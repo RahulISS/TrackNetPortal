@@ -1,0 +1,298 @@
+<style>
+    .gm-iv-address {
+        background-color: #222;
+        opacity: 0.8;
+        font-family: Roboto, Arial, sans-serif;
+        border-bottom-right-radius: 2px;
+        border-top-right-radius: 2px;
+        display: inline-block;
+        display: none;
+        padding: 6px 8px;
+        margin-top: 10px;
+        height: 56px;
+        box-sizing: border-box;
+    }
+    main.ng-scope {
+        height: calc(100vh - 115px);
+        overflow: hidden;
+    }
+    .chartmdl .modal-body {
+        height: 440px;
+    }
+    .gm-fullscreen-control {
+        display: none;
+    }
+    .container,.container-fluid,.container-lg,.container-md,.container-sm,.container-xl,.container-xxl {
+        width: 100%;
+        padding-right: var(--bs-gutter-x, 0.75rem);
+        padding-left: var(--bs-gutter-x, 0.75rem);
+        margin-right: auto;
+        margin-left: auto;
+        background-color: #ffffff;
+    }
+    .withtree {
+        width: 100%;
+    }
+    .datepickerbuttonInnerC {
+        background-color: #ffffff;
+    }
+    div.pointerIcon {
+        line-height: 20px;
+        height: 28px;
+    }
+    .sensorStyle {
+        float: left;
+        width: 50%;
+    }
+    div.chartsArea {
+        margin-top: 8px;
+        border-radius: 40px;
+    }
+    .outer-block-3 {
+        border-bottom: none;
+    }
+    .box-border-n {
+        border-bottom: 1px solid #fff;
+    }
+    #exitStreetView {
+        display: none;
+        position: absolute;
+        z-index: 10;
+        top: 15px;
+        left: 0;
+        font-size: 14px;
+        border-radius: 0 4px 4px 0;
+    }
+    .alert_changed {
+        color: #fff;
+        text-align: center;
+        font-size: 12px;
+        background-color: #18223e;
+        border-radius: 40px;
+        padding: 5px;
+    }
+    .alert_changed i,
+    .alert_changed strong {
+        display: block;
+        font-weight: 500;
+    }
+    .alert_changed ul {
+        padding: 3px 5px 0;
+        list-style: none;
+        overflow-y: auto;
+        max-height: 82px;
+        margin-left: 8px;
+        margin-right: 8px;
+    }
+    .alert_changed ul li {
+        border-top: 1px solid #FF5050;
+        border-radius: 0;
+        /* background-color: #ffffff; */
+        color: #fff;
+        margin-bottom: 5px;
+        line-height: 1.3;
+        padding: 10px 0 0;
+        cursor: pointer;
+    }
+    .alert_changed ul li.angle {
+        border-color: #FFFF00;
+    }
+    .alert_changed ul li.distance {
+        border-color: #FF9900;
+    }
+    .alert_changed li {
+        font-weight: 400;
+    }
+    @media screen and (max-width: 768px) {
+        .modal-dialog {
+            top: 25%;
+        }
+        .sensorStyle {
+            width: 100%;
+        }
+    }
+    #myModal .modal-dialog {
+    max-width: 18vw;
+    margin: auto 1.5rem;
+    margin-top: 40vh;
+    }
+    #myModal .modal-body{
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+    #myModal .modal-body h3 {
+        font-size: 15px;
+        line-height: 20px;
+    }
+</style>
+<section>
+    <div class="container-fluid">
+        <div class="main-block">
+            <div class="block-1 customanimation" ng-class="(blockExpandLeft?'block-xpnd':'')">
+                <div class="ts-c">
+                    <div class="btn_clps">
+                        <button ng-click="blockExpandLeft=!blockExpandLeft" id="btn_colps" class="SeeMore2"><img class="icon_clp" src="bootstrap5/img/expand.png" /></button>
+                    </div>
+
+                    <div class="main-block-inner-1">
+                        <div class="ul_li step_11 ctm-blc-1">
+                            <div class="outer-block-3 box-border-n border-0">
+                                <!--  <p>Real-Time Summary</p> -->
+                                <div class="box-block-21">
+                                    <div ng-app="tracknetCtrl" ng-controller="tracknetController" class="box-block-r time_block sp-mng">
+                                        <h5>SGT</h5>
+                                        <h2>{{time}}</h2>
+                                        <h3>{{date}}</h3>
+                                    </div>
+                                   <!-- <a class="button morebtn_block"> -->
+                                    <div class="morebtn_block border-0">
+                                    <div class="clod_block">
+                                        <div class="cb-bg-color">
+                                            <!-- <h3>{{ dynamicCity }}, <span>{{ dynamicState }}</span></h3> -->
+                                            <h3>Singapore, <span>SGP</span></h3>
+                                            <p>{{ temperature }} &#8451;</p>
+                                        </div>
+                                        <div class="flx_bx_sun">
+                                            <!-- <img src="bootstrap5/img/moon-icon.png" />
+                                            <p>Partly Cloudy</p> -->
+                                            <p><img src="bootstrap5/img/noun-humidity-4708665-FFFFFF.png"/> {{ humidity }}%</p>
+                                            <p><img src="bootstrap5/img/noun-wind-sock-4708670-FFFFFF.png" /> max. {{ windSpeed }} km/h, {{ windDirectionText }}</p>
+                                            <div class="tooltipvalue">
+                                                <p><img src="bootstrap5/img/noun-snow-4708681-FFFFFF.png" /> {{ Rainfall }}mm</p>
+                                                <span class="tooltiptext">Rainfall Past Hour</span>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="morebtn_block">
+                                            <p>More</p>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <!-- </a> -->
+                                    <div class="box-block-rs temp_data toggle_hd">
+                                        <h3>Current Temperature : <span>{{ temperature }}°C</span></h3>
+                                        <h3>Current Weather Humidity :<span> {{ humidity }}%</span></h3>
+                                        <h3>Current Wind Speed :<span> {{ windSpeed }}km/h</span></h3>
+                                        <h3>Current Wind Direction : <span>{{ windDirectionText }}</span></h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="outer-block-3">
+                                <div class="box-block-21">
+                                    <div class="box-block-r backgorund-non">
+                                        <highchart class="chartsArea" config="realtimesummery"></highchart>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="outer-block-3 last_block_3">
+                                <div class="alert_changed">
+                                    <strong>Alerts  and Alarms ({{alertCount}})</strong>
+                                    <i ng-if="alertCount==0">ALL ALERTS ARE CLEAR</i>
+                                    <ul ng-if="alertCount>0">
+                                        <li ng-repeat="alert in alertLists"  ng-click="alertClick(alert)">
+                                            <p class="{{alert.class}}">
+                                                {{ alert.aTreeNode_textLabel }}<br/> 
+                                                {{ alert.message }}<br/>
+                                                {{ alert.oldest_comm_date }}
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="block-2">
+                <div class="ts-c map_block_middle">
+                    <div class="date_picker_block">
+                        <button ng-click="blockExpandLeft=!blockExpandLeft;blockExpandRight=!blockExpandRight" id="btn_colps" class="SeeMore4"><img class="icon_clp" src="bootstrap5/img/expand.png" /></button>
+                        <div class="input_flx_bx">
+                            <div class="datepickerbuttonInnerC">
+                                <div class="datepickerbuttonleftC pointerIcon" ng-click='nextPrevClick("left")'><i class="fas fa-caret-left"></i></div>
+                                <div id="singleDate" class="datepickerbuttonmiddleC pointerIcon">
+                                    <span></span>&nbsp;&nbsp;
+                                </div>
+                                <div class="datepickerbuttonrightC pointerIcon" ng-click='nextPrevClick("right")'><i class="fas fa-caret-right"></i></div>
+                            </div>
+                            <button id="homeMapZoom" class="btn btn-primary" ng-click="zoomMapClick()" style="float: right;">Zoom</button>
+                            <button ng-click="resetMapClick()" id="homeMapReset" class="btn btn-danger">Reset</button>
+                        </div>
+                    </div>
+
+                    <div class="withtree tracknet-map">
+                        <div class="viewtemplateInner">
+                            <button ng-click="exitStreetViewMap()" id="exitStreetView" class="btn btn-danger">Exit Street View</button>
+                            <div class="homemaparea">
+                                <div id="tracknetMap" class="homeleft"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="block-3 last_block_third customanimation" ng-class="(blockExpandRight?'block-xpnd-2':'')">
+                <div class="ts-c">
+                    <div class="btn_clps las_blocked">
+                        <button id="btn_colps" ng-click="blockExpandRight=!blockExpandRight" class="SeeMore3"><img class="icon_clp" src="bootstrap5/img/expand.png" /></button>
+
+                        <a class="openhis btn_open" style="float: right;" href="#" ng-click="loadData(false)" data-bs-toggle="modal" data-bs-target="#exampleModal">Open</a>
+                    </div>
+                    <div class="ul_li vides ctm-blc-1">
+                        <div class="flx_bx1"></div>
+                        <div class="flx_bx1">
+                        </div>
+                        <div id="myDiv"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<div class="modal fade chartmdl" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body overflow-hidden min-440">
+                <highchart class="chartsArea" id="meterChartConfig" config="meterChartConfig"></highchart>
+            </div>
+            <div class="modal-footer">
+                <button style="background-color: #3255a2; font-size: 14px;" type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Current Temperature : <span>{{ temperature }}°C</span></h3>
+                <h3>Current Weather Humidity :<span> {{ humidity }}%</span></h3>
+                <h3>Current Wind Speed :<span> {{ windSpeed }}km/h</span></h3>
+                <h3>Current Wind Direction : <span>{{ windDirectionText }}</span></h3>
+            </div>
+            <div class="modal-footer">
+                <button style="background-color: #3255a2; font-size: 14px;" type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
+<div class="mb-space-20px"></div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".morebtn_block ").click(function () {
+            $("#myModal").modal('show');
+        });
+    });
+
+    
+</script>

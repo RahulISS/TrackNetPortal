@@ -1,0 +1,63 @@
+<div class="summaryContainer">
+    <!-- Tree -->
+    <div class="summaryTreeContainer">
+        <div id="settingsTree" class="chartsTree font_size_tree" jstreesettings></div>
+    </div>
+    <div class="summaryChartContainer">
+
+        <div class="outerContainer">
+            <h1 style="text-align: center; padding: 10px;">User-configurable SMS and Email Notifications</h1>
+            <div ng-show=" statusView " class="innerContainer">
+                <form action="" id="userFrm" ng-if="configRecord.length > 0">
+                     <!-- <button ng-click='go()'>Go</button> -->
+                    <div class="user-frm-wrp">
+                        <label for="">Contact Name </label>
+                        <input type="text" id="contact_name" value="{{configRecord.contactName}}" placeholder="Enter your Contact Name">
+                    </div>
+
+                    <div class="user-frm-wrp">
+                        <label for="">Email Address</label>
+                        <input type="email"  id="email_address" value="" placeholder="Enter Email Address">
+                    </div>
+                    <div class="user-frm-wrp">
+                        <label for="">SMS Number</label>
+                        <input type="text"  id="sms_number" value="" placeholder="Enter SMS Number">
+                    </div>
+
+                    <div class="btn--flex userFrm-btn">                        
+                        <input type="submit" ng-click="saveUserConfiguations($event)" class="submit__btn" />
+                        <input type="reset" ng-click="" class="cancel__btn" />
+                        <input type="submit" value="Test" ng-click="sendTestMessage()" class="test_btn"/>
+                    </div>
+                </form>
+                <!-- ng-if="configRecord.length > 0" -->
+                <form action="" id="userFrm" >
+                    <div class="user-frm-wrp">
+                       
+                        <label for="">Contact Name</label>
+                        <input type="text" id="contact_name" ng-model="contactName" value="{{contactName}}" placeholder="Enter your Contact Name">
+                    </div>
+
+                    <div class="user-frm-wrp">
+                        <label for="">Email Address</label>
+                        <input type="email"  id="email_address" ng-model="emailAddress" value="{{emailAddress}}" placeholder="Enter Email Address">
+                    </div>
+                    <div class="user-frm-wrp">
+                        <label for="">SMS Number</label>
+                        <input type="text"  id="sms_number" ng-model="smsNumber" value="{{smsNumber}}" placeholder="Enter SMS Number">
+                    </div>
+
+                    <div class="btn--flex userFrm-btn w-100">                        
+                        <input type="submit" value="Update" ng-click="saveUserConfiguations($event)" class="submit__btn" />
+                        <input type="reset" ng-click="" class="cancel__btn" />
+                        <input type="submit" value="Test" ng-click="sendTestMessage()" class="test_btn"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show=" ( !statusView && loading ) || ( !statusView && operationResult ) " class="overlay flexBoxCenter">
+        {{message}}
+    </div>
+</div>

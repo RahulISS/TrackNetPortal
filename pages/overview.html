@@ -1,0 +1,84 @@
+<style type="text/css">div.overviewequiplabel{width: auto;}</style>
+<div class="overviewpage">
+	<!-- Tree -->
+	<div class="meterTree2 noprint">
+		<div class="treeInnerchart">
+			<div id="overviewTree" class="chartsTree font_size_tree" jstreeover></div>
+		</div>
+	</div>
+	<!-- Chart -->
+	<div class="withtree">
+		<div class="viewtemplateInner">
+			<!-- Tabs -->
+			<div class="maintenancetabbar">
+				<div class="navButtonsSub">
+						<div class="topnavbuttons4" style="vertical-align: bottom;">
+							<!-- Removed </button> tag to fix an issue that caused unregular gap between button elements -->
+							<button ng-class="{ 'navMenuButton-checked' :  actualvalueTab}" class="navMenuButton font_size_menutabs"
+							ng-click="showTab('actualvalueTab')">Actual Values
+							<span><i aria-hidden="true"></i></span>
+							<button ng-class="{ 'navMenuButton-checked' :  !actualvalueTab}" class="navMenuButton font_size_menutabs"
+							ng-click="showTab('trendsTab')">Trends
+							<span><i aria-hidden="true"></i></span>
+						</div>
+					</tr>
+				</div>
+			</div>
+			<!-- Content -->
+			<div class="overviewcontents"><div class="overviewcontentsInner">
+				<!-- Title Bar -->
+				<div class="overviewtitlebar">
+					<!-- Date Picker -->
+					<div class="datepickerbutton">
+						<div class="datepickerbuttonInnerC"><tr>
+							<div class="datepickerbuttonleftC pointerIcon" ng-click='changeDateRange("left")'><i class="fas fa-caret-left"></i></div>
+							<div id="overviewDateRange" class="datepickerbuttonmiddleC pointerIcon">
+								<span></span>&nbsp;&nbsp;
+							</div>
+							<div class="datepickerbuttonrightC pointerIcon" ng-click='changeDateRange("right")'><i class="fas fa-caret-right"></i></div>
+						</div>
+					</div>
+					<!-- Interval -->
+					<div class="intervalbuttondivC elspace">
+						<select class="titlebutton" ng-change="changeInterval()" ng-model="overviewInterval" ng-options="oneitem.name for oneitem in intervalFilter"></select>
+					</div>
+					<div class="chartTopButtons elspace">
+						<button ng-click="toogleWeekDays(wd)" ng-class="availableWeekdays[wd] ? 'btn-flat btn-success' : 'btn-flat btn-danger'" ng-repeat="wd in weekdays">
+							{{ wd }}
+						</button>
+					</div>
+					<!-- Title -->
+					<div class="overviewequiplabel">
+						{{equipName}}
+					</div>
+				</div>
+				<!-- Chart Part -->
+				<div class="overviewChartContainer"><div class="overviewChartContainerInner">
+					<div class="oneChartContainer" ng-repeat="oneChartItem in measurementChartArray"><div class="oneChartContainerInner">
+					<div class="oneChartLeft">
+						<table class="oneChartLeftTable">
+							<tr>
+								<td id={{oneChartItem.tdid}}></td>
+							</tr>
+						</table>
+					</div>
+					<div id={{oneChartItem.chartdivid}} class="oneChartRightActual">
+					
+						
+						<highchart class="chartClassOverview" id={{oneChartItem.chartid}} config="oneChartItem.config"></highchart>
+						
+					</div>
+					<div class="oneChartRightRight" ng-hide="actualvalueTab">
+						<div ng-hide=" oneChartItem.measurement === 'Flow Switch' || oneChartItem.measurement === 'Door Switch' || oneChartItem.measurement === 'Flow Valve' " 
+								class="inneroneChartRightRight">
+							<button id={{oneChartItem.avgid}} type="button" class="btn btn-default overviewfoldbuttonOn stand_font" ng-click='changeFold(this,"avg")' style="border-radius: 0px;">avg</button>
+							<button id={{oneChartItem.maxid}} type="button" class="btn btn-default overviewfoldbuttonOff stand_font" ng-click='changeFold(this,"max")' style="border-radius: 0px;">max</button>
+							<button id={{oneChartItem.minid}} type="button" class="btn btn-default overviewfoldbuttonOff stand_font" ng-click='changeFold(this,"min")' style="border-radius: 0px;">min</button>
+						</div>	
+					</div>
+				</div></div>
+				</div></div>
+			</div></div>
+		</div>
+	</div>
+</div>

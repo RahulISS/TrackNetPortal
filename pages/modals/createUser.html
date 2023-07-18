@@ -1,0 +1,76 @@
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          Create New User
+        </h4>
+      </div>
+      <div class="modal-body">
+        <form class="userCreateForm" name="userCreateForm" novalidate>
+        <div class="userCreateContainer">
+            <div class="settingsInputRow">
+              <div class="boxlabel">Username</div>
+              <div class="boxinput"> <input ng-class="{ 'invalidInput' : userCreateForm.newusername.$invalid }" name="newusername"
+                ng-model="newusername" class="userSetInput" type="text" placeholder="Enter your username" required> </div>
+            </div>
+            <div class="settingsInputRow">
+              <div class="boxlabel">Enter New Password</div>
+              <div class="boxinput"> <input ng-class="{ 'invalidInput' : userCreateForm.newPassword.$invalid }" name="newPassword"
+                ng-model="newPassword" class="userSetInput" type="password" required> </div>
+            </div>
+            <div class="settingsInputRow">
+              <div class="boxlabel">Confirm New Password</div>
+              <div class="boxinput"> <input ng-class="{ 'invalidInput' : userCreateForm.newPasswordCheck.$invalid }" name="newPasswordCheck"
+                ng-model="newPasswordCheck" class="userSetInput" type="password" required> </div>
+            </div>
+            <div class="settingsInputRow">
+              <div class="boxlabel">Permission Level</div>
+              <div class="boxinput"> <select ng-model="upermissionlevel" class="userSetSel" ng-options="permission for permission in permissionArr"></select> </div>
+            </div>
+            <div class="settingsInputRow">
+              <div class="boxlabel">First Name</div>
+              <div class="boxinput"> <input ng-class="{ 'invalidInput' : userCreateForm.ufirstname.$invalid }" name="ufirstname"
+                ng-model="ufirstname" class="userSetInput" type="text" placeholder="Enter your first name" required> </div>
+            </div>
+            <div class="settingsInputRow">
+              <div class="boxlabel">Last Name</div>
+              <div class="boxinput"> <input ng-class="{ 'invalidInput' : userCreateForm.ulastname.$invalid }" name="ulastname"
+                ng-model="ulastname" class="userSetInput" type="text" placeholder="Enter your surname" required> </div>
+            </div>
+            <div class="settingsInputRow">
+              <div class="boxlabel">Email Address</div>
+              <div class="boxinput"> <input ng-class="{ 'invalidInput' : userCreateForm.uemailaddress.$invalid }" name="uemailaddress"
+                ng-model="uemailaddress" class="userSetInput" type="email"> </div>
+            </div>
+            <div class="settingsInputRow">
+              <div class="boxlabel">SMS</div>
+              <div class="boxinput"> <input ng-class="{ 'invalidInput' : userCreateForm.usms.$invalid }" name="usms"
+                ng-model="usms" class="userSetInput" type="text" ui-mask="9999 999 999"> </div>
+            </div>
+<!--
+            <div class="settingsInputRow">
+              <div class="boxlabel">Free Chlorine</div>
+              <div class="boxinput"> <select ng-model="uchlorineDefault" class="userSetSel" ng-options="chlorine for chlorine in chlorineArr"></select> </div>
+            </div>
+            <div class="settingsInputRow">
+              <div class="boxlabel">Pressure</div>
+              <div class="boxinput"> <select ng-model="upressureDefault" class="userSetSel" ng-options="pressure for pressure in pressureArr"></select> </div>
+            </div>
+-->
+            <div class="settingsInputRow">
+            <span class="error" ng-show="newPassword != newPasswordCheck">Passwords do not match!</span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button ng-class="{ 'isDisabled' : userCreateForm.newusername.$invalid || userCreateForm.newPassword.$invalid || userCreateForm.newPasswordCheck.$invalid
+        || userCreateForm.ufirstname.$invalid || userCreateForm.ulastname.$invalid || userCreateForm.uemailaddress.$invalid || userCreateForm.usms.$invalid || newPassword != newPasswordCheck }"
+        ng-disabled="userCreateForm.newusername.$invalid || userCreateForm.newPassword.$invalid || userCreateForm.newPasswordCheck.$invalid
+        || userCreateForm.ufirstname.$invalid || userCreateForm.ulastname.$invalid || userCreateForm.uemailaddress.$invalid || userCreateForm.usms.$invalid || newPassword != newPasswordCheck"
+        type="button" ng-click="close(true)" class="btn btn-primary" data-dismiss="modal">Create</button>
+      </div>
+    </div>
+  </div>
+</div>

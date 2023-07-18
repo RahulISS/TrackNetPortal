@@ -1,0 +1,44 @@
+<header>
+	<div class="loginHeader flexBoxCenter">
+		<!-- <div class="loginSides alignLeft"><strong><h2 style="color: blue;">Gcw Sewerage TracNet</h2></strong></div> -->
+		<div class="loginSides alignLeft"><img class="sydneyWt_logo" src="/_common/img/tracwater.png" alt="cityofgoldcoast logo"></div>
+		<img class="meterTracLogo" src="/_common/img/Final-Logo.png" alt="tracwater logo">
+	</div>
+</header>
+
+<main>
+	<div class="loginMain flexBoxCenter">
+		<div class="loginInner">
+			<form class="formMarginBottom" ng-submit="doLogin()">
+				<div class="">
+					<input class="marginBot loginInput" type="text" ng-model="username"
+						placeholder="Enter your username" class="u-full-width">
+				</div>
+				<div class="">
+					<input class="marginBot loginInput" type="password" ng-model="password"
+						placeholder="Enter your password" class="u-full-width">
+				</div>
+				<input class="inputNoMarginBottom loginInput" value="Login" type="submit">
+			</form>
+			<span class="errorMessage">{{loginError}}</span>
+		</div>
+	</div>
+</main>
+
+<footer>
+	<div class="loginFooter">
+		<div class="footerCol0">
+			&copy; {{thisyear}} TracWater Pty Ltd. Patented and Patents Pending. Terms of Use and Privacy Policy are applicable to you. All rights reserved.
+		</div>
+		<div class="footerCol3 flexBoxCenter">
+			<img src='img/mail.png' style="width: 26px;" /> &nbsp; support@tracwater.com.au
+		</div>
+		<div class="footerCol2 flexBoxCenter">
+			<img src='img/phone25.png' style="width: 24px;" /> &nbsp; 1300 563 219
+		</div>
+		<div class="footerCol1 flexBoxCenter">
+			<img src='img/world.png' style="width: 20px;" /> &nbsp; <a style="color: black;"
+				href="http://www.tracwater.com.au">www.tracwater.com.au</a>
+		</div>
+	</div>
+</footer>

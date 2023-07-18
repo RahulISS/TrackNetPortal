@@ -1,0 +1,509 @@
+<style>
+.loginHeader .img_tg_tp {
+   display: block;
+}
+.chartTopButtons .btn-flat {
+   padding: 2px 6px;
+}
+.flexBoxCenter{
+       overflow-y: scroll;
+    }
+</style>
+
+<div class="historypage">
+   <div class="historypageInner">
+  
+      <!-- Tree -->
+      <div class="meterTree2 noprint">
+         <div class="treeInnerchart">
+            <div id="imageTree" class="chartsTree font_size_tree" jstreeimage></div>
+         </div>
+      </div>
+      <!-- Chart -->
+      <div class="withtree1 cstm_img_ofl">
+         <div class="viewtemplateInner">
+            <!-- Content -->
+            <div id="scatterPlotCaontainer" class="chartsTabContent {{ showScatterPlot ? 'hiddenScrollXY' : '' }}">
+               <!-- Measurement -->
+               <div class="measurementTab">
+                  <!-- Control panel -->
+                  <div class="chartsMainControlsC">
+                     <!-- Date Picker -->
+                     <div class="datepickerbutton">
+                        <div class="datepickerbuttonInnerC">
+                           <div class="datepickerbuttonleftC pointerIcon" ng-click='changeDateRange("left")'><i
+                                 class="fas fa-caret-left"></i></div>
+                           <div id="chartsRange" class="datepickerbuttonmiddleC pointerIcon">
+                              <span></span>&nbsp;&nbsp;
+                           </div>
+                           <div class="datepickerbuttonrightC pointerIcon" ng-click='changeDateRange("right")'><i
+                                 class="fas fa-caret-right"></i></div>
+                        </div>
+                     </div>
+                     <div class="charts_m_ctrl_dropdown_interval elspace">
+                        <select class="titlebutton" ng-change="changeInterval()" ng-model="rollup"
+                           ng-options="oneitem.name for oneitem in chartIntervalFilter"></select>
+                     </div>
+                     <div class="charttitlebuttondivLeft elspace" style="height: 33px;">
+                        <button class="btnReset" ng-click='clearData()'>
+                           Reset
+                        </button>
+                     </div>
+                     <div class="chartTopButtons elspace">
+                       <!--  <div class="grid_btn">
+                           <button id="meter_gridLinesButton" ng-click='switchGridLine("meter")' type="button"
+                              id="meter_yminButton togglebtn" class="btnTopBar" ng-click='switchYmin("meter")'
+                              class="togglebtn">Gridlines</button>
+                           <button id="meter_yminButton" ng-click='switchYmin("meter")' type="button"
+                              class="btnTopBarOff togglebtn" >Y-axis min 0</button>
+                           <button id="meter_markersButton togglebtn" ng-click='switchMarkers("meter")' type="button"
+                              class="togglebtn btnTopBarOff">Markers</button>
+                           <button id="downloadButton" ng-click='download("meter")' type="button">Download</button>
+                           <button id="tableButton" ng-click='switchTable("meter",true)' class="btnTopBarOff" type="button">Table</button>
+                          
+                        </div> -->
+                           <button id="meter_gridLinesButton" ng-click='switchGridLine("meter")' class="btnTopBar" >Gridlines</button>
+                           <button id="meter_yminButton" ng-click='switchYmin("meter")' class="btnTopBarOff">Y-axis min 0</button>
+                                       <button id="meter_markersButton" ng-click='switchMarkers("meter")' class="btnTopBarOff" >Markers</button>
+                                       <button id="downloadButton" ng-click='download("meter")' class="btnTopBarOff" >
+                           Download
+                           </button>
+                                       <button id="tableButton" ng-click='switchTable("meter",true)' class="btnTopBarOff">
+                           	Table
+                           </button>
+                           <button id="tableButton" ng-click='toggleScatterPlot()' class="btnTopBarOff">
+                              Scatterplot
+                           </button>
+                     </div>
+                     <div class="chartTopButtons week_days elspace">
+                        <button ng-click="toogleWeekDays(wd)" ng-class="availableWeekdays[wd] ? 'btn-flat btn-success' : 'btn-flat btn-danger'" ng-repeat="wd in weekdays">
+                           {{ wd }}
+                        </button>
+                     </div>
+                  </div>
+                  <!-- <highchart  style="display: block; width: 100%;"    class="chartsArea chart_img" id="chartsMeterCompare" config="meterChartConfig"></highchart> -->
+                  <!-- Chart area -->
+                  <section class="image-page">
+                     <!-- <div class="flex_bx_gird">
+                        <div class="chart_bx_wd">
+                        	<img src="img/line-graph.png">
+                        </div>
+                        <div class="slider_bx_wd">
+                        	<img src="img/gallery_slider.png">
+                        </div>
+                        </div> -->
+                     <div class="flx_bx_main">
+                        <div class="chart_bx">
+                           <highchart style="display: block; width: 100%; height:604px;"
+                              class="chartsArea chart_img" id="chartsMeterCompare1" config="meterChartConfig1">
+                           </highchart>
+                        </div>
+                        <div class="img_slider_dt">
+                           <div class="no_data_fnd" style='display:none;' id='noimg_msg'>
+                              <p>There are no images available.</p>
+                           </div>
+                           <div class="inner_cstm_slider">
+                              <div>
+                                 <span class="left_slider_arrow" ng-click="previousImage()"><img src="img/left_arrow.png" ></span>
+                                 <span class="right_slider_arrow" ng-click="nextImage()"><img src="img/right_arrow.png" /></span>
+                              </div>
+                              <img id="film" src="" />
+
+                              <!-- <div class="thumbnail_loop">
+                              	<ul>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              		<li><img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" /></li>
+                              	</ul>
+                              </div> -->
+                              <!-- <div class="progress_bar_section">
+                                 <div id="audio-player-container">
+                                    <div class="audio-progress" id="audio-progress">
+                                       <div id="draggable-point"class="draggable ui-widget-content">
+                                          <div id="audio-progress-handle"></div>
+                                       </div>
+                                       <div id="audio-progress-bar" class="bar">
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div id="posX"></div>
+                              </div> -->
+                              <!-- <div class="progress_bar_tp">
+                             	<div class="data_tp_thumb" id="progressHvrImgCont">
+                             		<img src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg" id="progressHvrImg">
+                             		<p>sdgzd</p>
+                             	</div>
+                             	 <input class="pgress_bar" type="range" id="rangeVal" value="{{on_frame}}" min="{{on_frame}}" max="{{imageFrames.length}}" />
+                                 
+                             </div> -->
+
+                             <div id="progressBarTp" class="progress_bar_tp">
+                              <div id="progressHvrImgCont" class="data_tp_thumb">
+                                 <img
+                                    src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
+                                    id="progressHvrImg">
+                                 <p id="progressHvrTime"></p>
+                              </div>
+                              <input class="pgress_bar" type="range" id="rangeVal" value="" min="" max="{{imageFrames.length - 1}}" />
+
+                           </div>
+
+                              <div class="time_stamp">
+                                 <p id="currentImgTime"></p>
+                              </div>
+                              <div class="flx_bx_pld">
+                                 <div class="cnrtl_pl">
+                                    <button id="actionbutton">Play</button>
+                                    <button ng-click="stop()">Stop</button>
+                                    <input type="checkbox" ng-change="autoRepeat(autoRepeatImage)" ng-model="autoRepeatImage">
+                                  
+                                 </div>
+                                 
+                                 <div class="bx_dw_ps cnrtl_pl">
+                                     
+                                    <button ng-click="downloadImages()">Download Images</button>
+                                    <button ng-click="downloadVideo()">Download Video</button>
+                                 </div>
+                                 <div class="frame_speed">
+                                    <div class="speed_block">
+                                       <p>Timelapse Time per Image 
+(milliseconds):</p>
+                                       <input type="text" id="framerate" value="250" />
+                                    </div>
+                                    <!--  <div class="jmp_frame">
+                                       <p> Go to frame:</p>
+                                       <input type="text" id="gotoframe">
+                                       <button onclick="goFrame(document.getElementById(\'gotoframe\').value);">Go</button> 
+                                    </div> -->
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- <div class="no_data_fnd" style='display:none;' id='noimg_msg'>
+                              <p>There are no images available.</p>
+                              </div>
+                              	<div class="image_main_div">
+                              
+                              		<div class="content_div">
+                              
+                              			 <div class="main_slider_box">
+                              
+                              
+                              			
+                              	
+                              		<div class="date_slide_cntrl">
+                              			<div class="bg_color_br"> 
+                              				<div class="date_time_stamp">
+                              				
+                              				</div>
+                              				<div class="control_panel">
+                              					<ul>
+                              						<li><img class="play_slider" src="img/play-01.png" /></li>
+                              						<li><img class="stop_slider" src="img/pause-01.png" /></li>
+                              						<li><img class="stop_slider" src="img/3-01.png" /></li>
+                              					</ul>
+                              					
+                              				
+                              				</div>
+                              			</div>
+                              		</div>
+                              			</div>
+                              		</div>
+                              				   
+                              	 </div> -->
+                        </div>
+                     </div>
+                  </section>
+                  <!-- Chart stats area -->
+                  <div class="charts_m_stats_area" style="background-color: #fff;">
+                     <!-- 1 row of 4 stats boxes repeated 2 times vertically -->
+                     <div ng-repeat="oneline in tableStatArr" class="charts_m_stats_row" style="width:100%;">
+                        <!-- A box of data series stats repeated 4 times horizontally -->
+                        <div ng-repeat="oneitem in oneline track by $index" id={{tableStats[oneitem].divId}}
+                           class="charts_m_stats_row_cell w3-container w3-border w3-round-xlarge"
+                           style="color:{{tableStats[oneitem].colour}};">
+                           <!-- Row 1 Stats Box Title -->
+                           <div class="charts_m_stats_row_cell_title">
+                              <span class="title-span" ng-click="selectLegend(oneitem)">
+                                 <div class="numberdiv pointerIcon">{{ oneitem + 1 }}</div>
+                                 <div class="statTitleSpan">{{tableStats[oneitem].title}}</div>
+                              </span>
+                              <div ng-click="clearNodeData(oneitem,true)" class="closediv1 itemhidden"
+                                 id={{tableStats[oneitem].hideCloseDivId}}>
+                                 <i style="color:{{tableStats[oneitem].colour}};" class="fas fa-times"></i>
+                              </div>
+                           </div>
+                           <!-- Stats Data outer box takes mouse clicks-->
+                           <div>
+                              <!-- Stats Data inner box shows and hides the stats-->
+                              <div id={{tableStats[oneitem].hideDivId}} class="itemhidden">
+                                 <!-- Row 2 = Measurement dropdown list-->
+                                 <div class="charts_m_stats_row_cell_measurement">
+                                    <select style="color:{{tableStats[oneitem].colour}};" class="dropdownbuttonRegion"
+                                       ng-change="changeMeasurement(oneitem)"
+                                       ng-model="tableStats[oneitem].currentMeasurement"
+                                       ng-options="sensorItem.id_name for sensorItem in tableStats[oneitem].measurements">
+                                    </select>
+                                 </div>
+                                 <!-- Row 3 Units -->
+                                 <div class="charts_m_stats_row_cell_unit">
+                                    <div class="charts_m_stats_row_cell_unit_column">
+                                       {{tableStats[oneitem].currentMeasurement.unit}}</div>
+                                    <div class="charts_m_stats_row_cell_unit_column">
+                                       <select style="color:{{tableStats[oneitem].colour}};"
+                                          class="dropdownbuttonRegion" ng-change="changeFold(oneitem)"
+                                          ng-model="tableStats[oneitem].fold"
+                                          ng-options="oneFDitem.name for oneFDitem in foldmethodFilter">
+                                       </select>
+                                    </div>
+                                 </div>
+                                 <!-- Row 4 Min Max Data -->
+                                 <div class="charts_m_stats_row_cell_unit">
+                                    <div class="charts_m_stats_row_cell_unit_column">Max: {{tableStats[oneitem].max}}
+                                    </div>
+                                    <div class="charts_m_stats_row_cell_unit_column">Min: {{tableStats[oneitem].min}}
+                                    </div>
+                                 </div>
+                                 <!-- Row 6 Avg Sum Data -->
+                                 <div class="charts_m_stats_row_cell_unit">
+                                    <div class="charts_m_stats_row_cell_unit_column">Avg: {{tableStats[oneitem].avg}}
+                                    </div>
+                                    <div class="charts_m_stats_row_cell_unit_column"></div>
+                                 </div>
+                              </div>
+                              <!-- END: Stats Data inner box shows and hides the stats-->
+                           </div>
+                           <!-- Stats Data outer box takes mouse clicks-->
+                        </div>
+                     </div>
+                  </div>
+                  <div class="measureTable" ng-show="showMeasureTable">
+                     <div class="measureTableLeft">
+                        <div class="oneTableDiv">
+                           <table class="table table-bordered table-hover my-table">
+                              <thead>
+                                 <tr>
+                                    <th class="my-th">
+                                       Timestamp
+                                    </th>
+                                    <th ng-hide=" stat.pointId === null || stat.pointId === 'null' " class="my-th"
+                                       ng-repeat="stat in tableStats track by $index">
+                                       {{stat.title}} -
+                                       {{stat.currentMeasurement.id_name}}({{stat.currentMeasurement.unit}})
+                                    </th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 <tr ng-repeat="row in tableViewData track by $index">
+                                    <td class="my-td">
+                                       {{ readable(row.ts) }}
+                                    </td>
+                                    <td class="my-td" ng-repeat="item in activeItems track by $index">
+                                       {{ readable( row["x" + item ] ) }}
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                     <div class="measureTableRight">
+                        <button ng-click='switchTable("meter",false)' class="btnSideBar">
+                     Chart
+                        </button>
+                      <!--   <button type="button" ng-click='switchTable("meter",false)'>Chart</button> -->
+                     </div>
+                  </div>
+                  <div class="measureTable scatterPlot" ng-show="showScatterPlot">
+                     <div class="tptitlebar">
+                        <div>
+                           Layout: &nbsp;<select id="showGridToOneVision" ng-model="showGridToOne" ng-options="item as item.label for item in optionGridToOne track by item.value"></select>
+                        </div>
+                        <div ng-if="showGridToOne.value==1">
+                           <button ng-click="setAsActiveScatter(sChartId)" ng-repeat="(idx, sChartId) in scatterChartConfigCount" ng-class="activeScatterChart==sChartId ? 'btn-flat btn-success' : 'btn-flat btn-danger'">{{ (idx*1) + 1 }}</button>
+                        </div>
+                        <button class="btnTopBarOff" ng-click="toggleScatterPlot()">Return to Charts</button>
+                     </div>
+                     <div ng-if="showScatterPlot" class="chartContainerOne" ng-class="(showGridToOne.value==1 || scatterChartConfigCount>9) ? 'addScrollY' : ''">
+                        <div ng-if="showGridToOne.value==2 || (showGridToOne.value==1 && activeScatterChart==idx)" class="scatterWrap" ng-repeat="(idx, sChartConf) in scatterChartConfig">
+                           <highchart config="sChartConf"></highchart>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div ng-show="loading" class="se-pre-con">
+   <div class="cssload-container">
+         <div class="cssload-whirlpool"></div>
+   </div>
+ </div>
+ <div ng-show="loading" class="bg-overlay"></div>
+<script src="app/js/owl.carousel.min.js"></script>
+<script type="text/javascript">
+   $(document).ready(function () {
+      var owl = $('.owl-carousel');
+      owl.owlCarousel({
+         autoplay: false,
+         items: 1,
+         nav: true,
+         loop: true,
+         navText: ["<img src='img/left_arrow.png'>", "<img src='img/right_arrow.png'>"],
+         autoplayHoverPause: false,
+         autoplayTimeout: 2000,
+         autoplayHoverPause: false,
+         responsiveClass: true,
+         responsive: {
+
+            0: {
+
+               items: 1,
+               nav: true
+            },
+            600: {
+
+               items: 1,
+               nav: true,
+            },
+            1000: {
+
+               items: 1,
+               nav: true,
+               loop: true
+            }
+         }
+      });
+      // Replay on click close
+      jQuery('.play_slider').on('click', function () {
+         jQuery('.owl-carousel').trigger('play.owl.autoplay');
+         var carousel = jQuery('.owl-carousel').data('owl.carousel');
+         carousel.settings.autoplay = true;
+         carousel.options.autoplay = true;
+         jQuery('.owl-carousel').trigger('refresh.owl.carousel');
+      });
+
+   });
+
+</script>
+<script type="text/javascript">
+   jQuery('.stop_slider').on('click', function () {
+      jQuery('.owl-carousel').trigger('stop.owl.autoplay');
+      var carousel = jQuery('.owl-carousel').data('owl.carousel');
+      carousel.settings.autoplay = false;
+      carousel.options.autoplay = false;
+      jQuery('.owl-carousel').trigger('refresh.owl.carousel');
+   });
+</script>
+<!-- <script>
+   $(document).ready(function () {
+      $('#meter_gridLinesButton,.togglebtn').click(function () {
+         $(this).toggleClass("blackbg");
+      });
+   });
+</script> -->
+<!-- <script>
+   console.log('data3Images', data3Images);
+   var frames=['https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg','https://cdn3.vectorstock.com/i/1000x1000/35/52/placeholder-rgb-color-icon-vector-32173552.jpg','https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg'];
+   var playing=true;
+   var on_frame=0;
+   var timer;
+   launch();
+   function launch(){   
+   document.getElementById('film').src=frames[on_frame];
+   document.getElementById('actionbutton').addEventListener('click',play); 
+   // play();
+   }
+   
+   function change(){
+   document.getElementById('film').src=frames[on_frame]; //I have my images in a folder named frames
+   on_frame++;
+   if(on_frame==frames.length){on_frame=0;}
+   if(playing){
+       timer=setTimeout(change,document.getElementById('framerate').value?document.getElementById('framerate').value:1000);
+   }
+   }
+   
+   function play(){
+   launch();
+   document.getElementById('actionbutton').removeEventListener('click',play);
+   document.getElementById('actionbutton').addEventListener('click',pause);
+   document.getElementById('actionbutton').innerHTML='Pause';
+   clearInterval(timer);
+   playing=true;
+   change();
+   }
+   
+   function pause(){
+   document.getElementById('actionbutton').removeEventListener('click',pause);
+   document.getElementById('actionbutton').addEventListener('click',play);
+   document.getElementById('actionbutton').innerHTML='Play'; 
+   playing=false; 
+   
+   }
+   
+   function stop(){
+   document.getElementById('actionbutton').removeEventListener('click',pause);
+   document.getElementById('actionbutton').addEventListener('click',play);
+   document.getElementById('actionbutton').innerHTML='Play'; 
+   playing=false; 
+   on_frame=0;
+   }
+   
+   function goFrame(x){
+   if((x>-1)&&(x<=frames.length)){
+       on_frame=x;
+       if(!playing){document.getElementById('film').src='frames/'+frames[on_frame];}
+   }
+   else{
+       alert('Out of range');
+   }
+   }
+</script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<!-- <script type="text/javascript">
+   $('#draggable-point').draggable({
+      axis: 'x',
+      containment: "#audio-progress"
+   });
+   $('#draggable-point').draggable({
+      drag: function () {
+         var offset = $(this).offset();
+         var xPos = (100 * parseFloat($(this).css("left"))) / (parseFloat($(this).parent().css("width"))) + "%";
+         $('#audio-progress-bar').css({
+            'width': xPos
+         });
+      }
+   });
+</script> -->
+<script type="text/javascript">
+   controller = document.querySelector('input[type=range]');
+   // const radialProgress = document.querySelector('.RadialProgress');
+
+   setProgress = (progress) => {
+      const value = `${progress}%`;
+      if(typeof radialProgress != 'undefined') {
+         radialProgress.style.setProperty('--progress', value)
+         radialProgress.innerHTML = value
+         radialProgress.setAttribute('aria-valuenow', value)
+      }
+   }
+
+   setProgress(controller.value)
+   controller.oninput = () => {
+      setProgress(controller.value)
+   }
+</script>

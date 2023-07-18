@@ -1,0 +1,132 @@
+<div class="homepage">
+	<div class="withtree map-100" > 
+		<div class="viewtemplateInner">
+			<div class="homemaparea" id="item">
+				<div id="homeMap" class="homeleft" >
+				</div>
+			</div>
+		</div>
+		<div class="view-style">
+			<button class="reset_btn" ng-click="resetMapClick()">Reset</button>
+			<div class="cale-ico">
+				
+				<img src="img/collapse.png" alt="">
+			</div>
+			<select ng-model="installation_name" id="" ng-change="GetTableItemsBySlected(installation_name)" ng-options="inst_item as inst_item.installationName for inst_item in dataLocation">
+			<option ng-selected="true" value="">Select Installation...</option>
+			</select>
+		</div>
+		<script>
+			// map width inc desc
+			$('.cale-ico').on('click', function () {
+				$('body').find('.withtree').toggleClass('map-50');
+			});
+		</script>
+	</div>
+	<div class="side-det">
+		<table class="elem" data-ng-init="init()" style="bottom: 1px solid black;"> 
+			<thead style="background-color: #3255a2">
+				<tr style="color: aliceblue;">
+					<th>Site Name/Location</th>
+					<th>Distance (mm)</th>
+					<th>Bench Depth (mm)</th>
+					<th>Angle (deg)</th>
+					<th>Last Comm.</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				<a href="#"><tr ng-repeat="item in sortedArray_1 | filter : installation_name " ng-click="GetTableItemsByClick(item)">
+					<td class="changeMouse">{{item.installationName}}
+							<br>{{item.address}}</td>
+					<td ng-if="item.distance > 4000" class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ 4000 }} </td>
+					<td ng-else class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ item.distance | number : fractionSize }} </td>
+					<td></td>
+					<td class="changeMouse" ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }" >{{item.angle}}</td>
+					<td class="changeMouse" ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered' }">{{item.oldest_comm_date}}</td>
+				</tr></a>
+			</tbody>
+		</table>
+	</div>
+	<!-- Popup start -->
+	<div id="popupModalCenter" class="modal d-block" tabindex="-1" role="dialog" aria-labelledby="popupCenterTitle">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="popup-wrap">
+					<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h2>SETTINGS</h2>
+					<form action="" id="myForm">
+						<label for="">IMEI Number</label>
+						<input type="text" value="{{pointSettingData.id_serial}}" id="serialNumber" placeholder="Enter your Serial Number" disabled >
+						<label for="">Installation Time</label>
+						<input type="text" value="{{pointSettingData.product.created_at }}" placeholder="Enter installation time" disabled>	
+						<div class="distance-wrp">
+							<label for="distanceAlarm">
+								Distance Alert (mm, range: 400mm - 3,900mm):
+							</label>
+							<input type="text" value="{{ pointSettingData.distance_alert ? pointSettingData.distance_alert : Math.max(400, Math.min(3900, Math.floor(pointSettingData.distance_alert))) }}"  id="distance_alarm" min="400" max="3900" step="1" placeholder="Enter Distance Alert" oninput="checkDistanceAlarmValidity()"><span id="distanceAlarmError" style="display: none; color: yellow; font-size: smaller;">Distance alarm value must be between 400 and 3900.</span>
+						</div>
+						<div class="chkbx-wrp">
+							<label for="enableDistanceAlarm">
+								<input type="checkbox" id="enableDistanceAlarm" ng-checked="isDistanceAlertEnabled" value="{{pointSettingData.alert_enable}}" ng-class="{ 'checked-me': pointSettingData.alert_enable === 1 }" name="myAttribute" myAttribute="{{pointSettingData.alert_enable}}">
+								 Enable/Disable Distance Alert
+							</label>
+						</div>			  
+
+						<div class="btn--flex">
+							<!-- <button type="submit" ng-click="SavePoppupFormData()" class="submit__btn"> -->
+							<input type="button" value="Submit" ng-click="SavePoppupFormData()" class="submit__btn">
+							<input type="reset" class="reset__btn" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	<div class="loader" ng-show="isLoading">
+			<div class="loader-spinner"></div>
+		</div>
+	<script>
+		var enableDistanceAlarmCheckbox = document.getElementById("enableDistanceAlarm");
+		
+
+		function checkDistanceAlarmValidity() {
+			var input = document.getElementById("distance_alarm");
+			var errorMsg = document.getElementById("distanceAlarmError");
+			if (input.validity.rangeOverflow || input.validity.rangeUnderflow) {
+				errorMsg.style.display = "inline";
+			} else {
+				errorMsg.style.display = "none";
+			}
+		}
+
+		var enableDistanceAlarmCheckbox = document.getElementById("enableDistanceAlarm");
+		enableDistanceAlarmCheckbox.addEventListener("change", function() {
+		var attributeValue = enableDistanceAlarmCheckbox.getAttribute("myAttribute");
+		if (attributeValue === '1') {
+			enableDistanceAlarmCheckbox.value = "0";
+			enableDistanceAlarmCheckbox.classList.remove("checked-me");
+			enableDistanceAlarmCheckbox.setAttribute("myAttribute", "0");
+		} else {
+			enableDistanceAlarmCheckbox.value = "1";
+			enableDistanceAlarmCheckbox.classList.add("checked-me");
+			enableDistanceAlarmCheckbox.setAttribute("myAttribute", "1");
+		}
+		});
+
+	</script>
+		
+	<!-- Popup end-->
+	<script>
+		// popup start
+		$(document).ready(function () {
+		$(".close-button").click(function () {
+			$("#popupModalCenter").removeClass("show-modal");
+		});	
+		});
+		// popup end
+	</script>
+</div>

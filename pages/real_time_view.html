@@ -1,0 +1,53 @@
+<div class="kioskContainer">
+    <!-- Tree -->
+	<div class="meterTree2 noprint">
+		<div class="treeInnerchart">
+			<div id="kioskTree" class="chartsTree font_size_tree" jstreekiosk></div>
+		</div>
+    </div>
+    <!-- Charts -->
+	<div class="withtree">
+        <div ng-show=" viewType === 'flow' " class="kioskChartsContainer">
+            <div class="sewerLeft">
+                <div class="sewerLeftUpper">
+                    <div class="sewerLeftUpperTitle flexBoxCenter">
+                        Real-Time Level and Flow Monitoring
+                    </div>
+                    <div class="sewerLeftUpperChart">
+                        <highchart id="sewerChart" class="chart" config="sewerChartConfig"></highchart>
+                    </div>
+                </div>
+                <div class="sewerLeftLower flexBoxCenter">
+                    <div class="sewerLeftLowerItem">
+                        <div class="sewerLeftLowerItemTitle">
+                            <b>Current Flow Rate</b>
+                        </div>
+                        <div class="sewerLeftLowerItemCircle flexBoxCenter">
+                            <div id="flowRateCircle" class="circle">
+                                <span><b>{{flowRate}}</b></span>
+                                <span>{{flowRateUnit}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sewerLeftLowerItem">
+                        <div class="sewerLeftLowerItemTitle">
+                            <b>Current Flow Velocity</b>
+                        </div>
+                        <div class="sewerLeftLowerItemCircle flexBoxCenter">
+                            <div id="flowFelocityCircle" class="circle">
+                                <span><b>{{flowVelocity}}</b></span>
+                                <span>{{flowVelocityUnit}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sewerRight flexBoxCenter">
+                <div class="full" sewer-manhole min="0" max="3.75" value="depthValue" diameter="pipeDiameter"></div>
+            </div>
+        </div>
+        <div ng-show=" viewType === '' " class="kioskChartsContainer flexBoxCenter">
+            Please select a tree node
+        </div>
+	</div>
+</div>

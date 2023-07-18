@@ -1,0 +1,117 @@
+
+<style>
+
+.summaryChartContainer {
+	height: auto;
+   
+    margin-top: 75px;
+}
+
+
+</style>
+<div class="summaryContainer">
+
+	<div class="summaryLayerLow">
+		
+		<div class="summaryTreeContainer">
+			
+			<div class="mainTreeMeters">
+				<div id="summaryTree" class="chartsTree font_size_tree" jstree></div>
+			</div>
+
+			<div class="treeInnerLower">
+				<div class="treeInnerLowerStack">
+					<div class="mt-small flex-column flex-start" ng-repeat="sensor in availableSensors">
+						<div class="flexBoxCenter">
+							<input class="mr-small" type="checkbox" id={{sensor.id}} ng-checked="sensor.checked" ng-click="changeMeasurement(sensor)">
+							<span class="flexBoxCenter">{{sensor.id_name}}</span>
+						</div>
+					</div>
+				</div>
+				<div ng-show="shortOverlay" class="treeInnerLowerOverlay flexBoxCenter">
+					Loading...
+				</div>
+			</div>
+		</div>
+
+		<div class="summaryChartContainer">
+			<div class="summaryControl2">
+				<div class="navButtonsSub">
+					<div class="topnavbuttons2" style="vertical-align: bottom;">
+						<!-- Removed </button> tag to fix an issue that caused unregular gap between button elements -->
+						<button ng-class="{ 'navMenuButton-checked' :  queryTypeActual}"
+							class="navMenuButton font_size_menutabs" ng-click="switchType('actual')">Actual Values
+							<span><i aria-hidden="true"></i></span>
+							<button ng-class="{ 'navMenuButton-checked' :  queryTypeTrend}"
+								class="navMenuButton font_size_menutabs" ng-click="switchType('trend')">Trends
+								<span><i aria-hidden="true"></i></span>
+					</div>
+				</div>
+			</div>
+			<div class="summaryControlC">
+				<div class="datepickerbuttonC">
+					<div class="datepickerbuttonInnerC">
+						<div ng-click='changeDateRange("left")'class="datepickerbuttonleftC">
+							<i class="fas fa-caret-left"></i>
+						</div>
+						<div id="summaryDateRange" class="datepickerbuttonmiddleC pointerIcon">
+							<span></span>&nbsp;&nbsp;
+						</div>
+						<div ng-click='changeDateRange("right")' class="datepickerbuttonrightC">
+							<i class="fas fa-caret-right"></i>
+						</div>
+					</div>
+				</div>
+				<!-- Interval -->
+				<div class="intervalContainerC elspace">
+					<select ng-change="manualIntervalChange()" class="summaryInterval" ng-model="selectedItem"
+						ng-options="interval.name for interval in intervalFilter">
+					</select>
+				</div>
+				<div class="chartTopButtons elspace">
+					<button ng-click="toogleWeekDays(wd)" ng-class="availableWeekdays[wd] ? 'btn-flat btn-success' : 'btn-flat btn-danger'" ng-repeat="wd in weekdays">
+						{{ wd }}
+					</button>
+				</div>
+				<div class="intervalMessageContainer">
+					{{intervalMessage}}
+				</div>
+			</div>
+			<div ng-if="numMeter < 1 && activeChartsArray.length < 1 || numMeter == 0 && activeChartsArray.length > 0 || numMeter > 0 && activeChartsArray.length == 0"
+				class="summaryInfo" style="color:#FFF;">
+				At least one site and one sensor must be selected.
+			</div>
+			<div ng-if="numMeter > 0 && activeChartsArray.length > 0" class="summaryInfo">
+				<div class="summaryChart">
+					<div ng-class="{ 'chartContainerOne': activeChartsArray.length === 1 , 'chartContainerTwo': activeChartsArray.length == 2 ,
+          'chartContainerThree' : activeChartsArray.length == 3 , 'chartContainerFourToSix' : activeChartsArray.length > 3 && activeChartsArray.length < 7 ,
+          'chartContainerSevenToNine' : activeChartsArray.length > 6 && activeChartsArray.length < 10}"
+						ng-repeat="chart in activeChartsArray">
+						<div ng-show="queryTypeActual" class="chartTitle"> {{chart.measurementText}} <span ng-show=" chart.sensorType !== 'Bool' "> ({{chart.unit}}) </span> 
+						</div>
+						<div ng-click="changeType($index)" ng-show="queryTypeTrend" class="chartTitle2">
+							{{typeTrend[chart.trendIndex].text}} {{chart.measurementText}} ({{chart.unit}})</div>
+						<highchart id="chart{{chart.divId}}" class="chart" config="chart.config"></highchart>
+					</div>
+				</div>
+				<div class="legendControl">
+					<div ng-class="{ 'summaryLegendItemVisible' : meterVisible[$index] == true, 'summaryLegendItemHidden': meterVisible[$index]== false }"
+						ng-repeat="item in selectedIDs"> <!-- ng-click="visibleSeries($index)" -->
+						<div class="summaryLegendItemTop">
+							<div ng-class="returnColor($index)"></div>
+						</div>
+						<div class="summaryLegendItemBottom">
+							{{item.text}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div ng-show="loading" class="summaryContainerLoading">
+		Data is loading...
+	</div>
+
+
+</div>
