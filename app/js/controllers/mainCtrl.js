@@ -126,7 +126,6 @@ angular.module('mainCtrl', [])
                         };
                     });
                 });
-                console.log(promises_data,'promises_data')
                 $q.all(promises_data).then(function (responses) {
                     if (responses.length !== queriesArray.length) return;
                     getSensors(tree);

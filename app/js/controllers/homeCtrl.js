@@ -265,7 +265,6 @@ angular.module('homeCtrl', [])
 
 					
 					for(var k=0; k < $scope.sortedArray.length; k++) {
-						console.log($scope.sortedArray,'$scope.sortedArray')
 						last_comm_split = $scope.sortedArray[k].oldest_comm_date.split(" ");
 
 						if(last_comm_split[1] ==  "minutes" || last_comm_split[1] ==  "minute") {

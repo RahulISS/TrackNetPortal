@@ -1,6 +1,6 @@
 angular.module('chartsCtrl', [])
     
-    .controller('chartsController', function ($scope, $rootScope,Data,$q,$http,$timeout,$interval) {
+    .controller('chartsController', function ($scope, $rootScope,Data,$q,$http,$timeout,$interval,$window) {
         const isButtonVisible = true;
         const dataPickerFormat = "D/MM/YYYY";
         const skySparkFormat = "YYYY-MM-DD";
@@ -754,6 +754,17 @@ angular.module('chartsCtrl', [])
             downloadCsvFile(series, "meter.csv");
         };
 
+        $scope.myCustomDownload = function () {
+            let sDate = localStorage.getItem("startDate");
+            let eDate = localStorage.getItem("endDate");
+            let nodeId = localStorage.getItem("aTreeNodeId");
+            let sensorId = localStorage.getItem("sensorId");
+            let downloadUrl ='http://127.0.0.1:8000/api/v1/download_chart?aTreeNodeId='+nodeId+'&sensorId='+sensorId+'&startDate='+sDate+'&endDate='+eDate+'&fold=actual';
+
+            // Open the URL in a new window or tab to trigger the download
+            $window.open(downloadUrl, '_self');
+        };
+
         function downloadCsvFile(series, filename) {
             var tempDataList = [];
             var contents = "ts,";
@@ -1092,6 +1103,8 @@ angular.module('chartsCtrl', [])
             var datespan = moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat) + ".." + moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
             var startDate = moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat);
             var endDate = moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
+            localStorage.setItem("startDate", startDate);
+			localStorage.setItem("endDate", endDate);
             $scope.queriesArray = [];
             $scope.tableHeader = [];
             $scope.activeItems = [];
@@ -1099,13 +1112,12 @@ angular.module('chartsCtrl', [])
                 if( $scope.tableStats[i].pointId !== 'null' && $scope.tableStats[i].pointId !== null ){
                     $scope.activeItems.push(i);
                     const id = $scope.tableStats[i].pointId;
-                    console.log($scope.tableStats,'scope.tableStats')
                     const sensorType =  $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
+                    localStorage.setItem("aTreeNodeId", id);
+			        localStorage.setItem("sensorId", sensorType);
                     const interval = $scope.rollup.value;
-                    console.log($scope.rollup.value,'$scope.rollup.value')
                     const fold = $scope.tableStats[i].fold.value
-                    //const query = `html_plot_chart_06_b([${id}],${sensorType},${datespan},"${fold}",${interval})`;
-                    const query = `http://54.254.34.0/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+                    const query = `http://127.0.0.1:8000/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
                     let queryInfo = { query: query , index: i };
                     $scope.queriesArray.push(queryInfo);
                 }

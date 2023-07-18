@@ -76,23 +76,22 @@ angular.module('settingsCtrl', [])
                 emailAddress: $scope.emailAddress,
                 smsNumber: $scope.smsNumber
               };
-            const query = $http.post('http://54.254.34.0/api/v1/addSetting', loginData)
+            const query = $http.post('http://127.0.0.1:8000/api/v1/addSetting?portal='+$scope.aPortalName, loginData)
             .then(function (response){
-                console.log(response.data.data,'esponse.data.data')
-                    const data = response.data.data[0];
-                    if(data.status == 200){
-                        alert(data.msg);
+                    const data = response.data;
+                    if( data.status ){
+                        alert(data.message);
                     }
                 });
         }
        
         $scope.configRecord = [];
         $scope.contactName = [];
-                $scope.emailAddress = [];
-                $scope.smsNumber = [];
+        $scope.emailAddress = [];
+        $scope.smsNumber = [];
         function getSaveedUserConfiguration() {
             $scope.portal =  "tracnet trial 20230703";
-            const query = $http.get('http://54.254.34.0/api/v1/get-setting-data?portalName=Gold Coast Water')
+            const query = $http.get('http://54.254.34.0/api/v1/get-setting-data?portalName='+$scope.portal)
             .then(function (response){
 				const data = response.data.data;
                 console.log(response.data.data,'response.data.data data')
