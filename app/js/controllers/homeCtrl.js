@@ -666,8 +666,7 @@ angular.module('homeCtrl', [])
 			.then(function (response){
 				$scope.pointSettingData = response.data.data;
 				localStorage.setItem("instName", $scope.pointSettingData.installationName);
-
-				//console.log($scope.pointSettingData, "pointSettingData");
+			    console.log($scope.pointSettingData, "pointSettingData");
 			});						
 		}
 
@@ -675,6 +674,7 @@ angular.module('homeCtrl', [])
 		$scope.SavePoppupFormData = function(){
 			var node_name = localStorage.getItem("node_name");
 			let instName = localStorage.getItem("instName");
+			var node_id = localStorage.getItem("node_id");
 			$scope.bench_height = angular.element($('#bench_height')).val();
 			$scope.angel_alarm = angular.element($('#angel_alarm')).val();
 			var distance = angular.element($('#distance_alarm')).val() || 0;			
