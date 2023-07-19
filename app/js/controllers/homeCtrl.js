@@ -609,7 +609,7 @@ angular.module('homeCtrl', [])
 			
 			$scope.displayData[index]['infoBox'] = homeiw;
 			localStorage.setItem("node_id", nodeID.split(" ")[0]);
-			const query = $http.get('http://127.0.0.1:8000/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId='+nodeID)
+			const query = $http.get('http://54.254.34.0/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId='+nodeID)
 			.then(function (response){
 				const readings = response.data.data;
 				
