@@ -39,8 +39,7 @@
 				<a href="#"><tr ng-repeat="item in sortedArray_1 | filter : installation_name " ng-click="GetTableItemsByClick(item)">
 					<td class="changeMouse">{{item.installationName}}
 							<br>{{item.address}}</td>
-					<td ng-if="item.distance > 4000" class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ 4000 }} </td>
-					<td ng-else class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ item.distance | number : fractionSize }} </td>
+					<td class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ (item.distance < 3998)?item.distance:'' }} </td>
 					<td></td>
 					<td class="changeMouse" ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }" >{{item.angle}}</td>
 					<td class="changeMouse" ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered' }">{{item.oldest_comm_date}}</td>

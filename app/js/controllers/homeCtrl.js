@@ -189,123 +189,136 @@ angular.module('homeCtrl', [])
 				
 				var convertedData = [];
 					  
-					for (var i = 0; i < response.length; i++) {
+					for (var i = response.length-1; i > 0; i--) {
 
 						var data = response[i];
-						console.log(data, "my test");
-						if(data.point.angle > 5){
-							var angleColorRank=1;
-							var angleColor='Red';
-							var angle_alarm_tr ="Angle alarm Triggered";
-						}
-						else{
-							var angleColorRank=3;
-							var angleColor='Green';
-							var angle_alarm_tr ="";
-						}
 
-						var  distanceValue= parseInt(data.point.height);
-                    	var dis_color_rank = 3;
-                    	var dis_color = 'Green';
-                    	var distance_alarm_tr = "";
-    
-						if(data.point.height > 3998){
+						var objectId = data._id.$oid;
+						
+						var existingObject = convertedData.find(obj => obj.locationID === objectId);
+
+						if (!existingObject) {
+						
+							if(data.point.angle > 5){
+								var angleColorRank=1;
+								var angleColor='Red';
+								var angle_alarm_tr ="Angle alarm Triggered";
+							}
+							else{
+								var angleColorRank=3;
+								var angleColor='Green';
+								var angle_alarm_tr ="";
+							}
+
+							var  distanceValue= parseInt(data.point.height);
 							var dis_color_rank = 3;
 							var dis_color = 'Green';
-						}
-						if(data.point.height < 300){
-							var  distanceValue=400;
-							var distance_alarm_tr = "Distance alarm Triggered";
-							var dis_color_rank = 1;
-							var dis_color = 'Red';
-						}
+							var distance_alarm_tr = "";
+		
+							if(data.point.height > 3998){
+								var dis_color_rank = 3;
+								var dis_color = 'Green';
+							}
+							if(data.point.height < 300){
+								var  distanceValue=400;
+								var distance_alarm_tr = "Distance alarm Triggered";
+								var dis_color_rank = 1;
+								var dis_color = 'Red';
+							}
 
-						if(data.point.manhole_level_alarm=='Not full alarm'){
-							var manhole_level_alarm=0;
-						}
-						else{
-							var manhole_level_alarm=1;
-						}
-	
-						if(data.manhole_level_alarm=='Not moved'){
-							var manhole_moved_alarm =0;
-						}
-						else{
-							var manhole_moved_alarm =1;
-						}
+							if(data.point.manhole_level_alarm=='Not full alarm'){
+								var manhole_level_alarm=0;
+							}
+							else{
+								var manhole_level_alarm=1;
+							}
+		
+							if(data.manhole_level_alarm=='Not moved'){
+								var manhole_moved_alarm =0;
+							}
+							else{
+								var manhole_moved_alarm =1;
+							}
 
-						if(data.point.created_at.$date.$numberLong){
-							var timeDate = new Date(data.point.created_at.$date.$numberLong)
-						}
+							if(parseInt(data.point.created_at.$date.$numberLong)){
 
-						// // Current date and time
-						// var currentDate = new Date();
+								var options = {
+									timeZone: "Asia/Singapore",
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric',
+									hour: 'numeric',
+									minute: 'numeric',
+									second: 'numeric'
+								  };
 
-						// // Given timestamp (e.g., "2023-07-17T10:30:00")
-						// var givenTimestamp = new Date("2023-07-17T10:30:00");
+								var currentDate = new Date();
+								currentDate.toLocaleString("en-US", options );
 
-						// // Calculate the time difference in milliseconds
-						// var timeDiff = currentDate.getTime() - givenTimestamp.getTime();
+								var specificDate = new Date(parseInt(data.point.created_at.$date.$numberLong));
+								specificDate.toLocaleString("en-US", options );
 
-						// // Convert milliseconds to hours
-						// var hoursDiff = Math.floor(timeDiff / (1000  60  60));
+								var timeDiff = Math.abs(currentDate - specificDate);
 
-						// console.log("Hours difference:", hoursDiff);
-
-						
-				
-						var convertedPoint = {
-							locationID: data._id.$oid,
-							address: data.location.street+' '+data.location.city+' '+data.location.tz,
-							location: data.point._id.$oid,
-							latitude: parseFloat(data.location.latitude), // Populate with the appropriate value from the response
-							longitude: parseFloat(data.location.longitude), // Populate with the appropriate value from the response
-							city: data.location.city, // Populate with the appropriate value from the response
-							serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
-							installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
-							installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
-
-
-
-							angle: data.point.angle,
-							angleColorRank: angleColorRank, // Populate with the appropriate value from the response
-							angleColor: angleColor, // Populate with the appropriate value from the response
-							angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+								var hours = Math.floor(timeDiff / (1000 * 60 * 60));
+								//var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+								
+								var timeDate = hours
+							}							
+					
+							var convertedPoint = {
+								locationID: data._id.$oid,
+								address: data.location.street+' '+data.location.city+' '+data.location.tz,
+								location: data.point._id.$oid,
+								latitude: parseFloat(data.location.latitude), // Populate with the appropriate value from the response
+								longitude: parseFloat(data.location.longitude), // Populate with the appropriate value from the response
+								city: data.location.city, // Populate with the appropriate value from the response
+								serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
+								installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
+								installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
 
 
-							
-							lastCommColorRank: 0,
-							lastComm_alarm_tr: "",
-							last_communication: 9,
-							manhole_level_alarm: manhole_level_alarm,
-							manhole_moved_alarm: manhole_moved_alarm,
-							status:'all clear',
-							color:'green',
-							oldest_comm_date: "2 days ago",
-							customDistance: 500,
-							area: data.location.street, // Populate with the appropriate value from the response
-							// batterySta: data.location.street, // Populate with the appropriate value from the response
-							batteryStatus: data.point.manholeBatteryStatusValue,
-							batteryVolt: data.point.voltageValue, // Populate with the appropriate value from the response
-							//dis: data.point.distanceValue, // Populate with the appropriate value from the response
-							distance: distanceValue,
-							disColorRank:dis_color_rank, // Populate with the appropriate value from the response
-							disColor: dis_color, // Populate with the appropriate value from the response
-							distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
-							distanceValue: distanceValue,
-							//levelAl: '', // Populate with the appropriate value from the response
-							levelAlarm: data.point.manholeLevelAlarmValue,
-							//movedAl: '', // Populate with the appropriate value from the response
-							movedAlarm: data.point.manholeMovedAlarmValue,
-							//signalStre: '', // Populate with the appropriate value from the response
-							signalStrength: data.point.signalStrengthValue,
-							//temp: '', // Populate with the appropriate value from the response
-							temperature: data.point.temperatureValue,
-							ts: timeDate
 
-						};
+								angle: data.point.angle,
+								angleColorRank: angleColorRank, // Populate with the appropriate value from the response
+								angleColor: angleColor, // Populate with the appropriate value from the response
+								angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+
+
+								
+								lastCommColorRank: 0,
+								lastComm_alarm_tr: "",
+								last_communication: 9,
+								manhole_level_alarm: manhole_level_alarm,
+								manhole_moved_alarm: manhole_moved_alarm,
+								status:'all clear',
+								color:'green',
+								oldest_comm_date: timeDate + " hours ago",
+								customDistance: 500,
+								area: data.location.street, // Populate with the appropriate value from the response
+								// batterySta: data.location.street, // Populate with the appropriate value from the response
+								batteryStatus: data.point.manholeBatteryStatusValue,
+								batteryVolt: data.point.voltageValue, // Populate with the appropriate value from the response
+								//dis: data.point.distanceValue, // Populate with the appropriate value from the response
+								distance: distanceValue,
+								disColorRank:dis_color_rank, // Populate with the appropriate value from the response
+								disColor: dis_color, // Populate with the appropriate value from the response
+								distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
+								distanceValue: distanceValue,
+								//levelAl: '', // Populate with the appropriate value from the response
+								levelAlarm: data.point.manholeLevelAlarmValue,
+								//movedAl: '', // Populate with the appropriate value from the response
+								movedAlarm: data.point.manholeMovedAlarmValue,
+								//signalStre: '', // Populate with the appropriate value from the response
+								signalStrength: data.point.signalStrengthValue,
+								//temp: '', // Populate with the appropriate value from the response
+								temperature: data.point.temperatureValue,
+								ts: timeDate + " hours ago"
+							};
 				
 						convertedData.push(convertedPoint);
+
+						}
 					}
 					  
 					console.log(convertedData);
@@ -329,8 +342,7 @@ angular.module('homeCtrl', [])
 					var arrYellow_2_3 = [];
 					var arrYellow_3_3 = [];
 					var arrYellow_3_2 = [];
-					console.log($scope.dataLocation,'$scope.dataLocation')
-					console.log($scope.dataLocation.length,'$scope.dataLocation length')
+					
 					for(var i=0; i<$scope.dataLocation.length; i++ ) {
 						
 						if( ($scope.dataLocation[i].disColorRank == 1 && $scope.dataLocation[i].angleColorRank == 1)  ) {
@@ -390,7 +402,7 @@ angular.module('homeCtrl', [])
 
 					
 					for(var k=0; k < $scope.sortedArray.length; k++) {
-						console.log($scope.sortedArray,'$scope.sortedArray')
+						
 						last_comm_split = $scope.sortedArray[k].oldest_comm_date.split(" ");
 
 						if(last_comm_split[1] ==  "minutes" || last_comm_split[1] ==  "minute") {
@@ -451,10 +463,11 @@ angular.module('homeCtrl', [])
 		let beachMarker = [];
 
 		function buildMarker(dict){
-			console.log(dict,'dict')
+			
 			if( typeof dict.latitude === 'undefined' && typeof dict.longitude === 'undefined' ) return;
+			var disctdis = (dict.distance < 3998)?dict.distance+' mm':'--';
 			var infowindow = new google.maps.InfoWindow({
-				content: dict.distance.toLocaleString() +"mm"+",  " + dict.angle + "\xBA"  ,
+				content: disctdis.toLocaleString() +",  " + dict.angle + "\xBA"  ,
 			  });
 			
 			  var colorCode = dict.colorRank;  
@@ -576,7 +589,7 @@ angular.module('homeCtrl', [])
 				dataId: "aaaa",
 				enableEventPropagation: false
 			};
-			console.log(marker,'marker.position')
+			
 			homeiw = new InfoBox(myOptions);
 			homeiw.setPosition(marker.position);
 			homeiw.open(map);
@@ -593,13 +606,13 @@ angular.module('homeCtrl', [])
 			homeiw.addListener('closeclick', function(){
 				reCenterMap(null);
 			});
-			//console.log(nodeID,'nodeID saxena')
+			
 			$scope.displayData[index]['infoBox'] = homeiw;
 			localStorage.setItem("node_id", nodeID.split(" ")[0]);
 			const query = $http.get('http://127.0.0.1:8000/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId='+nodeID)
 			.then(function (response){
 				const readings = response.data.data;
-				console.log(response.data,'response.data test')
+				
 				let content = document.createElement("div");
 				content.style.cssText = "text-align: center; background: black; color: white; padding: 5px; font-size: 1.8rem";
 				content.setAttribute("id", 'infoBox_' + nodeID.split(" ")[0]);
@@ -637,7 +650,7 @@ angular.module('homeCtrl', [])
 			.then(function (response){
 				$scope.pointSettingData = response.data.data;
 				localStorage.setItem("instName", $scope.pointSettingData.installationName);
-				console.log($scope.pointSettingData, "pointSettingData");
+
 			});						
 		}
 
@@ -715,7 +728,7 @@ angular.module('homeCtrl', [])
 					imgpath = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
 				}
 			  }
-			  console.log(dict,'dict sorb')
+			  
 			let point = { lat: dict.latitude, lng: dict.longitude };
 			const mapOptions = {
 				center: point,
