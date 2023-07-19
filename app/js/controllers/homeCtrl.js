@@ -662,7 +662,7 @@ angular.module('homeCtrl', [])
 		$scope.poppupForm = function(){
 			var node_id = localStorage.getItem("node_id");
 			$("#popupModalCenter").addClass("show-modal");
-			$http.get('http://127.0.0.1:8000/api/v1/user-definded-distancealert/?aTreeNodeRef='+node_id)
+			$http.get('http://54.254.34.0/api/v1/user-definded-distancealert/?aTreeNodeRef='+node_id)
 			.then(function (response){
 				$scope.pointSettingData = response.data.data;
 				localStorage.setItem("instName", $scope.pointSettingData.installationName);
