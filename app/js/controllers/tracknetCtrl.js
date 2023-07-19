@@ -234,7 +234,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
     $scope.loadData = function (initset) {
         $scope.device = {};
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a http://54.254.34.0/api/v1/ */
-        $http.get('http://54.254.34.0/api/v1/tracnet-alarm-alert/'+ localStorage.getItem('singleDate'))
+        $http.get('http://54.254.34.0/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
 				.then(function (response){
             const data = response.data.data;
             console.log(data,'sorb data')
@@ -565,7 +565,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
     var last_comm_split = null;
 
     $scope.$on('$viewContentLoaded', function () {
-        $http.get('http://54.254.34.0/api/v1/traknetApiList')
+        $http.get('http://127.0.0.1:8000/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
 				.then(function (response){
                     console.log(response.data,'response.data traknetApiList')
             for (var i = 0; i < response.data.data.length; i++) {

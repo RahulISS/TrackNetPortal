@@ -183,17 +183,17 @@ angular.module('homeCtrl', [])
 		function addMarker(){
 			
 			$scope.isLoading = true;
-				const query = $http.get('http://54.254.34.0/api/v1/newtraknetApiList')
+				const query = $http.get('http://127.0.0.1:8000/api/v1/traknetApiList')
 				.then(function (res){
 				const response = res.data.data;
-				
+				console.log(response);
 				var convertedData = [];
 					  
 					for (var i = 0; i < response.length; i++) {
 
 						var data = response[i];
-						console.log(data, "my test");
-						if(data.point.angle > 5){
+
+						if(data.point.angleValue > 5){
 							var angleColorRank=1;
 							var angleColor='Red';
 							var angle_alarm_tr ="Angle alarm Triggered";
@@ -204,16 +204,16 @@ angular.module('homeCtrl', [])
 							var angle_alarm_tr ="";
 						}
 
-						var  distanceValue= parseInt(data.point.height);
+						var  distanceValue= parseInt(data.point.distanceValue);
                     	var dis_color_rank = 3;
                     	var dis_color = 'Green';
                     	var distance_alarm_tr = "";
     
-						if(data.point.height > 3998){
+						if(data.point.distanceValue > 3998){
 							var dis_color_rank = 3;
 							var dis_color = 'Green';
 						}
-						if(data.point.height < 300){
+						if(data.point.distanceValue < 300){
 							var  distanceValue=400;
 							var distance_alarm_tr = "Distance alarm Triggered";
 							var dis_color_rank = 1;
@@ -234,10 +234,6 @@ angular.module('homeCtrl', [])
 							var manhole_moved_alarm =1;
 						}
 
-						if(data.point.created_at.$date.$numberLong){
-							var timeDate = new Date(data.point.created_at.$date.$numberLong)
-						}
-
 						// // Current date and time
 						// var currentDate = new Date();
 
@@ -255,60 +251,59 @@ angular.module('homeCtrl', [])
 						
 				
 						var convertedPoint = {
-							locationID: data._id.$oid,
-							address: data.location.street+' '+data.location.city+' '+data.location.tz,
-							location: data.point._id.$oid,
-							latitude: parseFloat(data.location.latitude), // Populate with the appropriate value from the response
-							longitude: parseFloat(data.location.longitude), // Populate with the appropriate value from the response
-							city: data.location.city, // Populate with the appropriate value from the response
-							serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
-							installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
-							installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
+						locationID: data._id.$oid,
+						address: data.location.street+' '+data.location.city+' '+data.location.tz,
+						location: data.point._id.$oid,
+						latitude: parseFloat(data.location.latitude), // Populate with the appropriate value from the response
+						longitude: parseFloat(data.location.longitude), // Populate with the appropriate value from the response
+						city: data.location.city, // Populate with the appropriate value from the response
+						serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
+						installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
+						installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
 
 
 
-							angle: data.point.angle,
-							angleColorRank: angleColorRank, // Populate with the appropriate value from the response
-							angleColor: angleColor, // Populate with the appropriate value from the response
-							angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+						angle: data.point.angleValue,
+						angleColorRank: angleColorRank, // Populate with the appropriate value from the response
+						angleColor: angleColor, // Populate with the appropriate value from the response
+						angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
 
 
-							
-							lastCommColorRank: 0,
-							lastComm_alarm_tr: "",
-							last_communication: 9,
-							manhole_level_alarm: manhole_level_alarm,
-							manhole_moved_alarm: manhole_moved_alarm,
-							status:'all clear',
-							color:'green',
-							oldest_comm_date: "2 days ago",
-							customDistance: 500,
-							area: data.location.street, // Populate with the appropriate value from the response
-							// batterySta: data.location.street, // Populate with the appropriate value from the response
-							batteryStatus: data.point.manholeBatteryStatusValue,
-							batteryVolt: data.point.voltageValue, // Populate with the appropriate value from the response
-							//dis: data.point.distanceValue, // Populate with the appropriate value from the response
-							distance: distanceValue,
-							disColorRank:dis_color_rank, // Populate with the appropriate value from the response
-							disColor: dis_color, // Populate with the appropriate value from the response
-							distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
-							distanceValue: distanceValue,
-							//levelAl: '', // Populate with the appropriate value from the response
-							levelAlarm: data.point.manholeLevelAlarmValue,
-							//movedAl: '', // Populate with the appropriate value from the response
-							movedAlarm: data.point.manholeMovedAlarmValue,
-							//signalStre: '', // Populate with the appropriate value from the response
-							signalStrength: data.point.signalStrengthValue,
-							//temp: '', // Populate with the appropriate value from the response
-							temperature: data.point.temperatureValue,
-							ts: timeDate
-
+						
+						lastCommColorRank: 0,
+						lastComm_alarm_tr: "",
+						last_communication: 9,
+						manhole_level_alarm: manhole_level_alarm,
+						manhole_moved_alarm: manhole_moved_alarm,
+						status:'all clear',
+						color:'green',
+						oldest_comm_date: "2 days ago",
+						customDistance: 500,
+						area: data.location.street, // Populate with the appropriate value from the response
+						// batterySta: data.location.street, // Populate with the appropriate value from the response
+						batteryStatus: data.point.manholeBatteryStatusValue,
+						batteryVolt: data.point.voltageValue, // Populate with the appropriate value from the response
+						//dis: data.point.distanceValue, // Populate with the appropriate value from the response
+						distance: distanceValue,
+						disColorRank:dis_color_rank, // Populate with the appropriate value from the response
+						disColor: dis_color, // Populate with the appropriate value from the response
+						distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
+						distanceValue: distanceValue,
+						//levelAl: '', // Populate with the appropriate value from the response
+						levelAlarm: data.point.manholeLevelAlarmValue,
+						//movedAl: '', // Populate with the appropriate value from the response
+						movedAlarm: data.point.manholeMovedAlarmValue,
+						//signalStre: '', // Populate with the appropriate value from the response
+						signalStrength: data.point.signalStrengthValue,
+						//temp: '', // Populate with the appropriate value from the response
+						temperature: data.point.temperatureValue,
+						//ts: data.point.timestamp
 						};
 				
 						convertedData.push(convertedPoint);
 					}
 					  
-					console.log(convertedData);
+					  
 					const aLocation = convertedData
 					$scope.dataLocation = aLocation;
 					

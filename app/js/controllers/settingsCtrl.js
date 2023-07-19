@@ -346,13 +346,13 @@ angular.module('settingsCtrl', [])
         }
 
         $scope.sendTestMessage = function() {
-            let userInput = prompt("Please enter your contact no with country code", "+65");
+            let userInput = prompt("Please enter your contact no with country code", "65");
             if (Number(userInput)) {
-                const query = `emailSend( null ,"${userInput}@directsms.com.au", "", "Test Message Recieved!")`;
-                Data.sendRequest(query,$rootScope.storage.skysparkVersion).then(function(response){
-                    if( response.data.rows[0].val == "sent!" )
-                    alert("Test Message Sent!")
-            });
+                $http.get('http://127.0.0.1:8000/api/v1/send-sms?phoneNo='+userInput)
+				    .then(function (res){
+                        if( res.status)
+                        alert("Test Message Sent!")
+                });
             } else {
                 alert ("Invalid input. Please enter a valid number.");
             }
