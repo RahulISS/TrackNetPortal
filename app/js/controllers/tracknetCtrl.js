@@ -236,8 +236,10 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a http://54.254.34.0/api/v1/ */
         $http.get('http://54.254.34.0/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
 				.then(function (response){
+            
             const data = response.data.data;
-            console.log(data,'sorb data')
+            
+            console.log(data,'tracnet data')
             for (i = 0; i < data.length; i++) {
                 if ($scope.device[data[i].product_serialNumber] == undefined) $scope.device[data[i].product_serialNumber] = [];
                 let eachData = data[i];

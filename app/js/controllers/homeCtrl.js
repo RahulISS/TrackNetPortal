@@ -192,6 +192,17 @@ angular.module('homeCtrl', [])
 					for (var i = response.length-1; i > 0; i--) {
 
 						var data = response[i];
+						//console.log(data, "my test");
+						if(data.point.angle > 5){
+							var angleColorRank=1;
+							var angleColor='Red';
+							var angle_alarm_tr ="Angle alarm Triggered";
+						}
+						else{
+							var angleColorRank=3;
+							var angleColor='Green';
+							var angle_alarm_tr ="";
+						}
 
 						var objectId = data._id.$oid;
 						
@@ -321,7 +332,7 @@ angular.module('homeCtrl', [])
 						}
 					}
 					  
-					console.log(convertedData);
+					//console.log(convertedData);
 					const aLocation = convertedData
 					$scope.dataLocation = aLocation;
 					
@@ -342,7 +353,8 @@ angular.module('homeCtrl', [])
 					var arrYellow_2_3 = [];
 					var arrYellow_3_3 = [];
 					var arrYellow_3_2 = [];
-					
+					//console.log($scope.dataLocation,'$scope.dataLocation')
+					//console.log($scope.dataLocation.length,'$scope.dataLocation length')
 					for(var i=0; i<$scope.dataLocation.length; i++ ) {
 						
 						if( ($scope.dataLocation[i].disColorRank == 1 && $scope.dataLocation[i].angleColorRank == 1)  ) {
@@ -403,6 +415,7 @@ angular.module('homeCtrl', [])
 					
 					for(var k=0; k < $scope.sortedArray.length; k++) {
 						
+						//console.log($scope.sortedArray,'$scope.sortedArray')
 						last_comm_split = $scope.sortedArray[k].oldest_comm_date.split(" ");
 
 						if(last_comm_split[1] ==  "minutes" || last_comm_split[1] ==  "minute") {
@@ -464,6 +477,7 @@ angular.module('homeCtrl', [])
 
 		function buildMarker(dict){
 			
+			//console.log(dict,'dict')
 			if( typeof dict.latitude === 'undefined' && typeof dict.longitude === 'undefined' ) return;
 			var disctdis = (dict.distance < 3998)?dict.distance+' mm':'--';
 			var infowindow = new google.maps.InfoWindow({
@@ -590,6 +604,7 @@ angular.module('homeCtrl', [])
 				enableEventPropagation: false
 			};
 			
+			//console.log(marker,'marker.position')
 			homeiw = new InfoBox(myOptions);
 			homeiw.setPosition(marker.position);
 			homeiw.open(map);
@@ -613,6 +628,7 @@ angular.module('homeCtrl', [])
 			.then(function (response){
 				const readings = response.data.data;
 				
+				//console.log(response.data,'response.data test')
 				let content = document.createElement("div");
 				content.style.cssText = "text-align: center; background: black; color: white; padding: 5px; font-size: 1.8rem";
 				content.setAttribute("id", 'infoBox_' + nodeID.split(" ")[0]);
@@ -651,6 +667,7 @@ angular.module('homeCtrl', [])
 				$scope.pointSettingData = response.data.data;
 				localStorage.setItem("instName", $scope.pointSettingData.installationName);
 
+				//console.log($scope.pointSettingData, "pointSettingData");
 			});						
 		}
 
@@ -729,6 +746,7 @@ angular.module('homeCtrl', [])
 				}
 			  }
 			  
+			  //console.log(dict,'dict sorb')
 			let point = { lat: dict.latitude, lng: dict.longitude };
 			const mapOptions = {
 				center: point,

@@ -76,7 +76,7 @@ angular.module('settingsCtrl', [])
                 emailAddress: $scope.emailAddress,
                 smsNumber: $scope.smsNumber
               };
-            const query = $http.post('http://127.0.0.1:8000/api/v1/addSetting?portal='+$scope.aPortalName, loginData)
+            const query = $http.post('http://54.254.34.0/api/v1/addSetting?portal='+$scope.aPortalName, loginData)
             .then(function (response){
                     const data = response.data;
                     if( data.status ){
