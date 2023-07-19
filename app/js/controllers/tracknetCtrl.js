@@ -1,4 +1,4 @@
-angular.module('tracknetCtrl', []).controller('tracknetController', function ($scope, $rootScope, $http, Data, $q, $timeout, $interval) {
+angular.module('tracknetCtrl', []).controller('tracknetController', function ($scope, $rootScope, $http, Data, $q, $timeout, $interval,$filter) {
     const portalRef = '64ad1af2664396439a286273'; //tracnet trial 20230703
     const dataPickerFormat = "D/MM/YYYY";
     const skySparkFormat = "YYYY-MM-DD";
@@ -222,6 +222,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
     $scope.serialNo = '';
     $scope.$on("serialNumber", function (e, serialNumber) {
         $scope.serialNo = serialNumber;
+        console.log($scope.serialNo,'$scope.serialNo')
     });
     $scope.$watch("serialNo", function (index) {
         if (index == undefined) return;
@@ -231,46 +232,165 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
             document.getElementById('myDiv').innerHTML = $scope.locationData[index].marker.sensorContent;
         }
     });
+    
     $scope.loadData = function (initset) {
         $scope.device = {};
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a http://54.254.34.0/api/v1/ */
         $http.get('http://54.254.34.0/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
-				.then(function (response){
-            
-            const data = response.data.data;
-            
-            console.log(data,'tracnet data')
-            for (i = 0; i < data.length; i++) {
-                if ($scope.device[data[i].product_serialNumber] == undefined) $scope.device[data[i].product_serialNumber] = [];
-                let eachData = data[i];
-                $scope.device[data[i].product_serialNumber].push(eachData);
+				.then(function (res){
+            const response = res.data.data;
+            var convertedData = [];
+					  
+					for (var i = 0; i < response.length; i++) {
+
+						var data = response[i];
+						console.log(data, "my test");
+						if(data.point.angle > 5){
+							var angleColorRank=1;
+							var angleColor='Red';
+							var angle_alarm_tr ="Angle alarm Triggered";
+						}
+						else{
+							var angleColorRank=3;
+							var angleColor='Green';
+							var angle_alarm_tr ="";
+						}
+
+						var  distanceValue= parseInt(data.point.height);
+                    	var dis_color_rank = 3;
+                    	var dis_color = 'Green';
+                    	var distance_alarm_tr = "";
+    
+						if(data.point.height > 3998){
+							var dis_color_rank = 3;
+							var dis_color = 'Green';
+						}
+						if(data.point.height < 300){
+							var  distanceValue=400;
+							var distance_alarm_tr = "Distance alarm Triggered";
+							var dis_color_rank = 1;
+							var dis_color = 'Red';
+						}
+
+						if(data.point.manhole_level_alarm=='Not full alarm'){
+							var manhole_level_alarm=0;
+						}
+						else{
+							var manhole_level_alarm=1;
+						}
+	
+						if(data.manhole_level_alarm=='Not moved'){
+							var manhole_moved_alarm =0;
+						}
+						else{
+							var manhole_moved_alarm =1;
+						}
+
+						if(data.point.date){
+							var timeDate = data.point.date;
+						}
+
+				console.log(data.location,'data.location')
+						var convertedPoint = {
+							locationID: data.location._id.$oid,
+							address: data.location.street+' '+data.location.city+' '+data.location.tz,
+							location: data.point._id.$oid,
+							latitude: parseFloat(data.location.latitude), // Populate with the appropriate value from the response
+							longitude: parseFloat(data.location.longitude), // Populate with the appropriate value from the response
+							city: data.location.city, // Populate with the appropriate value from the response
+							serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
+							installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
+							installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
+
+
+
+							angle: data.point.angle,
+							angleColorRank: angleColorRank, // Populate with the appropriate value from the response
+							angleColor: angleColor, // Populate with the appropriate value from the response
+							angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+
+
+							
+							lastCommColorRank: 0,
+							lastComm_alarm_tr: "",
+							last_communication: 9,
+							manhole_level_alarm: manhole_level_alarm,
+							manhole_moved_alarm: manhole_moved_alarm,
+							status:'all clear',
+							color:'green',
+							oldest_comm_date: "2 days ago",
+							customDistance: 500,
+							area: data.location.street, // Populate with the appropriate value from the response
+							// batterySta: data.location.street, // Populate with the appropriate value from the response
+							batteryStatus: data.point.manholeBatteryStatusValue,
+							batteryVolt: data.point.voltageValue, // Populate with the appropriate value from the response
+							//dis: data.point.distanceValue, // Populate with the appropriate value from the response
+							distance: distanceValue,
+							disColorRank:dis_color_rank, // Populate with the appropriate value from the response
+							disColor: dis_color, // Populate with the appropriate value from the response
+							distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
+							distanceValue: distanceValue,
+							//levelAl: '', // Populate with the appropriate value from the response
+							levelAlarm: data.point.manholeLevelAlarmValue,
+							//movedAl: '', // Populate with the appropriate value from the response
+							movedAlarm: data.point.manholeMovedAlarmValue,
+							//signalStre: '', // Populate with the appropriate value from the response
+							signalStrength: data.point.signalStrengthValue,
+							//temp: '', // Populate with the appropriate value from the response
+							temperature: data.point.temperatureValue,
+							ts: timeDate,
+                            
+                            data:{
+                                city:data.location.city,
+                                latitude:data.location.latitude,
+                                longitude:data.location.longitude,
+                                state:data.location.state,
+                                street:data.location.street,
+                                tz:data.location.tz,
+                            }
+
+						};
+				
+						convertedData.push(convertedPoint);
+					}
+					  
+		    console.log(convertedData.data,'convertedData.data,');
+            console.log(data,'sorb data saxena')
+            for (i = 0; i < convertedData.length; i++) {
+                if ($scope.device[convertedData[i].serialNumber] == undefined) $scope.device[convertedData[i].serialNumber] = [];
+                let eachData = convertedData[i];
+                $scope.device[convertedData[i].serialNumber].push(eachData);
             }
             let queriesArray = [];
+            console.log($scope.device,'$scope.device saxena')
+            var i = 0;
             for (var index in $scope.device) {
+                i++;
+                console.log(index,'index index')
                 console.log($scope.device[index][0].location,'$scope.device[index][0].location')
                 console.log($scope.device[index],'$scope.device[index]')
+                //setTimeout(() => {
+                    if ($scope.device[index].length) 
+                    {
+                        queriesArray.push({ 'index': index, 'query': convertedData[i].data });
+                        i++;
+                    }
+                //}, 1000000);
                 
-                if ($scope.device[index].length) queriesArray.push({ 'index': index, 'query': 'http://54.254.34.0/api/v1/alocation-data/'+$scope.device[index][0].locationID });
             }
-            
+            console.log(convertedData[0].data,'convertedData.data saxena')
             if (queriesArray.length > 0) {
-                
-                // let promises_data = queriesArray.map(function (item) {
-                //     return Data.sendRequest(item.query, $rootScope.storage.skysparkVersion).then(function (reqResult) {
-                //         return {
-                //             'idx': item.index,
-                //             'data': reqResult.data
-                //         };
-                //     });
-                // });
+            
                 let promises_data = queriesArray.map(function (item) {
-                    return $http.get(item.query)
-                    .then(function (reqResult) {
+                    console.log(item,'item saxena')
+                    // return $http.get(item.query)
+                    // .then(function (reqResult) {
+                        //console.log(reqResult.data.data,'reqResult saxena')
                         return {
                             'idx': item.index,
-                            'data': reqResult.data
+                            'data': item.query
                         };
-                    });
+                    //});
                 });
                
                 $q.all(promises_data).then(function (responses) {
@@ -280,9 +400,9 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                         if (initset && !isIwOpen() && j == 0) {
                             $scope.serialNo = responses[j].idx;
                         }
-                    
+                        
                         $scope.locationData[responses[j].idx] = $scope.device[responses[j].idx][$scope.device[responses[j].idx].length-1];
-                        $scope.locationData[responses[j].idx].position = responses[j].data.data[0];
+                        $scope.locationData[responses[j].idx].position = responses[j].data[0];
                         $scope.locationData[responses[j].idx].marker = createMarker($scope.locationData[responses[j].idx]);
                     }
 
@@ -290,6 +410,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                     $scope.updateChartConfig();
                     if (initset && !(tracknetMap.isZoomed || isIwOpen())) $scope.recenterMap(false);
                     if ($scope.serialNo != '') updateOpenedInfowidow($scope.locationData[$scope.serialNo].marker);
+                    console.log($scope.locationData,'$scope.locationData res')
                 });
             }
         });
@@ -319,6 +440,16 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 
     }
 
+
+    const convertDateStringToISOString = function(dateString) {
+        const dateArray = dateString.split('_');
+        const datePart = dateArray[0].split('-').map(Number);
+        const timePart = dateArray[1].split('-').map(Number);
+    
+        const date = new Date(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]);
+        return $filter('date')(date, 'yyyy-MM-ddTHH:mm:ss');
+      };
+
     function createMarker(info) {
         console.log(info,'info sorb')
         const markericon = getMarkerColor(info);
@@ -332,41 +463,46 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                url: markericon,
             },
         });
-        
-        var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
+        console.log(marker,'marker saxena')
+        //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
+        const inputDateString = info.ts;
+        const ttemp = convertDateStringToISOString(inputDateString);
+        //console.log(convertedDate,'convertedDate'); // Output: "2023-07-19T10:53:01"
         var mmx = moment(ttemp);
         var timee = mmx.format('h:mm:ss A');
         var datee = mmx.format('ddd, MMMM Do YYYY');
-
+        console.log(mmx,'mmx')
+        console.log(timee,'timee')
+        console.log(datee,'datee')
         if (info.location == "undefined" | info.location == "undefined undefined")
             info.installationLocation = "Custom Location";
         else
             info.installationLocation = info.location;
 
-        if (info.position.city == "undefined")
+        if (info.city == "undefined")
             info.installationCity = "Custom City";
         else
-            info.installationCity = info.position.city;
+            info.installationCity = info.city;
 
         var distance_value = ''; 
-        if (info.dis > 400)
-           distance_value = info.dis;
+        if (info.distance > 400)
+           distance_value = info.distance;
         else
            distance_value = 400;
 
         marker.content = '<div class="infoWindowContent">' +
             "<b>Last Data: </b>" + datee + ' ' + timee + '<br>' + //IS-384 rename label name suggested by client
-            "<b>Street: </b>" + info.installationLocation + '<br>' +
+            "<b>Street: </b>" + info.area + '<br>' +
             "<b>City: </b>" + info.installationCity + '<br>' +
             "<b>Distance: </b>" + distance_value.toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' mm<br>' +
-            "<b>Angle: </b>" + info.ang + ' deg<br>' +
-            "<b>Temperature: </b>" + info.temp + ' °C<br>' +
+            "<b>Angle: </b>" + info.angle + ' deg<br>' +
+            "<b>Temperature: </b>" + info.temperature + ' °C<br>' +
             "<b>Signal Strength: </b>" + Math.trunc(info.signalStre).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm<br>' +
             "<b>Battery Status: </b>" + info.batteryVolt + ' V<br>' +
             '</div>';
 
         /**IS-416 starts*/
-        var streetCityName = info.installationLocation + ', ' + info.installationCity;
+        var streetCityName = info.area + ', ' + info.installationCity;
         
         /*IS-416 ends*/
         marker.sensorContent = '<div class="history_block" >' +
@@ -376,18 +512,19 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Last Communication Timestamp:</span> ' + datee + ' ' + timee + '</span> <span class="data-date"></span> </li>' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Distance:</span> ' +
             distance_value.toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' mm <span class="data-date"></span> </li>' +
-            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Angle: </span>' + info.ang + ' deg <span class="data-date"></span> </li>' +
-            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Temprature: </span>' + info.temp + ' °C<span class="data-date"></span> </li>' +
+            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Angle: </span>' + info.angle + ' deg <span class="data-date"></span> </li>' +
+            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Temprature: </span>' + info.temperature + ' °C<span class="data-date"></span> </li>' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Battery Voltage:</span> ' + info.batteryVolt + ' V <span class="data-date"></span> </li>' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Signal Strength:</span> ' + Math.trunc(info.signalStre).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm <span class="data-date"></span> </li>' +
             '</div>';
         '</div>';
-    
+    console.log($scope.locationData,'$scope.locationData')
         marker.addListener('click', function () {
             let markers = tracknetMap.marker;
             for (var i = markers.length - 1; i >= 0; i--) {
                 if (markers[i].id == this.id) {
-                    tracknetMap.infoWindow.setContent('<h2>' + $scope.locationData[this.id].aTreeNode_installation + '</h2>' + markers[i].content);
+                    console.log(markers[i].id, this.id,'$scope.locationData[this.id]')
+                    tracknetMap.infoWindow.setContent('<h2>' + $scope.locationData[markers[i].id].installationName + '</h2>' + markers[i].content);
                     $scope.locationData[this.id].marker = markers[i];
                     
                     break;
@@ -540,7 +677,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 
 
     $scope.alertClick = function (alert) {
-       
+       console.log(alert,'alert')
         var bounds = new google.maps.LatLngBounds();
         bounds.extend($scope.locationData[alert.product_serialNumber].marker.getPosition());
         tracknetMap.gMap.fitBounds(bounds);
@@ -567,20 +704,121 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
     var last_comm_split = null;
 
     $scope.$on('$viewContentLoaded', function () {
-        $http.get('http://127.0.0.1:8000/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
-				.then(function (response){
+        $http.get('http://54.254.34.0/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
+				.then(function (res){
+                    const response = res.data.data;
                     console.log(response.data,'response.data traknetApiList')
-            for (var i = 0; i < response.data.data.length; i++) {
-                if (response.data.data[i].angleColorRank == 3 && response.data.data[i].disColorRank == 3) $scope.realtimesummery.series[0].data[0].y++;
-                if (response.data.data[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++;
-                if (response.data.data[i].disColorRank == 1 || response.data.data[i].angleColorRank == 1) $scope.realtimesummery.series[0].data[2].y++;
+                    var convertedData = [];
+                    console.log(response.length,'response.length')
+                    for (var i = 0; i < response.length; i++) {
+
+						var data = response[i];
+						
+						var convertedPoint = {
+							
+							angle: data.point.angle,
+							angleColorRank: angleColorRank, // Populate with the appropriate value from the response
+							angleColor: angleColor, // Populate with the appropriate value from the response
+							angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+
+							distance: distance,
+							disColorRank:dis_color_rank, // Populate with the appropriate value from the response
+							disColor: dis_color, // Populate with the appropriate value from the response
+							distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
+							distanceValue: distance,
+							
+
+						};
+				
+						convertedData.push(convertedPoint);
+					}
+                    console.log(convertedData,'convertedData saxena sorb')
+                    console.log(convertedData.length,'convertedData.length')
+            for (var i = 0; i < convertedData.length; i++) {
+                if (convertedData[i].angleColorRank == 3 && convertedData[i].disColorRank == 3) $scope.realtimesummery.series[0].data[0].y++;
+                if (convertedData[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++;
+                if (convertedData[i].disColorRank == 1 || convertedData[i].angleColorRank == 1) $scope.realtimesummery.series[0].data[2].y++;
             }
         });
 
         $http.get('http://54.254.34.0/api/v1/tracnet-alarm-alert-tab')
-				.then(function (response){
-            $scope.alertLists = response.data.data;
-            console.log(response.data,'response.data tracnet-alarm-alert-tab')
+				.then(function (res){
+					const response = res.data.data;
+
+                    console.log("check the response",response);
+				
+					var convertedData = [];
+					  
+					for (var i = 0; i < response.length; i++) {
+
+						var data = response[i];
+
+                       
+                        if(data.location!==''){
+
+                            var status=''
+                            if(data.height < 300){
+                                 status="Distance alarms triggered";
+                            }
+                            else if(data.angle > 5){
+                                 status="Angle alarms triggered";
+                            }
+                            else if(data.height < 300 && data.angle > 5){
+                                 status="all alarms triggered";
+                            }
+
+                            if(parseInt(data.created_at.$date.$numberLong)){
+
+								var options = {
+									timeZone: "Asia/Singapore",
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric',
+									hour: 'numeric',
+									minute: 'numeric',
+									second: 'numeric'
+								  };
+
+								var currentDate = new Date();
+								currentDate.toLocaleString("en-US", options );
+
+								var specificDate = new Date(parseInt(data.created_at.$date.$numberLong));
+								specificDate.toLocaleString("en-US", options );
+
+								var timeDiff = Math.abs(currentDate - specificDate);
+
+                                console.log("check the timeDiff",timeDiff);
+
+								var hours = Math.floor(timeDiff / (1000 * 60 * 60));
+								//var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+								
+								var timeDate = hours
+							}	
+
+                            var convertedPoint = {
+                                aTreeNodeRef: data._id.$oid,
+                                aTreeNode_textLabel: data.textLabel,
+                                latitude: parseFloat(data.location.latitude),
+                                longitude: parseFloat(data.location.longitude),
+                                message: "Distance: "+ data.height+" mm, Angle:" + data.angle+ " deg",
+                                oldest_comm_date: timeDate+" hours",
+                                product_serialNumber:  data.device_id,
+                                status: status,
+                                street: data.location.street,
+                                city: data.location.city,
+                                time: timeDate,
+                            };
+                    
+                            convertedData.push(convertedPoint);
+                          
+                        }
+                     
+
+                       
+					}
+
+            $scope.alertLists = convertedData;
+
             for(var i=0; i<$scope.alertLists.length; i++){
                 $scope.alertLists[i].class = '';
                 if($scope.alertLists[i].status == 'distance alarm triggered') $scope.alertLists[i].class = 'distance danger';
@@ -610,9 +848,13 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                     $scope.alertLists[i].oldest_comm_date =  last_comm_split[0] + "mo";
                     
                 }
-                else {
+                else if(last_comm_split[1] ==  "year" || last_comm_split[1] ==  "year") {
                     $scope.alertLists[i].oldest_comm_date =  last_comm_split[0] + "y";
+                    
                 }
+                // else {
+                //     $scope.alertLists[i].oldest_comm_date =  last_comm_split[0] + "y";
+                // }
             }
             $scope.alertCount = $scope.alertLists.length;
         });
@@ -801,7 +1043,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         const marker = new google.maps.Marker({
             map: tracknetMap.gMap,
             position: position,
-            title: info.aTreeNode_installation,
+            title: info.installationName,
             id: info.serialNumber,
             disableDefaultUI: true,
             icon: {
@@ -819,10 +1061,10 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         else
             info.installationLocation = info.location;
 
-        if (info.position.city == "undefined")
+        if (info.city == "undefined")
             info.installationCity = "Custom City";
         else
-            info.installationCity = info.position.city;
+            info.installationCity = info.city;
         
         var distance_value = '';  
         if (info.dis > 400)
@@ -844,7 +1086,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         var streetCityName = info.installationLocation + ', ' + info.installationCity;
          marker.sensorContent = '<div class="history_block" >' +
             '<div class="history_block" >' +
-            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i>' + info.aTreeNode_installation +
+            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i>' + info.installationName +
             '<br>' + streetCityName + ' <span class="data-date"></span> </li>' + //IS-416
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Last Communication Timestamp:</span> ' + datee + ' ' + timee + '</span> <span class="data-date"></span> </li>' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Distance:</span> ' +
@@ -861,7 +1103,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                 
             for (var i = markers.length - 1; i >= 0; i--) {
                 if (markers[i].id == marker.id) {
-                    tracknetMap.infoWindow.setContent('<h2>' + $scope.locationData[marker.id].aTreeNode_installation + '</h2>' + markers[i].content);
+                    tracknetMap.infoWindow.setContent('<h2>' + $scope.locationData[marker.id].installationName + '</h2>' + markers[i].content);
                     $scope.locationData[marker.id].marker = markers[i];
                     break;
                 }
