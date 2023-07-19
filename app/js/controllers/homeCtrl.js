@@ -685,18 +685,21 @@ angular.module('homeCtrl', [])
 			    $scope.checkVal = 0
 			else
 			    $scope.checkVal = angular.element($('#enableDistanceAlarm')).val();
-			const query = `yvw_tracNet_userDefinded_distance_alert_01( { productRef: read(product and productModelRef == 2ac7d4be-00e6238c and id_serial == "${$scope.serialNo}")->id, distance_alert: ${$scope.distance_alarm}, alert_enable: ${$scope.checkVal}}, "${instName}")`;
-			Data.sendRequest(query,$rootScope.storage.skysparkVersion).then(function(response){
-				const data = response.data.rows[0];
-					if(data.status == 200){
-						alert("Data Saved");
-						$("#popupModalCenter").removeClass("show-modal");
-					}
-					else if(data.status == 400) {
-						alert(data.msg);
-						$("#popupModalCenter").removeClass("show-modal");
-					}
-			});
+				let formData = {
+					'aTreeNodeRef': node_id,
+					'alert_enable':  $scope.checkVal,
+					'distance_alert': $scope.distance_alarm
+				}
+				$http.post('http://54.254.34.0/api/v1/add-user-definded-distancealert', formData )
+					.then(function (response){
+						if(response.data.status ){
+							alert("Data Saved");
+							$("#popupModalCenter").removeClass("show-modal");
+						} else if(data.status == 400) {
+							alert(data.msg);
+							$("#popupModalCenter").removeClass("show-modal");
+						}
+					});
 		}
 
 		/*Zoom out marker location by the click on installation*/
