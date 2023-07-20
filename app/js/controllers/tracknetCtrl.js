@@ -256,8 +256,8 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 							var angleColor='Green';
 							var angle_alarm_tr ="";
 						}
-                        var angleValue = parseInt(data.point.angle);
-						var  distanceValue= parseInt(data.point.height);
+                        var angleValue= parseInt(data.point.angle);
+						var distanceValue= parseInt(data.point.height);
                     	var dis_color_rank = 3;
                     	var dis_color = 'Green';
                     	var distance_alarm_tr = "";
@@ -291,8 +291,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 							var timeDate = data.point.date;
 						}
 
-				
-						var convertedPoint = {
+				        var convertedPoint = {
 							locationID: data.location._id.$oid,
 							address: data.location.street+' '+data.location.city+' '+data.location.tz,
 							location: data.point._id.$oid,
@@ -302,17 +301,12 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 							serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
 							installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
 							installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
-
-
-
-							angle: angleValue,
+                            angle: angleValue,
 							angleColorRank: angleColorRank, // Populate with the appropriate value from the response
 							angleColor: angleColor, // Populate with the appropriate value from the response
 							angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
 
-
-							
-							lastCommColorRank: 0,
+                            lastCommColorRank: 0,
 							lastComm_alarm_tr: "",
 							last_communication: 9,
 							manhole_level_alarm: manhole_level_alarm,
@@ -445,7 +439,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
     const timePart = dateArray[1].split('-').map(Number);
 
     const date = new Date(Date.UTC(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]));
-       // console.log(date,'date timezone')
+       
     // Convert to Singapore timezone (UTC+8)
     date.setHours(date.getHours() + 8);
 
@@ -453,7 +447,6 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
       };
 
     function createMarker(info) {
-        console.log(info,'info sorb')
         const markericon = getMarkerColor(info);
         var marker = new google.maps.Marker({
             map: map,
@@ -469,11 +462,9 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
         const inputDateString = info.ts;
         const ttemp = convertDateStringToISOString(inputDateString);
-        //console.log(convertedDate,'convertedDate'); // Output: "2023-07-19T10:53:01"
         var mmx = moment(ttemp);
         var timee = mmx.format('h:mm:ss A');
         var datee = mmx.format('ddd, MMMM Do YYYY');
-       console.log(datee,'datee')
         if (info.location == "undefined" | info.location == "undefined undefined")
             info.installationLocation = "Custom Location";
         else
@@ -489,7 +480,6 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
            distance_value = info.distance;
         else if(info.distance > 3998){
             distance_value = "";
-            console.log(distance_value,'info.distance')
         } else{
             distance_value = 400;
         }
@@ -713,9 +703,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         $http.get('http://54.254.34.0/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
 				.then(function (res){
                     const response = res.data.data;
-                    console.log(response,'response.data traknetApiList')
                     var convertedAlertCountData = [];
-                    //console.log(response.length,'response.length')
                     for (var i = response.length-1; i > 0; i--) {
 
 						var data = response[i];
@@ -752,7 +740,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 							angleColorRank: angleColorRank, // Populate with the appropriate value from the response
 							angleColor: angleColor, // Populate with the appropriate value from the response
 							angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
-
+                            product_serialNumber: data.point.device_id,
 							distance: data.point.distance,
 							disColorRank:dis_color_rank, // Populate with the appropriate value from the response
 							disColor: dis_color, // Populate with the appropriate value from the response
@@ -775,7 +763,6 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                         }
                     }
                     
-                    console.log(uniqueDataCount,'convertedAlertCountData')
             for (var i = 0; i < uniqueDataCount.length; i++) {
                 if (uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3) $scope.realtimesummery.series[0].data[0].y++;
                 if (uniqueDataCount[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++;
@@ -841,15 +828,12 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                         }
                     }
 
-    // Now uniqueData contains the array of unique data based on device_id
-    //console.log(uniqueData,'uniqueData');
-
             $scope.alertLists = uniqueData;
 
             for(var i=0; i<$scope.alertLists.length; i++){
                 $scope.alertLists[i].class = '';
-                if($scope.alertLists[i].status == 'distance alarm triggered') $scope.alertLists[i].class = 'distance danger';
-                if($scope.alertLists[i].status == 'angle alarm triggered') $scope.alertLists[i].class = 'distance danger';
+                if($scope.alertLists[i].status == 'Distance alarms triggered') $scope.alertLists[i].class = 'distance danger';
+                if($scope.alertLists[i].status == 'Angle alarms triggeredd') $scope.alertLists[i].class = 'distance danger';
                 if($scope.alertLists[i].status == 'distance alert triggered') $scope.alertLists[i].class = 'distance warn';
                 if($scope.alertLists[i].status == 'all alarms') $scope.alertLists[i].class = 'distance danger';
 
@@ -1081,11 +1065,11 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
         const inputDateString = info.ts;
         const ttemp = convertDateStringToISOString(inputDateString);
-        //console.log(convertedDate,'convertedDate'); // Output: "2023-07-19T10:53:01"
+        
         var mmx = moment(ttemp);
         var timee = mmx.format('h:mm:ss A');
         var datee = mmx.format('ddd, MMMM Do YYYY');
-       console.log(datee,'datee')
+        
         if (info.location == "undefined" | info.location == "undefined undefined")
             info.installationLocation = "Custom Location";
         else
@@ -1101,7 +1085,6 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
            distance_value = info.distance;
         else if(info.distance > 3998){
             distance_value = "";
-            console.log(distance_value,'info.distance')
         } else{
             distance_value = 400;
         }
