@@ -285,7 +285,7 @@ angular.module('homeCtrl', [])
 								longitude: parseFloat(data.location.longitude), // Populate with the appropriate value from the response
 								city: data.location.city, // Populate with the appropriate value from the response
 								serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
-								installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
+								installationId: data.point._id.$oid, // Populate with the appropriate value from the response
 								installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
 
 
@@ -309,7 +309,7 @@ angular.module('homeCtrl', [])
 								area: data.location.street, // Populate with the appropriate value from the response
 								// batterySta: data.location.street, // Populate with the appropriate value from the response
 								batteryStatus: data.point.manholeBatteryStatusValue,
-								batteryVolt: data.point.voltageValue, // Populate with the appropriate value from the response
+								batteryVolt: data.point.battery_voltage, // Populate with the appropriate value from the response
 								//dis: data.point.distanceValue, // Populate with the appropriate value from the response
 								distance: distanceValue,
 								disColorRank:dis_color_rank, // Populate with the appropriate value from the response
@@ -319,11 +319,11 @@ angular.module('homeCtrl', [])
 								//levelAl: '', // Populate with the appropriate value from the response
 								levelAlarm: data.point.manholeLevelAlarmValue,
 								//movedAl: '', // Populate with the appropriate value from the response
-								movedAlarm: data.point.manholeMovedAlarmValue,
+								movedAlarm: data.point.moved_alarm,
 								//signalStre: '', // Populate with the appropriate value from the response
-								signalStrength: data.point.signalStrengthValue,
+								signalStrength: data.point.signal_strength,
 								//temp: '', // Populate with the appropriate value from the response
-								temperature: data.point.temperatureValue,
+								temperature: data.point.temperature,
 								ts: timeDate + " hours ago"
 							};
 				
@@ -332,7 +332,7 @@ angular.module('homeCtrl', [])
 						}
 					}
 					  
-					//console.log(convertedData);
+					console.log(convertedData);
 					const aLocation = convertedData
 					$scope.dataLocation = aLocation;
 					
