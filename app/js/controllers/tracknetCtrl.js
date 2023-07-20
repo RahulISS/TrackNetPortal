@@ -256,7 +256,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 							var angleColor='Green';
 							var angle_alarm_tr ="";
 						}
-
+                        var angleValue = parseInt(data.point.angle);
 						var  distanceValue= parseInt(data.point.height);
                     	var dis_color_rank = 3;
                     	var dis_color = 'Green';
@@ -305,7 +305,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 
 
 
-							angle: data.point.angle,
+							angle: angleValue,
 							angleColorRank: angleColorRank, // Populate with the appropriate value from the response
 							angleColor: angleColor, // Populate with the appropriate value from the response
 							angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
@@ -716,7 +716,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                     console.log(response,'response.data traknetApiList')
                     var convertedAlertCountData = [];
                     //console.log(response.length,'response.length')
-                    for (var i = 0; i < response.length; i++) {
+                    for (var i = response.length-1; i > 0; i--) {
 
 						var data = response[i];
                         if(data.point.angle > 5){
@@ -764,11 +764,22 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                         
 						convertedAlertCountData.push(convertedAlertCountPoint);
 					}
-                    console.log(convertedAlertCountData,'convertedAlertCountData')
-            for (var i = 0; i < convertedAlertCountData.length; i++) {
-                if (convertedAlertCountData[i].angleColorRank == 3 && convertedAlertCountData[i].disColorRank == 3) $scope.realtimesummery.series[0].data[0].y++;
-                if (convertedAlertCountData[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++;
-                if (convertedAlertCountData[i].disColorRank == 1 || convertedAlertCountData[i].angleColorRank == 1) $scope.realtimesummery.series[0].data[2].y++;
+                    var uniqueDataCount = [];
+                    var deviceIds = new Set(); // Using a Set to store unique device_ids
+
+                    for (var i = 0; i < convertedAlertCountData.length; i++) {
+                        var data = convertedAlertCountData[i];
+                        if (!deviceIds.has(data.product_serialNumber)) {
+                            uniqueDataCount.push(data);
+                            deviceIds.add(data.product_serialNumber);
+                        }
+                    }
+                    
+                    console.log(uniqueDataCount,'convertedAlertCountData')
+            for (var i = 0; i < uniqueDataCount.length; i++) {
+                if (uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3) $scope.realtimesummery.series[0].data[0].y++;
+                if (uniqueDataCount[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++;
+                if (uniqueDataCount[i].disColorRank == 1 || uniqueDataCount[i].angleColorRank == 1) $scope.realtimesummery.series[0].data[2].y++;
             }
            
         });
@@ -781,7 +792,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 				
 					var convertedData = [];
 					  
-					for (var i = 0; i < response.length; i++) {
+					for (var i = response.length-1; i > 0; i--) {
 
 						var data = response[i];
 
@@ -807,12 +818,12 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                                 latitude: parseFloat(data.location.latitude),
                                 longitude: parseFloat(data.location.longitude),
                                 message: "Distance: "+ data.height+" mm, Angle:" + data.angle+ " deg",
-                                oldest_comm_date: timeDate+" hours",
+                                oldest_comm_date: data.date+" hours",
                                 product_serialNumber:  data.device_id,
                                 status: status,
                                 street: data.location.street,
                                 city: data.location.city,
-                                time: data.point.date,
+                                time: data.date,
                             };
                     
                             convertedData.push(convertedPoint);
@@ -823,15 +834,15 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                     var deviceIds = new Set(); // Using a Set to store unique device_ids
 
                     for (var i = 0; i < convertedData.length; i++) {
-                    var data = convertedData[i];
-                    if (!deviceIds.has(data.product_serialNumber)) {
-                        uniqueData.push(data);
-                        deviceIds.add(data.product_serialNumber);
-                    }
+                        var data = convertedData[i];
+                        if (!deviceIds.has(data.product_serialNumber)) {
+                            uniqueData.push(data);
+                            deviceIds.add(data.product_serialNumber);
+                        }
                     }
 
     // Now uniqueData contains the array of unique data based on device_id
-    console.log(uniqueData,'uniqueData');
+    //console.log(uniqueData,'uniqueData');
 
             $scope.alertLists = uniqueData;
 
@@ -882,21 +893,17 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         let data = [
             [], []
         ];
-        //console.log($scope.device[$scope.serialNo],'$scope.device[$scope.serialNo]')
         if ($scope.device[$scope.serialNo] != undefined) {
             for (let j = 0; j < $scope.device[$scope.serialNo].length; j++) {
                 let eachEntry = $scope.device[$scope.serialNo][j];
-                //var ttemp = eachEntry.ts.slice(0, eachEntry.ts.indexOf("+"));
-                //console.log(eachEntry.angle,'eachEntry saxena')
                 const ttemp = convertDateStringToISOString(eachEntry.ts);
                 var mmx = moment.utc(ttemp);
                 const xval = mmx.valueOf();
                 data[0].push([xval, eachEntry.angle]);
                 data[1].push([xval, eachEntry.distance]);
-               
             }
         }
-//console.log(data[0],'data[0]')
+
         $scope.meterChartConfig =
         {
             options:
@@ -1018,7 +1025,6 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                     id: 'Two',
                     tooltip: {}
                 }],
-                
             title: {
                 text: ""
             }
@@ -1026,8 +1032,6 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         $scope.meterChartConfig.options.lang.noData = 'No Data Recorded.';
         for (let i = 0; i < $scope.chartLabel.length; i++) {
             $scope.meterChartConfig.series[i].data = data[i];
-            console.log($scope.meterChartConfig.series[i].data ,'$scope.meterChartConfig.series[i].data ')
-            console.log($scope.meterChartConfig.series[i].data,'$scope.meterChartConfig')
         }
     }
 
