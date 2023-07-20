@@ -6,6 +6,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         $scope.time = moment().utcOffset("+08:00").format("h:mm:ss a");
         $scope.date = moment().utcOffset("+08:00").format("ddd, MMM Do YYYY");
     }
+    
     $scope.clockTime();
     $interval($scope.clockTime, 1000);
     $scope.blockExpandLeft = false;
@@ -222,7 +223,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
     $scope.serialNo = '';
     $scope.$on("serialNumber", function (e, serialNumber) {
         $scope.serialNo = serialNumber;
-        console.log($scope.serialNo,'$scope.serialNo')
+       
     });
     $scope.$watch("serialNo", function (index) {
         if (index == undefined) return;
@@ -244,7 +245,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 					for (var i = 0; i < response.length; i++) {
 
 						var data = response[i];
-						console.log(data, "my test");
+						
 						if(data.point.angle > 5){
 							var angleColorRank=1;
 							var angleColor='Red';
@@ -290,7 +291,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 							var timeDate = data.point.date;
 						}
 
-				console.log(data.location,'data.location')
+				
 						var convertedPoint = {
 							locationID: data.location._id.$oid,
 							address: data.location.street+' '+data.location.city+' '+data.location.tz,
@@ -322,8 +323,8 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 							customDistance: 500,
 							area: data.location.street, // Populate with the appropriate value from the response
 							// batterySta: data.location.street, // Populate with the appropriate value from the response
-							batteryStatus: data.point.manholeBatteryStatusValue,
-							batteryVolt: data.point.voltageValue, // Populate with the appropriate value from the response
+							batteryStatus: data.point.battery_status,
+							batteryVolt: data.point.battery_voltage, // Populate with the appropriate value from the response
 							//dis: data.point.distanceValue, // Populate with the appropriate value from the response
 							distance: distanceValue,
 							disColorRank:dis_color_rank, // Populate with the appropriate value from the response
@@ -331,13 +332,13 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 							distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
 							distanceValue: distanceValue,
 							//levelAl: '', // Populate with the appropriate value from the response
-							levelAlarm: data.point.manholeLevelAlarmValue,
+							levelAlarm: data.point.manholeLevelAlarm,
 							//movedAl: '', // Populate with the appropriate value from the response
-							movedAlarm: data.point.manholeMovedAlarmValue,
+							movedAlarm: data.point.manholeMovedAlarm,
 							//signalStre: '', // Populate with the appropriate value from the response
-							signalStrength: data.point.signalStrengthValue,
+							signalStrength: data.point.signal_strength,
 							//temp: '', // Populate with the appropriate value from the response
-							temperature: data.point.temperatureValue,
+							temperature: data.point.temperature,
 							ts: timeDate,
                             
                             data:{
@@ -354,21 +355,18 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 						convertedData.push(convertedPoint);
 					}
 					  
-		    console.log(convertedData.data,'convertedData.data,');
-            console.log(data,'sorb data saxena')
+		    
             for (i = 0; i < convertedData.length; i++) {
                 if ($scope.device[convertedData[i].serialNumber] == undefined) $scope.device[convertedData[i].serialNumber] = [];
                 let eachData = convertedData[i];
                 $scope.device[convertedData[i].serialNumber].push(eachData);
             }
             let queriesArray = [];
-            console.log($scope.device,'$scope.device saxena')
+          
             var i = 0;
             for (var index in $scope.device) {
                 i++;
-                console.log(index,'index index')
-                console.log($scope.device[index][0].location,'$scope.device[index][0].location')
-                console.log($scope.device[index],'$scope.device[index]')
+              
                 //setTimeout(() => {
                     if ($scope.device[index].length) 
                     {
@@ -378,11 +376,11 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                 //}, 1000000);
                 
             }
-            console.log(convertedData[0].data,'convertedData.data saxena')
+            
             if (queriesArray.length > 0) {
             
                 let promises_data = queriesArray.map(function (item) {
-                    console.log(item,'item saxena')
+                    
                     // return $http.get(item.query)
                     // .then(function (reqResult) {
                         //console.log(reqResult.data.data,'reqResult saxena')
@@ -410,7 +408,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                     $scope.updateChartConfig();
                     if (initset && !(tracknetMap.isZoomed || isIwOpen())) $scope.recenterMap(false);
                     if ($scope.serialNo != '') updateOpenedInfowidow($scope.locationData[$scope.serialNo].marker);
-                    console.log($scope.locationData,'$scope.locationData res')
+                    
                 });
             }
         });
@@ -443,11 +441,15 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 
     const convertDateStringToISOString = function(dateString) {
         const dateArray = dateString.split('_');
-        const datePart = dateArray[0].split('-').map(Number);
-        const timePart = dateArray[1].split('-').map(Number);
-    
-        const date = new Date(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]);
-        return $filter('date')(date, 'yyyy-MM-ddTHH:mm:ss');
+    const datePart = dateArray[0].split('-').map(Number);
+    const timePart = dateArray[1].split('-').map(Number);
+
+    const date = new Date(Date.UTC(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]));
+       // console.log(date,'date timezone')
+    // Convert to Singapore timezone (UTC+8)
+    date.setHours(date.getHours() + 8);
+
+    return date;
       };
 
     function createMarker(info) {
@@ -463,7 +465,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                url: markericon,
             },
         });
-        console.log(marker,'marker saxena')
+        
         //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
         const inputDateString = info.ts;
         const ttemp = convertDateStringToISOString(inputDateString);
@@ -471,9 +473,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         var mmx = moment(ttemp);
         var timee = mmx.format('h:mm:ss A');
         var datee = mmx.format('ddd, MMMM Do YYYY');
-        console.log(mmx,'mmx')
-        console.log(timee,'timee')
-        console.log(datee,'datee')
+       console.log(datee,'datee')
         if (info.location == "undefined" | info.location == "undefined undefined")
             info.installationLocation = "Custom Location";
         else
@@ -487,8 +487,14 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         var distance_value = ''; 
         if (info.distance > 400)
            distance_value = info.distance;
-        else
-           distance_value = 400;
+        else if(info.distance > 3998){
+            distance_value = "";
+            console.log(distance_value,'info.distance')
+        } else{
+            distance_value = 400;
+        }
+        
+           
 
         marker.content = '<div class="infoWindowContent">' +
             "<b>Last Data: </b>" + datee + ' ' + timee + '<br>' + //IS-384 rename label name suggested by client
@@ -497,7 +503,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
             "<b>Distance: </b>" + distance_value.toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' mm<br>' +
             "<b>Angle: </b>" + info.angle + ' deg<br>' +
             "<b>Temperature: </b>" + info.temperature + ' °C<br>' +
-            "<b>Signal Strength: </b>" + Math.trunc(info.signalStre).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm<br>' +
+            "<b>Signal Strength: </b>" + Math.trunc(info.signalStrength).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm<br>' +
             "<b>Battery Status: </b>" + info.batteryVolt + ' V<br>' +
             '</div>';
 
@@ -515,15 +521,15 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Angle: </span>' + info.angle + ' deg <span class="data-date"></span> </li>' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Temprature: </span>' + info.temperature + ' °C<span class="data-date"></span> </li>' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Battery Voltage:</span> ' + info.batteryVolt + ' V <span class="data-date"></span> </li>' +
-            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Signal Strength:</span> ' + Math.trunc(info.signalStre).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm <span class="data-date"></span> </li>' +
+            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Signal Strength:</span> ' + Math.trunc(info.signalStrength).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm <span class="data-date"></span> </li>' +
             '</div>';
         '</div>';
-    console.log($scope.locationData,'$scope.locationData')
+    
         marker.addListener('click', function () {
             let markers = tracknetMap.marker;
             for (var i = markers.length - 1; i >= 0; i--) {
                 if (markers[i].id == this.id) {
-                    console.log(markers[i].id, this.id,'$scope.locationData[this.id]')
+                    
                     tracknetMap.infoWindow.setContent('<h2>' + $scope.locationData[markers[i].id].installationName + '</h2>' + markers[i].content);
                     $scope.locationData[this.id].marker = markers[i];
                     
@@ -677,7 +683,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
 
 
     $scope.alertClick = function (alert) {
-       console.log(alert,'alert')
+       
         var bounds = new google.maps.LatLngBounds();
         bounds.extend($scope.locationData[alert.product_serialNumber].marker.getPosition());
         tracknetMap.gMap.fitBounds(bounds);
@@ -707,45 +713,71 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         $http.get('http://54.254.34.0/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
 				.then(function (res){
                     const response = res.data.data;
-                    console.log(response.data,'response.data traknetApiList')
-                    var convertedData = [];
-                    console.log(response.length,'response.length')
+                    console.log(response,'response.data traknetApiList')
+                    var convertedAlertCountData = [];
+                    //console.log(response.length,'response.length')
                     for (var i = 0; i < response.length; i++) {
 
 						var data = response[i];
+                        if(data.point.angle > 5){
+							var angleColorRank=1;
+							var angleColor='Red';
+							var angle_alarm_tr ="Angle alarm Triggered";
+						}
+						else{
+							var angleColorRank=3;
+							var angleColor='Green';
+							var angle_alarm_tr ="";
+						}
+
+						var  distanceValue= parseInt(data.point.height);
+                    	var dis_color_rank = 3;
+                    	var dis_color = 'Green';
+                    	var distance_alarm_tr = "";
+    
+						if(data.point.height > 3998){
+							var dis_color_rank = 3;
+							var dis_color = 'Green';
+						}
+						if(data.point.height < 300){
+							var  distanceValue=400;
+							var distance_alarm_tr = "Distance alarm Triggered";
+							var dis_color_rank = 1;
+							var dis_color = 'Red';
+						}
 						
-						var convertedPoint = {
+						var convertedAlertCountPoint = {
 							
 							angle: data.point.angle,
 							angleColorRank: angleColorRank, // Populate with the appropriate value from the response
 							angleColor: angleColor, // Populate with the appropriate value from the response
 							angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
 
-							distance: distance,
+							distance: data.point.distance,
 							disColorRank:dis_color_rank, // Populate with the appropriate value from the response
 							disColor: dis_color, // Populate with the appropriate value from the response
 							distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
-							distanceValue: distance,
+							distanceValue: data.point.distance,
 							
 
 						};
-				
-						convertedData.push(convertedPoint);
+                        
+						convertedAlertCountData.push(convertedAlertCountPoint);
 					}
-                    console.log(convertedData,'convertedData saxena sorb')
-                    console.log(convertedData.length,'convertedData.length')
-            for (var i = 0; i < convertedData.length; i++) {
-                if (convertedData[i].angleColorRank == 3 && convertedData[i].disColorRank == 3) $scope.realtimesummery.series[0].data[0].y++;
-                if (convertedData[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++;
-                if (convertedData[i].disColorRank == 1 || convertedData[i].angleColorRank == 1) $scope.realtimesummery.series[0].data[2].y++;
+                    console.log(convertedAlertCountData,'convertedAlertCountData')
+            for (var i = 0; i < convertedAlertCountData.length; i++) {
+                if (convertedAlertCountData[i].angleColorRank == 3 && convertedAlertCountData[i].disColorRank == 3) $scope.realtimesummery.series[0].data[0].y++;
+                if (convertedAlertCountData[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++;
+                if (convertedAlertCountData[i].disColorRank == 1 || convertedAlertCountData[i].angleColorRank == 1) $scope.realtimesummery.series[0].data[2].y++;
             }
+           
         });
 
         $http.get('http://54.254.34.0/api/v1/tracnet-alarm-alert-tab')
 				.then(function (res){
 					const response = res.data.data;
 
-                    console.log("check the response",response);
+                  
 				
 					var convertedData = [];
 					  
@@ -767,33 +799,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                                  status="all alarms triggered";
                             }
 
-                            if(parseInt(data.created_at.$date.$numberLong)){
-
-								var options = {
-									timeZone: "Asia/Singapore",
-									year: 'numeric',
-									month: 'long',
-									day: 'numeric',
-									hour: 'numeric',
-									minute: 'numeric',
-									second: 'numeric'
-								  };
-
-								var currentDate = new Date();
-								currentDate.toLocaleString("en-US", options );
-
-								var specificDate = new Date(parseInt(data.created_at.$date.$numberLong));
-								specificDate.toLocaleString("en-US", options );
-
-								var timeDiff = Math.abs(currentDate - specificDate);
-
-                                console.log("check the timeDiff",timeDiff);
-
-								var hours = Math.floor(timeDiff / (1000 * 60 * 60));
-								//var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-								
-								var timeDate = hours
-							}	
+                            
 
                             var convertedPoint = {
                                 aTreeNodeRef: data._id.$oid,
@@ -806,18 +812,28 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                                 status: status,
                                 street: data.location.street,
                                 city: data.location.city,
-                                time: timeDate,
+                                time: data.point.date,
                             };
                     
                             convertedData.push(convertedPoint);
                           
-                        }
-                     
-
-                       
+                        } 
 					}
+                    var uniqueData = [];
+                    var deviceIds = new Set(); // Using a Set to store unique device_ids
 
-            $scope.alertLists = convertedData;
+                    for (var i = 0; i < convertedData.length; i++) {
+                    var data = convertedData[i];
+                    if (!deviceIds.has(data.product_serialNumber)) {
+                        uniqueData.push(data);
+                        deviceIds.add(data.product_serialNumber);
+                    }
+                    }
+
+    // Now uniqueData contains the array of unique data based on device_id
+    console.log(uniqueData,'uniqueData');
+
+            $scope.alertLists = uniqueData;
 
             for(var i=0; i<$scope.alertLists.length; i++){
                 $scope.alertLists[i].class = '';
@@ -866,17 +882,21 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         let data = [
             [], []
         ];
+        //console.log($scope.device[$scope.serialNo],'$scope.device[$scope.serialNo]')
         if ($scope.device[$scope.serialNo] != undefined) {
             for (let j = 0; j < $scope.device[$scope.serialNo].length; j++) {
                 let eachEntry = $scope.device[$scope.serialNo][j];
-                var ttemp = eachEntry.ts.slice(0, eachEntry.ts.indexOf("+"));
+                //var ttemp = eachEntry.ts.slice(0, eachEntry.ts.indexOf("+"));
+                //console.log(eachEntry.angle,'eachEntry saxena')
+                const ttemp = convertDateStringToISOString(eachEntry.ts);
                 var mmx = moment.utc(ttemp);
                 const xval = mmx.valueOf();
                 data[0].push([xval, eachEntry.angle]);
                 data[1].push([xval, eachEntry.distance]);
+               
             }
         }
-
+//console.log(data[0],'data[0]')
         $scope.meterChartConfig =
         {
             options:
@@ -998,6 +1018,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
                     id: 'Two',
                     tooltip: {}
                 }],
+                
             title: {
                 text: ""
             }
@@ -1005,6 +1026,8 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
         $scope.meterChartConfig.options.lang.noData = 'No Data Recorded.';
         for (let i = 0; i < $scope.chartLabel.length; i++) {
             $scope.meterChartConfig.series[i].data = data[i];
+            console.log($scope.meterChartConfig.series[i].data ,'$scope.meterChartConfig.series[i].data ')
+            console.log($scope.meterChartConfig.series[i].data,'$scope.meterChartConfig')
         }
     }
 
@@ -1051,11 +1074,14 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
             },
         });
 
-        var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
+        //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
+        const inputDateString = info.ts;
+        const ttemp = convertDateStringToISOString(inputDateString);
+        //console.log(convertedDate,'convertedDate'); // Output: "2023-07-19T10:53:01"
         var mmx = moment(ttemp);
         var timee = mmx.format('h:mm:ss A');
         var datee = mmx.format('ddd, MMMM Do YYYY');
-
+       console.log(datee,'datee')
         if (info.location == "undefined" | info.location == "undefined undefined")
             info.installationLocation = "Custom Location";
         else
@@ -1065,36 +1091,45 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
             info.installationCity = "Custom City";
         else
             info.installationCity = info.city;
-        
-        var distance_value = '';  
-        if (info.dis > 400)
-            distance_value = info.dis;
-        else
+
+        var distance_value = ''; 
+        if (info.distance > 400)
+           distance_value = info.distance;
+        else if(info.distance > 3998){
+            distance_value = "";
+            console.log(distance_value,'info.distance')
+        } else{
             distance_value = 400;
+        }
+        
+           
 
         marker.content = '<div class="infoWindowContent">' +
             "<b>Last Data: </b>" + datee + ' ' + timee + '<br>' + //IS-384 rename label name suggested by client
-            "<b>Street: </b>" + info.installationLocation + '<br>' +
+            "<b>Street: </b>" + info.area + '<br>' +
             "<b>City: </b>" + info.installationCity + '<br>' +
             "<b>Distance: </b>" + distance_value.toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' mm<br>' +
-            "<b>Angle: </b>" + info.ang + ' deg<br>' +
-            "<b>Temperature: </b>" + info.temp + ' °C<br>' +
-            "<b>Signal Strength: </b>" + Math.trunc(info.signalStre).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm<br>' +
+            "<b>Angle: </b>" + info.angle + ' deg<br>' +
+            "<b>Temperature: </b>" + info.temperature + ' °C<br>' +
+            "<b>Signal Strength: </b>" + Math.trunc(info.signalStrength).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm<br>' +
             "<b>Battery Status: </b>" + info.batteryVolt + ' V<br>' +
             '</div>';
+
+        /**IS-416 starts*/
+        var streetCityName = info.area + ', ' + info.installationCity;
         
-        var streetCityName = info.installationLocation + ', ' + info.installationCity;
-         marker.sensorContent = '<div class="history_block" >' +
+        /*IS-416 ends*/
+        marker.sensorContent = '<div class="history_block" >' +
             '<div class="history_block" >' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i>' + info.installationName +
             '<br>' + streetCityName + ' <span class="data-date"></span> </li>' + //IS-416
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Last Communication Timestamp:</span> ' + datee + ' ' + timee + '</span> <span class="data-date"></span> </li>' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Distance:</span> ' +
             distance_value.toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' mm <span class="data-date"></span> </li>' +
-            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Angle: </span>' + info.ang + ' deg <span class="data-date"></span> </li>' +
-            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Temprature: </span>' + info.temp + ' °C<span class="data-date"></span> </li>' +
+            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Angle: </span>' + info.angle + ' deg <span class="data-date"></span> </li>' +
+            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Temprature: </span>' + info.temperature + ' °C<span class="data-date"></span> </li>' +
             '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Battery Voltage:</span> ' + info.batteryVolt + ' V <span class="data-date"></span> </li>' +
-            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Signal Strength:</span> ' + Math.trunc(info.signalStre).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm <span class="data-date"></span> </li>' +
+            '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Signal Strength:</span> ' + Math.trunc(info.signalStrength).toLocaleString(undefined, { maximumFractionDigits: info.decimalPlaces }) + ' dBm <span class="data-date"></span> </li>' +
             '</div>';
         '</div>';
 
