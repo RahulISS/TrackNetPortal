@@ -227,13 +227,13 @@ angular.module('homeCtrl', [])
 							var distance_alarm_tr = "";
 		
 							if(data.point.height > 3998){
-								var dis_color_rank = 3;
-								var dis_color = 'Green';
+								var dis_color_rank = 0;
+								var dis_color = '';
 							}
 							if(data.point.height < 300){
 								var  distanceValue=400;
 								var distance_alarm_tr = "Distance alarm Triggered";
-								var dis_color_rank = 1;
+								var dis_color_rank = 3;
 								var dis_color = 'Red';
 							}
 							if(data.point.height < data.point.distance_alert && data.point.alert_enable == 1){
@@ -256,8 +256,11 @@ angular.module('homeCtrl', [])
 								var manhole_moved_alarm =1;
 							}
 
+							console.log(data.point.created_at, "created at")
+							
 							if(parseInt(data.point.created_at.$date.$numberLong)){
 
+							
 								var options = {
 									timeZone: "Asia/Singapore",
 									year: 'numeric',
@@ -275,13 +278,38 @@ angular.module('homeCtrl', [])
 								specificDate.toLocaleString("en-US", options );
 
 								var timeDiff = Math.abs(currentDate - specificDate);
-
-								var hours = Math.floor(timeDiff / (1000 * 60 * 60));
-								//var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
 								
+								var cd = 24 * 60 * 60 * 1000;
+								var hValue = Math.floor(timeDiff / cd);
+								if( hValue > 25 ) {
+									var lastComm = "Communications alarm Triggered";
+									var lastCommColor = 3;
+								} else {
+									var lastComm = "";
+									var lastCommColor = "";
+								}
+
+								if(timeDiff < 1000) { //miliseconds
+									var hours = timeDiff + ' ms';
+								} else if( timeDiff >= 1000 && timeDiff < 60000) { //seconds
+									var hours = ((timeDiff % 60000) / 1000).toFixed(0) + 's';
+								} else if(timeDiff >= 60000 && timeDiff < 3600000) { //mins
+									var hours = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)) + 'min';
+								} else if( timeDiff >= 3600000 && timeDiff < 86400000) { //hours
+									var hours = Math.floor(timeDiff / 3600000) + 'h';
+								} else if( timeDiff >= 86400000 && timeDiff < 2592000000) { //day
+									var hours = Math.floor(timeDiff / cd) + 'd';
+								} else if( timeDiff >= 2592000000 && timeDiff < 31536000000) { //week
+									var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + 'wk';
+								} else { //year
+									var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + 'y';
+								}
+								
+								//console.log(hours, "timeDiff")
 								var timeDate = hours
-							}							
-					
+							}	
+												
+							//console.log(timeDate);
 							var convertedPoint = {
 								locationID: data._id.$oid,
 								address: data.location.street+' '+data.location.city+' '+data.location.tz,
@@ -292,24 +320,18 @@ angular.module('homeCtrl', [])
 								serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
 								installationId: data.point._id.$oid, // Populate with the appropriate value from the response
 								installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
-
-
-
 								angle: data.point.angle,
 								angleColorRank: angleColorRank, // Populate with the appropriate value from the response
 								angleColor: angleColor, // Populate with the appropriate value from the response
 								angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
-
-
-								
-								lastCommColorRank: 0,
-								lastComm_alarm_tr: "",
+								lastCommColorRank: lastCommColor,
+								lastComm_alarm_tr: lastComm,
 								last_communication: 9,
 								manhole_level_alarm: manhole_level_alarm,
 								manhole_moved_alarm: manhole_moved_alarm,
 								status:'all clear',
 								color:'green',
-								oldest_comm_date: timeDate + " hours ago",
+								oldest_comm_date: timeDate,
 								customDistance: 500,
 								area: data.location.street, // Populate with the appropriate value from the response
 								// batterySta: data.location.street, // Populate with the appropriate value from the response
@@ -337,7 +359,7 @@ angular.module('homeCtrl', [])
 						}
 					}
 					  
-					console.log(convertedData);
+					//console.log(convertedData);
 					const aLocation = convertedData
 					$scope.dataLocation = aLocation;
 					
@@ -358,8 +380,7 @@ angular.module('homeCtrl', [])
 					var arrYellow_2_3 = [];
 					var arrYellow_3_3 = [];
 					var arrYellow_3_2 = [];
-					//console.log($scope.dataLocation,'$scope.dataLocation')
-					//console.log($scope.dataLocation.length,'$scope.dataLocation length')
+					
 					for(var i=0; i<$scope.dataLocation.length; i++ ) {
 						
 						if( ($scope.dataLocation[i].disColorRank == 1 && $scope.dataLocation[i].angleColorRank == 1)  ) {
@@ -418,35 +439,35 @@ angular.module('homeCtrl', [])
 					$scope.sortedArray = $scope.sortedArray.concat(arrYellow_3_3);
 
 					
-					for(var k=0; k < $scope.sortedArray.length; k++) {
+					// for(var k=0; k < $scope.sortedArray.length; k++) {
 						
-						//console.log($scope.sortedArray,'$scope.sortedArray')
-						last_comm_split = $scope.sortedArray[k].oldest_comm_date.split(" ");
+					// 	//console.log($scope.sortedArray,'$scope.sortedArray')
+					// 	last_comm_split = $scope.sortedArray[k].oldest_comm_date.split(" ");
 
-						if(last_comm_split[1] ==  "minutes" || last_comm_split[1] ==  "minute") {
-							$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "min";
+					// 	if(last_comm_split[1] ==  "minutes" || last_comm_split[1] ==  "minute") {
+					// 		$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "min";
 							
-						}
-						else if(last_comm_split[1] ==  "hours" || last_comm_split[1] ==  "hour") {
-							$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "h";
+					// 	}
+					// 	else if(last_comm_split[1] ==  "hours" || last_comm_split[1] ==  "hour") {
+					// 		$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "h";
 							
-						}
-						else if(last_comm_split[1] ==  "day" || last_comm_split[1] ==  "days") {
-							$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "d";
+					// 	}
+					// 	else if(last_comm_split[1] ==  "day" || last_comm_split[1] ==  "days") {
+					// 		$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "d";
 							
-						}
-						else if(last_comm_split[1] ==  "weeks" || last_comm_split[1] ==  "week") {
-							$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "wk";
+					// 	}
+					// 	else if(last_comm_split[1] ==  "weeks" || last_comm_split[1] ==  "week") {
+					// 		$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "wk";
 							
-						}
-						else if(last_comm_split[1] ==  "month" || last_comm_split[1] ==  "months") {
-							$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "mo";
+					// 	}
+					// 	else if(last_comm_split[1] ==  "month" || last_comm_split[1] ==  "months") {
+					// 		$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "mo";
 							
-						}
-						else {
-							$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "y";
-						}
-					}
+					// 	}
+					// 	else {
+					// 		$scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "y";
+					// 	}
+					// }
 
 					$scope.sortedArray_1 = $scope.sortedArray;
 
@@ -671,7 +692,7 @@ angular.module('homeCtrl', [])
 			.then(function (response){
 				$scope.pointSettingData = response.data.data;
 				localStorage.setItem("instName", $scope.pointSettingData.installationName);
-			    console.log($scope.pointSettingData, "pointSettingData");
+			    //console.log($scope.pointSettingData, "pointSettingData");
 			});						
 		}
 
