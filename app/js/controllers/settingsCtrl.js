@@ -76,7 +76,7 @@ angular.module('settingsCtrl', [])
                 emailAddress: $scope.emailAddress,
                 smsNumber: $scope.smsNumber
               };
-            const query = $http.post('http://54.254.34.0/api/v1/addSetting?portal='+$scope.aPortalName, loginData)
+            const query = $http.post('https://dev-api-sg.tracwater.asia/api/v1/addSetting?portal='+$scope.aPortalName, loginData)
             .then(function (response){
                     const data = response.data;
                     if( data.status ){
@@ -91,7 +91,7 @@ angular.module('settingsCtrl', [])
         $scope.smsNumber = [];
         function getSaveedUserConfiguration() {
             $scope.portal =  "tracnet trial 20230703";
-            const query = $http.get('http://54.254.34.0/api/v1/get-setting-data?portalName='+$scope.portal)
+            const query = $http.get('https://dev-api-sg.tracwater.asia/api/v1/get-setting-data?portalName='+$scope.portal)
             .then(function (response){
 				const data = response.data.data;
                 console.log(response.data.data,'response.data.data data')
@@ -212,7 +212,7 @@ angular.module('settingsCtrl', [])
                 smsNumber: $scope.smsNumber
               };
              
-            const query = $http.post('http://54.254.34.0/api/v1/addSetting', loginData)
+            const query = $http.post('https://dev-api-sg.tracwater.asia/api/v1/addSetting', loginData)
             .then(function (response){
                 const settings = response?.data?.data?.[0];
                 if( settings !== 'undefined' && settings !== undefined ){

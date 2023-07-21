@@ -759,7 +759,7 @@ angular.module('chartsCtrl', [])
             let eDate = localStorage.getItem("endDate");
             let nodeId = localStorage.getItem("aTreeNodeId");
             let sensorId = localStorage.getItem("sensorId");
-            let downloadUrl ='http://54.254.34.0/api/v1/download_chart?aTreeNodeId='+nodeId+'&sensorId='+sensorId+'&startDate='+sDate+'&endDate='+eDate+'&fold=actual';
+            let downloadUrl ='https://dev-api-sg.tracwater.asia/api/v1/download_chart?aTreeNodeId='+nodeId+'&sensorId='+sensorId+'&startDate='+sDate+'&endDate='+eDate+'&fold=actual';
 
             // Open the URL in a new window or tab to trigger the download
             $window.open(downloadUrl, '_self');
@@ -1117,7 +1117,7 @@ angular.module('chartsCtrl', [])
 			        localStorage.setItem("sensorId", sensorType);
                     const interval = $scope.rollup.value;
                     const fold = $scope.tableStats[i].fold.value
-                    const query = `http://54.254.34.0/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+                    const query = `https://dev-api-sg.tracwater.asia/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
                     let queryInfo = { query: query , index: i };
                     $scope.queriesArray.push(queryInfo);
                 }

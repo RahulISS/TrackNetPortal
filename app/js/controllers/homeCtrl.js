@@ -183,7 +183,7 @@ angular.module('homeCtrl', [])
 		function addMarker(){
 			
 			$scope.isLoading = true;
-				const query = $http.get('http://54.254.34.0/api/v1/newtraknetApiList')
+				const query = $http.get('https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList')
 				.then(function (res){
 				const response = res.data.data;
 				
@@ -624,7 +624,7 @@ angular.module('homeCtrl', [])
 			
 			$scope.displayData[index]['infoBox'] = homeiw;
 			localStorage.setItem("node_id", nodeID.split(" ")[0]);
-			const query = $http.get('http://54.254.34.0/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId='+nodeID)
+			const query = $http.get('https://dev-api-sg.tracwater.asia/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId='+nodeID)
 			.then(function (response){
 				const readings = response.data.data;
 				
@@ -662,7 +662,7 @@ angular.module('homeCtrl', [])
 		$scope.poppupForm = function(){
 			var node_id = localStorage.getItem("node_id");
 			$("#popupModalCenter").addClass("show-modal");
-			$http.get('http://54.254.34.0/api/v1/user-definded-distancealert?aTreeNodeRef='+node_id)
+			$http.get('https://dev-api-sg.tracwater.asia/api/v1/user-definded-distancealert?aTreeNodeRef='+node_id)
 			.then(function (response){
 				$scope.pointSettingData = response.data.data;
 				localStorage.setItem("instName", $scope.pointSettingData.installationName);
@@ -690,7 +690,7 @@ angular.module('homeCtrl', [])
 					'alert_enable':  $scope.checkVal,
 					'distance_alert': $scope.distance_alarm
 				}
-				$http.post('http://54.254.34.0/api/v1/add-user-definded-distancealert', formData )
+				$http.post('https://dev-api-sg.tracwater.asia/api/v1/add-user-definded-distancealert', formData )
 					.then(function (response){
 						if(response.data.status ){
 							alert("Data Saved");

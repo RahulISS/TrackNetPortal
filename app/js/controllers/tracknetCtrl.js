@@ -236,8 +236,8 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
     
     $scope.loadData = function (initset) {
         $scope.device = {};
-        /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a http://54.254.34.0/api/v1/ */
-        $http.get('http://54.254.34.0/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
+        /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a https://dev-api-sg.tracwater.asia/api/v1/ */
+        $http.get('https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
 				.then(function (res){
             const response = res.data.data;
             var convertedData = [];
@@ -700,7 +700,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
     var last_comm_split = null;
 
     $scope.$on('$viewContentLoaded', function () {
-        $http.get('http://54.254.34.0/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
+        $http.get('https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/'+ localStorage.getItem('singleDate'))
 				.then(function (res){
                     const response = res.data.data;
                     var convertedAlertCountData = [];
@@ -771,7 +771,7 @@ angular.module('tracknetCtrl', []).controller('tracknetController', function ($s
            
         });
 
-        $http.get('http://54.254.34.0/api/v1/tracnet-alarm-alert-tab')
+        $http.get('https://dev-api-sg.tracwater.asia/api/v1/tracnet-alarm-alert-tab')
 				.then(function (res){
 					const response = res.data.data;
 
