@@ -309,6 +309,7 @@ angular
               var angleValue = parseInt(data.point.angle);
 
               var convertedPoint = {
+                installationName: data.treenode.textLabel,
                 locationID: data.location._id.$oid,
                 address:
                   data.location.street +
@@ -322,7 +323,7 @@ angular
                 city: data.location.city, // Populate with the appropriate value from the response
                 serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
                 installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
-                installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
+                // installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
 
                 angle: angleValue,
                 angleColorRank: angleColorRank, // Populate with the appropriate value from the response
@@ -357,6 +358,7 @@ angular
                 //temp: '', // Populate with the appropriate value from the response
                 temperature: data.point.temperature,
                 ts: timeDate,
+                realts: data.point.created_at,
 
                 data: {
                   city: data.location.city,
@@ -510,8 +512,20 @@ angular
 
         //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
         const inputDateString = info.ts;
+        var options = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+          };
+
+        var specificDate = new Date(parseInt(info.realts.$date.$numberLong));
+        specificDate.toLocaleString("en-US", options );
+
         const ttemp = convertDateStringToISOString(inputDateString);
-        var mmx = moment(ttemp);
+        var mmx = moment(specificDate);
         var timee = mmx.format("h:mm:ss A");
         var datee = mmx.format("ddd, MMMM Do YYYY");
         if (
@@ -1300,6 +1314,7 @@ angular
       $interval($scope.weatherData, 600000);
 
       function showMarker(info) {
+        
         var position = info.marker.getPosition();
         info.marker.setMap(null);
 
@@ -1316,9 +1331,21 @@ angular
 
         //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
         const inputDateString = info.ts;
+        var options = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric'
+          };
+
+        var specificDate = new Date(parseInt(info.realts.$date.$numberLong));
+        specificDate.toLocaleString("en-US", options );
+
         const ttemp = convertDateStringToISOString(inputDateString);
 
-        var mmx = moment(ttemp);
+        var mmx = moment(specificDate);
         var timee = mmx.format("h:mm:ss A");
         var datee = mmx.format("ddd, MMMM Do YYYY");
 
