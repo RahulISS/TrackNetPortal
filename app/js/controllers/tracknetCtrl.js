@@ -291,6 +291,15 @@ angular
                 var dis_color = "Red";
               }
 
+              if (
+                data.point.height < data.point.distance_alert &&
+                data.point.alert_enable == 1
+              ) {
+                var distance_alarm_tr = "Distance alert Triggered";
+                var dis_color_rank = 2;
+                var dis_color = "yellow";
+              }
+
               if (data.point.manhole_level_alarm == "Not full alarm") {
                 var manhole_level_alarm = 0;
               } else {

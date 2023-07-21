@@ -65,7 +65,7 @@
 							<label for="distanceAlarm">
 								Distance Alert (mm, range: 400mm - 3,900mm):
 							</label>
-							<input type="number" value="{{ pointSettingData.distance_alert ? pointSettingData.distance_alert : Math.max(400, Math.min(3900, Math.floor(pointSettingData.distance_alert))) }}"  id="distance_alarm" min="400" max="3900" step="1" placeholder="Enter Distance Alert" oninput="checkDistanceAlarmValidity()"><span id="distanceAlarmError" style="display: none; color: yellow; font-size: smaller;">Distance alarm value must be between 400 and 3900.</span>
+							<input type="text" value="{{ pointSettingData.distance_alert ? pointSettingData.distance_alert : Math.max(400, Math.min(3900, Math.floor(pointSettingData.distance_alert))) }}"  id="distance_alarm" min="400" max="3900" step="1" placeholder="Enter Distance Alert" oninput="checkDistanceAlarmValidity()"><span id="distanceAlarmError" style="display: none; color: yellow; font-size: smaller;">Distance alarm value must be between 400 and 3900.</span>
 						</div>
 						<div class="chkbx-wrp">
 							<label for="enableDistanceAlarm">
