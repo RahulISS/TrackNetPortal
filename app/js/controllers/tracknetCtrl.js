@@ -396,14 +396,10 @@ angular
 
             if (queriesArray.length > 0) {
               let promises_data = queriesArray.map(function (item) {
-                // return $http.get(item.query)
-                // .then(function (reqResult) {
-                //console.log(reqResult.data.data,'reqResult saxena')
                 return {
                   idx: item.index,
                   data: item.query,
                 };
-                //});
               });
 
               $q.all(promises_data).then(function (responses) {
@@ -981,7 +977,6 @@ angular
                   var hours = Math.floor(tismeDiff / (1000 * 60 * 60)) + "y";
                 }
 
-                //console.log(hours, "timeDiff")
                 var timeDate = hours;
 
                 var msg = "";
@@ -1024,42 +1019,29 @@ angular
                 deviceIds.add(data.product_serialNumber);
               }
             }
-            console.log(uniqueData, "uniqueData ");
+
             $scope.alertLists = uniqueData;
             var uniqueAlertData = [];
             for (var i = 0; i < $scope.alertLists.length; i++) {
               $scope.alertLists[i].class = "";
               if ($scope.alertLists[i].status == "Distance alarms triggered") {
                 uniqueAlertData.push($scope.alertLists[i]);
-                console.log(
-                  uniqueAlertData,
-                  "uniqueAlertData Distance alarms triggered"
-                );
 
                 $scope.alertLists[i].class = "distance danger";
               }
               if ($scope.alertLists[i].status == "Angle alarms triggered") {
                 uniqueAlertData.push($scope.alertLists[i]);
-                console.log(
-                  uniqueAlertData,
-                  "uniqueAlertData Angle alarms triggered"
-                );
+
                 $scope.alertLists[i].class = "distance danger";
               }
               if ($scope.alertLists[i].status == "distance alert triggered") {
                 uniqueAlertData.push($scope.alertLists[i]);
-                console.log(
-                  uniqueAlertData,
-                  "uniqueAlertData distance alert triggered"
-                );
+
                 $scope.alertLists[i].class = "distance warn";
               }
               if ($scope.alertLists[i].status == "all alarms triggered") {
                 uniqueAlertData.push($scope.alertLists[i]);
-                console.log(
-                  uniqueAlertData,
-                  "uniqueAlertData all alarms triggered"
-                );
+
                 $scope.alertLists[i].class = "distance danger";
               }
 
