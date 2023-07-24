@@ -808,15 +808,14 @@ angular
       $scope.$on("$viewContentLoaded", function () {
         $http
           .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" +
-              localStorage.getItem("singleDate")
+            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList"
           )
           .then(function (res) {
             const response = res.data.data;
             var convertedAlertCountData = [];
             for (var i = response.length - 1; i > 0; i--) {
               var data = response[i];
-              if (data.point.angle > 5) {
+              if ( Number(data.point.angle) > 5) {
                 var angleColorRank = 1;
                 var angleColor = "Red";
                 var angle_alarm_tr = "Angle alarm Triggered";
@@ -828,17 +827,15 @@ angular
 
               var distanceValue = parseInt(data.point.height);
 
-              if (data.point.height > 3998) {
-                var distanceValue = "";
-                var dis_color_rank = "";
-                var dis_color = "";
-              }
-
-              if (data.point.height < 300) {
+              if ( Number(data.point.height) < 300) {
                 var distanceValue = 400;
                 var distance_alarm_tr = "Distance alarm Triggered";
                 var dis_color_rank = 1;
                 var dis_color = "Red";
+              } else if ( Number(data.point.height) > 3998) {
+                var distanceValue = "";
+                var dis_color_rank = "";
+                var dis_color = "";
               } else {
                 var dis_color_rank = 3;
                 var dis_color = "Green";
@@ -850,8 +847,9 @@ angular
                 if (Number(data.point.height) < distanceAlertValue && data.point.alert_enable ==  1 ) {
                   dis_color_rank = 2;
                   var dis_color = "Yellow";
+                  var distance_alarm_tr = "Distance alert Triggered";
                 }
-            }
+              }
 
               var convertedAlertCountPoint = {
                 angle: data.point.angle,
@@ -978,11 +976,11 @@ angular
                   var msg =
                     "Distance: " +
                     disValue +
-                    " mm, Angle:" +
+                    " mm, Angle: " +
                     data.angle +
                     " deg";
                 } else {
-                  var msg = "Angle:" + data.angle + " deg";
+                  var msg = "Angle: " + data.angle + " deg";
                 }
                 var convertedPoint = {
                   aTreeNodeRef: data._id.$oid,
