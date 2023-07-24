@@ -638,7 +638,7 @@ angular
           content: boxText,
           disableAutoPan: true,
           maxWidth: 0,
-          zIndex: 1,
+          zIndex: 999,
           boxStyle: {
             opacity: 1,
             width: "300px",

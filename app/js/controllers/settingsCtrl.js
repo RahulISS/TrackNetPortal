@@ -492,7 +492,7 @@ angular
         );
         if (Number(userInput)) {
           $http
-            .get("http://127.0.0.1:8000/api/v1/send-sms?phoneNo=" + userInput)
+            .get("https://dev-api-sg.tracwater.asia/api/v1/sms?receiverNumber=" + userInput)
             .then(function (res) {
               if (res.status) alert("Test Message Sent!");
             });
