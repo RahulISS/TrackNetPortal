@@ -754,7 +754,7 @@ angular
         $scope.bench_height = angular.element($("#bench_height")).val();
         $scope.angel_alarm = angular.element($("#angel_alarm")).val();
         var distance = angular.element($("#distance_alarm")).val() || 0;
-        $scope.distance_alarm = distance + "mm";
+        $scope.distance_alarm = distance;
         $scope.serialNo = angular.element($("#serialNumber")).val();
         $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
         if ($scope.checkVal == "") $scope.checkVal = 0;
