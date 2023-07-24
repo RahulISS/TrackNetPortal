@@ -282,7 +282,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="row in tableViewData">
+                                        <tr ng-repeat="row in tableViewData  | orderBy:'ts'">
 											<td class="my-td">
 												{{ readable(row.ts) }}
 											</td>

@@ -827,20 +827,31 @@ angular
               }
 
               var distanceValue = parseInt(data.point.height);
-              var dis_color_rank = 3;
-              var dis_color = "Green";
-              var distance_alarm_tr = "";
 
               if (data.point.height > 3998) {
-                var dis_color_rank = 3;
-                var dis_color = "Green";
+                var distanceValue = "";
+                var dis_color_rank = "";
+                var dis_color = "";
               }
+
               if (data.point.height < 300) {
                 var distanceValue = 400;
                 var distance_alarm_tr = "Distance alarm Triggered";
                 var dis_color_rank = 1;
                 var dis_color = "Red";
+              } else {
+                var dis_color_rank = 3;
+                var dis_color = "Green";
+                var distance_alarm_tr = "";
               }
+              
+              if ("distance_alert" in data.point) {
+                var distanceAlertValue = parseInt(data.point.distance_alert);
+                if (Number(data.point.height) < distanceAlertValue && data.point.alert_enable ==  1 ) {
+                  dis_color_rank = 2;
+                  var dis_color = "Yellow";
+                }
+            }
 
               var convertedAlertCountPoint = {
                 angle: data.point.angle,
@@ -869,17 +880,10 @@ angular
             }
 
             for (var i = 0; i < uniqueDataCount.length; i++) {
-              if (
-                uniqueDataCount[i].angleColorRank == 3 &&
-                uniqueDataCount[i].disColorRank == 3
-              )
+              if ( uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3 )
                 $scope.realtimesummery.series[0].data[0].y++;
-              if (uniqueDataCount[i].disColorRank == 2)
-                $scope.realtimesummery.series[0].data[1].y++;
-              if (
-                uniqueDataCount[i].disColorRank == 1 ||
-                uniqueDataCount[i].angleColorRank == 1
-              )
+              if ( uniqueDataCount[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++
+              if ( uniqueDataCount[i].disColorRank == 1 || uniqueDataCount[i].angleColorRank == 1 )
                 $scope.realtimesummery.series[0].data[2].y++;
             }
           });
@@ -897,7 +901,6 @@ angular
               if (data.location !== "") {
                 var status = "";
                 var disValue = "";
-
                 if (Number(data.height) < 300) {
                   status = "Distance alarms triggered";
                 } else if (Number(data.angle) > 5) {
@@ -911,6 +914,13 @@ angular
                   status = "all clear";
                 }
 
+                if ("distance_alert" in data) {
+                    var distanceAlertValue = parseInt(data.distance_alert);
+                    if (Number(data.height) < distanceAlertValue && data.alert_enable ==  1 ) {
+                      status = "Distance alert triggered";
+                    }
+                }
+                
                 if (Number(data.height) < 400) {
                   var disValue = 400;
                 } else if (Number(data.height) >= 3998) {
@@ -1006,6 +1016,7 @@ angular
 
             $scope.alertLists = uniqueData;
             var uniqueAlertData = [];
+            //console.log($scope.alertLists.length, "my count")
             for (var i = 0; i < $scope.alertLists.length; i++) {
               $scope.alertLists[i].class = "";
               if ($scope.alertLists[i].status == "Distance alarms triggered") {
@@ -1018,7 +1029,7 @@ angular
 
                 $scope.alertLists[i].class = "distance danger";
               }
-              if ($scope.alertLists[i].status == "distance alert triggered") {
+              if ($scope.alertLists[i].status == "Distance alert triggered") {
                 uniqueAlertData.push($scope.alertLists[i]);
 
                 $scope.alertLists[i].class = "distance warn";
