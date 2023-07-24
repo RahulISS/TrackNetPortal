@@ -484,21 +484,10 @@ angular
         const dateArray = dateString.split("_");
         const datePart = dateArray[0].split("-").map(Number);
         const timePart = dateArray[1].split("-").map(Number);
-
-        const date = new Date(
-          Date.UTC(
-            datePart[0],
-            datePart[1] - 1,
-            datePart[2],
-            timePart[0],
-            timePart[1],
-            timePart[2]
-          )
-        );
-
-        // Convert to Singapore timezone (UTC+8)
-        date.setHours(date.getHours() + 8);
-
+      
+        // Note: Months in JavaScript Date are zero-based (0-11)
+        const date = new Date(Date.UTC(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]));
+      
         return date;
       };
 
@@ -506,33 +495,19 @@ angular
         const markericon = getMarkerColor(info);
         var marker = new google.maps.Marker({
           map: map,
-          position: new google.maps.LatLng(info.latitude, info.longitude), //IS-384
-          title: info.installationName, //IS-416
+          position: new google.maps.LatLng(info.latitude, info.longitude), 
+          title: info.installationName, 
           id: info.serialNumber,
           disableDefaultUI: true,
           icon: {
             url: markericon,
           },
         });
-
-        //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
         const inputDateString = info.ts;
-        var options = {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric'
-          };
-
-        var specificDate = new Date(parseInt(info.realts.$date.$numberLong));
-        specificDate.toLocaleString("en-US", options );
-
         const ttemp = convertDateStringToISOString(inputDateString);
-        var mmx = moment(specificDate);
-        var timee = mmx.format("h:mm:ss A");
-        var datee = mmx.format("ddd, MMMM Do YYYY");
+        const singaporeTime = moment(ttemp).tz("Asia/Singapore");
+        var timee = singaporeTime.format("h:mm:ss A");
+        var datee = singaporeTime.format("ddd, MMMM Do YYYY");
         if (
           (info.location == "undefined") |
           (info.location == "undefined undefined")
@@ -945,26 +920,12 @@ angular
                 }
 
                 if (parseInt(data.created_at.$date.$numberLong))
-                  var options = {
-                    timeZone: "Asia/Singapore",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    second: "numeric",
-                  };
-
+               
                 var currentDate = new Date();
-                currentDate.toLocaleString("en-US", options);
-
-                var specificDate = new Date(
-                  parseInt(data.created_at.$date.$numberLong)
-                );
-                specificDate.toLocaleString("en-US", options);
-
-                var timeDiff = Math.abs(currentDate - specificDate);
-
+                const singaporeCurrentTime = moment(currentDate).tz("Asia/Singapore");
+                const ttemp = convertDateStringToISOString(data.date);
+                const singaporeTime = moment(ttemp).tz("Asia/Singapore");
+                var timeDiff = Math.abs(singaporeCurrentTime - singaporeTime);
                 var cd = 24 * 60 * 60 * 1000;
                 var hValue = Math.floor(timeDiff / cd);
                 if (hValue > 25) {
@@ -1322,23 +1283,10 @@ angular
 
         //var ttemp = info.ts.slice(0, info.ts.indexOf("+"));
         const inputDateString = info.ts;
-        var options = {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric'
-          };
-
-        var specificDate = new Date(parseInt(info.realts.$date.$numberLong));
-        specificDate.toLocaleString("en-US", options );
-
         const ttemp = convertDateStringToISOString(inputDateString);
-
-        var mmx = moment(specificDate);
-        var timee = mmx.format("h:mm:ss A");
-        var datee = mmx.format("ddd, MMMM Do YYYY");
+        const singaporeTime = moment(ttemp).tz("Asia/Singapore");
+        var timee = singaporeTime.format("h:mm:ss A");
+        var datee = singaporeTime.format("ddd, MMMM Do YYYY");
 
         if (
           (info.location == "undefined") |

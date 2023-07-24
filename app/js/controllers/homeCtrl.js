@@ -261,26 +261,22 @@ angular
                 }
 
                 if (parseInt(data.point.created_at.$date.$numberLong)) {
-                  var options = {
-                    timeZone: "Asia/Singapore",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                    second: "numeric",
+                  const convertDateStringToISOString = function (dateString) {
+                    const dateArray = dateString.split("_");
+                    const datePart = dateArray[0].split("-").map(Number);
+                    const timePart = dateArray[1].split("-").map(Number);
+                  
+                    // Note: Months in JavaScript Date are zero-based (0-11)
+                    const date = new Date(Date.UTC(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]));
+                    return date;
                   };
 
-                  var currentDate = new Date();
-                  currentDate.toLocaleString("en-US", options);
-
-                  var specificDate = new Date(
-                    parseInt(data.point.created_at.$date.$numberLong)
-                  );
-                  specificDate.toLocaleString("en-US", options);
-
+                  const inputDateString = data.point.date;
+                  const ttemp = convertDateStringToISOString(inputDateString);
+                  const specificDate = moment(ttemp).tz("Asia/Singapore");
+                  
+                  const currentDate = moment().tz("Asia/Singapore");
                   var timeDiff = Math.abs(currentDate - specificDate);
-
                   var cd = 24 * 60 * 60 * 1000;
                   var hValue = Math.floor(timeDiff / cd);
                   if (hValue > 25) {
