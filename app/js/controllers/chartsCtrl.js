@@ -1490,9 +1490,8 @@ angular
             $scope.meterChartConfig.series[index].name =
               $scope.tableStats[index].title +
               " - " +
-              $scope.tableStats[index].currentMeasurement.id_name;
-            $scope.meterChartConfig.series[index].marker.enabled =
-              $scope.chartStatusSet.meter.markers;
+            $scope.tableStats[index].currentMeasurement.id_name;
+            $scope.meterChartConfig.series[index].marker.enabled = $scope.chartStatusSet.meter.markers;
             $scope.meterChartConfig.series[index]["tooltip"]["pointFormatter"] =
               function () {
                 return dataPointFormaterFunction(
