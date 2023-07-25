@@ -11,12 +11,18 @@ angular
       $timeout,
       $window,
       $state,
-      $location
+      $location,
+      apiBaseUrl
     ) {
       const portalRef = "64ad1af2664396439a286273";
       let selectedNodeLabel;
       let selectedProduct;
-
+      $scope.serverRequest = apiBaseUrl;
+      const token =  localStorage.getItem("loginToken");
+      const customeHeader = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      };
       $scope.loading = false;
       $scope.operationResult = false;
 
@@ -99,13 +105,12 @@ angular
           emailAddress: $scope.emailAddress,
           smsNumber: $scope.smsNumber,
         };
-        const query = $http
-          .post(
-            "https://dev-api-sg.tracwater.asia/api/v1/addSetting?portal=" +
-              $scope.aPortalName,
-            loginData
-          )
-          .then(function (response) {
+        const query = $http ({
+          method: 'POST',
+          url: $scope.serverRequest+"addSetting?portal="+ $scope.aPortalName,
+          headers: customeHeader,
+          body: loginData
+        }).then(function (response) {
             const data = response.data;
             if (data.status) {
               alert(data.message);
@@ -119,12 +124,11 @@ angular
       $scope.smsNumber = [];
       function getSaveedUserConfiguration() {
         $scope.portal = "tracnet trial 20230703";
-        const query = $http
-          .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/get-setting-data?portalName=" +
-              $scope.portal
-          )
-          .then(function (response) {
+        const query = $http ({
+          method: 'GET',
+          url: $scope.serverRequest+"get-setting-data?portalName="+$scope.portal,
+          headers: customeHeader
+        }).then(function (response) {
             const data = response.data.data;
             $scope.contactName = data.contactName;
             $scope.emailAddress = data.emailAddress;
@@ -274,12 +278,12 @@ angular
           smsNumber: $scope.smsNumber,
         };
 
-        const query = $http
-          .post(
-            "https://dev-api-sg.tracwater.asia/api/v1/addSetting",
-            loginData
-          )
-          .then(function (response) {
+        const query = $http ({
+          method: 'POST',
+          url: $scope.serverRequest+"addSetting",
+          headers: customeHeader,
+          body: loginData
+        }).then(function (response) {
             const settings = response?.data?.data?.[0];
             if (settings !== "undefined" && settings !== undefined) {
               if (settings?.val !== undefined) {
@@ -491,9 +495,11 @@ angular
           "65"
         );
         if (Number(userInput)) {
-          $http
-            .get("https://dev-api-sg.tracwater.asia/api/v1/sms?receiverNumber=" + userInput)
-            .then(function (res) {
+          $http ({
+            method: 'GET',
+            url: $scope.serverRequest+"sms?receiverNumber="+ userInput,
+            headers: customeHeader
+          }).then(function (res) {
               if (res.status) alert("Test Message Sent!");
             });
         } else {

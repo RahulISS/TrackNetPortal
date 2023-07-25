@@ -6,6 +6,11 @@ angular
     function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval,apiBaseUrl) {
       /*TraNet yvw mobile portal*/
       $scope.serverRequest = apiBaseUrl;
+      const token =  localStorage.getItem("loginToken");
+      const customeHeader = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      };
       $scope.refreshPage = function () {
         setTimeout(function () {
           window.location.reload();
@@ -187,9 +192,11 @@ angular
       var arr = [];
       function addMarker() {
         $scope.isLoading = true;
-        const query = $http
-          .get($scope.serverRequest+"newtraknetApiList")
-          .then(function (res) {
+        const query = $http ({
+          method: 'GET',
+          url: $scope.serverRequest+"newtraknetApiList",
+          headers: customeHeader
+        }).then(function (res) {
             const response = res.data.data;
 
             var convertedData = [];
@@ -688,7 +695,11 @@ angular
 
         $scope.displayData[index]["infoBox"] = homeiw;
         localStorage.setItem("node_id", nodeID.split(" ")[0]);
-        const query = $http.get($scope.serverRequest+"html_aTreeNode_hisEndVal?aTreeNodeId=" +nodeID ).then(function (response) {
+        const query = $http ({
+          method: 'GET',
+          url: $scope.serverRequest+"html_aTreeNode_hisEndVal?aTreeNodeId=" +nodeID,
+          headers: customeHeader
+        }).then(function (response) {
             const readings = response.data.data;
 
             let content = document.createElement("div");
@@ -745,10 +756,11 @@ angular
       $scope.poppupForm = function () {
         var node_id = localStorage.getItem("node_id");
         $("#popupModalCenter").addClass("show-modal");
-        $http.get($scope.serverRequest+"user-definded-distancealert?aTreeNodeRef=" +
-              node_id
-          )
-          .then(function (response) {
+        $http ({
+          method: 'GET',
+          url: $scope.serverRequest+"user-definded-distancealert?aTreeNodeRef=" +node_id,
+          headers: customeHeader
+        }).then(function (response) {
             $scope.pointSettingData = response.data.data;
             localStorage.setItem(
               "instName",
@@ -775,9 +787,12 @@ angular
           alert_enable: $scope.checkVal,
           distance_alert: $scope.distance_alarm,
         };
-        $http
-          .post( $scope.serverRequest+"add-user-definded-distancealert", formData )
-          .then(function (response) {
+        $http ({
+          method: 'POST',
+          url: $scope.serverRequest+"add-user-definded-distancealert",
+          headers: customeHeader,
+          body: formData
+        }).then(function (response) {
             if (response.data.status) {
               alert("Data Saved");
               $("#popupModalCenter").removeClass("show-modal");

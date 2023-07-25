@@ -1,5 +1,6 @@
 angular.module('loginCtrl', [])
-  .controller('loginController', function ($scope, $http, $rootScope, $state) {
+  .controller('loginController', function ($scope, $http, $rootScope, $state,apiBaseUrl) {
+    $scope.serverRequest = apiBaseUrl;
     $scope.doLogin = function () {
       // Create an object with the login credentials
       var loginData = {
@@ -8,21 +9,19 @@ angular.module('loginCtrl', [])
       };
 
       // Make an HTTP POST request to the login API endpoint
-      $http.post('https://dev-api-sg.tracwater.asia/api/v1/login', loginData)
+      $http.post($scope.serverRequest+'login', loginData)
         .then(function (response) {
           // Handle the response from the server
           var data = response.data;
           if (data) {
+            localStorage.setItem("loginToken", data.data.token);
             $rootScope.storage.loggedIn = data.success;
             $state.go('main');
           } else {
-            // Login failed
             $scope.loginError = 'Invalid username or password';
           }
         })
         .catch(function (error) {
-          // Handle error if the API request fails
-          //onsole.log(error, 'error');
           $scope.loginError = 'Invalid username or password';
         });
     };

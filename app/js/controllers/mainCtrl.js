@@ -1,6 +1,12 @@
 angular.module('mainCtrl', [])
 
-    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location) {
+    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location, apiBaseUrl) {
+        $scope.serverRequest = apiBaseUrl;
+        const token =  localStorage.getItem("loginToken");
+        const customeHeader = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
         $rootScope.storage.toggle = false;
         $scope.thisyear = new Date().getFullYear();
         var today = new Date();
@@ -54,7 +60,11 @@ angular.module('mainCtrl', [])
         // let sensors = [];
 
         $rootScope.loadTree = function() {
-            const query = $http.get('https://dev-api-sg.tracwater.asia/api/v1/chart')
+            const query = $http ({
+                method: 'GET',
+                url: $scope.serverRequest+"chart",
+                headers: customeHeader
+            })
             .then(function (response) { 
                 const data = response.data.data; 
                 let flatArray = [ {
@@ -110,7 +120,7 @@ angular.module('mainCtrl', [])
                             subSub.children.forEach(el => {
                                 queriesArray.push({
                                     'index': el._id,
-                                    'query': `https://dev-api-sg.tracwater.asia/api/v1/atreenode-ref?productRef=${el._id}`
+                                    'query': $scope.serverRequest+`atreenode-ref?productRef=${el._id}`
                                 });
                             });
                         });
@@ -150,7 +160,11 @@ angular.module('mainCtrl', [])
 
         function checkedRefData(e, edata) {
             let sensors = [];
-              const query2 = $http.get('https://dev-api-sg.tracwater.asia/api/v1/sensortList')
+            const query2 = $http ({
+                method: 'GET',
+                url: $scope.serverRequest+"sensortList",
+                headers: customeHeader
+              })
               .then(function (response){
                     const data = response.data.data
                     for( let i = 0; i < data.length; i++){

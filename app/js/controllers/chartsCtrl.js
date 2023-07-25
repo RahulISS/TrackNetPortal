@@ -11,13 +11,19 @@ angular
       $http,
       $timeout,
       $interval,
-      $window
+      $window,
+      apiBaseUrl
     ) {
       const isButtonVisible = true;
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";
       const gridTickColor = "#b9b9b9";
-
+      $scope.serverRequest = apiBaseUrl;
+      const token =  localStorage.getItem("loginToken");
+      const customeHeader = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      };
       var currentLegend = 0;
 
       $scope.data_table_meter_page = [];
@@ -977,15 +983,7 @@ angular
         let nodeId = localStorage.getItem("aTreeNodeId");
         let sensorId = localStorage.getItem("sensorId");
         let downloadUrl =
-          "https://dev-api-sg.tracwater.asia/api/v1/download_chart?aTreeNodeId=" +
-          nodeId +
-          "&sensorId=" +
-          sensorId +
-          "&startDate=" +
-          sDate +
-          "&endDate=" +
-          eDate +
-          "&fold=actual";
+          $scope.serverRequest+"download_chart?aTreeNodeId=" +nodeId +"&sensorId=" +sensorId +"&startDate=" +sDate +"&endDate=" +eDate +"&fold=actual";
 
         // Open the URL in a new window or tab to trigger the download
         $window.open(downloadUrl, "_self");
@@ -1407,7 +1405,7 @@ angular
             localStorage.setItem("sensorId", sensorType);
             const interval = $scope.rollup.value;
             const fold = $scope.tableStats[i].fold.value;
-            const query = `https://dev-api-sg.tracwater.asia/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+            const query = $scope.serverRequest+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
             let queryInfo = { query: query, index: i };
             $scope.queriesArray.push(queryInfo);
           }

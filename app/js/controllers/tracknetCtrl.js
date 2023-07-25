@@ -10,8 +10,15 @@ angular
       $q,
       $timeout,
       $interval,
-      $filter
+      $filter,
+      apiBaseUrl
     ) {
+      $scope.serverRequest = apiBaseUrl;
+      const token =  localStorage.getItem("loginToken");
+      const customeHeader = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      };
       const portalRef = "64ad1af2664396439a286273"; //tracnet trial 20230703
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";
@@ -253,11 +260,11 @@ angular
       $scope.loadData = function (initset) {
         $scope.device = {};
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a https://dev-api-sg.tracwater.asia/api/v1/ */
-        $http
-          .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" +
-              localStorage.getItem("singleDate")
-          )
+        $http ({
+          method: 'GET',
+          url: $scope.serverRequest+"newtraknetApiList/"+ localStorage.getItem("singleDate"),
+          headers: customeHeader
+        })
           .then(function (res) {
             const response = res.data.data;
             var convertedData = [];
@@ -806,11 +813,11 @@ angular
       var last_comm_split = null;
 
       $scope.$on("$viewContentLoaded", function () {
-        $http
-          .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList"
-          )
-          .then(function (res) {
+        const query = $http ({
+          method: 'GET',
+          url: $scope.serverRequest+"newtraknetApiList",
+          headers: customeHeader
+        }).then(function (res) {
             const response = res.data.data;
             var convertedAlertCountData = [];
             for (var i = response.length - 1; i > 0; i--) {
