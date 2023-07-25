@@ -3,9 +3,9 @@ angular
 
   .controller(
     "homeController",
-    function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval) {
+    function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval,apiBaseUrl) {
       /*TraNet yvw mobile portal*/
-
+      $scope.serverRequest = apiBaseUrl;
       $scope.refreshPage = function () {
         setTimeout(function () {
           window.location.reload();
@@ -188,7 +188,7 @@ angular
       function addMarker() {
         $scope.isLoading = true;
         const query = $http
-          .get("https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList")
+          .get($scope.serverRequest+"newtraknetApiList")
           .then(function (res) {
             const response = res.data.data;
 
@@ -670,12 +670,7 @@ angular
 
         $scope.displayData[index]["infoBox"] = homeiw;
         localStorage.setItem("node_id", nodeID.split(" ")[0]);
-        const query = $http
-          .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId=" +
-              nodeID
-          )
-          .then(function (response) {
+        const query = $http.get($scope.serverRequest+"html_aTreeNode_hisEndVal?aTreeNodeId=" +nodeID ).then(function (response) {
             const readings = response.data.data;
 
             let content = document.createElement("div");
@@ -732,9 +727,7 @@ angular
       $scope.poppupForm = function () {
         var node_id = localStorage.getItem("node_id");
         $("#popupModalCenter").addClass("show-modal");
-        $http
-          .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/user-definded-distancealert?aTreeNodeRef=" +
+        $http.get($scope.serverRequest+"user-definded-distancealert?aTreeNodeRef=" +
               node_id
           )
           .then(function (response) {
@@ -765,10 +758,7 @@ angular
           distance_alert: $scope.distance_alarm,
         };
         $http
-          .post(
-            "https://dev-api-sg.tracwater.asia/api/v1/add-user-definded-distancealert",
-            formData
-          )
+          .post( $scope.serverRequest+"add-user-definded-distancealert", formData )
           .then(function (response) {
             if (response.data.status) {
               alert("Data Saved");

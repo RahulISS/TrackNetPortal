@@ -1,9 +1,9 @@
 angular.module('homeCtrl', [])
 
-	.controller('homeController', function ($scope,$http, $rootScope,Data,$timeout,$compile,$interval) { 
+	.controller('homeController', function ($scope,$http, $rootScope,Data,$timeout,$compile,$interval,apiBaseUrl) { 
 
 		/*TraNet yvw mobile portal*/
-
+		$scope.serverRequest = apiBaseUrl;
 		$scope.refreshPage = function(){
 			setTimeout(function(){
 				window.location.reload();
@@ -183,7 +183,7 @@ angular.module('homeCtrl', [])
 		function addMarker(){
 			
 			$scope.isLoading = true;
-				const query = $http.get('http://127.0.0.1:8000/api/v1/traknetApiList')
+				const query = $http.get( $scope.serverRequest+`traknetApiList`)
 				.then(function (res){
 				const response = res.data.data;
 				console.log(response);
@@ -591,7 +591,7 @@ angular.module('homeCtrl', [])
 			//console.log(nodeID,'nodeID saxena')
 			$scope.displayData[index]['infoBox'] = homeiw;
 			localStorage.setItem("node_id", nodeID.split(" ")[0]);
-			const query = $http.get('http://127.0.0.1:8000/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId='+nodeID)
+			const query = $http.get($scope.serverRequest+`html_aTreeNode_hisEndVal?aTreeNodeId=`+nodeID)
 			.then(function (response){
 				const readings = response.data.data;
 				console.log(response.data,'response.data test')
@@ -628,7 +628,7 @@ angular.module('homeCtrl', [])
 		$scope.poppupForm = function(){
 			var node_id = localStorage.getItem("node_id");
 			$("#popupModalCenter").addClass("show-modal");
-			$http.get('http://127.0.0.1:8000/api/v1/user-definded-distancealert/?aTreeNodeRef='+node_id)
+			$http.get($scope.serverRequest+'user-definded-distancealert/?aTreeNodeRef='+node_id)
 			.then(function (response){
 				$scope.pointSettingData = response.data.data;
 				localStorage.setItem("instName", $scope.pointSettingData.installationName);
