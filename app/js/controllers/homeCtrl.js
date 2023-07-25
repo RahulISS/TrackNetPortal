@@ -459,10 +459,43 @@ angular
             $scope.sortedArray = $scope.sortedArray.concat(connCatArr_2);
             $scope.sortedArray = $scope.sortedArray.concat(arrYellow_3_3);
 
+            for(var k=0; k < $scope.sortedArray.length; k++) {
+
+              last_comm_split = $scope.sortedArray[k].oldest_comm_date.split(" ");
+  
+              if(last_comm_split[1] ==  "minutes" || last_comm_split[1] ==  "minute") {
+                $scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "min";
+                
+              }
+              else if(last_comm_split[1] ==  "hours" || last_comm_split[1] ==  "hour") {
+                $scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "h";
+                
+              }
+              else if(last_comm_split[1] ==  "day" || last_comm_split[1] ==  "days") {
+                $scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "d";
+                
+              }
+              else if(last_comm_split[1] ==  "weeks" || last_comm_split[1] ==  "week") {
+                $scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "wk";
+                
+              }
+              else if(last_comm_split[1] ==  "month" || last_comm_split[1] ==  "months") {
+                $scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "mo";
+                
+              } 
+              else if(last_comm_split[1] ==  "second" || last_comm_split[1] ==  "seconds") {
+                $scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] + "s";
+                
+              }
+              else {
+                $scope.sortedArray[k].oldest_comm_date =  last_comm_split[0] ;
+              }
+            }
+
             $scope.sortedArray_1 = $scope.sortedArray;
 
             // sorted end
-            for (var i = 0; i < $scope.sortedArray.length; i++) {
+            for (var i = 0; i < $scope.sortedArray_1.length; i++) {
               arr.push(aLocation[i].installationId.split(" ")[0]);
 
               let dict = {};
