@@ -328,7 +328,7 @@ angular
                   angle_alarm_tr: angle_alarm_tr, 
                   lastCommColorRank: lastCommColor,
                   lastComm_alarm_tr: lastComm,
-                  last_communication: timeDate,
+                  last_communication: timeDiff,
                   manhole_level_alarm: manhole_level_alarm,
                   manhole_moved_alarm: manhole_moved_alarm,
                   status: "all clear",
@@ -358,7 +358,7 @@ angular
             $scope.dataLocation = aLocation;
             
             const sorter = (a, b) => {
-              return b.last_communication - a.last_communication;
+              return a.last_communication - b.last_communication;
             };
 
             const sortByLastComm = (arr) => {
