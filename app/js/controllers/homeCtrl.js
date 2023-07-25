@@ -187,26 +187,13 @@ angular
       var arr = [];
       function addMarker() {
         $scope.isLoading = true;
-        const query = $http
-          .get("https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList")
-          .then(function (res) {
+        const query = $http.get("https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList").then(function (res) {
             const response = res.data.data;
 
             var convertedData = [];
 
             for (var i = response.length - 1; i > 0; i--) {
               var data = response[i];
-
-              if (data.point.angle > 5) {
-                var angleColorRank = 1;
-                var angleColor = "Red";
-                var angle_alarm_tr = "Angle alarm Triggered";
-              } else {
-                var angleColorRank = 3;
-                var angleColor = "Green";
-                var angle_alarm_tr = "";
-              }
-
               var objectId = data._id.$oid;
 
               var existingObject = convertedData.find(
@@ -214,6 +201,7 @@ angular
               );
 
               if (!existingObject) {
+
                 if (data.point.angle > 5) {
                   var angleColorRank = 1;
                   var angleColor = "Red";
@@ -236,7 +224,7 @@ angular
                 if (data.point.height < 300) {
                   var distanceValue = 400;
                   var distance_alarm_tr = "Distance alarm Triggered";
-                  var dis_color_rank = 3;
+                  var dis_color_rank = 1;
                   var dis_color = "Red";
                 }
                 if (
@@ -277,6 +265,7 @@ angular
                   
                   const currentDate = moment().tz("Asia/Singapore");
                   var timeDiff = Math.abs(currentDate - specificDate);
+                  
                   var cd = 24 * 60 * 60 * 1000;
                   var hValue = Math.floor(timeDiff / cd);
                   if (hValue > 25) {
@@ -327,44 +316,38 @@ angular
                     " " +
                     data.location.tz,
                   location: data.point._id.$oid,
-                  latitude: parseFloat(data.location.latitude), // Populate with the appropriate value from the response
-                  longitude: parseFloat(data.location.longitude), // Populate with the appropriate value from the response
-                  city: data.location.city, // Populate with the appropriate value from the response
-                  serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
-                  installationId: data.point._id.$oid, // Populate with the appropriate value from the response
-                  installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
+                  latitude: parseFloat(data.location.latitude), 
+                  longitude: parseFloat(data.location.longitude), 
+                  city: data.location.city, 
+                  serialNumber: data.product.id_serial, 
+                  installationId: data.point._id.$oid, 
+                  installationName: data.treenode.textLabel, 
                   angle: data.point.angle,
-                  angleColorRank: angleColorRank, // Populate with the appropriate value from the response
-                  angleColor: angleColor, // Populate with the appropriate value from the response
-                  angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+                  angleColorRank: parseInt(angleColorRank), 
+                  angleColor: angleColor, 
+                  angle_alarm_tr: angle_alarm_tr, 
                   lastCommColorRank: lastCommColor,
                   lastComm_alarm_tr: lastComm,
-                  last_communication: 9,
+                  last_communication: timeDate,
                   manhole_level_alarm: manhole_level_alarm,
                   manhole_moved_alarm: manhole_moved_alarm,
                   status: "all clear",
                   color: "green",
                   oldest_comm_date: timeDate,
                   customDistance: 500,
-                  area: data.location.street, // Populate with the appropriate value from the response
-                  // batterySta: data.location.street, // Populate with the appropriate value from the response
+                  area: data.location.street,  
                   batteryStatus: data.point.manholeBatteryStatusValue,
-                  batteryVolt: data.point.battery_voltage, // Populate with the appropriate value from the response
-                  //dis: data.point.distanceValue, // Populate with the appropriate value from the response
+                  batteryVolt: data.point.battery_voltage, 
                   distance: distanceValue,
-                  disColorRank: dis_color_rank, // Populate with the appropriate value from the response
-                  disColor: dis_color, // Populate with the appropriate value from the response
-                  distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
+                  disColorRank: parseInt(dis_color_rank), 
+                  disColor: dis_color, 
+                  distance_alarm_tr: distance_alarm_tr, 
                   distanceValue: distanceValue,
-                  //levelAl: '', // Populate with the appropriate value from the response
-                  levelAlarm: data.point.manholeLevelAlarmValue,
-                  //movedAl: '', // Populate with the appropriate value from the response
+                  levelAlarm: data.point.manholeLevelAlarmValue, 
                   movedAlarm: data.point.moved_alarm,
-                  //signalStre: '', // Populate with the appropriate value from the response
                   signalStrength: data.point.signal_strength,
-                  //temp: '', // Populate with the appropriate value from the response
                   temperature: data.point.temperature,
-                  ts: data.ts, //timeDate + " hours ago"
+                  ts: data.ts, 
                 };
 
                 convertedData.push(convertedPoint);
@@ -373,9 +356,9 @@ angular
 
             const aLocation = convertedData;
             $scope.dataLocation = aLocation;
-
+            
             const sorter = (a, b) => {
-              return b.disColorRank - a.disColorRank;
+              return b.last_communication - a.last_communication;
             };
 
             const sortByLastComm = (arr) => {
