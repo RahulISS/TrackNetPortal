@@ -818,14 +818,16 @@ angular
           typeof dict.longitude === "undefined"
         )
           return;
+
+        if(dict.distance < 3998) {
+          var custContent = dict.angle + "\xBA";
+        } else {
+          var custContent = disctdis.toLocaleString() + ",  " + dict.angle + "\xBA";
+        }
         var infowindow = new google.maps.InfoWindow({
-          content:
-            dict.distance.toLocaleString() +
-            "mm " +
-            " ,  " +
-            dict.angle +
-            "\xBA",
+          content: custContent
         });
+       
         var colorCode = dict.disColorRank;
         var colorCode2 = dict.angleColorRank;
         var imgpath = "";
