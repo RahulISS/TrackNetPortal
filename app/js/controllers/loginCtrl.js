@@ -15,7 +15,7 @@ angular.module('loginCtrl', [])
           var data = response.data;
           if (data) {
             localStorage.setItem("loginToken", data.data.token);
-            $rootScope.storage.loggedIn = data.success;
+            $rootScope.storage.loggedIn = data.status;
             $state.go('main');
           } else {
             $scope.loginError = 'Invalid username or password';

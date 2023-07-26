@@ -893,11 +893,13 @@ angular
             }
           });
 
-        $http
-          .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/tracnet-alarm-alert-tab"
-          )
-          .then(function (res) {
+    
+
+          $http ({
+            method: 'GET',
+            url: $scope.serverRequest+"tracnet-alarm-alert-tab",
+            headers: customeHeader
+          }).then(function (res) {
             const response = res.data.data;
             var convertedData = [];
 

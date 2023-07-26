@@ -1,6 +1,12 @@
 angular.module('mainCtrl', [])
 
-    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location, apiBaseUrl) {
+    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location, apiBaseUrl,$window) {
+
+        if ($window.localStorage.getItem('loginToken') == null) {
+            $state.go('login');
+            return;
+          }
+
         $scope.serverRequest = apiBaseUrl;
         const token =  localStorage.getItem("loginToken");
         const customeHeader = {
@@ -51,10 +57,11 @@ angular.module('mainCtrl', [])
 
         $scope.signOut = function () {
             $rootScope.storage.loggedIn = false;
-            $rootScope.storage.authToken = false;
             $rootScope.storage.$reset();
             $scope.refreshPage();
+            $window.localStorage.removeItem('loginToken');
             $state.go('login');
+            return;
         }
 
         // let sensors = [];
