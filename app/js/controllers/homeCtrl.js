@@ -215,11 +215,12 @@ angular
                 var distanceValue = parseInt(data.point.height);
                 var dis_color_rank = 3;
                 var dis_color = "Green";
-                var distance_alarm_tr = "";
+                var distance_alarm_tr = " - ";
 
                 if (data.point.height > 3998) {
-                  var dis_color_rank = 0;
+                  var dis_color_rank = 3;
                   var dis_color = "";
+                  var distanceValue = "";
                 }
                 if (data.point.height < 300) {
                   var distanceValue = 400;
@@ -529,9 +530,14 @@ angular
           typeof dict.longitude === "undefined"
         )
           return;
-        var disctdis = dict.distance < 3998 ? dict.distance + " mm" : "--";
+        
+        if(dict.distance < 3998) {
+          var custContent = dict.angle + "\xBA";
+        } else {
+          var custContent = disctdis.toLocaleString() + ",  " + dict.angle + "\xBA";
+        }
         var infowindow = new google.maps.InfoWindow({
-          content: disctdis.toLocaleString() + ",  " + dict.angle + "\xBA",
+          content: custContent
         });
 
         var colorCode = dict.colorRank;
