@@ -255,8 +255,7 @@ angular
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a https://dev-api-sg.tracwater.asia/api/v1/ */
         $http
           .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" +
-              localStorage.getItem("singleDate")
+            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList" 
           )
           .then(function (res) {
             const response = res.data.data;
@@ -393,13 +392,15 @@ angular
             var i = 0;
             for (var index in $scope.device) {
               i++;
-
+              console.log(convertedData[i], "convertedData")
               //setTimeout(() => {
               if ($scope.device[index].length) {
-                queriesArray.push({
-                  index: index,
-                  query: convertedData[i].data,
-                });
+                if(convertedData[i]) {
+                  queriesArray.push({
+                    index: index,
+                    query: convertedData[i].data,
+                  });
+                }
                 i++;
               }
               //}, 1000000);

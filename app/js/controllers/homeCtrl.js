@@ -531,10 +531,10 @@ angular
         )
           return;
         
-        if(dict.distance < 3998) {
+        if(dict.distance > 3998) {
           var custContent = dict.angle + "\xBA";
         } else {
-          var custContent = disctdis.toLocaleString() + ",  " + dict.angle + "\xBA";
+          var custContent = dict.distance.toLocaleString() + ",  " + dict.angle + "\xBA";
         }
         var infowindow = new google.maps.InfoWindow({
           content: custContent
@@ -819,10 +819,10 @@ angular
         )
           return;
 
-        if(dict.distance < 3998) {
+        if(dict.distance > 3998) {
           var custContent = dict.angle + "\xBA";
         } else {
-          var custContent = disctdis.toLocaleString() + ",  " + dict.angle + "\xBA";
+          var custContent = dict.distance.toLocaleString() + ",  " + dict.angle + "\xBA";
         }
         var infowindow = new google.maps.InfoWindow({
           content: custContent
