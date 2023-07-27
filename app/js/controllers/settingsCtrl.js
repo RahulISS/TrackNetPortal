@@ -109,7 +109,7 @@ angular
           method: 'POST',
           url: $scope.serverRequest+"addSetting?portal="+ $scope.aPortalName,
           headers: customeHeader,
-          body: loginData
+          data: loginData
         }).then(function (response) {
             const data = response.data;
             if (data.status) {

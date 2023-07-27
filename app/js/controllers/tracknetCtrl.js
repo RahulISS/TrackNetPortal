@@ -261,9 +261,16 @@ angular
       $scope.loadData = function (initset) {
         $scope.device = {};
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a https://dev-api-sg.tracwater.asia/api/v1/ */
+
+
+        const apiUrl = $scope.isFirstLoad ? `${$scope.serverRequest}newtraknetApiList`
+        : `${$scope.serverRequest}newtraknetApiList/` + localStorage.getItem("singleDate");
+
+
+
         $http ({
           method: 'GET',
-          url: $scope.serverRequest+"newtraknetApiList/"+ localStorage.getItem("singleDate"),
+          url: apiUrl,
           headers: customeHeader
         })
           .then(function (res) {
