@@ -224,11 +224,12 @@ angular
                 var distanceValue = parseInt(data.point.height);
                 var dis_color_rank = 3;
                 var dis_color = "Green";
-                var distance_alarm_tr = "";
+                var distance_alarm_tr = " - ";
 
                 if (data.point.height > 3998) {
-                  var dis_color_rank = 0;
+                  var dis_color_rank = 3;
                   var dis_color = "";
+                  var distanceValue = "";
                 }
                 if (data.point.height < 400) {
                   var distanceValue = 400;
@@ -337,7 +338,7 @@ angular
                   angle_alarm_tr: angle_alarm_tr, 
                   lastCommColorRank: lastCommColor,
                   lastComm_alarm_tr: lastComm,
-                  last_communication: timeDate,
+                  last_communication: timeDiff,
                   manhole_level_alarm: manhole_level_alarm,
                   manhole_moved_alarm: manhole_moved_alarm,
                   status: "all clear",
@@ -367,7 +368,7 @@ angular
             $scope.dataLocation = aLocation;
             
             const sorter = (a, b) => {
-              return b.last_communication - a.last_communication;
+              return a.last_communication - b.last_communication;
             };
 
             const sortByLastComm = (arr) => {
@@ -538,7 +539,6 @@ angular
           typeof dict.longitude === "undefined"
         )
           return;
-        var disctdis = dict.distance < 3998 ? dict.distance + " mm" : "--";
         
         if(dict.distance > 3998) {
           var custContent = dict.angle + "\xBA";
@@ -552,7 +552,7 @@ angular
           
         }
         var infowindow = new google.maps.InfoWindow({
-          content: disctdis.toLocaleString() + ",  " + dict.angle + "\xBA",
+          content: custContent
         });
 
         var colorCode = dict.colorRank;
@@ -843,12 +843,7 @@ angular
           }
         }
         var infowindow = new google.maps.InfoWindow({
-          content:
-            dict.distance.toLocaleString() +
-            "mm " +
-            " ,  " +
-            dict.angle +
-            "\xBA",
+          content: custContent
         });
         var colorCode = dict.disColorRank;
         var colorCode2 = dict.angleColorRank;
