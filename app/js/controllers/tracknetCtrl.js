@@ -16,6 +16,7 @@ angular
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";
       $scope.isFirstLoad = true;
+      $scope.isFirstLoadAlarm = true;
       $scope.clockTime = function () {
         $scope.time = moment().utcOffset("+08:00").format("h:mm:ss a");
         $scope.date = moment().utcOffset("+08:00").format("ddd, MMM Do YYYY");
@@ -250,11 +251,13 @@ angular
             $scope.locationData[index].marker.sensorContent;
         }
       });
-
+      $scope.apiUrlAlarm = "";
       $scope.loadData = function (initset) {
         $scope.device = {};
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a https://dev-api-sg.tracwater.asia/api/v1/ */
         // Define the API URL based on the isFirstLoad flag
+        
+
         const apiUrl = $scope.isFirstLoad
         ? "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList"
         : "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate");
@@ -264,6 +267,7 @@ angular
           .get(apiUrl)
           .then(function (res) {
             const response = res.data.data;
+            
             var convertedData = [];
 
             for (var i = 0; i < response.length; i++) {
@@ -453,6 +457,7 @@ angular
             // After the API call, set isFirstLoad to false, so subsequent calendar changes use the new URL
             $scope.isFirstLoad = false;
           });
+          alarmApi();
       };
 
       function updateOpenedInfowidow(marker) {
@@ -820,10 +825,10 @@ angular
 
       var last_comm_split = null;
 
-      $scope.$on("$viewContentLoaded", function () {
+      function alarmApi(){
         $http
           .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList"
+            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate")
           )
           .then(function (res) {
             const response = res.data.data;
@@ -860,7 +865,7 @@ angular
               if ("distance_alert" in data.point) {
                 var distanceAlertValue = parseInt(data.point.distance_alert);
                 if (Number(data.point.height) < distanceAlertValue && data.point.alert_enable ==  1 ) {
-                  dis_color_rank = 2;
+                  var dis_color_rank = 2;
                   var dis_color = "Yellow";
                   var distance_alarm_tr = "Distance alert Triggered";
                 }
@@ -891,7 +896,7 @@ angular
                 deviceIds.add(data.product_serialNumber);
               }
             }
-
+           
             for (var i = 0; i < uniqueDataCount.length; i++) {
               if ( uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3 )
                 $scope.realtimesummery.series[0].data[0].y++;
@@ -900,15 +905,12 @@ angular
                 $scope.realtimesummery.series[0].data[2].y++;
             }
           });
-
+       
         $http
-          .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/tracnet-alarm-alert-tab"
-          )
+          .get("https://dev-api-sg.tracwater.asia/api/v1/tracnet-alarm-alert-tab/" + localStorage.getItem("singleDate"))
           .then(function (res) {
             const response = res.data.data;
             var convertedData = [];
-
             for (var i = response.length - 1; i > 0; i--) {
               var data = response[i];
               if (data.location !== "") {
@@ -939,7 +941,7 @@ angular
                 } else if (Number(data.height) >= 3998) {
                   var disValue = "";
                 } else {
-                  var disValue = Number(data.height);
+                  var disValue = Number(data.height).toLocaleString();
                 }
 
                 if (parseInt(data.created_at.$date.$numberLong))
@@ -1100,6 +1102,13 @@ angular
             $scope.alertCount = uniqueAlertData.length;
             $scope.alertLists = uniqueAlertData;
           });
+      }
+
+      $scope.$on("$viewContentLoaded", function () {
+        
+          alarmApi();
+          
+        
       });
 
       $scope.meterChartConfig = [];
