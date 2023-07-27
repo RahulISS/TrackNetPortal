@@ -230,7 +230,7 @@ angular
                   var dis_color_rank = 0;
                   var dis_color = "";
                 }
-                if (data.point.height < 300) {
+                if (data.point.height < 400) {
                   var distanceValue = 400;
                   var distance_alarm_tr = "Distance alarm Triggered";
                   var dis_color_rank = 1;
@@ -347,7 +347,7 @@ angular
                   area: data.location.street,  
                   batteryStatus: data.point.manholeBatteryStatusValue,
                   batteryVolt: data.point.battery_voltage, 
-                  distance: distanceValue,
+                  distance: distanceValue.toLocaleString(),
                   disColorRank: parseInt(dis_color_rank), 
                   disColor: dis_color, 
                   distance_alarm_tr: distance_alarm_tr, 
@@ -539,6 +539,18 @@ angular
         )
           return;
         var disctdis = dict.distance < 3998 ? dict.distance + " mm" : "--";
+        
+        if(dict.distance > 3998) {
+          var custContent = dict.angle + "\xBA";
+        } else {
+          if(dict.distance == ''){
+              var custContent = dict.angle + "\xBA";
+          }
+          else{
+            var custContent = dict.distance.toLocaleString() + "mm,  " + dict.angle + "\xBA";
+          }
+          
+        }
         var infowindow = new google.maps.InfoWindow({
           content: disctdis.toLocaleString() + ",  " + dict.angle + "\xBA",
         });
@@ -819,6 +831,17 @@ angular
           typeof dict.longitude === "undefined"
         )
           return;
+
+        if(dict.distance > 3998) {
+          var custContent = dict.angle + "\xBA";
+        } else {
+          if(dict.distance == ''){
+            var custContent = dict.angle + "\xBA";
+          }
+          else{
+            var custContent = dict.distance.toLocaleString() + "mm,  " + dict.angle + "\xBA";
+          }
+        }
         var infowindow = new google.maps.InfoWindow({
           content:
             dict.distance.toLocaleString() +

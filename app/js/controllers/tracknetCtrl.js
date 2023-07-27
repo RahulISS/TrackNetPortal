@@ -22,6 +22,7 @@ angular
       const portalRef = "64ad1af2664396439a286273"; //tracnet trial 20230703
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";
+      $scope.isFirstLoad = true;
       $scope.clockTime = function () {
         $scope.time = moment().utcOffset("+08:00").format("h:mm:ss a");
         $scope.date = moment().utcOffset("+08:00").format("ddd, MMM Do YYYY");
@@ -400,7 +401,7 @@ angular
             var i = 0;
             for (var index in $scope.device) {
               i++;
-
+             
               //setTimeout(() => {
               if ($scope.device[index].length) {
                 queriesArray.push({
@@ -450,6 +451,9 @@ angular
                   );
               });
             }
+          }).finally(function () {
+            // After the API call, set isFirstLoad to false, so subsequent calendar changes use the new URL
+            $scope.isFirstLoad = false;
           });
       };
 
@@ -530,11 +534,17 @@ angular
         else info.area = info.area;
 
         var distance_value = "";
-        if (info.distance > 400) distance_value = info.distance;
-        else if (info.distance > 3998) {
-          distance_value = "";
-        } else {
+       
+        if (info.distance > 400) 
+        {
+          distance_value = info.distance;
+        }
+         else {
           distance_value = 400;
+        }
+        if (info.distance > 3998){
+          distance_value = "";
+          
         }
 
         marker.content =
@@ -1023,7 +1033,7 @@ angular
 
             $scope.alertLists = uniqueData;
             var uniqueAlertData = [];
-            //console.log($scope.alertLists.length, "my count")
+            
             for (var i = 0; i < $scope.alertLists.length; i++) {
               $scope.alertLists[i].class = "";
               if ($scope.alertLists[i].status == "Distance alarms triggered") {
