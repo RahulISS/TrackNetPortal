@@ -15,6 +15,7 @@ angular
       const portalRef = "64ad1af2664396439a286273"; //tracnet trial 20230703
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";
+      $scope.isFirstLoad = true;
       $scope.clockTime = function () {
         $scope.time = moment().utcOffset("+08:00").format("h:mm:ss a");
         $scope.date = moment().utcOffset("+08:00").format("ddd, MMM Do YYYY");
@@ -253,10 +254,14 @@ angular
       $scope.loadData = function (initset) {
         $scope.device = {};
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a https://dev-api-sg.tracwater.asia/api/v1/ */
+        // Define the API URL based on the isFirstLoad flag
+        const apiUrl = $scope.isFirstLoad
+        ? "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList"
+        : "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate");
+
+        
         $http
-          .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList" 
-          )
+          .get(apiUrl)
           .then(function (res) {
             const response = res.data.data;
             var convertedData = [];
@@ -392,7 +397,7 @@ angular
             var i = 0;
             for (var index in $scope.device) {
               i++;
-              console.log(convertedData[i], "convertedData")
+             
               //setTimeout(() => {
               if ($scope.device[index].length) {
                 if(convertedData[i]) {
@@ -444,6 +449,9 @@ angular
                   );
               });
             }
+          }).finally(function () {
+            // After the API call, set isFirstLoad to false, so subsequent calendar changes use the new URL
+            $scope.isFirstLoad = false;
           });
       };
 
@@ -524,11 +532,17 @@ angular
         else info.area = info.area;
 
         var distance_value = "";
-        if (info.distance > 400) distance_value = info.distance;
-        else if (info.distance > 3998) {
-          distance_value = "";
-        } else {
+       
+        if (info.distance > 400) 
+        {
+          distance_value = info.distance;
+        }
+         else {
           distance_value = 400;
+        }
+        if (info.distance > 3998){
+          distance_value = "";
+          
         }
 
         marker.content =
@@ -1015,7 +1029,7 @@ angular
 
             $scope.alertLists = uniqueData;
             var uniqueAlertData = [];
-            //console.log($scope.alertLists.length, "my count")
+            
             for (var i = 0; i < $scope.alertLists.length; i++) {
               $scope.alertLists[i].class = "";
               if ($scope.alertLists[i].status == "Distance alarms triggered") {

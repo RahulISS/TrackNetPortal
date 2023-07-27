@@ -222,7 +222,7 @@ angular
                   var dis_color = "";
                   var distanceValue = "";
                 }
-                if (data.point.height < 300) {
+                if (data.point.height < 400) {
                   var distanceValue = 400;
                   var distance_alarm_tr = "Distance alarm Triggered";
                   var dis_color_rank = 1;
@@ -339,7 +339,7 @@ angular
                   area: data.location.street,  
                   batteryStatus: data.point.manholeBatteryStatusValue,
                   batteryVolt: data.point.battery_voltage, 
-                  distance: distanceValue,
+                  distance: distanceValue.toLocaleString(),
                   disColorRank: parseInt(dis_color_rank), 
                   disColor: dis_color, 
                   distance_alarm_tr: distance_alarm_tr, 
