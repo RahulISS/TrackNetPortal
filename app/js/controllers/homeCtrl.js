@@ -534,7 +534,13 @@ angular
         if(dict.distance > 3998) {
           var custContent = dict.angle + "\xBA";
         } else {
-          var custContent = dict.distance.toLocaleString() + ",  " + dict.angle + "\xBA";
+          if(dict.distance == ''){
+              var custContent = dict.angle + "\xBA";
+          }
+          else{
+            var custContent = dict.distance.toLocaleString() + "mm,  " + dict.angle + "\xBA";
+          }
+          
         }
         var infowindow = new google.maps.InfoWindow({
           content: custContent
@@ -822,7 +828,12 @@ angular
         if(dict.distance > 3998) {
           var custContent = dict.angle + "\xBA";
         } else {
-          var custContent = dict.distance.toLocaleString() + ",  " + dict.angle + "\xBA";
+          if(dict.distance == ''){
+            var custContent = dict.angle + "\xBA";
+          }
+          else{
+            var custContent = dict.distance.toLocaleString() + "mm,  " + dict.angle + "\xBA";
+          }
         }
         var infowindow = new google.maps.InfoWindow({
           content: custContent
