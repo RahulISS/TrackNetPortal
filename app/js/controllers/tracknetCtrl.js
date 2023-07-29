@@ -456,8 +456,12 @@ angular
           }).finally(function () {
             // After the API call, set isFirstLoad to false, so subsequent calendar changes use the new URL
             $scope.isFirstLoad = false;
+            $scope.realtimesummery.series[0].data[0].y = 0;
+            $scope.realtimesummery.series[0].data[1].y = 0;
+            $scope.realtimesummery.series[0].data[2].y = 0;
+            alarmApi();
           });
-          alarmApi();
+         
       };
 
       function updateOpenedInfowidow(marker) {
@@ -826,6 +830,7 @@ angular
       var last_comm_split = null;
 
       function alarmApi(){
+        
         $http
           .get(
             "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate")
@@ -845,17 +850,13 @@ angular
                 var angle_alarm_tr = "";
               }
 
-              var distanceValue = parseInt(data.point.height);
+             // var distanceValue = parseInt(data.point.height);
 
               if ( Number(data.point.height) < 300) {
-                var distanceValue = 400;
+               // var distanceValue = 400;
                 var distance_alarm_tr = "Distance alarm Triggered";
                 var dis_color_rank = 1;
                 var dis_color = "Red";
-              } else if ( Number(data.point.height) > 3998) {
-                var distanceValue = "";
-                var dis_color_rank = "";
-                var dis_color = "";
               } else {
                 var dis_color_rank = 3;
                 var dis_color = "Green";
@@ -877,11 +878,11 @@ angular
                 angleColor: angleColor, // Populate with the appropriate value from the response
                 angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
                 product_serialNumber: data.point.device_id,
-                distance: data.point.distance,
+                distance: data.point.height,
                 disColorRank: dis_color_rank, // Populate with the appropriate value from the response
                 disColor: dis_color, // Populate with the appropriate value from the response
                 distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
-                distanceValue: data.point.distance,
+                distanceValue: data.point.height,
               };
 
               convertedAlertCountData.push(convertedAlertCountPoint);
