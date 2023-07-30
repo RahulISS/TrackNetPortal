@@ -256,8 +256,6 @@ angular
         $scope.device = {};
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a https://dev-api-sg.tracwater.asia/api/v1/ */
         // Define the API URL based on the isFirstLoad flag
-        
-
         const apiUrl = $scope.isFirstLoad
         ? "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList"
         : "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate");
@@ -402,7 +400,6 @@ angular
             for (var index in $scope.device) {
               i++;
              
-              //setTimeout(() => {
               if ($scope.device[index].length) {
                 if(convertedData[i]) {
                   queriesArray.push({
@@ -412,7 +409,6 @@ angular
                 }
                 i++;
               }
-              //}, 1000000);
             }
 
             if (queriesArray.length > 0) {
@@ -461,7 +457,6 @@ angular
             $scope.realtimesummery.series[0].data[2].y = 0;
             alarmApi();
           });
-         
       };
 
       function updateOpenedInfowidow(marker) {
@@ -830,7 +825,9 @@ angular
       var last_comm_split = null;
 
       function alarmApi(){
-        
+          $scope.realtimesummery.series[0].data[0].y = 0;
+          $scope.realtimesummery.series[0].data[1].y = 0;
+          $scope.realtimesummery.series[0].data[2].y = 0;
         $http
           .get(
             "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate")
@@ -862,106 +859,37 @@ angular
                 var dis_color = "Green";
                 var distance_alarm_tr = "";
               }
-              
               if ("distance_alert" in data.point) {
                 var distanceAlertValue = parseInt(data.point.distance_alert);
-                if (Number(data.point.height) < distanceAlertValue && data.point.alert_enable ==  1 ) {
+                if (distanceAlertValue != "undefined" && Number(data.point.height) < distanceAlertValue && data.point.alert_enable ==  1 ) {
                   var dis_color_rank = 2;
                   var dis_color = "Yellow";
                   var distance_alarm_tr = "Distance alert Triggered";
-                }
+                } 
               }
-
-              var convertedAlertCountPoint = {
-                angle: data.point.angle,
-                angleColorRank: angleColorRank, // Populate with the appropriate value from the response
-                angleColor: angleColor, // Populate with the appropriate value from the response
-                angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
-                product_serialNumber: data.point.device_id,
-                distance: data.point.height,
-                disColorRank: dis_color_rank, // Populate with the appropriate value from the response
-                disColor: dis_color, // Populate with the appropriate value from the response
-                distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
-                distanceValue: data.point.height,
-              };
-
-              convertedAlertCountData.push(convertedAlertCountPoint);
-            }
-            var uniqueDataCount = [];
-            var deviceIds = new Set(); // Using a Set to store unique device_ids
-
-            for (var i = 0; i < convertedAlertCountData.length; i++) {
-              var data = convertedAlertCountData[i];
-              if (!deviceIds.has(data.product_serialNumber)) {
-                uniqueDataCount.push(data);
-                deviceIds.add(data.product_serialNumber);
-              }
-            }
-           
-            for (var i = 0; i < uniqueDataCount.length; i++) {
-              if ( uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3 )
-                $scope.realtimesummery.series[0].data[0].y++;
-              if ( uniqueDataCount[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++
-              if ( uniqueDataCount[i].disColorRank == 1 || uniqueDataCount[i].angleColorRank == 1 )
-                $scope.realtimesummery.series[0].data[2].y++;
-            }
-          });
-       
-        $http
-          .get("https://dev-api-sg.tracwater.asia/api/v1/tracnet-alarm-alert-tab/" + localStorage.getItem("singleDate"))
-          .then(function (res) {
-            const response = res.data.data;
-            var convertedData = [];
-            for (var i = response.length - 1; i > 0; i--) {
-              var data = response[i];
-              if (data.location !== "") {
                 var status = "";
                 var disValue = "";
-                if (Number(data.height) < 300) {
+                if (Number(data.point.height) < 300) {
                   status = "Distance alarms triggered";
-                } else if (Number(data.angle) > 5) {
+                } else if (Number(data.point.angle) > 5) {
                   status = "Angle alarms triggered";
-                } else if (
-                  Number(data.height) < 300 &&
-                  Number(data.angle) > 5
-                ) {
+                } else if ( Number(data.point.height) < 300 && Number(data.point.angle) > 5) {
                   status = "all alarms triggered";
+                } else if ("distance_alert" in data.point && Number(data.point.height) < distanceAlertValue && data.point.alert_enable ==  1) {
+                  status = "Distance alert triggered";
                 } else {
                   status = "all clear";
                 }
-
-                if ("distance_alert" in data) {
-                    var distanceAlertValue = parseInt(data.distance_alert);
-                    if (Number(data.height) < distanceAlertValue && data.alert_enable ==  1 ) {
-                      status = "Distance alert triggered";
-                    }
-                }
                 
-                if (Number(data.height) < 400) {
-                  var disValue = 400;
-                } else if (Number(data.height) >= 3998) {
-                  var disValue = "";
-                } else {
-                  var disValue = Number(data.height).toLocaleString();
-                }
 
-                if (parseInt(data.created_at.$date.$numberLong))
-               
                 var currentDate = new Date();
                 const singaporeCurrentTime = moment(currentDate).tz("Asia/Singapore");
-                const ttemp = convertDateStringToISOString(data.date);
+                const ttemp = convertDateStringToISOString(data.point.date);
                 const singaporeTime = moment(ttemp).tz("Asia/Singapore");
                 var timeDiff = Math.abs(singaporeCurrentTime - singaporeTime);
                 var cd = 24 * 60 * 60 * 1000;
                 var hValue = Math.floor(timeDiff / cd);
-                if (hValue > 25) {
-                  var lastComm = "Communications alarm Triggered";
-                  var lastCommColor = 3;
-                } else {
-                  var lastComm = "";
-                  var lastCommColor = "";
-                }
-
+  
                 if (timeDiff < 1000) {
                   //miliseconds
                   var hours = timeDiff + " ms";
@@ -984,53 +912,82 @@ angular
                   var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + "wk";
                 } else {
                   //year
-                  var hours = Math.floor(tismeDiff / (1000 * 60 * 60)) + "y";
+                  var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + "y";
                 }
 
                 var timeDate = hours;
 
+                if (Number(data.point.height) < 400) {
+                  var disValue = 400;
+                } else if (Number(data.point.height) >= 3998) {
+                  var disValue = "";
+                } else {
+                  var disValue = Number(data.point.height).toLocaleString();
+                }
                 var msg = "";
                 if (disValue != "") {
                   var msg =
                     "Distance: " +
                     disValue +
                     " mm, Angle: " +
-                    data.angle +
+                    data.point.angle +
                     " deg";
                 } else {
-                  var msg = "Angle: " + data.angle + " deg";
+                  var msg = "Angle: " + data.point.angle + " deg";
                 }
-                var convertedPoint = {
-                  aTreeNodeRef: data._id.$oid,
-                  aTreeNode_textLabel: data.textLabel,
-                  latitude: parseFloat(data.location.latitude),
-                  longitude: parseFloat(data.location.longitude),
-                  message: msg,
-                  oldest_comm_date: data.date + " hours",
-                  product_serialNumber: data.device_id,
-                  status: status,
-                  oldest_comm_date: timeDate,
-                  last_comm_split: timeDate + " hours ago",
-                  street: data.location.street,
-                  city: data.location.city,
-                  time: timeDate + " hours ago",
-                };
+              var convertedAlertCountPoint = {
+                /*alert and alarm count response*/
+                angle: data.point.angle,
+                angleColorRank: angleColorRank, // Populate with the appropriate value from the response
+                angleColor: angleColor, // Populate with the appropriate value from the response
+                angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+                product_serialNumber: data.point.device_id,
+                distance: data.point.height,
+                disColorRank: dis_color_rank, // Populate with the appropriate value from the response
+                disColor: dis_color, // Populate with the appropriate value from the response
+                distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
+                distanceValue: data.point.height,
+                /*alert and alarm list response*/
+                aTreeNodeRef: data.aTreeNodeRef.$oid,
+                aTreeNode_textLabel: data.point.textLabel,
+                latitude: parseFloat(data.location.latitude),
+                longitude: parseFloat(data.location.longitude),
+                message: msg,
+                  //oldest_comm_date: data.date + " hours",
+                product_serialNumber: data.point.device_id,
+                status: status,
+                oldest_comm_date: timeDate,
+                last_comm_split: timeDate + " hours ago",
+                street: data.location.street,
+                city: data.location.city,
+                time: timeDate + " hours ago",
+              };
 
-                convertedData.push(convertedPoint);
-              }
+              convertedAlertCountData.push(convertedAlertCountPoint);
             }
-            var uniqueData = [];
+            
+            var uniqueDataCount = [];
             var deviceIds = new Set(); // Using a Set to store unique device_ids
 
-            for (var i = 0; i < convertedData.length; i++) {
-              var data = convertedData[i];
+            for (var i = 0; i < convertedAlertCountData.length; i++) {
+              var data = convertedAlertCountData[i];
               if (!deviceIds.has(data.product_serialNumber)) {
-                uniqueData.push(data);
+                uniqueDataCount.push(data);
                 deviceIds.add(data.product_serialNumber);
               }
             }
-
-            $scope.alertLists = uniqueData;
+           
+            for (var i = 0; i < uniqueDataCount.length; i++) {
+              if ( uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3 )
+                $scope.realtimesummery.series[0].data[0].y++;
+              if ( uniqueDataCount[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++
+              if ( uniqueDataCount[i].disColorRank == 1 || uniqueDataCount[i].angleColorRank == 1 )
+                $scope.realtimesummery.series[0].data[2].y++;
+            }
+            var uniqueData = [];
+            var deviceIds = new Set(); // Using a Set to store unique device_ids
+            
+            $scope.alertLists = uniqueDataCount;
             var uniqueAlertData = [];
             
             for (var i = 0; i < $scope.alertLists.length; i++) {
@@ -1055,7 +1012,6 @@ angular
 
                 $scope.alertLists[i].class = "distance danger";
               }
-
               last_comm_split =
                 $scope.alertLists[i].oldest_comm_date.split(" ");
 
@@ -1106,10 +1062,7 @@ angular
       }
 
       $scope.$on("$viewContentLoaded", function () {
-        
-          alarmApi();
-          
-        
+        alarmApi();
       });
 
       $scope.meterChartConfig = [];
