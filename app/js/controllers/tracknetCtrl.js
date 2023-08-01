@@ -823,6 +823,23 @@ angular
       };
 
       var last_comm_split = null;
+      /*alertlist sorting*/
+      function customComparator(a, b) {
+        function extractHours(timeString) {
+          if (timeString.endsWith('h')) {
+            return parseInt(timeString);
+          } else if (timeString.endsWith('min')) {
+            return parseInt(timeString) / 60;
+          } else {
+            return 0;
+          }
+        }
+
+        const hoursA = extractHours(a.oldest_comm_date);
+        const hoursB = extractHours(b.oldest_comm_date);
+
+        return hoursA - hoursB;
+      }
 
       function alarmApi(){
           $scope.realtimesummery.series[0].data[0].y = 0;
@@ -956,6 +973,7 @@ angular
                   //oldest_comm_date: data.date + " hours",
                 product_serialNumber: data.point.device_id,
                 status: status,
+                myTime: timeDate,
                 oldest_comm_date: timeDate,
                 last_comm_split: timeDate + " hours ago",
                 street: data.location.street,
@@ -988,6 +1006,7 @@ angular
             var deviceIds = new Set(); // Using a Set to store unique device_ids
             
             $scope.alertLists = uniqueDataCount;
+
             var uniqueAlertData = [];
             
             for (var i = 0; i < $scope.alertLists.length; i++) {
@@ -1057,7 +1076,7 @@ angular
               // }
             }
             $scope.alertCount = uniqueAlertData.length;
-            $scope.alertLists = uniqueAlertData;
+            $scope.alertLists = uniqueAlertData.sort(customComparator);
           });
       }
 
