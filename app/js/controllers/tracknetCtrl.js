@@ -823,10 +823,13 @@ angular
       };
 
       var last_comm_split = null;
+      
       /*alertlist sorting*/
       function customComparator(a, b) {
         function extractHours(timeString) {
-          if (timeString.endsWith('h')) {
+          if (timeString.endsWith('d')) {
+            return parseInt(timeString) * 24; // Convert days to hours
+          } else if (timeString.endsWith('h')) {
             return parseInt(timeString);
           } else if (timeString.endsWith('min')) {
             return parseInt(timeString) / 60;
@@ -834,10 +837,10 @@ angular
             return 0;
           }
         }
-
+      
         const hoursA = extractHours(a.oldest_comm_date);
         const hoursB = extractHours(b.oldest_comm_date);
-
+      
         return hoursA - hoursB;
       }
 
