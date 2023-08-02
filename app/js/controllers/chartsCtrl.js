@@ -1407,7 +1407,7 @@ angular
             localStorage.setItem("sensorId", sensorType);
             const interval = $scope.rollup.value;
             const fold = $scope.tableStats[i].fold.value;
-            const query = `https://dev-api-sg.tracwater.asia/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+            const query = `http://127.0.0.1:8000/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
             let queryInfo = { query: query, index: i };
             $scope.queriesArray.push(queryInfo);
           }
@@ -1434,6 +1434,14 @@ angular
           }
           for (let i = 0; i < responses.length; i++) {
             const data = responses[i].data.data.data;
+            for (let k = data.length - 1; k >= 0; k--) {
+              if (data[k].v0 <= 400) {
+                  data[k].v0 = 400;
+              } else if (data[k].v0 >= 3998) {
+                  data.splice(k, 1); // Remove the element at index k
+              } 
+              // You don't need the else block here, so it can be omitted.
+          }
             const index = responses[i].index;
             $scope.tableStats[index].max = 0;
             $scope.tableStats[index].min = 0;
