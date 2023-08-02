@@ -1407,7 +1407,7 @@ angular
             localStorage.setItem("sensorId", sensorType);
             const interval = $scope.rollup.value;
             const fold = $scope.tableStats[i].fold.value;
-            const query = `http://127.0.0.1:8000/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+            const query = `https://dev-api-sg.tracwater.asia/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
             let queryInfo = { query: query, index: i };
             $scope.queriesArray.push(queryInfo);
           }
