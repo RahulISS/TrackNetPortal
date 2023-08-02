@@ -17,6 +17,7 @@ angular
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";
       const gridTickColor = "#b9b9b9";
+      $scope.sensorType = "";
 
       var currentLegend = 0;
 
@@ -1401,13 +1402,14 @@ angular
           ) {
             $scope.activeItems.push(i);
             const id = $scope.tableStats[i].pointId;
-            const sensorType =
+             $scope.sensorType =
               $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
             localStorage.setItem("aTreeNodeId", id);
-            localStorage.setItem("sensorId", sensorType);
+            console.log($scope.sensorType,'id sorb')
+            localStorage.setItem("sensorId", $scope.sensorType);
             const interval = $scope.rollup.value;
             const fold = $scope.tableStats[i].fold.value;
-            const query = `https://dev-api-sg.tracwater.asia/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+            const query = `https://dev-api-sg.tracwater.asia/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
             let queryInfo = { query: query, index: i };
             $scope.queriesArray.push(queryInfo);
           }
@@ -1432,14 +1434,22 @@ angular
           for (let p = 0; p < responses[0].data.data.data.length; p++) {
             $scope.tableViewData.push([responses[0].data.data.data[p].ts]);
           }
+          
           for (let i = 0; i < responses.length; i++) {
             const data = responses[i].data.data.data;
+            console.log(responses[i].data, "data")
             for (let k = data.length - 1; k >= 0; k--) {
-              if (data[k].v0 <= 400) {
+              if($scope.sensorType == "64ae522eefa8baae8f106b9d"){
+                console.log("in")
+                if (data[k].v0 <= 400) {
                   data[k].v0 = 400;
-              } else if (data[k].v0 >= 3998) {
-                  data.splice(k, 1); // Remove the element at index k
-              } 
+                  console.log("400")
+                } else if (data[k].v0 >= 3998) {
+                  console.log("3998")
+                    data.splice(k, 1); // Remove the element at index k
+                } 
+              }
+              
               // You don't need the else block here, so it can be omitted.
           }
             const index = responses[i].index;
