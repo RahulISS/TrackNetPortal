@@ -855,7 +855,7 @@ angular
           .then(function (res) {
             const response = res.data.data;
             var convertedAlertCountData = [];
-            for (var i = response.length - 1; i > 0; i--) {
+            for (var i = response.length - 1; i >= 0; i--) {
               var data = response[i];
               if ( Number(data.point.angle) > 5) {
                 var angleColorRank = 1;
@@ -867,7 +867,6 @@ angular
                 var angle_alarm_tr = "";
               }
 
-             // var distanceValue = parseInt(data.point.height);
 
               if ( Number(data.point.height) < 300) {
                // var distanceValue = 400;
