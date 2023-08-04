@@ -28,8 +28,8 @@
 			<thead style="background-color: #3255a2">
 				<tr style="color: aliceblue;">
 					<th>Site Name/Location</th>
-					<th>Distance (mm)</th>
-					<th>Bench Depth (mm)</th>
+					<th>Reltaive Distance (%)</th>
+					<!-- <th>Bench Depth (mm)</th> -->
 					<th>Angle (deg)</th>
 					<th>Last Comm.</th>
 				</tr>
@@ -40,7 +40,7 @@
 					<td class="changeMouse">{{item.installationName}}
 							<br>{{item.address}}</td>
 					<td class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ item.distance }} </td>
-					<td></td>
+					<!-- <td></td> -->
 					<td class="changeMouse" ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }" >{{item.angle}}</td>
 					<td class="changeMouse" ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered' }">{{item.oldest_comm_date}}</td>
 				</tr></a>

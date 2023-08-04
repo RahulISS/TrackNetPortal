@@ -514,6 +514,7 @@ angular
               let marker = buildMarker(dict);
               dict["marker"] = marker;
               dict["point"] = marker.point;
+              dict["realtiveDistance"] = "10";
               $scope.displayData.push(dict);
             }
           })
@@ -523,8 +524,11 @@ angular
       }
 
       let beachMarker = [];
-
+      
       function buildMarker(dict) {
+     
+
+       console.log(dict,"dict");
         if (
           typeof dict.latitude === "undefined" &&
           typeof dict.longitude === "undefined"
@@ -538,10 +542,11 @@ angular
               var custContent = dict.angle + "\xBA";
           }
           else{
-            var custContent = dict.distance.toLocaleString() + "mm,  " + dict.angle + "\xBA";
+            var custContent = "10%,  " + dict.angle + "\xBA";
           }
           
         }
+        var custContent =  "10%,  " + dict.angle + "\xBA";
         var infowindow = new google.maps.InfoWindow({
           content: custContent
         });
@@ -652,7 +657,7 @@ angular
           $scope.displayData[index].infoBox.close();
         }
       }
-
+      var reading = [];
       function getInfoWinData(node, marker) {
         let homeiw;
         let boxText = document.createElement("div");
@@ -698,6 +703,18 @@ angular
 
         $scope.displayData[index]["infoBox"] = homeiw;
         localStorage.setItem("node_id", nodeID.split(" ")[0]);
+        var rr = {
+          "decimalPlaces": 0,
+            "hisEndVal": 10,
+            "id": "64ae522eefa8baae8f106b9d",
+            "id_name": "Relative Distance",
+            "kind": "Number",
+            "mod": "2021-06-02T04:49:37.821Z UTC",
+            "rank": 2,
+            "unit": "%",
+            "unit_common": null,
+            "type": null
+        }
         const query = $http
           .get(
             "https://dev-api-sg.tracwater.asia/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId=" +
@@ -705,7 +722,8 @@ angular
           )
           .then(function (response) {
             const readings = response.data.data;
-
+            readings.unshift(rr)
+           // console.log(readings,"readings");
             let content = document.createElement("div");
             content.style.cssText =
               "text-align: center; background: black; color: white; padding: 5px; font-size: 1.8rem";

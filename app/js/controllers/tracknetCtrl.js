@@ -213,7 +213,7 @@ angular
           }
         });
       }
-      $scope.chartLabel = ["Angle", "Distance"];
+      $scope.chartLabel = ["Angle", "Relative Distance"];
 
       $scope.$watch("singleDate", function (newDate, oldDate) {
         if (newDate == undefined) return;
@@ -562,6 +562,8 @@ angular
           "<b>City: </b>" +
           info.installationCity +
           "<br>" +
+          "<b>Relative Distance:</b> 10 %  "+
+          "<br>" +
           "<b>Distance: </b>" +
           distance_value.toLocaleString(undefined, {
             maximumFractionDigits: info.decimalPlaces,
@@ -603,8 +605,10 @@ angular
           '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Distance:</span> ' +
           distance_value.toLocaleString(undefined, {
             maximumFractionDigits: info.decimalPlaces,
-          }) +
-          ' mm <span class="data-date"></span> </li>' +
+          }) + "mm" +
+          '</span> <span class="data-date"></span> </li>' +
+          '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Relative Distance: 10 %</span> ' +
+          '  <span class="data-date"></span> </li>' +
           '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Angle: </span>' +
           info.angle +
           ' deg <span class="data-date"></span> </li>' +
@@ -946,9 +950,9 @@ angular
                 var msg = "";
                 if (disValue != "") {
                   var msg =
-                    "Distance: " +
+                    "Relative Distance: " +
                     disValue +
-                    " mm, Angle: " +
+                    " %, Angle: " +
                     data.point.angle +
                     " deg";
                 } else {
