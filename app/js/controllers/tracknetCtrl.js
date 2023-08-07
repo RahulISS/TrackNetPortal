@@ -407,7 +407,6 @@ angular
                     query: convertedData[i].data,
                   });
                 }
-                i++;
               }
             }
 
