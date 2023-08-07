@@ -10917,17 +10917,18 @@ table.elem td {
     border-radius: 5px;
     border: 1px solid #808080;
     margin-bottom: 10px;
-    padding: 5px 10px;
+    padding: 5px 0px;
 }
 .homepage.ng-scope #popupModalCenter form .btn--flex input:hover{
     color: #fff;
 }
 .homepage.ng-scope #popupModalCenter .modal-content{
     background-color: #3255A2 !important;
-    color: #fff;
+    /* color: #fff; */
 }
 .homepage.ng-scope #popupModalCenter h2{
-    font-size: 50px;
+    font-size: 32px;
+    color: #fdfdfd;
 }
 
 
@@ -11204,6 +11205,263 @@ form#userFrm .user-frm-wrp input {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
     }
+/* CSS styles for the modal container */
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* CSS styles for the modal content */
+  .modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  /* Additional styles to center the modal */
+  .modal {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .mhole{
+    background-color: #000;
+  }
+  
+  .mhole-mobile {
+    max-width: 375px;
+    width: 100%;
+    margin: 0% auto;
+    padding: 22px 0px;
+    position: relative;
+    background-color: #fff;
+  }
+  .mhole-mobile h4{
+    text-align: center;
+    padding-bottom: 10px;
+  }
+  .mhole-mobile .mhole-image{
+    width: 100%;
+  } 
+  .mhole-mobile .mhole-image img{
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .mhole-mobile .mhole-content{
+    position: absolute;
+    top: 52px;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    padding: 0 55px 0 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+  }  
+  
+  .mhole-mobile .mhole-content .mhole-alert{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 84px;
+    position: relative;
+    /* margin-bottom: 61px; */
+  }
+  .mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1){
+    margin-bottom: 0;
+  }
+  .mhole-mobile .mhole-content .mhole-alert::before{
+    position: absolute;
+    content: "";
+    border: 1.7px solid red;
+    width: 100%;
+    left: 0;
+  }
+  .mhole-mobile .mhole-content .mhole-alert label,
+  .mhole-mobile .mhole-content .mhole-alert input{
+    border: 3px solid red;
+    padding: 1px;
+    background: #fff;
+    z-index: 1;
+  }
+  
+  .mhole-mobile .mhole-content .mhole-alert input{
+    outline: none;
+    max-width: 90px;
+    position: relative;
+  }
+  
+  .mhole-mobile .mhole-content .mhole-alert .cross-btn{
+    position: absolute;
+    top: -15px;
+    right: -8px;
+    border: none;
+    outline: none;
+    background: none;
+    z-index: 1;
+    font-size: 18px;
+  }
+  
+  .mhole-mobile .mhole-content .traingles {
+    position: absolute !important;
+    top: 130px;
+  }
+  
+  .mhole-mobile .mhole-content .squares{
+    position: absolute;
+    top: 265px;
+  }
+  .mhole-mobile .mhole-content .circles{
+    position: absolute;
+    top: 355px;
+  }
+  .mhole-mobile .mhole-content .boundaryTwo{
+    position: absolute;
+    top: 430px;
+  }
+  
+  .mhole-mobile .mhole-content .traingles label,
+  .mhole-mobile .mhole-content .squares label,
+  .mhole-mobile .mhole-content .circles label,
+  .mhole-mobile .mhole-content .traingles input,
+  .mhole-mobile .mhole-content .squares input,
+  .mhole-mobile .mhole-content .circles input
+  {
+    border: 3px solid orange;
+  }
+  
+  
+  .mhole-mobile .mhole-content .traingles::after,
+  .mhole-mobile .mhole-content .squares::after,
+  .mhole-mobile .mhole-content .circles::after{
+    position: absolute;
+    right: -27px;
+    content: "";
+    background: url(../../img/triangle.svg);
+    background-repeat: no-repeat;
+    width: 24px;
+    height: 24px;
+  }
+  
+  .mhole-mobile .mhole-content .squares::after{
+    background: url(../../img/square.svg);
+    background-repeat: no-repeat;
+  }
+  .mhole-mobile .mhole-content .circles::after{
+    background: url(../../img/circle.svg);
+    background-repeat: no-repeat;
+  }
+  
+  .mhole-mobile .mhole-content .mhole-text{
+  max-width: 215px;
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  }
+  
+  .mhole-mobile .mhole-content .mhole-text p{
+    background: #fff;
+    z-index: 1;
+    margin-left: 132px;
+  }
+  
+  .mhole-mobile .mhole-content .mhole-text p::before{
+    position: absolute;
+    content: "";
+    border: 1px solid red;
+    width: 25%;
+    top: 28px;
+    margin-left: -100px;
+  }
+  
+  .mhole-mobile .alert-input{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 15px;
+  }
+  .mhole-mobile .alert-input input{
+    max-width: 35px;
+    width: 100%;
+    border: 2px solid orange;
+    /* border-radius: 4px; */
+    text-align: center;
+    padding: 5px 0;
+  }
+  
+  .mhole-mobile .alert-input p{
+    margin-bottom: 0px;
+    padding: 4px 12px;
+    border: 2px solid orange;
+    margin-left: 2px;
+  }
+  
+  .mhole-mobile .alert-checkbox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .mhole-mobile .alert-checkbox label{
+    padding: 2px 5px;
+    border: 1px solid #cccccc45;
+    border-radius: 4px;
+  }
+  
+  .mhole-mobile .buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    /* flex-direction: column; */
+    gap: 40px;
+  }
+  
+  .mhole-mobile .save-btn{
+    outline: none;
+    border: 1px solid #000;
+    background: rgb(91 180 91);;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 6px;
+    padding: 4px 30px;
+  }
+  .mhole-mobile .cancel-btn{
+    outline: none;
+    border: none;
+    background: #b40505;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 6px;
+    padding: 4px 22px;
+  }
+  
+  .mhole-mobile .edit-btn{
+    position: absolute;
+    top: 45px;
+    left: 62px;
+    text-decoration: none;
+    z-index: 9999999;
+  }
+  
+  .error-msg{
+      color: #f9cb00;
+      font-size: 12px;
+  }
+  
   
   
   

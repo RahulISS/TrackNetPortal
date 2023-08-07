@@ -52,6 +52,73 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="popup-wrap">
+					<button type="button" class="close-button" ng-click="closeModal()" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h2>SETTINGS</h2>
+					<!-- <form  method="post" name="manholeSpecification" id="manholeSpecification" ng-submit="manholeSpecificationsformData()"> -->
+					<form action="" id="myForm">
+						<section class="mhole">
+							<div class="mhole-mobile">
+								<h4>Manhole Specifications</h4>
+								<div class="mhole-image">
+								<img src="img/inner-image.png" alt="">
+								</div>
+								<div class="mhole-content">
+								<div class="mhole-text">
+									<p>TracNet Sensor</p>
+								</div>
+								<div class="mhole-alert boundaryOne">
+									<label for="">Full (100%)</label>
+									<input type="text" ng-readonly="isReadOnly" name="fullValue" id="fullValue" placeholder="400mm" value="{{getTableAlert.full}}">
+									<!-- <button type="button" class="cross-btn">x</button> -->
+								</div>
+								<div class="mhole-alert traingles">
+									<label for="">Alert</label>
+									<input type="text" ng-readonly="isReadOnly" name="alert1" id="alert1" placeholder="1000mm" value="{{getTableAlert.alert1}}">
+									<!-- <button type="button" class="cross-btn">x</button> -->
+								</div>
+								<div class="mhole-alert squares">
+									<label for="">Alert</label>
+									<input type="text" ng-readonly="isReadOnly" name="alert2" id="alert2" placeholder="2000mm" value="{{getTableAlert.alert2}}">
+									<!-- <button type="button" class="cross-btn">x</button> -->
+								</div>
+								<div class="mhole-alert circles">
+									<label for="">Alert</label>
+									<input type="text" ng-readonly="isReadOnly" name="alert3" id="alert3" placeholder="3000mm" value="{{getTableAlert.alert3}}">
+									<!-- <button type="button" class="cross-btn">x</button> -->
+								</div>
+								<div class="mhole-alert boundaryTwo">
+									<label for="">Empty (0%)</label>
+									<input type="text" ng-readonly="isReadOnly" name="emptyValue" id="emptyValue" placeholder="3998mm" value="{{getTableAlert.empty}}">
+									<!-- <button type="button" class="cross-btn">x</button> -->
+								</div>
+								</div>
+								<div class="alert-input">
+								<label for="">Number of Alerts</label>
+								<input type="number" class="alertNumber" ng-readonly="isReadOnly"  max="3" min="0" onchange="logAlertDisplay()" value="3">
+								<!-- <p>3</p> -->
+								</div>
+								<div class="alert-checkbox">
+								<div class="checkbox">
+									<input type="checkbox" class="hideBoundaries" name="" id="">
+									<label for="">Hide Boundaries</label>
+								</div>
+								<div class="checkbox">
+									<input type="checkbox" class="hideAlerts" name="" id="">
+									<label for="">Hide Alerts</label>
+								</div>
+								</div>
+								<div class="buttons">
+									<input type="button" value="Submit" ng-click="SavePoppupFormData()" class="save-btn submit__btn">
+									<input type="reset" class="cancel-btn reset__btn" />
+								<!-- <button class="cancel-btn" ng-click="closeModal()">Cancel, Go Back</button> -->
+								</div>
+							</div>
+						</section>
+					</form>
+				</div>
+				<!-- <div class="popup-wrap">
 					<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
@@ -75,12 +142,12 @@
 						</div>			  
 
 						<div class="btn--flex">
-							<!-- <button type="submit" ng-click="SavePoppupFormData()" class="submit__btn"> -->
+							<button type="submit" ng-click="SavePoppupFormData()" class="submit__btn">
 							<input type="button" value="Submit" ng-click="SavePoppupFormData()" class="submit__btn">
 							<input type="reset" class="reset__btn" />
 						</div>
 					</form>
-				</div>
+				</div> -->
 			</div>
 		</div>
 		
@@ -117,6 +184,50 @@
 		});
 
 	</script>
+	<script>
+		logAlertDisplay()
+		function logAlertDisplay(){
+			var val = $(".alertNumber").val();
+			if(val == 0){
+				$('.traingles').css('display', 'none');
+				$('.squares').css('display', 'none');
+				$('.circles').css('display', 'none');
+			}else if(val == 3){
+				$('.traingles').css('display', 'inherit');
+				$('.squares').css('display', 'inherit');
+				$('.circles').css('display', 'inherit');
+			}else if(val == 2){
+				$('.squares').css('display', 'inherit');
+				$('.circles').css('display', 'inherit');
+				$('.traingles').css('display', 'none');
+			}else if(val == 1){
+				$('.circles').css('display', 'inherit');
+				$('.traingles').css('display', 'none');
+				$('.squares').css('display', 'none');
+			}
+		}
+		
+		$(document).on("click", ".hideBoundaries", function() {
+			if($(this).is(":checked")) {
+				$(".boundaryTwo").hide();
+				$(".boundaryOne").hide();
+			} else {
+				$(".boundaryTwo").show();
+				$(".boundaryOne").show();
+			}
+		});
+		$(document).on("click", ".hideAlerts", function() {
+			if($(this).is(":checked")) {
+				$('.circles').hide();
+				$('.traingles').hide();
+				$('.squares').hide();
+			} else {
+				$('.circles').show();
+				$('.traingles').show();
+				$('.squares').show();
+			}
+		});
+	</script> 
 		
 	<!-- Popup end-->
 	<script>
