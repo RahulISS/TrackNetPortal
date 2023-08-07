@@ -11226,7 +11226,7 @@ form#userFrm .user-frm-wrp input {
   }
   
   /* Additional styles to center the modal */
-  .modal {
+  /* .modal {
     display: flex !important;
     justify-content: center;
     align-items: center;
@@ -11235,7 +11235,7 @@ form#userFrm .user-frm-wrp input {
   
   .mhole{
     background-color: #000;
-  }
+  } */
   
   .mhole-mobile {
     max-width: 375px;

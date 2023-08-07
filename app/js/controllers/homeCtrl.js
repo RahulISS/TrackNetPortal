@@ -706,12 +706,6 @@ angular
           .then(function (response) {
             const readings = response.data.data;
 
-            //$http.get(`https://dev-api-sg.tracwater.asia/api/v1/getDistanceAlert/${node.installationName}`)
-            $http.get(`http://127.0.0.1:8000/api/v1/getDistanceAlert/865385060064275`)
-            .then(function (res) {
-              alert(res)
-            });
-
             let content = document.createElement("div");
             content.style.cssText =
               "text-align: center; background: black; color: white; padding: 5px; font-size: 1.8rem";
@@ -748,7 +742,17 @@ angular
               tempInnerHTML +
               "<tr style='background: #ececec;'><td colspan='2'><div style='display: inline-flex;gap: 10px; padding: 5px 0 10px;'><img ng-click='poppupForm()' src='https://www.iconpacks.net/icons/2/free-settings-icon-3110-thumb.png'/ style='height:50px;width:50px;padding: 10px; background: white;border-radius: 5px;margin: 0; cursor: pointer;'>";
             tempInnerHTML = tempInnerHTML + "</table>";
-            tempInnerHTML = tempInnerHTML + `<div class="alertValue ng-scope"><label for="">Distance at Empty (0%)</label><div class="ng-binding">3999</div><label for="">Distance at Full (100%)</label><div class="ng-binding">550</div><label for="">Distance Alert 1</label><div class="ng-binding">100</div><label for="">Distance Alert 2</label><div class="ng-binding">1500</div><label for="">Distance Alert 3</label><div class="ng-binding">1500</div></div>`;
+
+            //$http.get(`https://dev-api-sg.tracwater.asia/api/v1/getDistanceAlert/${node.installationName}`)
+            $http.get(`http://127.0.0.1:8000/api/v1/getDistanceAlert/865385060064275`)
+            .then(function (res) {
+              
+            var getTableAlert = res.data.data.distance_alert;
+
+            console.log(getTableAlert);
+
+            tempInnerHTML = tempInnerHTML + `<div class="alertValue ng-scope"><label for="">Distance at Empty (0%)</label><div class="ng-binding">`+ getTableAlert.empty + `</div><label for="">Distance at Full (100%)</label><div class="ng-binding">`+ getTableAlert.full + `</div><label for="">Distance Alert 1</label><div class="ng-binding">`+ getTableAlert.alert1 + `</div><label for="">Distance Alert 2</label><div class="ng-binding">`+ getTableAlert.alert2 + `</div><label for="">Distance Alert 3</label><div class="ng-binding">`+ getTableAlert.alert3 + `</div></div>`;
+          });
             content.innerHTML = tempInnerHTML;
 
             var compiled = $compile(content)($scope);
@@ -786,14 +790,14 @@ angular
         var node_name = localStorage.getItem("node_name");
         let instName = localStorage.getItem("instName");
         var node_id = localStorage.getItem("node_id");
-        //$scope.bench_height = angular.element($("#bench_height")).val();
-        //$scope.angel_alarm = angular.element($("#angel_alarm")).val();
-        //var distance = angular.element($("#distance_alarm")).val() || 0;
-        //$scope.distance_alarm = distance;
-        //$scope.serialNo = angular.element($("#serialNumber")).val();
-        //$scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
-        // if ($scope.checkVal == "") $scope.checkVal = 0;
-        // else $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
+        $scope.bench_height = angular.element($("#bench_height")).val();
+        $scope.angel_alarm = angular.element($("#angel_alarm")).val();
+        var distance = angular.element($("#distance_alarm")).val() || 0;
+        $scope.distance_alarm = distance;
+        $scope.serialNo = angular.element($("#serialNumber")).val();
+        $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
+        if ($scope.checkVal == "") $scope.checkVal = 0;
+        else $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
         $scope.fullValue = angular.element($("#fullValue")).val();
         $scope.emptyValue = angular.element($("#emptyValue")).val();
         $scope.alert1 = angular.element($("#alert1")).val();
