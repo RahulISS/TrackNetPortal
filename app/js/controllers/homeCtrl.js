@@ -654,6 +654,7 @@ angular
       }
 
       function getInfoWinData(node, marker) {
+        console.log(node);
         let homeiw;
         let boxText = document.createElement("div");
         boxText.style.cssText =
@@ -707,8 +708,7 @@ angular
           .then(function (response) {
             const readings = response.data.data;
 
-            $http.get(`http://127.0.0.1:8000/api/v1/getDistanceAlert/${node.installationName}`).then(function (res) {
-            //$http.get(`http://127.0.0.1:8000/api/v1/getDistanceAlert/865385060064275`).then(function (res) {
+            $http.get(`http://127.0.0.1:8000/api/v1/getDeviceIdByPointID/${nodeID}`).then(function (res) {
               
             var getTableAlert = res.data.data.distance_alert;
             $scope.getStoreAlert = res.data.data.distance_alert;
@@ -721,7 +721,10 @@ angular
             let tempInnerHTML =
               "<b>" +
               node.installationName +
-              "</b><table class='homemaptable'><tr><td>Relative Distance</td><td>5%</td></tr>";
+              "</b><table class='homemaptable'>";
+            if(res.data.data.distance_percentage){
+              tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ res.data.data.distance_percentage+"%</td></tr>";
+            }
             for (let i = 0; i < readings.length; i++) {
               if (readings[i].id_name == "Battery Voltage") {
                 tempInnerHTML =
@@ -745,7 +748,7 @@ angular
             }
             tempInnerHTML =
               tempInnerHTML +
-              "<tr><td>TracNet IMEI</td><td>"+ res.data.data.device_id  +"</td></tr> <tr ><td colspan='2'><i>Last Updated 6h ago</i></td></tr> <tr style='background: #ececec;'><td colspan='2'><div ><p  style='height:50px;width:100%;padding: 24px; color: black;margin: 0; cursor: pointer;text-align: left;'> Manhole Specifications </p></div><div style='gap: 10px; margin: -40px 0px 0px 160px;height: 40px;width: 40px;'><img ng-click='poppupForm()' src='../img/../free-pencil-icon-9435.png'/ style='height:40px;width:40px;transform: rotate(90deg);padding: 10px; background: #3255a2;border-radius: 5px;margin: 0; cursor: pointer;'></div>";
+              "<tr><td>TracNet IMEI</td><td>"+ res.data.data.device_id  +"</td></tr> <tr ><td colspan='2'><i>Last Updated "+ res.data.data.date+" ago</i></td></tr> <tr style='background: #ececec;'><td colspan='2'><div ><p  style='height:50px;width:100%;padding: 24px; color: black;margin: 0; cursor: pointer;text-align: left;'> Manhole Specifications </p></div><div style='gap: 10px; margin: -40px 0px 0px 160px;height: 40px;width: 40px;'><img ng-click='poppupForm()' src='./img/free-pencil-icon-9435.png'/ style='height:40px;width:40px;transform: rotate(90deg);padding: 10px; background: #3255a2;border-radius: 5px;margin: 0; cursor: pointer;'></div>";
            
               
               if(res.data.status==true)
