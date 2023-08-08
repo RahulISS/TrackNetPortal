@@ -266,17 +266,14 @@ angular
                   
                   const currentDate = moment().tz("Asia/Singapore");
                   var timeDiff = Math.abs(currentDate - specificDate);
-                  
-                  var cd = 24 * 60 * 60 * 1000;
-                  var hValue = Math.floor(timeDiff / cd);
-                  if (hValue > 25) {
+                  var lastCommColor = "";
+                  //90000000 ms is equal to 25days
+                  if( timeDiff >= 90000000 ){
                     var lastComm = "Communications alarm Triggered";
-                    var lastCommColor = 3;
                   } else {
                     var lastComm = "";
-                    var lastCommColor = "";
                   }
-
+                  var cd = 24 * 60 * 60 * 1000;
                   if (timeDiff < 1000) {
                     //miliseconds
                     var hours = timeDiff + " ms";
