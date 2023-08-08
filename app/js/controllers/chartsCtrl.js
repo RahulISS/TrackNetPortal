@@ -978,7 +978,7 @@ angular
         let nodeId = localStorage.getItem("aTreeNodeId");
         let sensorId = localStorage.getItem("sensorId");
         let downloadUrl =
-          "https://dev-api-sg.tracwater.asia/api/v1/download_chart?aTreeNodeId=" +
+          "http://127.0.0.1:8000/api/v1/download_chart?aTreeNodeId=" +
           nodeId +
           "&sensorId=" +
           sensorId +
@@ -1409,7 +1409,7 @@ angular
             localStorage.setItem("sensorId", $scope.sensorType);
             const interval = $scope.rollup.value;
             const fold = $scope.tableStats[i].fold.value;
-            const query = `https://dev-api-sg.tracwater.asia/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+            const query = `http://127.0.0.1:8000/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
             let queryInfo = { query: query, index: i };
             $scope.queriesArray.push(queryInfo);
           }

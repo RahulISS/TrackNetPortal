@@ -54,7 +54,7 @@ angular.module('mainCtrl', [])
         // let sensors = [];
 
         $rootScope.loadTree = function() {
-            const query = $http.get('https://dev-api-sg.tracwater.asia/api/v1/chart')
+            const query = $http.get('http://127.0.0.1:8000/api/v1/chart')
             .then(function (response) { 
                 const data = response.data.data; 
                 let flatArray = [ {
@@ -110,7 +110,7 @@ angular.module('mainCtrl', [])
                             subSub.children.forEach(el => {
                                 queriesArray.push({
                                     'index': el._id,
-                                    'query': `https://dev-api-sg.tracwater.asia/api/v1/atreenode-ref?productRef=${el._id}`
+                                    'query': `http://127.0.0.1:8000/api/v1/atreenode-ref?productRef=${el._id}`
                                 });
                             });
                         });
@@ -150,7 +150,7 @@ angular.module('mainCtrl', [])
 
         function checkedRefData(e, edata) {
             let sensors = [];
-              const query2 = $http.get('https://dev-api-sg.tracwater.asia/api/v1/sensortList')
+              const query2 = $http.get('http://127.0.0.1:8000/api/v1/sensortList')
               .then(function (response){
                     const data = response.data.data
                     for( let i = 0; i < data.length; i++){

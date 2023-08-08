@@ -187,7 +187,7 @@ angular
       var arr = [];
       function addMarker() {
         $scope.isLoading = true;
-        const query = $http.get("https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList").then(function (res) {
+        const query = $http.get("http://127.0.0.1:8000/api/v1/newtraknetApiList").then(function (res) {
             const response = res.data.data;
 
             var convertedData = [];
@@ -697,23 +697,31 @@ angular
         });
 
         $scope.displayData[index]["infoBox"] = homeiw;
+        $scope.getStoreAlert = '';
         localStorage.setItem("node_id", nodeID.split(" ")[0]);
         const query = $http
           .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId=" +
+            "http://127.0.0.1:8000/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId=" +
               nodeID
           )
           .then(function (response) {
             const readings = response.data.data;
 
+            $http.get(`http://127.0.0.1:8000/api/v1/getDistanceAlert/${node.installationName}`).then(function (res) {
+            //$http.get(`http://127.0.0.1:8000/api/v1/getDistanceAlert/865385060064275`).then(function (res) {
+              
+            var getTableAlert = res.data.data.distance_alert;
+            $scope.getStoreAlert = res.data.data.distance_alert;
+
             let content = document.createElement("div");
             content.style.cssText =
               "text-align: center; background: black; color: white; padding: 5px; font-size: 1.8rem";
             content.setAttribute("id", "infoBox_" + nodeID.split(" ")[0]);
+
             let tempInnerHTML =
               "<b>" +
               node.installationName +
-              "</b><table class='homemaptable'>";
+              "</b><table class='homemaptable'><tr><td>Relative Distance</td><td>5%</td></tr>";
             for (let i = 0; i < readings.length; i++) {
               if (readings[i].id_name == "Battery Voltage") {
                 tempInnerHTML =
@@ -737,22 +745,17 @@ angular
             }
             tempInnerHTML =
               tempInnerHTML +
-              "<tr style='background: #ececec;'><td colspan='2'><div style='display: inline-flex;gap: 10px; padding: 0px;'><p  style='height:50px;width:131px;padding: 24px; color: black;border-bottom: 2px solid;margin: 0; cursor: pointer;'> Site Setting</p>";
-            tempInnerHTML =
-              tempInnerHTML +
-              "<tr style='background: #ececec;'><td colspan='2'><div style='display: inline-flex;gap: 10px; padding: 5px 0 10px;'><img ng-click='poppupForm()' src='https://www.iconpacks.net/icons/2/free-settings-icon-3110-thumb.png'/ style='height:50px;width:50px;padding: 10px; background: white;border-radius: 5px;margin: 0; cursor: pointer;'>";
-            tempInnerHTML = tempInnerHTML + "</table>";
-
-            //$http.get(`https://dev-api-sg.tracwater.asia/api/v1/getDistanceAlert/${node.installationName}`)
-            $http.get(`http://127.0.0.1:8000/api/v1/getDistanceAlert/865385060064275`)
-            .then(function (res) {
+              "<tr><td>TracNet IMEI</td><td>"+ res.data.data.device_id  +"</td></tr> <tr ><td colspan='2'><i>Last Updated 6h ago</i></td></tr> <tr style='background: #ececec;'><td colspan='2'><div ><p  style='height:50px;width:100%;padding: 24px; color: black;margin: 0; cursor: pointer;text-align: left;'> Manhole Specifications </p></div><div style='gap: 10px; margin: -40px 0px 0px 160px;height: 40px;width: 40px;'><img ng-click='poppupForm()' src='../img/../free-pencil-icon-9435.png'/ style='height:40px;width:40px;transform: rotate(90deg);padding: 10px; background: #3255a2;border-radius: 5px;margin: 0; cursor: pointer;'></div>";
+           
               
-            var getTableAlert = res.data.data.distance_alert;
+              if(res.data.status==true)
+              if(getTableAlert){
+                tempInnerHTML = tempInnerHTML + `<tr class="bottom-cl"><td><label for="">Distance at Empty (0%)</label></td><td><div class="ng-binding">${getTableAlert.empty}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance at Full (100%)</label></td><td><div class="ng-binding">${getTableAlert.full}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 1</label></td><td><div class="ng-binding">${getTableAlert.alert1}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 2</label></td><td><div class="ng-binding">${getTableAlert.alert2}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 3</label></td><td><div class="ng-binding">${getTableAlert.alert3}mm</div></td></tr>`;
+              }
 
-            console.log(getTableAlert);
+              
+            tempInnerHTML = tempInnerHTML + "</table>"; 
 
-            tempInnerHTML = tempInnerHTML + `<div class="alertValue ng-scope"><label for="">Distance at Empty (0%)</label><div class="ng-binding">`+ getTableAlert.empty + `</div><label for="">Distance at Full (100%)</label><div class="ng-binding">`+ getTableAlert.full + `</div><label for="">Distance Alert 1</label><div class="ng-binding">`+ getTableAlert.alert1 + `</div><label for="">Distance Alert 2</label><div class="ng-binding">`+ getTableAlert.alert2 + `</div><label for="">Distance Alert 3</label><div class="ng-binding">`+ getTableAlert.alert3 + `</div></div>`;
-          });
             content.innerHTML = tempInnerHTML;
 
             var compiled = $compile(content)($scope);
@@ -765,6 +768,7 @@ angular
               content: compiled[0],
             });
           });
+        });
       }
 
       /*open the poppup form click on setting icon in info window*/
@@ -773,7 +777,7 @@ angular
         $("#popupModalCenter").addClass("show-modal");
         $http
           .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/user-definded-distancealert?aTreeNodeRef=" +
+            "http://127.0.0.1:8000/api/v1/user-definded-distancealert?aTreeNodeRef=" +
               node_id
           )
           .then(function (response) {
@@ -815,7 +819,7 @@ angular
         };
         $http
           .post(
-            "https://dev-api-sg.tracwater.asia/api/v1/add-user-definded-distancealert",
+            "http://127.0.0.1:8000/api/v1/add-user-definded-distancealert",
             formData
           )
           .then(function (response) {

@@ -8,7 +8,7 @@ angular.module('loginCtrl', [])
       };
 
       // Make an HTTP POST request to the login API endpoint
-      $http.post('https://dev-api-sg.tracwater.asia/api/v1/login', loginData)
+      $http.post('http://127.0.0.1:8000/api/v1/login', loginData)
         .then(function (response) {
           // Handle the response from the server
           var data = response.data;

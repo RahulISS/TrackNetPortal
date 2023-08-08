@@ -254,11 +254,11 @@ angular
       $scope.apiUrlAlarm = "";
       $scope.loadData = function (initset) {
         $scope.device = {};
-        /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a https://dev-api-sg.tracwater.asia/api/v1/ */
+        /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a http://127.0.0.1:8000/api/v1/ */
         // Define the API URL based on the isFirstLoad flag
         const apiUrl = $scope.isFirstLoad
-        ? "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList"
-        : "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate");
+        ? "http://127.0.0.1:8000/api/v1/newtraknetApiList"
+        : "http://127.0.0.1:8000/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate");
 
         
         $http
@@ -850,7 +850,7 @@ angular
           $scope.realtimesummery.series[0].data[2].y = 0;
         $http
           .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate")
+            "http://127.0.0.1:8000/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate")
           )
           .then(function (res) {
             const response = res.data.data;

@@ -11461,7 +11461,70 @@ form#userFrm .user-frm-wrp input {
       color: #f9cb00;
       font-size: 12px;
   }
-  
-  
-  
+  /* 08 update */
+  #homeMap .homemaptable{
+    background: #fff;
+    font-size: 12px;
+    padding: 0 5px;
+    color: #000;
+  }
+  #homeMap table.homemaptable tbody {
+    background: #fff;
+    font-size: 12px;
+    padding: 0 5px;
+    color: #000;
+}
+#homeMap table.homemaptable tbody tr{
+    background: #ececec;
+}
+table.homemaptable td {
+    padding: 0 15px;
+}
+table.homemaptable .bottom-cl td:first-child{
+    width: 70%;
+    padding: 0;
+}
+table.homemaptable .bottom-cl td:last-child{
+    width: 30%;padding: 0;
+}
+
+.bottom-cl td label{
+    background: #3255a2;
+    color: #fff;
+    text-align: left;
+    padding: 5px 10px;
+    width: calc(100% - 15px);
+    margin-left: 15px;
+}
+.bottom-cl td .ng-binding{
+    background: skyblue;
+    color: #fff;
+    text-align: left;
+    padding: 5px 10px;
+    width: calc(100% - 25px);
+    margin-right: 15px;
+}
+.mhole-mobile .alert-checkbox .checkbox{
+    height: unset;
+    width: unset;
+    display: flex;
+    gap: 5px;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+}
+.mhole-mobile .alert-checkbox .checkbox input {
+    height: 20px;
+    width: 100%;
+    max-width: 20px;
+    margin-bottom: 0 !important;
+}
+.mhole-mobile .alert-checkbox{
+    width: 100%;
+    max-width: 100%;
+    padding: 0 5px; 
+}
+.mhole-mobile .buttons{
+    padding: 0 15px;
+}
   

@@ -101,7 +101,7 @@ angular
         };
         const query = $http
           .post(
-            "https://dev-api-sg.tracwater.asia/api/v1/addSetting?portal=" +
+            "http://127.0.0.1:8000/api/v1/addSetting?portal=" +
               $scope.aPortalName,
             loginData
           )
@@ -121,7 +121,7 @@ angular
         $scope.portal = "tracnet trial 20230703";
         const query = $http
           .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/get-setting-data?portalName=" +
+            "http://127.0.0.1:8000/api/v1/get-setting-data?portalName=" +
               $scope.portal
           )
           .then(function (response) {
@@ -276,7 +276,7 @@ angular
 
         const query = $http
           .post(
-            "https://dev-api-sg.tracwater.asia/api/v1/addSetting",
+            "http://127.0.0.1:8000/api/v1/addSetting",
             loginData
           )
           .then(function (response) {
@@ -492,7 +492,7 @@ angular
         );
         if (Number(userInput)) {
           $http
-            .get("https://dev-api-sg.tracwater.asia/api/v1/sms?receiverNumber=" + userInput)
+            .get("http://127.0.0.1:8000/api/v1/sms?receiverNumber=" + userInput)
             .then(function (res) {
               if (res.status) alert("Test Message Sent!");
             });
