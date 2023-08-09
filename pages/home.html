@@ -118,36 +118,6 @@
 						</section>
 					</form>
 				</div>
-				<!-- <div class="popup-wrap">
-					<button type="button" class="close-button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-					<h2>SETTINGS</h2>
-					<form action="" id="myForm">
-						<label for="">IMEI Number</label>
-						<input type="text" value="{{pointSettingData.id_serial}}" id="serialNumber" placeholder="Enter your Serial Number" disabled >
-						<label for="">Installation Time</label>
-						<input type="text" value="{{pointSettingData.created_at }}" placeholder="Enter installation time" disabled>	
-						<div class="distance-wrp">
-							<label for="distanceAlarm">
-								Distance Alert (mm, range: 400mm - 3,900mm):
-							</label>
-							<input type="text" value="{{ pointSettingData.distance_alert ? pointSettingData.distance_alert : Math.max(400, Math.min(3900, Math.floor(pointSettingData.distance_alert))) }}"  id="distance_alarm" min="400" max="3900" step="1" placeholder="Enter Distance Alert" oninput="checkDistanceAlarmValidity()"><span id="distanceAlarmError" style="display: none; color: yellow; font-size: smaller;">Distance alarm value must be between 400 and 3900.</span>
-						</div>
-						<div class="chkbx-wrp">
-							<label for="enableDistanceAlarm">
-								<input type="checkbox" id="enableDistanceAlarm" ng-checked="isDistanceAlertEnabled" value="{{pointSettingData.alert_enable}}" ng-class="{ 'checked-me': pointSettingData.alert_enable === 1 }" name="myAttribute" myAttribute="{{pointSettingData.alert_enable}}">
-								 Enable/Disable Distance Alert
-							</label>
-						</div>			  
-
-						<div class="btn--flex">
-							<button type="submit" ng-click="SavePoppupFormData()" class="submit__btn">
-							<input type="button" value="Submit" ng-click="SavePoppupFormData()" class="submit__btn">
-							<input type="reset" class="reset__btn" />
-						</div>
-					</form>
-				</div> -->
 			</div>
 		</div>
 		

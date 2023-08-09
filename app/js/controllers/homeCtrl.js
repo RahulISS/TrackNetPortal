@@ -654,7 +654,7 @@ angular
       }
 
       function getInfoWinData(node, marker) {
-        console.log(node);
+        
         let homeiw;
         let boxText = document.createElement("div");
         boxText.style.cssText =
@@ -805,11 +805,30 @@ angular
         $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
         if ($scope.checkVal == "") $scope.checkVal = 0;
         else $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
+        //alert(angular.element($(".alertNumber")).val());return;
+
+        var val = angular.element($(".alertNumber")).val();
+        if(val == 0){
+          $scope.alert1 = '';
+          $scope.alert2 = '';
+          $scope.alert3 = '';
+        }else if(val == 3){
+          $scope.alert1 = angular.element($("#alert1")).val();
+          $scope.alert2 = angular.element($("#alert2")).val();
+          $scope.alert3 = angular.element($("#alert3")).val();
+        }else if(val == 2){
+          $scope.alert1 = '';
+          $scope.alert2 = angular.element($("#alert2")).val();
+          $scope.alert3 = angular.element($("#alert3")).val();
+        }else if(val == 1){
+          $scope.alert1 = '';
+          $scope.alert2 = '';
+          $scope.alert3 = angular.element($("#alert3")).val();
+        }
+
         $scope.fullValue = angular.element($("#fullValue")).val();
         $scope.emptyValue = angular.element($("#emptyValue")).val();
-        $scope.alert1 = angular.element($("#alert1")).val();
-        $scope.alert2 = angular.element($("#alert2")).val();
-        $scope.alert3 = angular.element($("#alert3")).val();
+
         let formData = {
           "pointId": node_id,
           "distance_alert": {
@@ -820,6 +839,7 @@ angular
             "alert3": $scope.alert3
           }
         };
+        
         $http
           .post(
             "http://127.0.0.1:8000/api/v1/add-user-definded-distancealert",
