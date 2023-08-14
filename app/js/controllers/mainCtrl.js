@@ -1,11 +1,11 @@
 angular.module('mainCtrl', [])
 
-    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location) {
+    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$window) {
         $rootScope.storage.toggle = false;
-        if($rootScope.storage.loggedIn != true){
-            window.location.hash = '#!/login'
+        if (localStorage.getItem("authToken") == '' || localStorage.getItem("authToken") == undefined) {
+			$state.go('login');
             return;
-        }
+		}
         $scope.thisyear = new Date().getFullYear();
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -48,11 +48,13 @@ angular.module('mainCtrl', [])
 		}
 
         $scope.signOut = function(){
+            $window.localStorage.removeItem('authToken'); 
             $rootScope.storage.loggedIn = false;
             $rootScope.storage.skysparkCookie = false;
             $rootScope.storage.settingsBarActive = !$rootScope.storage.settingsBarActive;
             $rootScope.storage.$reset();
-            window.location.hash = '#!/login'
+            window.location.hash = "#!/login";
+            window.location.reload();
             return;
         }
 

@@ -1093,11 +1093,7 @@ angular
 
 
     $scope.clearNodeData = function (index,node) {
-      // console.logn(ode,"");
-        var pointID = node.title+"_anchor"
-        console.log(pointID,"pointID");;
-        //j2_3_anchor
-        // console.log(pointID,"node");
+        var pointID = node.pointId+"_anchor"
         $scope.clearNode(index,pointID);
         $scope.tableStats[index].title = "";
         $scope.tableStats[index].pointId = "null";

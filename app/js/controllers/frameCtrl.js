@@ -157,7 +157,7 @@ angular.module('frameCtrl', [])
 		];
 
 		if($rootScope.storage.loggedIn != true){
-            window.location.hash = '#!/login'
+			$state.go('login');
             return;
         }
 

@@ -13,6 +13,8 @@ angular.module('loginCtrl', [])
           // Handle the response from the server
           var data = response.data;
           if (data) {
+            localStorage.setItem('loggedIn',data.status);
+            localStorage.setItem('authToken', data.data.token);
             $rootScope.storage.loggedIn = data.status;
             $state.go('main');
           } else {
