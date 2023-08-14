@@ -2,6 +2,10 @@ angular.module('mainCtrl', [])
 
     .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location) {
         $rootScope.storage.toggle = false;
+        if($rootScope.storage.loggedIn != true){
+            window.location.hash = '#!/login'
+            return;
+        }
         $scope.thisyear = new Date().getFullYear();
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -43,12 +47,13 @@ angular.module('mainCtrl', [])
 			}, 50);
 		}
 
-        $scope.signOut = function () {
+        $scope.signOut = function(){
             $rootScope.storage.loggedIn = false;
-            $rootScope.storage.authToken = false;
+            $rootScope.storage.skysparkCookie = false;
+            $rootScope.storage.settingsBarActive = !$rootScope.storage.settingsBarActive;
             $rootScope.storage.$reset();
-            $scope.refreshPage();
-            $state.go('login');
+            window.location.hash = '#!/login'
+            return;
         }
 
         // let sensors = [];

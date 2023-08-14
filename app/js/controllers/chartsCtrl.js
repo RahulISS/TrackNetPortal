@@ -1081,13 +1081,30 @@ angular
         } catch (err) {}
       };
 
-      $scope.clearNodeData = function (index) {
+      $scope.clearNode = function(index,pointID){
+        $('#chartTree').jstree(true).deselect_node(pointID);
+        $('#chartTree').jstree(true).enable_node(pointID);
+        $('#chartTree').jstree('deselect_node', pointID);
+        $('#chartTree').jstree('enable_node', pointID);
+        $.jstree.reference('#chartTree').deselect_node(pointID);
+        $.jstree.reference('#chartTree').enable_node(pointID);
+        $scope.selectLegend(index);
+      }
+
+
+    $scope.clearNodeData = function (index,node) {
+      // console.logn(ode,"");
+        var pointID = node.title+"_anchor"
+        console.log(pointID,"pointID");;
+        //j2_3_anchor
+        // console.log(pointID,"node");
+        $scope.clearNode(index,pointID);
         $scope.tableStats[index].title = "";
         $scope.tableStats[index].pointId = "null";
         $scope.tableStats[index].measurements = [];
         $scope.tableStats[index].fold = {
-          name: "null",
-          value: "null",
+            name: "null",
+            value: "null"
         };
         $scope.tableStats[index].max = 0;
         $scope.tableStats[index].min = 0;
@@ -1098,9 +1115,8 @@ angular
         $scope.meterChartConfig.options.yAxis[index].min = null;
         $scope.meterChartConfig.options.yAxis[index].max = null;
         setVisible();
-        //setNextCurrentLegend();
         isShowFlowReportButton(index);
-      };
+    };
 
       var args;
       $scope.dataLegendFull = false;
@@ -1405,7 +1421,7 @@ angular
              $scope.sensorType =
               $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
             localStorage.setItem("aTreeNodeId", id);
-            console.log($scope.sensorType,'id sorb')
+            //console.log($scope.sensorType,'id sorb')
             localStorage.setItem("sensorId", $scope.sensorType);
             const interval = $scope.rollup.value;
             const fold = $scope.tableStats[i].fold.value;
@@ -1437,15 +1453,15 @@ angular
           
           for (let i = 0; i < responses.length; i++) {
             const data = responses[i].data.data.data;
-            console.log(responses[i].data, "data")
+           // console.log(responses[i].data, "data")
             for (let k = data.length - 1; k >= 0; k--) {
               if($scope.sensorType == "64ae522eefa8baae8f106b9d"){
-                console.log("in")
+              //  console.log("in")
                 if (data[k].v0 <= 400) {
                   data[k].v0 = 400;
-                  console.log("400")
+                 // console.log("400")
                 } else if (data[k].v0 >= 3998) {
-                  console.log("3998")
+                  //console.log("3998")
                     data.splice(k, 1); // Remove the element at index k
                 } 
               }
@@ -1988,10 +2004,10 @@ angular
               $(this).jstree("open_all");
               $(this).jstree("deselect_node", [""], true);
             })
-            .bind("deselect_node.jstree", function (e, data) {
-              scope.$emit("checkedRef", data.node.text);
-              scope.deselceted = data.node.original;
-            })
+            // .bind("deselect_node.jstree", function (e, data) {
+            //   scope.$emit("checkedRef", data.node.text);
+            //   scope.deselceted = data.node.original;
+            // })
             .bind("select_node.jstree", async function (e, data) {
               if (data.node.id == "@2b931fe5-f624c0c6") {
                 for (i = 0; i < 10; i++) {
@@ -2019,6 +2035,9 @@ angular
                 }
                 scope.$emit("checkedRef", data.node.text);
                 scope.selected = data.node.original;
+                console.log(scope.selected,"scope.selected");
+                // var el =angular.element('#divId');
+                // el.attr('attr-name', 'attr-value');
               }
             });
         });

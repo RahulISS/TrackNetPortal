@@ -185,7 +185,7 @@
 						<div class="numberdiv pointerIcon">{{ oneitem + 1 }}</div>
 							<div class="statTitleSpan">{{tableStats[oneitem].title}}</div>
 										</span>
-                                        <div ng-click="clearNodeData(oneitem)" class="closediv1 itemhidden" id={{tableStats[oneitem].hideCloseDivId}}>
+                                        <div ng-click="clearNodeData(oneitem,tableStats[oneitem])" class="closediv1 itemhidden" id={{tableStats[oneitem].hideCloseDivId}}>
 											<i style="color:{{ tableStats[oneitem].colour }};" class="fas fa-times"></i>
 										</div>
                                 </div>

@@ -156,8 +156,9 @@ angular.module('frameCtrl', [])
 			}
 		];
 
-		if ($rootScope.storage.loggedIn == false) {
-			$state.go('login');
-		}
+		if($rootScope.storage.loggedIn != true){
+            window.location.hash = '#!/login'
+            return;
+        }
 
 	});

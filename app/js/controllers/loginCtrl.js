@@ -13,7 +13,7 @@ angular.module('loginCtrl', [])
           // Handle the response from the server
           var data = response.data;
           if (data) {
-            $rootScope.storage.loggedIn = data.success;
+            $rootScope.storage.loggedIn = data.status;
             $state.go('main');
           } else {
             // Login failed
