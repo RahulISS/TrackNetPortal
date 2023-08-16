@@ -10,7 +10,8 @@ angular
       $q,
       $timeout,
       $interval,
-      $filter
+      $filter,
+      apiBaseUrl
     ) {
       const portalRef = "64ad1af2664396439a286273"; //tracnet trial 20230703
       const dataPickerFormat = "D/MM/YYYY";
@@ -22,10 +23,20 @@ angular
         $scope.date = moment().utcOffset("+08:00").format("ddd, MMM Do YYYY");
       };
 
+
       $scope.clockTime();
       $interval($scope.clockTime, 1000);
       $scope.blockExpandLeft = false;
       $scope.blockExpandRight = false;
+
+
+      $scope.serverRequest = apiBaseUrl;
+      const token =  localStorage.getItem("authToken");
+      const customeHeader = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      };
+
 
       $("#singleDate").daterangepicker(
         {
@@ -257,12 +268,12 @@ angular
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a http://127.0.0.1:8000/api/v1/ */
         // Define the API URL based on the isFirstLoad flag
         const apiUrl = $scope.isFirstLoad
-        ? "http://127.0.0.1:8000/api/v1/newtraknetApiList"
-        : "http://127.0.0.1:8000/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate");
+        ? apiBaseUrl+"newtraknetApiList"
+        : apiBaseUrl+"newtraknetApiList/" + localStorage.getItem("singleDate");
 
         
         $http
-          .get(apiUrl)
+          .get(apiUrl, {headers:customeHeader})
           .then(function (res) {
             const response = res.data.data;
             
@@ -850,7 +861,7 @@ angular
           $scope.realtimesummery.series[0].data[2].y = 0;
         $http
           .get(
-            "http://127.0.0.1:8000/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate")
+            apiBaseUrl+"newtraknetApiList/" + localStorage.getItem("singleDate"), {headers:customeHeader}
           )
           .then(function (res) {
             const response = res.data.data;
