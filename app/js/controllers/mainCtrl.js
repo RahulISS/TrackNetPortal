@@ -1,7 +1,12 @@
 angular.module('mainCtrl', [])
 
-    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location) {
+    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location,$window) {
         $rootScope.storage.toggle = false;
+        if (localStorage.getItem("authToken") == '' || localStorage.getItem("authToken") == undefined) {
+			$state.go('login');
+            return;
+		}
+
         $scope.thisyear = new Date().getFullYear();
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -43,12 +48,15 @@ angular.module('mainCtrl', [])
 			}, 50);
 		}
 
-        $scope.signOut = function () {
+        $scope.signOut = function(){
+            $window.localStorage.removeItem('authToken'); 
             $rootScope.storage.loggedIn = false;
-            $rootScope.storage.authToken = false;
+            $rootScope.storage.skysparkCookie = false;
+            $rootScope.storage.settingsBarActive = !$rootScope.storage.settingsBarActive;
             $rootScope.storage.$reset();
-            $scope.refreshPage();
-            $state.go('login');
+            window.location.hash = "#!/login";
+            window.location.reload();
+            return;
         }
 
         // let sensors = [];

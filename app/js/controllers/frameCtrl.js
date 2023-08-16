@@ -156,8 +156,5 @@ angular.module('frameCtrl', [])
 			}
 		];
 
-		if ($rootScope.storage.loggedIn == false) {
-			$state.go('login');
-		}
 
 	});

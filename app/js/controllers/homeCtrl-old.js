@@ -188,7 +188,8 @@ angular
       function addMarker() {
         $scope.isLoading = true;
         const query = $http.get("http://127.0.0.1:8000/api/v1/newtraknetApiList").then(function (res) {
-            const response = res.data.data;
+          const response = res.data.data;
+          const response_pointDis = res.data.pointDis;
 
             var convertedData = [];
 
@@ -324,6 +325,7 @@ angular
                   installationId: data.point._id.$oid, 
                   installationName: data.treenode.textLabel, 
                   angle: data.point.angle,
+                  //point_distance_alarm: storeDistanceAlert,
                   angleColorRank: parseInt(angleColorRank), 
                   angleColor: angleColor, 
                   angle_alarm_tr: angle_alarm_tr, 
@@ -355,9 +357,18 @@ angular
               }
             }
 
-            const aLocation = convertedData;
+            const mergedArray = convertedData.map(item1 => {
+              const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
+                if (matchingItem2) {
+                    return { ...item1, point_alt: JSON.parse(matchingItem2.distance_alert) };
+                }
+                return item1;
+            });
+
+            const aLocation = mergedArray;
             $scope.dataLocation = aLocation;
-            
+
+            console.log(aLocation);
             const sorter = (a, b) => {
               return a.last_communication - b.last_communication;
             };
@@ -492,7 +503,7 @@ angular
             }
 
             $scope.sortedArray_1 = $scope.sortedArray;
-
+            var testData=[];
             // sorted end
             for (var i = 0; i < $scope.sortedArray_1.length; i++) {
               arr.push(aLocation[i].installationId.split(" ")[0]);
@@ -508,7 +519,7 @@ angular
               dict["installationName"] = aLocation[i].installationName;
               dict["city"] = aLocation[i].city;
               dict["infoBox"] = null;
-              dict["serial_no"] = aLocation[i].product_serialNumber;
+              dict["serial_no"] = aLocation[i].serialNumber;
               dict["colorRank"] = aLocation[i].disColorRank;
               dict["colorRank2"] = aLocation[i].angleColorRank;
               let marker = buildMarker(dict);
@@ -753,7 +764,7 @@ angular
               
               if(res.data.status==true)
               if(getTableAlert){
-                tempInnerHTML = tempInnerHTML + `<tr class="bottom-cl"><td><label for="">Distance at Empty (0%)</label></td><td><div class="ng-binding">${getTableAlert.empty}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance at Full (100%)</label></td><td><div class="ng-binding">${getTableAlert.full}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 1</label></td><td><div class="ng-binding">${getTableAlert.alert1}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 2</label></td><td><div class="ng-binding">${getTableAlert.alert2}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 3</label></td><td><div class="ng-binding">${getTableAlert.alert3}mm</div></td></tr>`;
+                tempInnerHTML = tempInnerHTML + `<tr class="bottom-cl"><td><label for="">Distance at Empty (0%)</label></td><td><div class="ng-binding">${getTableAlert.empty || '- ' }mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance at Full (100%)</label></td><td><div class="ng-binding">${getTableAlert.full|| '- '}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 1</label></td><td><div class="ng-binding">${getTableAlert.alert1|| '- '}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 2</label></td><td><div class="ng-binding">${getTableAlert.alert2|| '- '}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 3</label></td><td><div class="ng-binding">${getTableAlert.alert3|| '- '}mm</div></td></tr>`;
               }
 
               
