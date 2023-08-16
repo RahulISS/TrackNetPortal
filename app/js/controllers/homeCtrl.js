@@ -3,7 +3,7 @@ angular
 
   .controller(
     "homeController",
-    function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval) {
+    function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval,apiBaseUrl) {
       /*TraNet yvw mobile portal*/
 
       $scope.refreshPage = function () {
@@ -11,6 +11,15 @@ angular
           window.location.reload();
         }, 50);
       };
+
+      $scope.serverRequest = apiBaseUrl;
+      const token =  localStorage.getItem("authToken");
+      const customeHeader = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      };
+
+
       let styles = [
         {
           featureType: "administrative.locality",
@@ -187,7 +196,7 @@ angular
       var arr = [];
       function addMarker() {
         $scope.isLoading = true;
-        const query = $http.get("http://127.0.0.1:8000/api/v1/newtraknetApiList").then(function (res) {
+        const query = $http.get(apiBaseUrl+"newtraknetApiList", {headers:customeHeader}).then(function (res) {
             const response = res.data.data;
 
             var convertedData = [];
@@ -702,14 +711,13 @@ angular
         localStorage.setItem("node_id", nodeID.split(" ")[0]);
         const query = $http
           .get(
-            "http://127.0.0.1:8000/api/v1/html_aTreeNode_hisEndVal?aTreeNodeId=" +
-              nodeID
+            apiBaseUrl+"html_aTreeNode_hisEndVal?aTreeNodeId=" +
+              nodeID, {headers:customeHeader}
           )
           .then(function (response) {
             const readings = response.data.data;
 
-            $http.get(`http://127.0.0.1:8000/api/v1/getDeviceIdByPointID/${nodeID}`).then(function (res) {
-              
+            $http.get(apiBaseUrl+`getDeviceIdByPointID/${nodeID}`, {headers:customeHeader}).then(function (res) {             
             var getTableAlert = res.data.data.distance_alert;
             $scope.getStoreAlert = res.data.data.distance_alert;
 
@@ -780,8 +788,8 @@ angular
         $("#popupModalCenter").addClass("show-modal");
         $http
           .get(
-            "http://127.0.0.1:8000/api/v1/user-definded-distancealert?aTreeNodeRef=" +
-              node_id
+            apiBaseUrl+"user-definded-distancealert?aTreeNodeRef=" +
+              node_id, {headers:customeHeader}
           )
           .then(function (response) {
             $scope.pointSettingData = response.data.data;
@@ -842,8 +850,8 @@ angular
         
         $http
           .post(
-            "http://127.0.0.1:8000/api/v1/add-user-definded-distancealert",
-            formData
+            apiBaseUrl+"add-user-definded-distancealert",
+            formData, {headers:customeHeader}
           )
           .then(function (response) {
             if (response.data.status) {

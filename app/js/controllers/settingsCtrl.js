@@ -11,7 +11,8 @@ angular
       $timeout,
       $window,
       $state,
-      $location
+      $location,
+      apiBaseUrl
     ) {
       const portalRef = "64ad1af2664396439a286273";
       let selectedNodeLabel;
@@ -19,6 +20,14 @@ angular
 
       $scope.loading = false;
       $scope.operationResult = false;
+
+      $scope.serverRequest = apiBaseUrl;
+      const token =  localStorage.getItem("authToken");
+      const customeHeader = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      };
+
 
       $scope.settingsTreeData = $rootScope.storage.treeData;
       if ($scope.settingsTreeData.length > 0) {
@@ -101,9 +110,9 @@ angular
         };
         const query = $http
           .post(
-            "http://127.0.0.1:8000/api/v1/addSetting?portal=" +
+            apiBaseUrl+"addSetting?portal=" +
               $scope.aPortalName,
-            loginData
+            loginData, {headers:customeHeader}
           )
           .then(function (response) {
             const data = response.data;
@@ -121,8 +130,8 @@ angular
         $scope.portal = "tracnet trial 20230703";
         const query = $http
           .get(
-            "http://127.0.0.1:8000/api/v1/get-setting-data?portalName=" +
-              $scope.portal
+            apiBaseUrl+"get-setting-data?portalName=" +
+              $scope.portal, {headers:customeHeader}
           )
           .then(function (response) {
             const data = response.data.data;
@@ -276,8 +285,8 @@ angular
 
         const query = $http
           .post(
-            "http://127.0.0.1:8000/api/v1/addSetting",
-            loginData
+            apiBaseUrl+"addSetting",
+            loginData, {headers:customeHeader}
           )
           .then(function (response) {
             const settings = response?.data?.data?.[0];
@@ -492,7 +501,7 @@ angular
         );
         if (Number(userInput)) {
           $http
-            .get("http://127.0.0.1:8000/api/v1/sms?receiverNumber=" + userInput)
+            .get(apiBaseUrl+"sms?receiverNumber=" + userInput, {headers:customeHeader})
             .then(function (res) {
               if (res.status) alert("Test Message Sent!");
             });

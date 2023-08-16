@@ -1,7 +1,14 @@
 angular.module('mainCtrl', [])
 
-    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location,$window) {
+    .controller('mainController', function ($scope,$rootScope, $http, $state,$q,Data,$location,apiBaseUrl,$window) {
         $rootScope.storage.toggle = false;
+        $scope.serverRequest = apiBaseUrl;
+        const token =  localStorage.getItem("authToken");
+        const customeHeader = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+
         if (localStorage.getItem("authToken") == '' || localStorage.getItem("authToken") == undefined) {
 			$state.go('login');
             return;
@@ -48,21 +55,23 @@ angular.module('mainCtrl', [])
 			}, 50);
 		}
 
-        $scope.signOut = function(){
-            $window.localStorage.removeItem('authToken'); 
-            $rootScope.storage.loggedIn = false;
-            $rootScope.storage.skysparkCookie = false;
-            $rootScope.storage.settingsBarActive = !$rootScope.storage.settingsBarActive;
-            $rootScope.storage.$reset();
-            window.location.hash = "#!/login";
-            window.location.reload();
-            return;
+        $scope.signOut = function () {
+            const query = $http.get(apiBaseUrl+'logout', {headers:customeHeader})
+            .then(function (response) {
+                $window.localStorage.removeItem('authToken'); 
+                $rootScope.storage.loggedIn = false;
+                $rootScope.storage.authToken = false;
+                $rootScope.storage.$reset();
+                $scope.refreshPage();
+                $state.go('login');
+            });
+           
         }
 
         // let sensors = [];
 
         $rootScope.loadTree = function() {
-            const query = $http.get('http://127.0.0.1:8000/api/v1/chart')
+            const query = $http.get(apiBaseUrl+'chart', {headers:customeHeader})
             .then(function (response) { 
                 const data = response.data.data; 
                 let flatArray = [ {
@@ -118,14 +127,14 @@ angular.module('mainCtrl', [])
                             subSub.children.forEach(el => {
                                 queriesArray.push({
                                     'index': el._id,
-                                    'query': `http://127.0.0.1:8000/api/v1/atreenode-ref?productRef=${el._id}`
+                                    'query': apiBaseUrl+`atreenode-ref?productRef=${el._id}`
                                 });
                             });
                         });
                     }); 
                 }
                 const promises_data = queriesArray.map(function (item) {
-                    return $http.get(query)
+                    return $http.get(query, {headers:customeHeader})
                     .then(function (reqResult) {
                         console.log(reqResult.data,'reqResult.data sorb')
                         return {
@@ -158,7 +167,7 @@ angular.module('mainCtrl', [])
 
         function checkedRefData(e, edata) {
             let sensors = [];
-              const query2 = $http.get('http://127.0.0.1:8000/api/v1/sensortList')
+            const query2 = $http.get(apiBaseUrl+'sensortList', {headers:customeHeader})
               .then(function (response){
                     const data = response.data.data
                     for( let i = 0; i < data.length; i++){

@@ -11,7 +11,8 @@ angular
       $http,
       $timeout,
       $interval,
-      $window
+      $window,
+      apiBaseUrl
     ) {
       const isButtonVisible = true;
       const dataPickerFormat = "D/MM/YYYY";
@@ -20,6 +21,13 @@ angular
       $scope.sensorType = "";
 
       var currentLegend = 0;
+
+      $scope.serverRequest = apiBaseUrl;
+      const token =  localStorage.getItem("authToken");
+      const customeHeader = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      };
 
       $scope.data_table_meter_page = [];
 
@@ -978,7 +986,7 @@ angular
         let nodeId = localStorage.getItem("aTreeNodeId");
         let sensorId = localStorage.getItem("sensorId");
         let downloadUrl =
-          "http://127.0.0.1:8000/api/v1/download_chart?aTreeNodeId=" +
+        apiBaseUrl+"download_chart?aTreeNodeId=" +
           nodeId +
           "&sensorId=" +
           sensorId +
@@ -1409,7 +1417,7 @@ angular
             localStorage.setItem("sensorId", $scope.sensorType);
             const interval = $scope.rollup.value;
             const fold = $scope.tableStats[i].fold.value;
-            const query = `http://127.0.0.1:8000/api/v1/html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+            const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
             let queryInfo = { query: query, index: i };
             $scope.queriesArray.push(queryInfo);
           }
@@ -1417,7 +1425,7 @@ angular
 
         if ($scope.queriesArray.length === 0) return;
         const promises_data = $scope.queriesArray.map(function (item) {
-          return $http.get(item.query).then(function (reqResult) {
+          return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {
             return {
               index: item.index,
               data: reqResult,
