@@ -70,44 +70,46 @@
 								</div>
 								<div class="mhole-alert boundaryOne">
 									<label for="">Full (100%)</label>
-									<input type="text" ng-readonly="isReadOnly" name="fullValue" id="fullValue" placeholder="400mm" value="{{getStoreAlert.full}}">
-									<!-- <button type="button" class="cross-btn">x</button> -->
+									<input type="number" ng-readonly="isReadOnly" min="400" name="fullValue" id="fullValue" placeholder="400 mm" value="{{pointSettingData.full}}">
+									<span id="errorname" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
+								</div> 
+								<div class="mhole-alert traingles" ng-show="showAlert1">
+								<!-- <div class="mhole-alert traingles" ng-show="altCount == 3"> -->
+									<!-- <button ng-click="onDecreaseAlertNumber({{alarmCount}})">Alert</button> -->
+									<label for="" ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
+									<input type="number" ng-readonly="isReadOnly" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm" value="{{pointSettingData.alarmFirst}}">
 								</div>
-								<div class="mhole-alert traingles">
-									<label for="">Alert</label>
-									<input type="text" ng-readonly="isReadOnly" name="alert1" id="alert1" placeholder="1000mm" value="{{getStoreAlert.alert1}}">
-									<!-- <button type="button" class="cross-btn">x</button> -->
+								<div class="mhole-alert squares" ng-show="showAlert2">
+								<!-- <div class="mhole-alert squares" ng-show="altCount == 2 || altCount == 3"> -->
+									<label for="" ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
+									<input type="number" ng-readonly="isReadOnly" name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm" value="{{pointSettingData.alarmSecond}}">
 								</div>
-								<div class="mhole-alert squares">
-									<label for="">Alert</label>
-									<input type="text" ng-readonly="isReadOnly" name="alert2" id="alert2" placeholder="2000mm" value="{{getStoreAlert.alert2}}">
-									<!-- <button type="button" class="cross-btn">x</button> -->
-								</div>
-								<div class="mhole-alert circles">
-									<label for="">Alert</label>
-									<input type="text" ng-readonly="isReadOnly" name="alert3" id="alert3" placeholder="3000mm" value="{{getStoreAlert.alert3}}">
+								<div class="mhole-alert circles" ng-show="showAlert3">
+									<label for="" ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
+										<input type="number" ng-readonly="isReadOnly" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm" value="{{pointSettingData.alarmThird}}">
 									<!-- <button type="button" class="cross-btn">x</button> -->
 								</div>
 								<div class="mhole-alert boundaryTwo">
 									<label for="">Empty (0%)</label>
-									<input type="text" ng-readonly="isReadOnly" name="emptyValue" id="emptyValue" placeholder="3998mm" value="{{getStoreAlert.empty}}">
+									<input type="number" ng-readonly="isReadOnly" name="emptyValue" max="3998" id="emptyValue" placeholder="3998 mm" value="{{pointSettingData.empty}}">
+										<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
 									<!-- <button type="button" class="cross-btn">x</button> -->
 								</div>
 								</div>
 								<div class="alert-input">
-								<label for="">Number of Alerts</label>
-								<input type="number" class="alertNumber" ng-readonly="isReadOnly"  max="3" min="0" onchange="logAlertDisplay()" value="3">
-								<!-- <p>3</p> -->
+									<label for="">Number of Alerts</label>
+									<input type="number" class="alertNumber" id="alertNo" ng-readonly="isReadOnly"  max="3" min="0" value="{{alarmCount}}" ng-model="alarmCount" ng-change="confirmCheck({{alarmCount}})">
+									<!-- <p>3</p> -->
 								</div>
 								<div class="alert-checkbox">
-								<div class="checkbox">
-									<input type="checkbox" class="hideBoundaries" name="" id="">
-									<label for="">Hide Boundaries</label>
-								</div>
-								<div class="checkbox">
-									<input type="checkbox" class="hideAlerts" name="" id="">
-									<label for="">Hide Alerts</label>
-								</div>
+									<div class="checkbox">
+										<input type="checkbox" class="hideBoundaries" name="" id="">
+										<label for="">Hide Boundaries</label>
+									</div>
+									<div class="checkbox">
+										<input type="checkbox" class="hideAlerts" name="" id="">
+										<label for="">Hide Alerts</label>
+									</div>
 								</div>
 								<div class="buttons">
 									<input type="button" value="Submit" ng-click="SavePoppupFormData()" class="save-btn submit__btn">
@@ -155,28 +157,6 @@
 
 	</script>
 	<script>
-		logAlertDisplay()
-		function logAlertDisplay(){
-			var val = $(".alertNumber").val();
-			if(val == 0){
-				$('.traingles').css('display', 'none');
-				$('.squares').css('display', 'none');
-				$('.circles').css('display', 'none');
-			}else if(val == 3){
-				$('.traingles').css('display', 'inherit');
-				$('.squares').css('display', 'inherit');
-				$('.circles').css('display', 'inherit');
-			}else if(val == 2){
-				$('.squares').css('display', 'inherit');
-				$('.circles').css('display', 'inherit');
-				$('.traingles').css('display', 'none');
-			}else if(val == 1){
-				$('.circles').css('display', 'inherit');
-				$('.traingles').css('display', 'none');
-				$('.squares').css('display', 'none');
-			}
-		}
-		
 		$(document).on("click", ".hideBoundaries", function() {
 			if($(this).is(":checked")) {
 				$(".boundaryTwo").hide();
@@ -195,6 +175,24 @@
 				$('.circles').show();
 				$('.traingles').show();
 				$('.squares').show();
+			}
+		});
+
+		$(document).on("input", "#fullValue", function() {
+			var fValue = $(this).val();
+			if(parseInt(fValue) >= 400 && parseInt(fValue) <= 3998){
+				$('#errorname').hide();
+			}else{
+				$('#errorname').show();
+			}
+		});
+		$(document).on("input", "#emptyValue", function() {
+			var fullValue = $('#fullValue').val();
+			var eValue = $(this).val();
+			if((parseInt(eValue) > parseInt(fullValue) && parseInt(eValue) <= 3998 )){
+				$('#errorn').hide();
+			}else{
+				$('#errorn').show();
 			}
 		});
 	</script> 

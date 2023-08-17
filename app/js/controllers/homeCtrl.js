@@ -5,6 +5,12 @@ angular
     "homeController",
     function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval,apiBaseUrl) {
       /*TraNet yvw mobile portal*/
+      $scope.pointSettingData = '';
+      $scope.emptyVal = 3998;
+      $scope.fullVal = 400;
+      $scope.showAlert1 = false;
+      $scope.showAlert2 = false;
+      $scope.showAlert3 = false;
 
       $scope.refreshPage = function () {
         setTimeout(function () {
@@ -192,12 +198,31 @@ angular
       var arr = [];
       var last_comm_split = null;
 
+      function closest(array, num) {
+        var i = 0;
+        var minDiff = 1000;
+        var ans;
+        for (i in array) {
+          var m = Math.abs(num - array[i]);
+          if (m < minDiff) {
+          minDiff = m;
+          ans = array[i];
+          }
+        }
+        return ans;
+      }
+  
+      function getObjectKey(obj, value) {
+        return Object.keys(obj).find(key => obj[key] === value);
+      }
+
       /*showing all markers*/
       var arr = [];
       function addMarker() {
         $scope.isLoading = true;
         const query = $http.get(apiBaseUrl+"newtraknetApiList", {headers:customeHeader}).then(function (res) {
             const response = res.data.data;
+            const response_pointDis = res.data.pointDis;
 
             var convertedData = [];
 
@@ -332,7 +357,7 @@ angular
                   serialNumber: data.product.id_serial, 
                   installationId: data.point._id.$oid, 
                   installationName: data.treenode.textLabel, 
-                  angle: data.point.angle,
+                  angle: parseInt(data.point.angle),
                   angleColorRank: parseInt(angleColorRank), 
                   angleColor: angleColor, 
                   angle_alarm_tr: angle_alarm_tr, 
@@ -348,7 +373,7 @@ angular
                   area: data.location.street,  
                   batteryStatus: data.point.manholeBatteryStatusValue,
                   batteryVolt: data.point.battery_voltage, 
-                  distance: distanceValue.toLocaleString(),
+                  distance: distanceValue,
                   disColorRank: parseInt(dis_color_rank), 
                   disColor: dis_color, 
                   distance_alarm_tr: distance_alarm_tr, 
@@ -364,8 +389,29 @@ angular
               }
             }
 
-            const aLocation = convertedData;
+            const mergedArray = convertedData.map(item1 => {
+              const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
+                if (matchingItem2) {
+                  var point_alt = JSON.parse(matchingItem2.distance_alert);
+                    return { ...item1, 
+                      totalAlerts: JSON.parse(matchingItem2.distance_alert), 
+                      aCheck1: point_alt.alarmFirstCheck??0, 
+                      aCheck2: point_alt.alarmSecondCheck??0, 
+                      aCheck3: point_alt.alarmThirdCheck??0,
+                      alertOne: (point_alt.alert1)?parseInt(point_alt.alert1):400,
+                      alertTwo: (point_alt.alert2)?parseInt(point_alt.alert2):400,
+                      alertThree: (point_alt.alert3)?parseInt(point_alt.alert3):400,
+                      empty: (point_alt.empty)?parseInt(point_alt.empty):3998,
+                      full: (point_alt.full)?parseInt(point_alt.full):400,
+                    };
+                }
+                return item1;
+            });
+            
+            const aLocation = mergedArray;
             $scope.dataLocation = aLocation;
+
+            console.log(aLocation);
             
             const sorter = (a, b) => {
               return a.last_communication - b.last_communication;
@@ -510,16 +556,25 @@ angular
               dict["id"] = aLocation[i].installationId.split(" ")[0];
               dict["latitude"] = aLocation[i].latitude;
               dict["longitude"] = aLocation[i].longitude;
-              dict["distance"] = aLocation[i].distance;
+              dict["distance"] = aLocation[i].distance;              
+						  dict['relative_distance'] = aLocation[i].distance;
               dict["angle"] = aLocation[i].angle;
               dict["status"] = aLocation[i].status;
               dict["address"] = aLocation[i].address;
               dict["installationName"] = aLocation[i].installationName;
               dict["city"] = aLocation[i].city;
               dict["infoBox"] = null;
-              dict["serial_no"] = aLocation[i].product_serialNumber;
+              dict["serial_no"] = aLocation[i].serialNumber;
               dict["colorRank"] = aLocation[i].disColorRank;
               dict["colorRank2"] = aLocation[i].angleColorRank;
+              dict['totalAlerts'] = {
+                'al1': aLocation[i].alertThree,
+                'al2': aLocation[i].alertTwo,
+                'al3': aLocation[i].alertOne
+              }
+              dict['chk1'] = aLocation[i].aCheck1;
+              dict['chk2'] = aLocation[i].aCheck2;
+              dict['chk3'] = aLocation[i].aCheck3;
               let marker = buildMarker(dict);
               dict["marker"] = marker;
               dict["point"] = marker.point;
@@ -532,28 +587,32 @@ angular
       }
 
       let beachMarker = [];
-
+      $scope.altArr = [];
       function buildMarker(dict) {
-        if (
-          typeof dict.latitude === "undefined" &&
-          typeof dict.longitude === "undefined"
-        )
+        console.log(dict);
+        if (typeof dict.latitude === "undefined" &&typeof dict.longitude === "undefined")
           return;
+
+          if(dict.relative_distance < 0){
+            dict.relative_distance = 0;
+          }
+          if(dict.relative_distance > 100){
+            dict.relative_distance = 100;
+          }
         
-        if(dict.distance > 3998) {
-          var custContent = dict.angle + "\xBA";
-        } else {
-          if(dict.distance == ''){
-              var custContent = dict.angle + "\xBA";
-          }
-          else{
-            var custContent = dict.distance.toLocaleString() + "mm,  " + dict.angle + "\xBA";
-          }
-          
+        if( dict.chk1 == 1) {
+          $scope.altArr.push(dict.totalAlerts.al3);
         }
+        if( dict.chk2 == 1) {
+          $scope.altArr.push(dict.totalAlerts.al2);
+        }
+        if( dict.chk3 == 1) {
+          $scope.altArr.push(dict.totalAlerts.al1);
+        }
+      
         var infowindow = new google.maps.InfoWindow({
-          content: custContent
-        });
+          content: dict.relative_distance.toLocaleString() +"%"+",  " + dict.angle + "\xBA"  ,
+          });
 
         var colorCode = dict.colorRank;
         var colorCode2 = dict.colorRank2;
@@ -584,12 +643,35 @@ angular
               "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 2) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            var value = closest( $scope.altArr , dict.distance_main);
+					  var result = getObjectKey(dict.totalAlerts, value);
+						if( result == 'al3') {
+							imgpath = './img/triangle-01.png';
+						}
+
+						if( result == 'al2') {
+							imgpath = './img/square-01.png';
+						}
+
+						if( result == 'al1' ) {
+							imgpath = './img/circle-01.png';
+						}
           }
           if (colorCode == 2 && colorCode2 == 3) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            var value = closest( $scope.altArr , dict.distance_main );
+						var result = getObjectKey(dict.totalAlerts, value);
+						if( result == 'al3') {
+							imgpath = './img/triangle-01.png';
+						}
+
+						if( result == 'al2') {
+							
+							imgpath = './img/square-01.png';
+						}
+
+						if( result == 'al1' ) {
+							imgpath = './img/circle-01.png';
+						}
           }
           if (colorCode == 3 && colorCode2 == 2) {
             var imgpath =
@@ -726,13 +808,18 @@ angular
               "text-align: center; background: black; color: white; padding: 5px; font-size: 1.8rem";
             content.setAttribute("id", "infoBox_" + nodeID.split(" ")[0]);
 
-            let tempInnerHTML =
-              "<b>" +
-              node.installationName +
-              "</b><table class='homemaptable'>";
+            let tempInnerHTML ="<b>" + node.installationName + "</b><table class='homemaptable'>";
             if(res.data.data.distance_percentage){
+              var  relativeDistance = res.data.data.distance_percentage
+              if(relativeDistance < 0){
+                relativeDistance = 0;
+              }
+              if(relativeDistance > 100){
+                relativeDistance = 100;
+              }
               tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ res.data.data.distance_percentage+"%</td></tr>";
             }
+            
             for (let i = 0; i < readings.length; i++) {
               if (readings[i].id_name == "Battery Voltage") {
                 tempInnerHTML =
@@ -761,7 +848,7 @@ angular
               
               if(res.data.status==true)
               if(getTableAlert){
-                tempInnerHTML = tempInnerHTML + `<tr class="bottom-cl"><td><label for="">Distance at Empty (0%)</label></td><td><div class="ng-binding">${getTableAlert.empty}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance at Full (100%)</label></td><td><div class="ng-binding">${getTableAlert.full}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 1</label></td><td><div class="ng-binding">${getTableAlert.alert1}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 2</label></td><td><div class="ng-binding">${getTableAlert.alert2}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 3</label></td><td><div class="ng-binding">${getTableAlert.alert3}mm</div></td></tr>`;
+                tempInnerHTML = tempInnerHTML + `<tr class="bottom-cl"><td><label for="">Distance at Empty (0%)</label></td><td><div class="ng-binding">${(getTableAlert.empty)??''}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance at Full (100%)</label></td><td><div class="ng-binding">${(getTableAlert.full)??''}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 1</label></td><td><div class="ng-binding">${(getTableAlert.alert1)??''}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 2</label></td><td><div class="ng-binding">${(getTableAlert.alert2)??''}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 3</label></td><td><div class="ng-binding">${(getTableAlert.alert3)??''}mm</div></td></tr>`;
               }
 
               
@@ -784,21 +871,114 @@ angular
 
       /*open the poppup form click on setting icon in info window*/
       $scope.poppupForm = function () {
+        $scope.alarmCount = 0;
+			  $scope.pointSettingData = '';
         var node_id = localStorage.getItem("node_id");
         $("#popupModalCenter").addClass("show-modal");
-        $http
-          .get(
-            apiBaseUrl+"user-definded-distancealert?aTreeNodeRef=" +
-              node_id, {headers:customeHeader}
-          )
-          .then(function (response) {
-            $scope.pointSettingData = response.data.data;
-            localStorage.setItem(
-              "instName",
-              $scope.pointSettingData.installationName
-            );
-          });
+        $http.get(apiBaseUrl+"user-definded-distancealert?aTreeNodeRef=" +node_id, {headers:customeHeader}).then(function (response) {
+          if(response.data.data.distance_alert === undefined) { 
+            $scope.alarmCount = 0;
+          } else {
+            localStorage.setItem("instName",response.data.data.installationName);
+            $scope.pointSettingData = JSON.parse(response.data.data.distance_alert);
+            console.log( $scope.pointSettingData);
+
+              $scope.alarmCount =  parseInt(($scope.pointSettingData.alarmFirstCheck == 1  )? 1 : 0) + parseInt(($scope.pointSettingData.alarmSecondCheck == 1)? 1 : 0) + parseInt(($scope.pointSettingData.alarmThirdCheck == 1 )? 1 : 0)
+              console.log($scope.alarmCount);
+              $scope.emptyVal = parseInt($scope.pointSettingData.empty);
+              $scope.fullVal = parseInt($scope.pointSettingData.full);
+              $scope.alert1 = parseInt($scope.pointSettingData.alert1);
+              $scope.alert2 = parseInt($scope.pointSettingData.alert2);
+              $scope.alert3 = parseInt($scope.pointSettingData.alert3);
+              
+              if($scope.pointSettingData.alarmFirstCheck == 1) {
+                $scope.showAlert1 = true;
+              } else {
+                $scope.showAlert1 = false;
+              }
+              if($scope.pointSettingData.alarmSecondCheck == 1) {
+                $scope.showAlert2 = true;
+              } else {
+                $scope.showAlert2 = false;
+              }
+              if($scope.pointSettingData.alarmThirdCheck == 1) {
+                $scope.showAlert3 = true;
+              } else {
+                $scope.showAlert3 = false;
+              }
+              $scope.confirmCheck($scope.alarmCount , $scope.showAlert1 , $scope.showAlert2, $scope.showAlert3);
+            }
+          }).catch(function(error) {
+            $scope.alarmCount = 0;
+            $scope.emptyVal = 3998;
+            $scope.fullVal = 400;
+            $scope.showAlert1 = false;
+            $scope.showAlert2 = false;
+            $scope.showAlert3 = false;
+            $scope.alert1 = '';
+              $scope.alert2 = '';
+              $scope.alert3 = '';
+            // Error callback, handle the error here
+            console.error('Error occurred:', error);
+            });
       };
+
+      /*open the poppup form click on setting icon in info window*/
+		$scope.confirmCheck = function( altCount, alt1 , alt2 , alt3 ) { 
+			let newValue = $scope.alarmCount;
+			// Open a confirm popup
+			if(altCount < newValue) { 
+				if(!alt1 && newValue == 3 ) {
+					$scope.showAlert1 = true;
+				}
+				if(!alt2 && newValue == 2 ) {
+					$scope.showAlert2 = true;
+				}
+				if(!alt3 && newValue == 1 || newValue == 2 ) {
+					$scope.showAlert3 = true;
+				}
+			}
+
+			if(altCount > newValue){
+				var userConfirmed = confirm('Please select Alert which you want to delete!');
+				
+				if (userConfirmed) {
+					$scope.altCount = newValue;
+					$scope.alarmCount = newValue;
+				} else {
+					$scope.altCount = altCount;
+					$scope.alarmCount = altCount;
+				}
+			}else{
+				$scope.altCount = newValue;
+				$scope.alarmCount = newValue;
+			}
+		}
+
+		$scope.onDecreaseAlertNumber = function( args ) {
+			let text = confirm('Are you sure you are deleting the Alert?');
+			if(args == 'Alert1') {
+				if ( text == true) {
+					$scope.showAlert1 = false;
+				} else {
+					$scope.showAlert1 = true;
+				}
+			}
+			if(args == 'Alert2') {
+				if ( text == true) {
+					$scope.showAlert2 = false;
+				} else {
+					$scope.showAlert2 = true;
+				}
+			}
+			if(args == 'Alert3') {
+				if ( text == true) {
+					$scope.showAlert3 = false;
+				} else {
+					$scope.showAlert3 = true;
+				}
+			}
+		}
 
       /*save the settings poppup form data*/
       $scope.SavePoppupFormData = function () {
@@ -815,27 +995,46 @@ angular
         else $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
         //alert(angular.element($(".alertNumber")).val());return;
 
-        var val = angular.element($(".alertNumber")).val();
-        if(val == 0){
-          $scope.alert1 = '';
-          $scope.alert2 = '';
-          $scope.alert3 = '';
-        }else if(val == 3){
-          $scope.alert1 = angular.element($("#alert1")).val();
-          $scope.alert2 = angular.element($("#alert2")).val();
-          $scope.alert3 = angular.element($("#alert3")).val();
-        }else if(val == 2){
-          $scope.alert1 = '';
-          $scope.alert2 = angular.element($("#alert2")).val();
-          $scope.alert3 = angular.element($("#alert3")).val();
-        }else if(val == 1){
-          $scope.alert1 = '';
-          $scope.alert2 = '';
-          $scope.alert3 = angular.element($("#alert3")).val();
+        const enabled = 1;
+        const disabled = 0;
+        const defultAlertVal = 400;
+        var alertF = angular.element($('#alert1')).val();
+        var alertS = angular.element($('#alert2')).val();
+        var alertT = angular.element($('#alert3')).val();
+        //console.log( $scope.showAlert1 , $scope.showAlert2, $scope.showAlert3)
+        //return;
+        if( $scope.showAlert1 == true ) {
+          $scope.alert1 = (alertF) ? alertF : defultAlertVal;
+          $scope.alarmFirstCheck = enabled;	
+        } else {
+          $scope.alert1 = defultAlertVal ;
+          $scope.alarmFirstCheck = disabled;
         }
-
-        $scope.fullValue = angular.element($("#fullValue")).val();
-        $scope.emptyValue = angular.element($("#emptyValue")).val();
+        
+        if( $scope.showAlert2 == true ) {
+          $scope.alert2 = (alertS) ? alertS : defultAlertVal;
+          $scope.alarmSecondCheck = enabled;	
+        } else {
+          $scope.alert2 = defultAlertVal;
+          $scope.alarmSecondCheck = disabled;
+        }
+        
+        if( $scope.showAlert3 == true) {
+          $scope.alert3 = (alertT) ? alertT : defultAlertVal;
+          $scope.alarmThirdCheck = enabled;	
+        } else {
+          $scope.alert3 = defultAlertVal;
+          $scope.alarmThirdCheck = disabled;
+        }
+        
+        var full = angular.element($('#fullValue')).val();
+        $scope.fullValue = full;
+        var empty = angular.element($('#emptyValue')).val();
+        $scope.emptyValue = empty;
+        if(!$scope.fullValue || !$scope.emptyValue){
+          alert("require fullValue")
+          return;
+        }
 
         let formData = {
           "pointId": node_id,
@@ -844,7 +1043,10 @@ angular
             "empty": $scope.emptyValue,  
             "alert1": $scope.alert1, 
             "alert2": $scope.alert2,
-            "alert3": $scope.alert3
+            "alert3": $scope.alert3,
+            "alarmFirstCheck": $scope.alarmFirstCheck,
+            "alarmSecondCheck": $scope.alarmSecondCheck,
+            "alarmThirdCheck": $scope.alarmThirdCheck
           }
         };
         
@@ -875,25 +1077,36 @@ angular
       };
       /*get the single lat and lng zoom the location marker*/
       $scope.mapLocation = function (dict) {
-        if (
-          typeof dict.latitude === "undefined" &&
-          typeof dict.longitude === "undefined"
-        )
+        console.log(dict);
+        if (typeof dict.latitude === "undefined" && typeof dict.longitude === "undefined")
           return;
 
-        if(dict.distance > 3998) {
-          var custContent = dict.angle + "\xBA";
-        } else {
-          if(dict.distance == ''){
-            var custContent = dict.angle + "\xBA";
+          let alertObj = {
+            'al3': dict.alertOne,
+            'al2': dict.alertTwo,
+            'al1': dict.alertThree
+          };
+          let alertArr = [];
+          if( dict.aCheck1 == 1) {
+            alertArr.push(dict.alertOne);
           }
-          else{
-            var custContent = dict.distance.toLocaleString() + "mm,  " + dict.angle + "\xBA";
+          if( dict.aCheck2 == 1) {
+            alertArr.push(dict.alertTwo);
           }
-        }
-        var infowindow = new google.maps.InfoWindow({
-          content: custContent
-        });
+          if( dict.aCheck3 == 1) {
+            alertArr.push(dict.alertThree);
+          }
+          if( typeof dict.latitude === 'undefined' && typeof dict.longitude === 'undefined' ) return;
+          if(dict.relative_distance < 0){
+            dict.relative_distance = 0;
+          }
+          if(dict.relative_distance > 100){
+            dict.relative_distance = 100;
+          }
+        
+          var infowindow = new google.maps.InfoWindow({
+            content: dict.relative_distance.toLocaleString() +"%"+",  " + dict.angle + "\xBA"  ,
+          });
        
         var colorCode = dict.disColorRank;
         var colorCode2 = dict.angleColorRank;
@@ -924,12 +1137,33 @@ angular
               "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 2) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            let value = closest(alertArr , dict.distance)
+            var result = getObjectKey(alertObj, value);
+            
+            if( result == 'al3') {
+              imgpath = './img/triangle-01.png';
+            }
+
+            if( result == 'al2') {
+              imgpath = './img/square-01.png';
+            }
+
+            if( result == 'al1' ) {
+              imgpath = './img/circle-01.png';
+            }
           }
           if (colorCode == 2 && colorCode2 == 3) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            if( result == 'al3') {
+              imgpath = './img/triangle-01.png';
+            }
+  
+            if( result == 'al2') {
+              imgpath = './img/square-01.png';
+            }
+  
+            if( result == 'al1' ) {
+              imgpath = './img/circle-01.png';
+            }
           }
           if (colorCode == 3 && colorCode2 == 2) {
             var imgpath =
