@@ -403,6 +403,7 @@ angular
                       alertThree: (point_alt.alert3)?parseInt(point_alt.alert3):400,
                       empty: (point_alt.empty)?parseInt(point_alt.empty):3998,
                       full: (point_alt.full)?parseInt(point_alt.full):400,
+                      relative_distance: Math.round(((( (point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)-(item1.distance - (point_alt.full)?parseInt(point_alt.full):400 )) / ((point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)) * 100),
                     };
                 }
                 return item1;
@@ -411,7 +412,6 @@ angular
             const aLocation = mergedArray;
             $scope.dataLocation = aLocation;
 
-            console.log(aLocation);
             
             const sorter = (a, b) => {
               return a.last_communication - b.last_communication;
@@ -432,65 +432,54 @@ angular
             var arrYellow_3_2 = [];
 
             for (var i = 0; i < $scope.dataLocation.length; i++) {
-              if (
-                $scope.dataLocation[i].disColorRank == 1 &&
-                $scope.dataLocation[i].angleColorRank == 1
-              ) {
+              if( $scope.dataLocation[i].hasOwnProperty('full') ) {
+                $scope.fullVal = $scope.dataLocation[i].full;
+              } 
+  
+              if( $scope.dataLocation[i].hasOwnProperty('empty') ) {
+                $scope.emptyVal = $scope.dataLocation[i].empty;
+              }  
+              
+              $scope.dataLocation[i]['relative_distance'] = Math.round(((( $scope.emptyVal - $scope.fullVal)-($scope.dataLocation[i].distance - $scope.fullVal )) / ($scope.emptyVal - $scope.fullVal)) * 100);
+
+              if($scope.dataLocation[i]['relative_distance'] < 0){
+                $scope.dataLocation[i]['relative_distance'] = 0;
+              }
+              if($scope.dataLocation[i]['relative_distance'] > 100){
+                $scope.dataLocation[i]['relative_distance'] = 100;
+              }
+              if ($scope.dataLocation[i].disColorRank == 1 && $scope.dataLocation[i].angleColorRank == 1 ) {
                 arrRed__1_1.push($scope.dataLocation[i]);
               }
 
-              if (
-                $scope.dataLocation[i].disColorRank == 1 &&
-                $scope.dataLocation[i].angleColorRank == 2
-              ) {
+              if ($scope.dataLocation[i].disColorRank == 1 && $scope.dataLocation[i].angleColorRank == 2 ) {
                 arrRed__1_2.push($scope.dataLocation[i]);
               }
-              if (
-                $scope.dataLocation[i].disColorRank == 2 &&
-                $scope.dataLocation[i].angleColorRank == 1
-              ) {
+              if ( $scope.dataLocation[i].disColorRank == 2 && $scope.dataLocation[i].angleColorRank == 1 ) {
                 arrRed__2_1.push($scope.dataLocation[i]);
               }
 
-              if (
-                $scope.dataLocation[i].disColorRank == 1 &&
-                $scope.dataLocation[i].angleColorRank == 3
-              ) {
+              if ( $scope.dataLocation[i].disColorRank == 1 && $scope.dataLocation[i].angleColorRank == 3 ) {
                 arrRed__1_3.push($scope.dataLocation[i]);
               }
 
-              if (
-                $scope.dataLocation[i].disColorRank == 3 &&
-                $scope.dataLocation[i].angleColorRank == 1
-              ) {
+              if ( $scope.dataLocation[i].disColorRank == 3 && $scope.dataLocation[i].angleColorRank == 1 ) {
                 arrRed__3_1.push($scope.dataLocation[i]);
               }
 
-              if (
-                $scope.dataLocation[i].disColorRank == 2 &&
-                $scope.dataLocation[i].angleColorRank == 2
-              ) {
+              if ( $scope.dataLocation[i].disColorRank == 2 && $scope.dataLocation[i].angleColorRank == 2 ) {
                 arrYellow_2_2.push($scope.dataLocation[i]);
               }
 
-              if (
-                $scope.dataLocation[i].disColorRank == 2 &&
-                $scope.dataLocation[i].angleColorRank == 3
-              ) {
+              if ( $scope.dataLocation[i].disColorRank == 2 && $scope.dataLocation[i].angleColorRank == 3 ) {
                 arrYellow_2_3.push($scope.dataLocation[i]);
               }
 
-              if (
-                $scope.dataLocation[i].disColorRank == 3 &&
-                $scope.dataLocation[i].angleColorRank == 2
-              ) {
+              if ( $scope.dataLocation[i].disColorRank == 3 && $scope.dataLocation[i].angleColorRank == 2 ) {
                 arrYellow_3_2.push($scope.dataLocation[i]);
               }
 
-              if (
-                $scope.dataLocation[i].disColorRank == 3 &&
-                $scope.dataLocation[i].angleColorRank == 3
-              ) {
+              if ( $scope.dataLocation[i].disColorRank == 3 && $scope.dataLocation[i].angleColorRank == 3 ) {
                 arrYellow_3_3.push($scope.dataLocation[i]);
               }
             }
@@ -557,7 +546,8 @@ angular
               dict["latitude"] = aLocation[i].latitude;
               dict["longitude"] = aLocation[i].longitude;
               dict["distance"] = aLocation[i].distance;              
-						  dict['relative_distance'] = aLocation[i].distance;
+						  dict['relative_distance'] = aLocation[i].relative_distance;
+						  dict['distance_main'] = aLocation[i].distance;
               dict["angle"] = aLocation[i].angle;
               dict["status"] = aLocation[i].status;
               dict["address"] = aLocation[i].address;
@@ -619,28 +609,22 @@ angular
         var imgpath = "";
         if (colorCode) {
           if (colorCode == 3 && colorCode2 == 3) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 1) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 3) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath =  "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 3 && colorCode2 == 1) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 2) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 1) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 2) {
             var value = closest( $scope.altArr , dict.distance_main);
@@ -674,8 +658,7 @@ angular
 						}
           }
           if (colorCode == 3 && colorCode2 == 2) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
           }
         }
 
@@ -810,17 +793,24 @@ angular
 
             let tempInnerHTML ="<b>" + node.installationName + "</b><table class='homemaptable'>";
             if(res.data.data.distance_percentage){
-              var  relativeDistance = res.data.data.distance_percentage
-              if(relativeDistance < 0){
-                relativeDistance = 0;
-              }
-              if(relativeDistance > 100){
-                relativeDistance = 100;
-              }
-              tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ res.data.data.distance_percentage+"%</td></tr>";
-            }
+            tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ res.data.data.distance_percentage+"%</td></tr>";}
             
             for (let i = 0; i < readings.length; i++) {
+              // if (readings[i].id_name == "Distance") {
+              //   var sdistance = String(readings[i].hisEndVal);
+              //   sdistance = sdistance.replace(/ mm/g, '');
+
+              //   var  relativeDistance = Math.round(((( (getTableAlert && getTableAlert.empty)?parseInt(getTableAlert.empty):3998 - (getTableAlert && getTableAlert.full)?parseInt(getTableAlert.full):400)-(parseInt(sdistance) - (getTableAlert && getTableAlert.full)?parseInt(getTableAlert.full):400 )) / ((getTableAlert && getTableAlert.empty)?parseInt(getTableAlert.empty):3998 - (getTableAlert && getTableAlert.full)?parseInt(getTableAlert.full):400)) * 100);
+              //   if(relativeDistance < 0){
+              //     relativeDistance = 0;
+              //   }
+              //   if(relativeDistance > 100){
+              //     relativeDistance = 100;
+              //   }
+              //   tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ relativeDistance+"%</td></tr>";
+
+            
+              // }
               if (readings[i].id_name == "Battery Voltage") {
                 tempInnerHTML =
                   tempInnerHTML +
@@ -841,6 +831,7 @@ angular
                   (readings[i].unit ? readings[i].unit : "");
               }
             }
+
             tempInnerHTML =
               tempInnerHTML +
               "<tr><td>TracNet IMEI</td><td>"+ res.data.data.device_id  +"</td></tr> <tr ><td colspan='2'><i>Last Updated "+ res.data.data.date+" ago</i></td></tr> <tr style='background: #ececec;'><td colspan='2'><div ><p  style='height:50px;width:100%;padding: 24px; color: black;margin: 0; cursor: pointer;text-align: left;'> Manhole Specifications </p></div><div style='gap: 10px; margin: -40px 0px 0px 160px;height: 40px;width: 40px;'><img ng-click='poppupForm()' src='./img/free-pencil-icon-9435.png'/ style='height:40px;width:40px;transform: rotate(90deg);padding: 10px; background: #3255a2;border-radius: 5px;margin: 0; cursor: pointer;'></div>";
@@ -881,10 +872,9 @@ angular
           } else {
             localStorage.setItem("instName",response.data.data.installationName);
             $scope.pointSettingData = JSON.parse(response.data.data.distance_alert);
-            console.log( $scope.pointSettingData);
 
               $scope.alarmCount =  parseInt(($scope.pointSettingData.alarmFirstCheck == 1  )? 1 : 0) + parseInt(($scope.pointSettingData.alarmSecondCheck == 1)? 1 : 0) + parseInt(($scope.pointSettingData.alarmThirdCheck == 1 )? 1 : 0)
-              console.log($scope.alarmCount);
+              
               $scope.emptyVal = parseInt($scope.pointSettingData.empty);
               $scope.fullVal = parseInt($scope.pointSettingData.full);
               $scope.alert1 = parseInt($scope.pointSettingData.alert1);
@@ -1001,7 +991,6 @@ angular
         var alertF = angular.element($('#alert1')).val();
         var alertS = angular.element($('#alert2')).val();
         var alertT = angular.element($('#alert3')).val();
-        //console.log( $scope.showAlert1 , $scope.showAlert2, $scope.showAlert3)
         //return;
         if( $scope.showAlert1 == true ) {
           $scope.alert1 = (alertF) ? alertF : defultAlertVal;
@@ -1077,7 +1066,6 @@ angular
       };
       /*get the single lat and lng zoom the location marker*/
       $scope.mapLocation = function (dict) {
-        console.log(dict);
         if (typeof dict.latitude === "undefined" && typeof dict.longitude === "undefined")
           return;
 
@@ -1096,14 +1084,14 @@ angular
           if( dict.aCheck3 == 1) {
             alertArr.push(dict.alertThree);
           }
-          if( typeof dict.latitude === 'undefined' && typeof dict.longitude === 'undefined' ) return;
+          
           if(dict.relative_distance < 0){
             dict.relative_distance = 0;
           }
           if(dict.relative_distance > 100){
             dict.relative_distance = 100;
           }
-        
+        console.log(dict);
           var infowindow = new google.maps.InfoWindow({
             content: dict.relative_distance.toLocaleString() +"%"+",  " + dict.angle + "\xBA"  ,
           });
@@ -1113,28 +1101,22 @@ angular
         var imgpath = "";
         if (colorCode) {
           if (colorCode == 3 && colorCode2 == 3) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 1) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 3) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 3 && colorCode2 == 1) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 2) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 1) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 2) {
             let value = closest(alertArr , dict.distance)
@@ -1166,8 +1148,7 @@ angular
             }
           }
           if (colorCode == 3 && colorCode2 == 2) {
-            var imgpath =
-              "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
           }
         }
 
