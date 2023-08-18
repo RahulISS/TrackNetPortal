@@ -449,12 +449,7 @@ angular
               });
             }
           }).finally(function () {
-            // After the API call, set isFirstLoad to false, so subsequent calendar changes use the new URL
             $scope.isFirstLoad = false;
-            $scope.realtimesummery.series[0].data[0].y = 0;
-            $scope.realtimesummery.series[0].data[1].y = 0;
-            $scope.realtimesummery.series[0].data[2].y = 0;
-            alarmApi();
           });
       };
 
@@ -849,7 +844,7 @@ angular
           $scope.realtimesummery.series[0].data[2].y = 0;
         $http
           .get(
-            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList/" + localStorage.getItem("singleDate")
+            "https://dev-api-sg.tracwater.asia/api/v1/newtraknetApiList" 
           )
           .then(function (res) {
             const response = res.data.data;
