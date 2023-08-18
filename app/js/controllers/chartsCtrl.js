@@ -1182,14 +1182,14 @@ angular
           $scope.reloadMethod();
         }
       };
-      $scope.change = "Distance";
+      $scope.change = "Relative Distance";
       $scope.getVal = function () {
         $scope.change = $scope.selectedValue;
       };
 
       $scope.selectedInsCount = 0;
       $scope.compareNode = "";
-      $scope.valueAngle = "Distance";
+      $scope.valueAngle = "Relative Distance";
       countNode = [];
       var countInstallation = 0;
 
@@ -1200,18 +1200,11 @@ angular
         if (!$scope.showScatterPlot) {
           $scope.tableStats[currentLegend].pointId = node._id;
           $scope.tableStats[currentLegend].title = node.text;
-          $scope.tableStats[currentLegend].measurements =
-            $rootScope.storage.sensorData; //JSON.parse(JSON.stringify($rootScope.storage.sensorData));
-          $scope.tableStats[currentLegend].currentMeasurement =
-            $scope.tableStats[currentLegend].measurements[0];
-          $scope.tableStats[currentLegend].fold =
-            $rootScope.foldmethodFilter[0].value;
-          document.getElementById(
-            $scope.tableStats[currentLegend].hideDivId
-          ).style.visibility = "visible";
-          document.getElementById(
-            $scope.tableStats[currentLegend].hideCloseDivId
-          ).style.visibility = "visible";
+          $scope.tableStats[currentLegend].measurements = $rootScope.storage.sensorData; //JSON.parse(JSON.stringify($rootScope.storage.sensorData));
+          $scope.tableStats[currentLegend].currentMeasurement =  $scope.tableStats[currentLegend].measurements[0];
+          $scope.tableStats[currentLegend].fold = $rootScope.foldmethodFilter[0].value;
+          document.getElementById( $scope.tableStats[currentLegend].hideDivId ).style.visibility = "visible";
+          document.getElementById( $scope.tableStats[currentLegend].hideCloseDivId).style.visibility = "visible";
           setNextCurrentLegend($scope.tableStats);
           $scope.cancelInterval();
           $scope.startInterval();
@@ -1220,25 +1213,27 @@ angular
       });
 
       $scope.$watch("selectedValue", function () {
-        $scope.tableStats[currentLegend].measurements =
-          $rootScope.storage.sensorData;
-        if ($scope.selectedValue == "Angle") {
+        $scope.tableStats[currentLegend].measurements = $rootScope.storage.sensorData;
+        if ($scope.selectedValue == "Relative Distance") {
           for (var i = 0; i < $scope.tableStats.length; i++) {
             if ($scope.tableStats[i].title != "") {
-              $scope.tableStats[i].currentMeasurement =
-                $scope.tableStats[i].measurements[1];
+              $scope.tableStats[i].currentMeasurement = $scope.tableStats[i].measurements[0];
             }
           }
-        } else if ($scope.selectedValue == "Distance") {
+        }else if($scope.selectedValue == "Distance") {
+          for (var i = 0; i < $scope.tableStats.length; i++) {
+              if($scope.tableStats[i].title != '') {
+                  $scope.tableStats[i].currentMeasurement = $scope.tableStats[i].measurements[1];                 
+              }
+          }               
+      } else if ($scope.selectedValue == "Angle") {
           for (var i = 0; i < $scope.tableStats.length; i++) {
             if ($scope.tableStats[i].title != "") {
-              $scope.tableStats[i].currentMeasurement =
-                $scope.tableStats[i].measurements[0];
+              $scope.tableStats[i].currentMeasurement = $scope.tableStats[i].measurements[2];
             }
           }
         } else {
-          $scope.tableStats[currentLegend].currentMeasurement =
-            $scope.tableStats[currentLegend].measurements[0];
+          $scope.tableStats[currentLegend].currentMeasurement = $scope.tableStats[currentLegend].measurements[0];
         }
 
         $scope.cancelInterval();
@@ -1386,34 +1381,21 @@ angular
       }
 
       function loadData() {
-        var datespan =
-          moment($rootScope.storage.chartsRangeStartDate).format(
-            skySparkFormat
-          ) +
-          ".." +
-          moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
-        var startDate = moment($rootScope.storage.chartsRangeStartDate).format(
-          skySparkFormat
-        );
-        var endDate = moment($rootScope.storage.chartsRangeEndDate).format(
-          skySparkFormat
-        );
+        var datespan = moment($rootScope.storage.chartsRangeStartDate).format( skySparkFormat ) + ".." + moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
+        var startDate = moment($rootScope.storage.chartsRangeStartDate).format( skySparkFormat );
+        var endDate = moment($rootScope.storage.chartsRangeEndDate).format( skySparkFormat );
         localStorage.setItem("startDate", startDate);
         localStorage.setItem("endDate", endDate);
         $scope.queriesArray = [];
         $scope.tableHeader = [];
         $scope.activeItems = [];
         for (let i = 0; i < $scope.tableStats.length; i++) {
-          if (
-            $scope.tableStats[i].pointId !== "null" &&
-            $scope.tableStats[i].pointId !== null
-          ) {
+          if ( $scope.tableStats[i].pointId !== "null" && $scope.tableStats[i].pointId !== null ) {
             $scope.activeItems.push(i);
             const id = $scope.tableStats[i].pointId;
-             $scope.sensorType =
-              $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
+             $scope.sensorType = $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
             localStorage.setItem("aTreeNodeId", id);
-            console.log($scope.sensorType,'id sorb')
+            console.log($scope.sensorType,'id sorbmc')
             localStorage.setItem("sensorId", $scope.sensorType);
             const interval = $scope.rollup.value;
             const fold = $scope.tableStats[i].fold.value;
@@ -1509,38 +1491,19 @@ angular
               return pre + curr;
             }, 0);
             $scope.tableStats[index].sum = sum.toFixed(2);
-            $scope.tableStats[index].avg = (sum / measurements.length).toFixed(
-              0
-            );
+            $scope.tableStats[index].avg = (sum / measurements.length).toFixed(0);
             updateSeriesData();
-            $scope.meterChartConfig.series[index].name =
-              $scope.tableStats[index].title +
-              " - " +
-            $scope.tableStats[index].currentMeasurement.id_name;
+            $scope.meterChartConfig.series[index].name =$scope.tableStats[index].title +" - " + $scope.tableStats[index].currentMeasurement.id_name;
             $scope.meterChartConfig.series[index].marker.enabled = $scope.chartStatusSet.meter.markers;
-            $scope.meterChartConfig.series[index]["tooltip"]["pointFormatter"] =
-              function () {
-                return dataPointFormaterFunction(
-                  this,
-                  $scope.tableStats[index].currentMeasurement
-                );
+            $scope.meterChartConfig.series[index]["tooltip"]["pointFormatter"] = function () {
+                return dataPointFormaterFunction(this,$scope.tableStats[index].currentMeasurement);
               };
             let sensorName;
             sensorName = $scope.tableStats[index].currentMeasurement.id_name;
-            $scope.meterChartConfig.options.yAxis[index].labels["formatter"] =
-              function () {
-                return yAxisLabelFormaterFunction(
-                  this,
-                  $scope.tableStats[index].currentMeasurement.kind,
-                  $scope.tableStats[index].currentMeasurement.id_name,
-                  $scope.tableStats[index].currentMeasurement.unit
-                );
+            $scope.meterChartConfig.options.yAxis[index].labels["formatter"] = function () {
+                return yAxisLabelFormaterFunction( this, $scope.tableStats[index].currentMeasurement.kind, $scope.tableStats[index].currentMeasurement.id_name, $scope.tableStats[index].currentMeasurement.unit );
               };
-            if (
-              sensorName === "Flow Switch" ||
-              sensorName === "Door Switch" ||
-              sensorName === "Flow Valve"
-            ) {
+            if (sensorName === "Flow Switch" || sensorName === "Door Switch" || sensorName === "Flow Valve") {
               $scope.meterChartConfig.options.yAxis[index].tickWidth = 0;
             } else {
               $scope.meterChartConfig.options.yAxis[index].tickWidth = 2;

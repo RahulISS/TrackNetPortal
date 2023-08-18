@@ -262,10 +262,7 @@ angular
                   var dis_color_rank = 1;
                   var dis_color = "Red";
                 }
-                if (
-                  data.point.height < data.point.distance_alert &&
-                  data.point.alert_enable == 1
-                ) {
+                if (data.point.height < data.point.distance_alert ) {
                   var distance_alarm_tr = "Distance alert Triggered";
                   var dis_color_rank = 2;
                   var dis_color = "yellow";
@@ -919,13 +916,13 @@ angular
 			// Open a confirm popup
 			if(altCount < newValue) { 
 				if(!alt1 && newValue == 3 ) {
-					$scope.showAlert1 = true;
+					$scope.showAlert3 = true;
 				}
 				if(!alt2 && newValue == 2 ) {
 					$scope.showAlert2 = true;
 				}
 				if(!alt3 && newValue == 1 || newValue == 2 ) {
-					$scope.showAlert3 = true;
+					$scope.showAlert1 = true;
 				}
 			}
 
@@ -947,11 +944,11 @@ angular
 
 		$scope.onDecreaseAlertNumber = function( args ) {
 			let text = confirm('Are you sure you are deleting the Alert?');
-			if(args == 'Alert1') {
+			if(args == 'Alert3') {
 				if ( text == true) {
-					$scope.showAlert1 = false;
+					$scope.showAlert3 = false;
 				} else {
-					$scope.showAlert1 = true;
+					$scope.showAlert3 = true;
 				}
 			}
 			if(args == 'Alert2') {
@@ -961,11 +958,11 @@ angular
 					$scope.showAlert2 = true;
 				}
 			}
-			if(args == 'Alert3') {
+			if(args == 'Alert1') {
 				if ( text == true) {
-					$scope.showAlert3 = false;
+					$scope.showAlert1 = false;
 				} else {
-					$scope.showAlert3 = true;
+					$scope.showAlert1 = true;
 				}
 			}
 		}
@@ -1135,6 +1132,8 @@ angular
             }
           }
           if (colorCode == 2 && colorCode2 == 3) {
+            let value = closest(alertArr , dict.distance)
+					  var result = getObjectKey(alertObj, value);
             if( result == 'al3') {
               imgpath = './img/triangle-01.png';
             }
