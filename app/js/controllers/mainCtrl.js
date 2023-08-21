@@ -170,6 +170,13 @@ angular.module('mainCtrl', [])
             const query2 = $http.get(apiBaseUrl+'sensortList', {headers:customeHeader})
               .then(function (response){
                     const data = response.data.data
+                    let sensors = [ {
+                        'id': '@2ac7dd09-7e4cd602',
+                        'unit': '%',
+                        'id_name': 'Relative Distance',
+                        'rank': 1,
+                        'checked': false,
+                    }];
                     for( let i = 0; i < data.length; i++){
                         if(data[i].unit != "1"){
                             sensors.push({

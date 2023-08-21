@@ -1,4 +1,57 @@
+<style>
+	body { font-family: sans-serif; }
+	#confirmBox
+	{
+		display: none;
+		background-color: #eee;
+		border-radius: 14px;
+		border: 1px solid #aaa;
+		position: fixed;
+		width: 30%;
+		left: 40%;
+		top: 40%;
+		margin-left: -82px;
+		padding: 50px 26px 49px;
+		box-sizing: border-box;
+		text-align: center;
+		z-index: 99999;
+	}
+	#confirmBox .button {
+		background-color: #ccc;
+		display: inline-block;
+		border-radius: 12px;
+		border: 0px solid #aaa;
+		padding: 20px;
+		text-align: center;
+		width: 150px;
+		cursor: pointer;
+	}
+	#confirmBox .button:hover
+	{
+		background-color: #ddd;
+	}
+	#confirmBox .message
+	{
+		text-align: center;
+		margin-bottom: 8px;
+	}
+
+	.bgColor0{
+		background: #fff!important;
+	}
+	.opacity0{
+		opacity: 0.5;
+	}
+	</style>
 <div class="homepage">
+	<div id="confirmBox" ng-show="deleteModel">
+		<button class="remove-button" ng-click="disableAlertModal()" data-dismiss="modal" aria-label="Close"> 
+			<span aria-hidden="true">×</span>
+		</button>
+		<div class="message"></div>
+		<span class="button yes disable {{delClass}}">{{ btnValue }}</span>
+		<span class="button no disable"> Delete</span>
+	</div>
 	<div class="withtree map-100" > 
 		<div class="viewtemplateInner">
 			<div class="homemaparea" id="item">
@@ -55,9 +108,7 @@
 					<button type="button" class="close-button" ng-click="closeModal()" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
-					<h2>SETTINGS</h2>
-					<!-- <form  method="post" name="manholeSpecification" id="manholeSpecification" ng-submit="manholeSpecificationsformData()"> -->
-					<form action="" id="myForm">
+					<form action="" id="myForm" autocomplete="off">
 						<section class="mhole">
 							<div class="mhole-mobile">
 								<h4>Manhole Specifications</h4>
@@ -73,48 +124,41 @@
 									<input type="number" ng-readonly="isReadOnly" min="400" name="fullValue" id="fullValue" placeholder="400 mm" value="{{pointSettingData.full}}">
 									<span id="errorname" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
 								</div> 
-								<div class="mhole-alert traingles" ng-show="showAlert1">
-								<!-- <div class="mhole-alert traingles" ng-show="altCount == 3"> -->
-									<!-- <button ng-click="onDecreaseAlertNumber({{alarmCount}})">Alert</button> -->
+								<div class="mhole-alert traingles {{addClass}}" ng-show="showAlert1" >
 									<label for="" ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
-									<input type="number" ng-readonly="isReadOnly" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm" value="{{pointSettingData.alarmFirst}}">
+									<input type="number" ng-readonly="isReadOnly" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm" value="{{pointSettingData.alarm1}}">
 								</div>
-								<div class="mhole-alert squares" ng-show="showAlert2">
-								<!-- <div class="mhole-alert squares" ng-show="altCount == 2 || altCount == 3"> -->
+								<div class="mhole-alert squares {{addClass}}" ng-show="showAlert2">
 									<label for="" ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
-									<input type="number" ng-readonly="isReadOnly" name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm" value="{{pointSettingData.alarmSecond}}">
+									<input type="number" ng-readonly="isReadOnly" name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm" value="{{pointSettingData.alarm2}}">
 								</div>
-								<div class="mhole-alert circles" ng-show="showAlert3">
+								<div class="mhole-alert circles {{addClass}}" ng-show="showAlert3">
 									<label for="" ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
-										<input type="number" ng-readonly="isReadOnly" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm" value="{{pointSettingData.alarmThird}}">
-									<!-- <button type="button" class="cross-btn">x</button> -->
+									<input type="number" ng-readonly="isReadOnly" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm" value="{{pointSettingData.alarm3}}">
 								</div>
 								<div class="mhole-alert boundaryTwo">
 									<label for="">Empty (0%)</label>
 									<input type="number" ng-readonly="isReadOnly" name="emptyValue" max="3998" id="emptyValue" placeholder="3998 mm" value="{{pointSettingData.empty}}">
-										<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
-									<!-- <button type="button" class="cross-btn">x</button> -->
+									<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
 								</div>
 								</div>
-								<div class="alert-input">
-									<label for="">Number of Alerts</label>
-									<input type="number" class="alertNumber" id="alertNo" ng-readonly="isReadOnly"  max="3" min="0" value="{{alarmCount}}" ng-model="alarmCount" ng-change="confirmCheck({{alarmCount}})">
-									<!-- <p>3</p> -->
+								<div class="alert-input">								
+									<button type="button" class="addbtn {{disClass}}" id="myBtn2" ng-click="confirmCheck()"> Add Alert</button>
+									<button type="button" class="delbtn" ng-click="openDeleteWindow()"> Del. All</button>
 								</div>
 								<div class="alert-checkbox">
-									<div class="checkbox">
-										<input type="checkbox" class="hideBoundaries" name="" id="">
-										<label for="">Hide Boundaries</label>
-									</div>
-									<div class="checkbox">
-										<input type="checkbox" class="hideAlerts" name="" id="">
-										<label for="">Hide Alerts</label>
-									</div>
+								<div class="checkbox">
+									<input type="checkbox" class="hideBoundaries" name="" id="">
+									<label for="">Hide Boundaries</label>
+								</div>
+								<div class="checkbox">
+									<input type="checkbox" class="hideAlerts" name="" id="">
+									<label for="">Hide Alerts</label>
+								</div>
 								</div>
 								<div class="buttons">
-									<input type="button" value="Submit" ng-click="SavePoppupFormData()" class="save-btn submit__btn">
-									<input type="reset" class="cancel-btn reset__btn" />
-								<!-- <button class="cancel-btn" ng-click="closeModal()">Cancel, Go Back</button> -->
+									<input type="button" value="Save Changes" ng-click="SavePoppupFormData()" class="save-btn submit__btn">
+									<input type="button" class="cancel-btn reset__btn" value="Cancel, Go Back" ng-click="closeModal()"/>
 								</div>
 							</div>
 						</section>
@@ -122,8 +166,25 @@
 				</div>
 			</div>
 		</div>
-		
 	</div>
+
+	<!--Add alert model starts-->
+	<div id="myModal2" class="modal2">
+		<div class="modal2-content">
+			<form action="" id="addAlertForm" name="LoginForm" >
+				<div class="sec-head">
+					<h3>Add a New Alert</h3>
+				</div>
+				<div class="modal2-content-wrp">
+					<label for="">Alert:</label>
+					<input type="number" id="alert" name="alert" ng-model="alert" autocomplete="off">
+					<span style="color:red; display:block; text-align:left; font-weight: bold;" ng-show="alertError">{{ errMsg }}</span>
+					<button type="button" class="modal-submit" ng-click="addAlertValue()">Add</button>
+					<button type="button" class="close modal-close" ng-click="closeAddAlertModal()">Cancel, Go back</button>
+				</div>
+			</form>
+		</div>
+  	</div>	
 	<div class="loader" ng-show="isLoading">
 			<div class="loader-spinner"></div>
 		</div>
@@ -201,10 +262,50 @@
 	<script>
 		// popup start
 		$(document).ready(function () {
-		$(".close-button").click(function () {
-			$("#popupModalCenter").removeClass("show-modal");
-		});	
+			$(".close-button").click(function () {
+				$("#popupModalCenter").removeClass("show-modal");
+			});	
+		});
+		$(document).ready(function () {
+			$(".cancel-btn").click(function () {
+				$("#popupModalCenter").removeClass("show-modal");
+			});	
 		});
 		// popup end
+		// Get the modal2
+		var modal2 = document.getElementById("myModal2");
+
+		// Get the button that opens the modal
+		var btn = document.getElementById("myBtn2");
+
+		// Get the <span> element that closes the modal2
+		var span = document.getElementsByClassName("close")[0];
+
+		// When the user clicks the button, open the modal2 
+		btn.onclick = function() {
+			modal2.style.display = "block";
+		}
+
+		// When the user clicks on <span> (x), close the modal2
+		span.onclick = function() {
+			modal2.style.display = "none";
+		}
+
+		// When the user clicks anywhere outside of the modal2, close it
+		window.onclick = function(event) {
+			if (event.target == modal2) {
+				modal2.style.display = "none";
+			}
+		}
+		function doConfirm(msg, yesFn, noFn) {
+
+			var confirmBox = $("#confirmBox");
+			confirmBox.find(".message").text(msg);
+			confirmBox.find(".yes,.no").unbind().click(function () {
+				confirmBox.hide();
+			});
+			confirmBox.find(".yes").click(yesFn);
+			confirmBox.find(".no").click(noFn);
+			confirmBox.show();
+		}
 	</script>
-</div>
