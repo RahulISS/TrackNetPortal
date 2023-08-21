@@ -127,7 +127,8 @@
 								{{ wd }}
 							</button>
 							<div class=" updated-btn-wrp">
-								<input type="radio" class="my-radio" id="Distance" name="radioBtn" value="Distance"  ng-model="selectedValue"  ng-change="getVal()" ng-checked="true"> Distance 
+								<input type="radio" class="my-radio" id="Relative Distance" name="radioBtn" value="Relative Distance"  ng-model="selectedValue"  ng-change="getVal()" ng-checked="true"> Relative Distance 
+								<input type="radio" class="my-radio" id="Distance" name="radioBtn" value="Distance"  ng-model="selectedValue"  ng-change="getVal()"> Distance 
 								<input type="radio" class="my-radio"  id="Angle" name="radioBtn" value="Angle"  ng-model="selectedValue" ng-change="getVal()" > Angle
 							</div>
 						</div>
@@ -195,7 +196,7 @@
                                         <div id={{tableStats[oneitem].hideDivId}} class="itemhidden">
                                                 <!-- Row 2 = Measurement dropdown list-->
                                                 <div class="charts_m_stats_row_cell_measurement">                        
-							<select style="color:{{tableStats[oneitem].colour}};" class="dropdownbuttonRegion" ng-change="changeMeasurement(oneitem)" ng-model="tableStats[oneitem].currentMeasurement" ng-options="sensorItem.id_name for sensorItem in tableStats[oneitem].measurements"></select>         
+							<select style="color:{{tableStats[oneitem].colour}}" class="dropdownbuttonRegion" ng-change="changeMeasurement(oneitem)" ng-model="tableStats[oneitem].currentMeasurement" ng-options="sensorItem.id_name for sensorItem in tableStats[oneitem].measurements"></select>         
                                                 </div>
                                                 <!-- Row 3 Units -->
                                                 <div class="charts_m_stats_row_cell_unit">
