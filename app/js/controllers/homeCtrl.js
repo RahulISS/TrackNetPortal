@@ -11,6 +11,16 @@ angular
       $scope.showAlert1 = false;
       $scope.showAlert2 = false;
       $scope.showAlert3 = false;
+      $scope.addAlertModel = false;
+      $scope.alertError = false;
+      $scope.disableBtn = false;
+      $scope.deleteBtn = false;
+      $scope.alert1Check = 0;
+      $scope.alert2Check = 0;
+      $scope.alert3Check = 0;
+      $scope.addClass = '';
+      $scope.btnValue = '';
+      $scope.deleteModel = false;
 
       $scope.refreshPage = function () {
         setTimeout(function () {
@@ -866,34 +876,59 @@ angular
         $http.get(apiBaseUrl+"user-definded-distancealert?aTreeNodeRef=" +node_id, {headers:customeHeader}).then(function (response) {
           if(response.data.data.distance_alert === undefined) { 
             $scope.alarmCount = 0;
+            $scope.alert1 = 0;
+            $scope.alert2 = 0;
+            $scope.alert3 = 0;
           } else {
-            localStorage.setItem("instName",response.data.data.installationName);
-            $scope.pointSettingData = JSON.parse(response.data.data.distance_alert);
+              localStorage.setItem("instName",response.data.data.installationName);
+              $scope.pointSettingData = JSON.parse(response.data.data.distance_alert);              
 
-              $scope.alarmCount =  parseInt(($scope.pointSettingData.alarmFirstCheck == 1  )? 1 : 0) + parseInt(($scope.pointSettingData.alarmSecondCheck == 1)? 1 : 0) + parseInt(($scope.pointSettingData.alarmThirdCheck == 1 )? 1 : 0)
-              
+              $scope.alarmCount =  parseInt(($scope.pointSettingData.alert1 )? 1 : 0) + parseInt(($scope.pointSettingData.alert2)? 1 : 0) + parseInt(($scope.pointSettingData.alert3 )? 1 : 0)
               $scope.emptyVal = parseInt($scope.pointSettingData.empty);
               $scope.fullVal = parseInt($scope.pointSettingData.full);
               $scope.alert1 = parseInt($scope.pointSettingData.alert1);
               $scope.alert2 = parseInt($scope.pointSettingData.alert2);
               $scope.alert3 = parseInt($scope.pointSettingData.alert3);
-              
-              if($scope.pointSettingData.alarmFirstCheck == 1) {
+              $scope.alert1Check = $scope.pointSettingData.alarmFirstCheck;
+              $scope.alert2Check = $scope.pointSettingData.alarmSecondCheck;
+              $scope.alert3Check = $scope.pointSettingData.alarmThirdCheck;
+              $scope.showAlert1 = true;
+              $scope.showAlert2 = true;
+              $scope.showAlert3 = true;
+
+              if( $scope.alert1Check == 0) {
+                $scope.addClass = 'alertLight';
+              } else {
+                $scope.addClass = '';
+              }
+              if($scope.alert1) {
                 $scope.showAlert1 = true;
               } else {
                 $scope.showAlert1 = false;
               }
-              if($scope.pointSettingData.alarmSecondCheck == 1) {
+              if($scope.alert2) {
                 $scope.showAlert2 = true;
               } else {
                 $scope.showAlert2 = false;
               }
-              if($scope.pointSettingData.alarmThirdCheck == 1) {
+              if($scope.alert3) {
                 $scope.showAlert3 = true;
               } else {
                 $scope.showAlert3 = false;
               }
-              $scope.confirmCheck($scope.alarmCount , $scope.showAlert1 , $scope.showAlert2, $scope.showAlert3);
+            }
+            if( $scope.alarmCount == 0 ) {
+              $scope.delClass = 'disable-alert';
+              $scope.showAlert3 = false;
+              $scope.showAlert2 = false;
+              $scope.showAlert1 = false;
+            } 
+    
+            if( $scope.alarmCount < 3) { 
+              $scope.disClass = '';
+            } else {
+              $scope.disClass = 'disable-alert';
+              $scope.delClass = '';
             }
           }).catch(function(error) {
             $scope.alarmCount = 0;
@@ -903,69 +938,228 @@ angular
             $scope.showAlert2 = false;
             $scope.showAlert3 = false;
             $scope.alert1 = '';
-              $scope.alert2 = '';
-              $scope.alert3 = '';
+            $scope.alert2 = '';
+            $scope.alert3 = '';
             // Error callback, handle the error here
             console.error('Error occurred:', error);
             });
       };
 
       /*open the poppup form click on setting icon in info window*/
-		$scope.confirmCheck = function( altCount, alt1 , alt2 , alt3 ) { 
-			let newValue = $scope.alarmCount;
-			// Open a confirm popup
-			if(altCount < newValue) { 
-				if(!alt1 && newValue == 3 ) {
-					$scope.showAlert3 = true;
-				}
-				if(!alt2 && newValue == 2 ) {
-					$scope.showAlert2 = true;
-				}
-				if(!alt3 && newValue == 1 || newValue == 2 ) {
-					$scope.showAlert1 = true;
-				}
-			}
+      $scope.counter = 0;
+      $scope.confirmCheck = function() {
+        $scope.counter = $scope.counter + 1
+        let newValue = $scope.counter;
+        if( $scope.counter >= 0 ) {
+          $scope.delClass = '';
+        }
+        if( $scope.counter == 1) {
+          $scope.alert = '';
+          $scope.alertError = '';
+          $scope.name = 'alert1';
+        }
+        if( $scope.counter == 2) {
+          $scope.alert = '';
+          $scope.alertError = '';
+          $scope.name = 'alert2';
+        }
+        if( $scope.counter == 3 ) {
+          $scope.alert = '';
+          $scope.alertError = '';
+          $scope.name = 'alert3';
+          $scope.disClass = 'disable-alert';
+        }
 
-			if(altCount > newValue){
-				var userConfirmed = confirm('Please select Alert which you want to delete!');
-				
-				if (userConfirmed) {
-					$scope.altCount = newValue;
-					$scope.alarmCount = newValue;
-				} else {
-					$scope.altCount = altCount;
-					$scope.alarmCount = altCount;
-				}
-			}else{
-				$scope.altCount = newValue;
-				$scope.alarmCount = newValue;
-			}
-		}
 
-		$scope.onDecreaseAlertNumber = function( args ) {
-			let text = confirm('Are you sure you are deleting the Alert?');
-			if(args == 'Alert3') {
-				if ( text == true) {
-					$scope.showAlert3 = false;
-				} else {
-					$scope.showAlert3 = true;
-				}
-			}
-			if(args == 'Alert2') {
-				if ( text == true) {
-					$scope.showAlert2 = false;
-				} else {
-					$scope.showAlert2 = true;
-				}
-			}
-			if(args == 'Alert1') {
-				if ( text == true) {
-					$scope.showAlert1 = false;
-				} else {
-					$scope.showAlert1 = true;
-				}
-			}
-		}
+        if( newValue > 0 ) { 
+          if(newValue == 1 ) {
+            $scope.addAlertModel = true;
+            $scope.showAlert1 = true; //triangle
+          }
+          if(newValue == 2) { 
+            $scope.showAlert2 = true; //square
+          }
+          if(newValue == 3) {
+            $scope.showAlert3 = true; //circle
+          }
+        } else {
+          $scope.counter = 0; 
+        }
+      }
+      
+      $scope.openDeleteWindow = function() {
+        console.log("test")
+        $scope.deleteModel = true;
+        if( $scope.pointSettingData ) {
+          if($scope.pointSettingData.alarmFirstCheck == 0 ) {
+            
+            $scope.btnValue = 'Enable';
+            $scope.addClass = '';
+          } else {
+            
+            $scope.btnValue = 'Disable';
+            $scope.addClass = 'alertLight';
+          }
+        } else {
+          $scope.btnValue = 'Disable';
+          $scope.addClass = 'alertLight';
+        }
+        
+        // disable all aleerts
+        doConfirm(" Select Option You Want To Perform!", function yes() {
+          $scope.disableBtn = true;
+        //delete all alerts
+        }, function no() {
+          if($scope.showAlert1 == true) {
+            $scope.showAlert1 = false;
+          }
+          if($scope.showAlert2 == true) {
+            $scope.showAlert2 = false;
+          }
+          if($scope.showAlert3 == true) {
+            $scope.showAlert3 = false;
+          }
+          
+          $scope.deleteBtn = true;
+        });
+        
+        }
+
+      $scope.disableAlertModal = function(){
+        $scope.deleteModel = false;
+        $scope.addClass = '';
+      }
+
+
+      $scope.removeAllAlerts = function( ) {
+        $scope.showAlert1 = false;
+        $scope.showAlert2 = false;
+        $scope.showAlert3 = false;
+        $scope.counter = 0;
+        $scope.disClass = '';
+        $scope.delClass = 'disable-alert';
+        $scope.values = [];
+      }
+
+      $scope.values = [];
+      $scope.addAlertValue = function() {
+        let alertVal = parseInt(angular.element($("#alert")).val());
+        let full = $scope.full;
+        let empty = $scope.empty;
+        
+        if( typeof $scope.pointSettingData != 'undefined' ) { 
+          if($scope.pointSettingData.alarm1) {
+            $scope.values.push($scope.pointSettingData.alarm1);
+          }
+          if($scope.pointSettingData.alarmSecond) {
+            $scope.values.push($scope.pointSettingData.alarm2);
+          }
+          if($scope.pointSettingData.alarmThird) {
+            $scope.values.push($scope.pointSettingData.alarm3);
+          }
+        }
+        
+        if(!alertVal) { 
+          $scope.alertError = true;
+          $scope.errMsg = "Alert Value is Required";
+          return;
+        }
+        
+        let fullAlarm = ( full ) ? full : 400;
+        let emptyAlarm = ( empty ) ? empty : 3998;
+
+        if(parseInt(alertVal) && parseInt(alertVal) < fullAlarm) {
+          $scope.alertError = true;
+          $scope.errMsg = "Alert Should be >= 'Full 100%' value or 400";
+          return;
+        } 
+        
+        if(parseInt(alertVal) && parseInt(alertVal) >= emptyAlarm) { 
+          $scope.alertError = true;
+          $scope.errMsg = "Alert Should be <= 'Empty 0%' value or 3998";
+          return;
+        } 
+        
+        if ($scope.values.includes(alertVal)) {
+          // If the value already exists, do not add it again
+          $scope.alertError = true;
+            $scope.errMsg = "Alert Value already exists.";
+          return;
+        } else {
+          // Add the value to the array
+          $scope.values.push(alertVal);
+          // Sort the array in ascending order
+          $scope.values.sort(function(a, b) {
+            return a - b;
+          });
+          
+          // Update input boxes with sorted values
+          $scope.alert1 = $scope.values[0] || 0;
+          $scope.alert2 = $scope.values[1] || 0;
+          $scope.alert3 = $scope.values[2] || 0;
+          
+          if( $scope.alert1 > 0 ){
+            $scope.showAlert1 = true;
+          } else {
+            $scope.showAlert1 = false;
+          }
+          if( $scope.alert2 > 0 ){
+            $scope.showAlert2 = true;
+          } else {
+            $scope.showAlert2 = false;
+          }
+          if( $scope.alert3 > 0 ){
+            $scope.showAlert3 = true;
+          } else {
+            $scope.showAlert3 = false;
+          }
+          // If the newly entered value is larger than the last value, move it to the last input box
+          if (alertVal > $scope.values[2]) {
+            $scope.alert3 = alertVal;
+          }
+        }
+      
+        // Close the modal
+        document.getElementById("myModal2").style.display = "none";
+      };
+      
+      
+
+      /**This function is use to set false if user will select cancle, go back button while adding alerts */
+      $scope.closeAddAlertModal = function(){
+        if( $scope.counter == 1 ) {
+          if( $scope.alarmCount == 1) {
+            $scope.showAlert1 = true;
+            $scope.delClass = '';
+          } else {
+            $scope.showAlert1 = false;
+            $scope.delClass = 'disable-alert';
+          }
+          
+          $scope.counter = 0;
+        }
+        if( $scope.counter == 2 ) {
+          console.log($scope.showAlert2)
+          if( $scope.showAlert2 === true ){
+            $scope.showAlert2 = true
+          } else {
+            $scope.showAlert2 = false;
+          }
+          $scope.counter = 0;
+        }
+        if( $scope.counter == 3 ){
+          $scope.showAlert3 = false;
+          $scope.counter = 0;
+        }
+      }
+        /** ends */
+
+      /*Close Model*/
+      $scope.closeModal = function () {
+        $scope.showModal = false;
+        document.getElementById("myModal2").style.display = "none";
+      };
+      /*End*/
 
       /*save the settings poppup form data*/
       $scope.SavePoppupFormData = function () {
@@ -983,42 +1177,88 @@ angular
         //alert(angular.element($(".alertNumber")).val());return;
 
         const enabled = 1;
-        const disabled = 0;
-        const defultAlertVal = 400;
-        var alertF = angular.element($('#alert1')).val();
-        var alertS = angular.element($('#alert2')).val();
-        var alertT = angular.element($('#alert3')).val();
-        //return;
+        var node_name = localStorage.getItem("node_name");
+        var val = angular.element($(".alertNumber")).val();
+        var alertF = parseInt(angular.element($('#alert1')).val());
+        var alertS = parseInt(angular.element($('#alert2')).val());
+        var alertT = parseInt(angular.element($('#alert3')).val());
+        
         if( $scope.showAlert1 == true ) {
-          $scope.alert1 = (alertF) ? alertF : defultAlertVal;
+          $scope.alert1 = alertF;
           $scope.alarmFirstCheck = enabled;	
-        } else {
-          $scope.alert1 = defultAlertVal ;
-          $scope.alarmFirstCheck = disabled;
+        }  else {
+          $scope.alert1 = null;
+          $scope.alarmFirstCheck = null;	
         }
         
         if( $scope.showAlert2 == true ) {
-          $scope.alert2 = (alertS) ? alertS : defultAlertVal;
+          $scope.alert2 = alertS;
           $scope.alarmSecondCheck = enabled;	
         } else {
-          $scope.alert2 = defultAlertVal;
-          $scope.alarmSecondCheck = disabled;
+          $scope.alert2 = null;
+          $scope.alarmSecondCheck = null;
         }
         
         if( $scope.showAlert3 == true) {
-          $scope.alert3 = (alertT) ? alertT : defultAlertVal;
+          $scope.alert3 = alertT;
           $scope.alarmThirdCheck = enabled;	
         } else {
-          $scope.alert3 = defultAlertVal;
-          $scope.alarmThirdCheck = disabled;
+          $scope.alert3 = null;
+          $scope.alarmThirdCheck = null;
         }
-        
-        var full = angular.element($('#fullValue')).val();
-        $scope.fullValue = full;
-        var empty = angular.element($('#emptyValue')).val();
-        $scope.emptyValue = empty;
-        if(!$scope.fullValue || !$scope.emptyValue){
-          alert("require fullValue")
+        /* disable button starts*/ 
+        if( $scope.disableBtn ==  true) { 
+          if( $scope.alert1 != null ) {
+            if( $scope.alert1Check != 'undefined' && $scope.alert1Check == 0) {
+              $scope.alarmFirstCheck = 1;
+            } else {
+              $scope.alarmFirstCheck = 0;
+            }
+          } 
+          // else {
+          // 	$scope.alert1 = null;
+          // 	$scope.alarmFirstCheck = null;
+          // }
+          if( $scope.alert2 != null ) {
+            if( $scope.alert2Check != 'undefined' && $scope.alert2Check == 0) {
+              $scope.alarmSecondCheck = 1;
+            } else {
+              $scope.alarmSecondCheck = 0;
+            }
+          } 
+          // else {
+          // 	$scope.alert2 = null;
+          // 	$scope.alarmSecondCheck = null;
+          // }
+          if( $scope.alert3 != null ) {
+            if( $scope.alert3Check != 'undefined' && $scope.alert3Check == 0) {
+              $scope.alarmThirdCheck = 1;
+            } else {
+              $scope.alarmThirdCheck = 0;
+            }
+          } 
+          // else {
+          // 	$scope.alert3 = null;
+          // 	$scope.alarmThirdCheck = null;
+          // }
+        }
+        /* diable button ends*/ 
+        /** delete button starts*/
+        if( $scope.deleteBtn ==  true) { 
+          $scope.alert1 = null;
+          $scope.alarmFirstCheck = null;
+
+          $scope.alert2 = null;
+          $scope.alarmSecondCheck = null;
+
+          $scope.alert3 = null;
+          $scope.alarmThirdCheck = null;
+        }
+        /** delete button ends*/
+        $scope.fullValue = angular.element($('#fullValue')).val();
+        $scope.emptyValue = angular.element($('#emptyValue')).val();
+        if( !$scope.fullValue || !$scope.emptyValue){
+          alert("Setting Boundaries are Required")
           return;
         }
 

@@ -1379,7 +1379,7 @@ angular
           $scope.meterChartConfig.options.yAxis[k].max = null;
         }
       }
-
+      var sensor_name = null;
       function loadData() {
         var datespan = moment($rootScope.storage.chartsRangeStartDate).format( skySparkFormat ) + ".." + moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
         var startDate = moment($rootScope.storage.chartsRangeStartDate).format( skySparkFormat );
@@ -1387,6 +1387,8 @@ angular
         localStorage.setItem("startDate", startDate);
         localStorage.setItem("endDate", endDate);
         $scope.queriesArray = [];
+        $scope.queriesRelativeDistalceArray = [];
+        $scope.checkRelativeDistanceSensor = '';
         $scope.tableHeader = [];
         $scope.activeItems = [];
         for (let i = 0; i < $scope.tableStats.length; i++) {
@@ -1395,13 +1397,21 @@ angular
             const id = $scope.tableStats[i].pointId;
              $scope.sensorType = $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
             localStorage.setItem("aTreeNodeId", id);
-            console.log($scope.sensorType,'id sorbmc')
             localStorage.setItem("sensorId", $scope.sensorType);
-            const interval = $scope.rollup.value;
-            const fold = $scope.tableStats[i].fold.value;
-            const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
-            let queryInfo = { query: query, index: i };
-            $scope.queriesArray.push(queryInfo);
+
+            sensor_name = $scope.tableStats[i].currentMeasurement.id_name;
+            $scope.checkRelativeDistanceSensor = $scope.tableStats[i].currentMeasurement.id_name;
+            if($scope.checkRelativeDistanceSensor == "Relative Distance"){
+                
+                const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+                let queryInfo = { query: query , index: i };
+                $scope.queriesRelativeDistalceArray.push(queryInfo);
+            }else{
+                
+                const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+                let queryInfo = { query: query , index: i };
+                $scope.queriesArray.push(queryInfo);
+            }
           }
         }
 

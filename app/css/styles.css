@@ -11527,4 +11527,165 @@ table.homemaptable .bottom-cl td:last-child{
 .mhole-mobile .buttons{
     padding: 0 15px;
 }
+
+
+
+/* 21 august */
+.alartNo {
+    display: none;
+}
+
+
+.mhole-mobile .mhole-content .mhole-alert.boundaryOne label,.mhole-mobile .mhole-content .mhole-alert.boundaryTwo label {
+    border: 3px solid red;
+}
+
+.mhole-mobile .mhole-content .mhole-alert.boundaryOne input#fullValue, .mhole-mobile .mhole-content .mhole-alert.boundaryTwo input#emptyValue {
+    border: 3px solid red;
+    border-radius: 0;
+}
+.mhole-mobile .alert-input button.addbtn {
+    background: orange;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    padding: 10px 15px;
+    max-width: 150px;
+    width: 100%;
+    margin-top: 15px;
+    border: 3px solid transparent;
+    font-weight: bold;
+    margin-left: 20px;
+    font-size: 20px;
+}
+.mhole-mobile .alert-input button.delbtn {
+    background: red;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    padding: 10px 15px;
+    max-width: 150px;
+    width: 100%;
+    margin-top: 15px;
+    border: 3px solid transparent;
+    font-weight: bold;
+    margin-right: 20px;
+    font-size: 20px;
+}
+.mhole-mobile .alert-input button.disable-alert {
+    background: grey;
+    color: #cbcbcb;
+    border: 3px solid #212121;
+    pointer-events: none;
+}
+.mhole-mobile .alert-checkbox+.buttons input {
+    max-width: 250px;
+    width: 100% !important;
+    border-radius: 5px !important;
+}
+.mhole-mobile .alert-checkbox+.buttons input.save-btn.submit__btn{
+    border: 3px solid #2f782f;
+}
+.mhole-mobile .alert-checkbox+.buttons input.cancel-btn.reset__btn{
+    border: 3px solid #970d0d;
+}
+.mhole-mobile .alert-checkbox+.buttons {
+    flex-direction: column !important;
+    gap: 5px;
+    margin-top: 20px;
+}
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
   
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  /* The Close Button */
+
+  div#myModal2 {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    height: 400px;
+    width: 300px;
+    background: white;
+    margin: auto;
+    right: 0;
+    bottom: 0;
+    border: 1.5px solid orange;
+    border-radius: 10px 10px 30px 30px;
+    box-shadow: 3rem 3rem 10rem 10rem rgba(0,0,0,.175);
+    overflow: hidden;
+    display: none;
+  }
+
+  .sec-head {
+    padding: 20px 10px;
+    background: orange;
+    color: #fff;
+    text-align: center;
+    padding-top: 40px;
+}
+
+.sec-head h3 {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.modal2-content-wrp label {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.modal2-content-wrp input {
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.modal2-content-wrp {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 15px;
+    margin-top: 20px;
+}
+.modal-submit{
+    background: rgb(91 180 91);
+    color: #fff;
+    font-size: 20px;
+    border-radius: 6px;
+    padding: 4px 30px;
+    border: 3px solid #2f782f;
+}
+.modal-close{
+    background: #b40505;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 6px;
+    padding: 4px 22px;
+    border: 3px solid #970d0d;
+}
+
+.alertLight {
+    opacity: 0.5;
+}
+
