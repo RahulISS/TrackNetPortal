@@ -94,7 +94,7 @@
 							<br>{{item.address}}</td>
 					<td class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ item.relative_distance }}% </td>
 					<!-- <td></td> -->
-					<td class="changeMouse" ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }" >{{item.angle}}</td>
+					<td class="changeMouse" ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }" >{{item.angle}} deg</td>
 					<td class="changeMouse" ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered' }">{{item.oldest_comm_date}}</td>
 				</tr></a>
 			</tbody>
@@ -116,45 +116,45 @@
 								<img src="img/inner-image.png" alt="">
 								</div>
 								<div class="mhole-content">
-								<div class="mhole-text">
-									<p>TracNet Sensor</p>
-								</div>
-								<div class="mhole-alert boundaryOne">
-									<label for="">Full (100%)</label>
-									<input type="number" ng-readonly="isReadOnly" min="400" name="fullValue" id="fullValue" placeholder="400 mm" value="{{pointSettingData.full}}">
-									<span id="errorname" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
-								</div> 
-								<div class="mhole-alert traingles {{addClass}}" ng-show="showAlert1" >
-									<label for="" ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
-									<input type="number" ng-readonly="isReadOnly" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm" value="{{pointSettingData.alarm1}}">
-								</div>
-								<div class="mhole-alert squares {{addClass}}" ng-show="showAlert2">
-									<label for="" ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
-									<input type="number" ng-readonly="isReadOnly" name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm" value="{{pointSettingData.alarm2}}">
-								</div>
-								<div class="mhole-alert circles {{addClass}}" ng-show="showAlert3">
-									<label for="" ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
-									<input type="number" ng-readonly="isReadOnly" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm" value="{{pointSettingData.alarm3}}">
-								</div>
-								<div class="mhole-alert boundaryTwo">
-									<label for="">Empty (0%)</label>
-									<input type="number" ng-readonly="isReadOnly" name="emptyValue" max="3998" id="emptyValue" placeholder="3998 mm" value="{{pointSettingData.empty}}">
-									<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
-								</div>
+									<div class="mhole-text">
+										<p>TracNet Sensor</p>
+									</div>
+									<div class="mhole-alert boundaryOne">
+										<label for="">Full (100%)</label>
+										<input type="number" ng-readonly="isReadOnly" min="400" name="fullValue" id="fullValue" placeholder="400 mm" value="{{pointSettingData.full}}">
+										<span id="errorname" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
+									</div> 
+									<div class="mhole-alert traingles {{addClass}}" ng-show="showAlert1" >
+										<label for="" ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
+										<input type="number" ng-readonly="isReadOnly" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm" value="{{pointSettingData.alarm1}}">
+									</div>
+									<div class="mhole-alert squares {{addClass}}" ng-show="showAlert2">
+										<label for="" ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
+										<input type="number" ng-readonly="isReadOnly" name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm" value="{{pointSettingData.alarm2}}">
+									</div>
+									<div class="mhole-alert circles {{addClass}}" ng-show="showAlert3">
+										<label for="" ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
+										<input type="number" ng-readonly="isReadOnly" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm" value="{{pointSettingData.alarm3}}">
+									</div>
+									<div class="mhole-alert boundaryTwo">
+										<label for="">Empty (0%)</label>
+										<input type="number" ng-readonly="isReadOnly" name="emptyValue" max="3998" id="emptyValue" placeholder="3998 mm" value="{{pointSettingData.empty}}">
+										<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
+									</div>
 								</div>
 								<div class="alert-input">								
 									<button type="button" class="addbtn {{disClass}}" id="myBtn2" ng-click="confirmCheck()"> Add Alert</button>
 									<button type="button" class="delbtn" ng-click="openDeleteWindow()"> Del. All</button>
 								</div>
 								<div class="alert-checkbox">
-								<div class="checkbox">
-									<input type="checkbox" class="hideBoundaries" name="" id="">
-									<label for="">Hide Boundaries</label>
-								</div>
-								<div class="checkbox">
-									<input type="checkbox" class="hideAlerts" name="" id="">
-									<label for="">Hide Alerts</label>
-								</div>
+									<div class="checkbox">
+										<input type="checkbox" class="hideBoundaries" name="" id="">
+										<label for="">Hide Boundaries</label>
+									</div>
+									<div class="checkbox">
+										<input type="checkbox" class="hideAlerts" name="" id="">
+										<label for="">Hide Alerts</label>
+									</div>
 								</div>
 								<div class="buttons">
 									<input type="button" value="Save Changes" ng-click="SavePoppupFormData()" class="save-btn submit__btn">
