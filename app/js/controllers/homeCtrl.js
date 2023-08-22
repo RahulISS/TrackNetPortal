@@ -4,7 +4,7 @@ angular
   .controller(
     "homeController",
     function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval,apiBaseUrl) {
-      /*TraNet yvw mobile portal*/
+      
       $scope.pointSettingData = '';
       $scope.emptyVal = 3998;
       $scope.fullVal = 400;
@@ -272,7 +272,8 @@ angular
                   var dis_color_rank = 1;
                   var dis_color = "Red";
                 }
-                if (data.point.height < data.point.distance_alert ) {
+
+                if (data.point.height < data.point.distance_alert) {
                   var distance_alarm_tr = "Distance alert Triggered";
                   var dis_color_rank = 2;
                   var dis_color = "yellow";
@@ -389,7 +390,8 @@ angular
                   movedAlarm: data.point.moved_alarm,
                   signalStrength: data.point.signal_strength,
                   temperature: data.point.temperature,
-                  ts: data.ts, 
+                  ts: data.ts,
+                  height: data.point.height,
                 };
 
                 convertedData.push(convertedPoint);
@@ -399,26 +401,30 @@ angular
             const mergedArray = convertedData.map(item1 => {
               const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
                 if (matchingItem2) {
-                  var point_alt = JSON.parse(matchingItem2.distance_alert);
-                    return { ...item1, 
-                      totalAlerts: JSON.parse(matchingItem2.distance_alert), 
-                      aCheck1: point_alt.alarmFirstCheck??0, 
-                      aCheck2: point_alt.alarmSecondCheck??0, 
-                      aCheck3: point_alt.alarmThirdCheck??0,
-                      alertOne: (point_alt.alert1)?parseInt(point_alt.alert1):400,
-                      alertTwo: (point_alt.alert2)?parseInt(point_alt.alert2):400,
-                      alertThree: (point_alt.alert3)?parseInt(point_alt.alert3):400,
-                      empty: (point_alt.empty)?parseInt(point_alt.empty):3998,
-                      full: (point_alt.full)?parseInt(point_alt.full):400,
-                      relative_distance: Math.round(((( (point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)-(item1.distance - (point_alt.full)?parseInt(point_alt.full):400 )) / ((point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)) * 100),
-                    };
+                  if(matchingItem2.distance_alert !== null){
+                    var point_alt = JSON.parse(matchingItem2.distance_alert);
+                  }else{
+                    var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
+                  }
+                      return { ...item1, 
+                        totalAlerts: point_alt, 
+                        aCheck1: point_alt.alarmFirstCheck??0, 
+                        aCheck2: point_alt.alarmSecondCheck??0, 
+                        aCheck3: point_alt.alarmThirdCheck??0,
+                        alertOne: (point_alt.alert1)?parseInt(point_alt.alert1):400,
+                        alertTwo: (point_alt.alert2)?parseInt(point_alt.alert2):400,
+                        alertThree: (point_alt.alert3)?parseInt(point_alt.alert3):400,
+                        empty: (point_alt.empty)?parseInt(point_alt.empty):3998,
+                        full: (point_alt.full)?parseInt(point_alt.full):400,
+                        relative_distance: Math.round(((( (point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)-(item1.distance - (point_alt.full)?parseInt(point_alt.full):400 )) / ((point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)) * 100),
+                      };
                 }
                 return item1;
             });
             
             const aLocation = mergedArray;
             $scope.dataLocation = aLocation;
-
+console.log(mergedArray);
             
             const sorter = (a, b) => {
               return a.last_communication - b.last_communication;
@@ -799,25 +805,27 @@ angular
             content.setAttribute("id", "infoBox_" + nodeID.split(" ")[0]);
 
             let tempInnerHTML ="<b>" + node.installationName + "</b><table class='homemaptable'>";
-            if(res.data.data.distance_percentage){
-            tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ res.data.data.distance_percentage+"%</td></tr>";}
             
             for (let i = 0; i < readings.length; i++) {
-              // if (readings[i].id_name == "Distance") {
-              //   var sdistance = String(readings[i].hisEndVal);
-              //   sdistance = sdistance.replace(/ mm/g, '');
+              if (readings[i].id_name == "Distance") {
+                var sdistance = String(readings[i].hisEndVal);
+                sdistance = sdistance.replace(/ mm/g, '');
 
-              //   var  relativeDistance = Math.round(((( (getTableAlert && getTableAlert.empty)?parseInt(getTableAlert.empty):3998 - (getTableAlert && getTableAlert.full)?parseInt(getTableAlert.full):400)-(parseInt(sdistance) - (getTableAlert && getTableAlert.full)?parseInt(getTableAlert.full):400 )) / ((getTableAlert && getTableAlert.empty)?parseInt(getTableAlert.empty):3998 - (getTableAlert && getTableAlert.full)?parseInt(getTableAlert.full):400)) * 100);
-              //   if(relativeDistance < 0){
-              //     relativeDistance = 0;
-              //   }
-              //   if(relativeDistance > 100){
-              //     relativeDistance = 100;
-              //   }
-              //   tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ relativeDistance+"%</td></tr>";
+                if(getTableAlert !== null && 'full' in getTableAlert){
+                  var  relativeDistance = Math.round(((( parseInt(getTableAlert.empty) - parseInt(getTableAlert.full))-(parseInt(sdistance) - parseInt(getTableAlert.full) )) / (parseInt(getTableAlert.empty) - parseInt(getTableAlert.full))) * 100);
+                }else{
+                  var  relativeDistance =  Math.round((((3998 - 400)-(parseInt(sdistance) - 400)) / (3998 - 400)) * 100);
+                }
+                if(relativeDistance < 0){
+                  relativeDistance = 0;
+                }
+                if(relativeDistance > 100){
+                  relativeDistance = 100;
+                }
+                tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ relativeDistance+"%</td></tr>";
 
             
-              // }
+              }
               if (readings[i].id_name == "Battery Voltage") {
                 tempInnerHTML =
                   tempInnerHTML +
@@ -841,7 +849,7 @@ angular
 
             tempInnerHTML =
               tempInnerHTML +
-              "<tr><td>TracNet IMEI</td><td>"+ res.data.data.device_id  +"</td></tr> <tr ><td colspan='2'><i>Last Updated "+ res.data.data.date+" ago</i></td></tr> <tr style='background: #ececec;'><td colspan='2'><div ><p  style='height:50px;width:100%;padding: 24px; color: black;margin: 0; cursor: pointer;text-align: left;'> Manhole Specifications </p></div><div style='gap: 10px; margin: -40px 0px 0px 160px;height: 40px;width: 40px;'><img ng-click='poppupForm()' src='./img/free-pencil-icon-9435.png'/ style='height:40px;width:40px;transform: rotate(90deg);padding: 10px; background: #3255a2;border-radius: 5px;margin: 0; cursor: pointer;'></div>";
+              "<tr><td>TracNet IMEI</td><td>"+ res.data.data.device_id  +"</td></tr> <tr ><td colspan='2'><i>Last Updated "+ res.data.data.date+" ago</i></td></tr> <tr style='background: #ececec;'><td colspan='2'><div ><p  style='height:50px;width:100%;padding: 24px; color: black;margin: 0; cursor: pointer;text-align: left;'> Manhole Specifications </p></div><div style='gap: 10px; margin: -40px 0px 0px 160px;height: 40px;width: 40px;'><img ng-click='poppupForm()' src='./img/icon1-01.svg'/ style='cursor: pointer;'></div>";
            
               
               if(res.data.status==true)
@@ -988,7 +996,6 @@ angular
       }
       
       $scope.openDeleteWindow = function() {
-        console.log("test")
         $scope.deleteModel = true;
         if( $scope.pointSettingData ) {
           if($scope.pointSettingData.alarmFirstCheck == 0 ) {

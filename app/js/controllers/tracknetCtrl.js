@@ -230,6 +230,7 @@ angular
         if (newDate == undefined) return;
         $("#singleDate span").html(moment(newDate).format(dataPickerFormat));
         $scope.loadData(true);
+        loadRelativeDistance();
       });
       $scope.nextPrevClick = function (direction) {
         let start = localStorage.getItem("singleDate");
@@ -275,12 +276,20 @@ angular
         $http
           .get(apiUrl, {headers:customeHeader})
           .then(function (res) {
-            const response = res.data.data;
+            const response = res.data.data;            
+            const response_pointDis = res.data.pointDis;
             
-            var convertedData = [];
+            var allconvertedData = [];
 
-            for (var i = 0; i < response.length; i++) {
+            for (var i = response.length - 1; i > 0; i--) {
               var data = response[i];
+              var objectId = data._id.$oid;
+
+              var existingObject = allconvertedData.find(
+                (obj) => obj.locationID === objectId
+              );
+
+              if (!existingObject) {
 
               if (data.point.angle > 5) {
                 var angleColorRank = 1;
@@ -395,9 +404,29 @@ angular
                   tz: data.location.tz,
                 },
               };
-
-              convertedData.push(convertedPoint);
+              allconvertedData.push(convertedPoint);
             }
+          }
+
+          const convertedData = allconvertedData.map(item1 => {
+            const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
+              if (matchingItem2) {
+                var point_alt = JSON.parse(matchingItem2.distance_alert);
+                  return { ...item1, 
+                    totalAlerts: JSON.parse(matchingItem2.distance_alert), 
+                    aCheck1: point_alt.alarmFirstCheck??0, 
+                    aCheck2: point_alt.alarmSecondCheck??0, 
+                    aCheck3: point_alt.alarmThirdCheck??0,
+                    alertOne: (point_alt.alert1)?parseInt(point_alt.alert1):400,
+                    alertTwo: (point_alt.alert2)?parseInt(point_alt.alert2):400,
+                    alertThree: (point_alt.alert3)?parseInt(point_alt.alert3):400,
+                    empty: (point_alt.empty)?parseInt(point_alt.empty):3998,
+                    full: (point_alt.full)?parseInt(point_alt.full):400,
+                    relative_distance: Math.round(((( (point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)-(item1.distance - (point_alt.full)?parseInt(point_alt.full):400 )) / ((point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)) * 100),
+                  };
+              }
+              return item1;
+          });
 
             for (i = 0; i < convertedData.length; i++) {
               if ($scope.device[convertedData[i].serialNumber] == undefined)
@@ -430,7 +459,9 @@ angular
                 };
               });
 
+
               $q.all(promises_data).then(function (responses) {
+        
                 if (responses.length !== queriesArray.length) return;
                 for (let j = 0; j < responses.length; j++) {
                   if (initset && !isIwOpen() && j == 0) {
@@ -552,8 +583,19 @@ angular
         }
         if (info.distance > 3998){
           distance_value = "";
-          
         }
+
+        if(info.totalAlerts !=undefined){
+          console.log("v",info.full,info.empty,info.totalAlerts,"l");
+        var relativeDistanceCal = Math.round((((info.empty - info.full)-(info.distanceValue - info.full)) / (info.empty - info.full)) * 100)
+        if(relativeDistanceCal < 0){
+            relativeDistanceCal = 0;
+        }
+        if(relativeDistanceCal > 100){
+            relativeDistanceCal = 100;
+        }
+      }
+
 
         marker.content =
           '<div class="infoWindowContent">' +
@@ -573,6 +615,7 @@ angular
             maximumFractionDigits: info.decimalPlaces,
           }) +
           " mm<br>" +
+          "<b>Relative Distance: </b>" + relativeDistanceCal + ' %<br>' +
           "<b>Angle: </b>" +
           info.angle +
           " deg<br>" +
@@ -606,6 +649,7 @@ angular
           " " +
           timee +
           '</span> <span class="data-date"></span> </li>' +
+           '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Relative Distance: </span>' + relativeDistanceCal + ' % <span class="data-date"></span> </li>' +
           '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Distance:</span> ' +
           distance_value.toLocaleString(undefined, {
             maximumFractionDigits: info.decimalPlaces,
@@ -1240,7 +1284,147 @@ angular
         }
       };
 
+  
+
+      $scope.relativedistance = {
+        options: {
+            chart : {
+                type: 'column',
+                height: 230,
+            },
+            yAxis: {
+                min: 0,
+                max: 100,
+                labels: {
+                    formatter: function(v) {
+                        return v.value + "%";
+                    }
+                },
+                title: {
+                    text : ''
+                }
+            },
+            xAxis: {
+                labels: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    return formatRDToolTip(this);
+                }
+            },
+            plotOptions: {
+                column: {
+                    events: {
+                        click: function(e) {
+                            columnRDClick(e);
+                        }
+                    }
+                }
+            },
+            legend: {
+                enabled: false,
+            }
+        },
+        series: [
+            {
+                name: "test",
+                data : []
+            }
+        ],
+        title: {
+            text: ""
+        }
+    }
+
+    $scope.relativedistance = {
+        options: {
+            chart : {
+                type: 'column',
+                height: 230,
+            },
+            yAxis: {
+                min: 0,
+                max: 100,
+                labels: {
+                    formatter: function(v) {
+                        return v.value + "%";
+                    }
+                },
+                title: {
+                    text : ''
+                }
+            },
+            xAxis: {
+                labels: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    return formatRDToolTip(this);
+                }
+            },
+            plotOptions: {
+                column: {
+                    events: {
+                        click: function(e) {
+                            columnRDClick(e);
+                        }
+                    }
+                }
+            },
+            legend: {
+                enabled: false,
+            }
+        },
+        series: [
+            {
+                name: "test",
+                data : []
+            }
+        ],
+        title: {
+            text: ""
+        }
+    }
+
+    function loadRelativeDistance () {
+
+      // 
+
+        const date = localStorage.getItem('singleDate');
+        Data.sendRequest(`temp_relative( read( aPortal and aCustomerRef->id_name == "Gold Coast Water" and id_name == "sewerage demo" )->id, ${date}..${date})` ,$rootScope.storage.skysparkVersion).then((response) => {
+            const rowsData = response.data.rows;
+            const allSeriesData = [];
+            for (var i=0; i < rowsData.length; i++){
+                if(1*rowsData[i]?.val_full>0) allSeriesData.push({y : rowsData[i]?.val_full , myData : rowsData[i], color: "#3255A2"});
+            }
+            $scope.relativedistance.series[0].data = allSeriesData;
+            if($scope.$parent && $scope.$parent.relativedistance){
+                $scope.$parent.relativedistance.series[0].data = allSeriesData;
+            }
+            const relativedistancechart = $('#relativedistance').highcharts();
+            relativedistancechart.series[0].update({
+                data: allSeriesData
+            });
+        });
+    }
+
+
+
       function formatRDToolTip(pointClicked) {
+
+        console.log(pointClicked,"myaaa");
+        return false;
+
         const data = pointClicked.point.myData;
         const x = pointClicked.x;
         return (
@@ -1248,7 +1432,7 @@ angular
           ", " +
           data.street +
           ", " +
-          data.val_full +
+          data.full +
           "%"
         );
       }
