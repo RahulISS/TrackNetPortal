@@ -124,19 +124,19 @@
 									<div class="mhole-alert traingles {{addAlt1Class}}" ng-show="showAlert1" >
 										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
 										<label ng-if="activeBtn == false" for="">Alert</label>
-										<input type="number" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm"  ng-change="onInputChange('alert1')" value="{{pointSettingData.alarmFirst}}">
+										<input type="number" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm"  ng-change="onInputChange('alert1')" value="{{pointSettingData.alert1}}">
 										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt1 }}</span>
 									</div>
 									<div class="mhole-alert squares {{addAlt2Class}}" ng-show="showAlert2">
 										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
 										<label ng-if="activeBtn == false" for="">Alert</label>
-										<input type="number"  name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm"  ng-change="onInputChange('alert2')" value="{{pointSettingData.alarmSecond}}">
+										<input type="number"  name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm"  ng-change="onInputChange('alert2')" value="{{pointSettingData.alert2}}">
 										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt2 }}</span>
 									</div>
 									<div class="mhole-alert circles {{addAlt3Class}}" ng-show="showAlert3">
 										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
 										<label ng-if="activeBtn == false" for="">Alert</label>
-										<input type="number" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm"  ng-change="onInputChange('alert3')" value="{{pointSettingData.alarmThird}}">
+										<input type="number" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm"  ng-change="onInputChange('alert3')" value="{{pointSettingData.alert2}}">
 										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt3 }}</span>
 									</div>
 									<div class="mhole-alert boundaryTwo">
