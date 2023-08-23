@@ -283,10 +283,10 @@ angular
 
             for (var i = response.length - 1; i > 0; i--) {
               var data = response[i];
-              var objectId = data._id.$oid;
+              var objectId = data.product.id_serial;
 
               var existingObject = allconvertedData.find(
-                (obj) => obj.locationID === objectId
+                (obj) => obj.serialNumber === objectId
               );
 
               if (!existingObject) {
@@ -318,8 +318,7 @@ angular
               }
 
               if (
-                data.point.height < data.point.distance_alert &&
-                data.point.alert_enable == 1
+                data.point.height < data.point.distance_alert
               ) {
                 var distance_alarm_tr = "Distance alert Triggered";
                 var dis_color_rank = 2;
@@ -411,9 +410,13 @@ angular
           const convertedData = allconvertedData.map(item1 => {
             const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
               if (matchingItem2) {
-                var point_alt = JSON.parse(matchingItem2.distance_alert);
+                if(matchingItem2.distance_alert !== null){
+                  var point_alt = JSON.parse(matchingItem2.distance_alert);
+                }else{
+                  var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
+                }
                   return { ...item1, 
-                    totalAlerts: JSON.parse(matchingItem2.distance_alert), 
+                    totalAlerts: point_alt, 
                     aCheck1: point_alt.alarmFirstCheck??0, 
                     aCheck2: point_alt.alarmSecondCheck??0, 
                     aCheck3: point_alt.alarmThirdCheck??0,
@@ -427,7 +430,6 @@ angular
               }
               return item1;
           });
-
             for (i = 0; i < convertedData.length; i++) {
               if ($scope.device[convertedData[i].serialNumber] == undefined)
                 $scope.device[convertedData[i].serialNumber] = [];
@@ -438,8 +440,7 @@ angular
 
             var i = 0;
             for (var index in $scope.device) {
-              i++;
-             
+                          
               if ($scope.device[index].length) {
                 if(convertedData[i]) {
                   queriesArray.push({
@@ -509,26 +510,85 @@ angular
         return getmap !== null && typeof getmap !== "undefined";
       }
 
+      function closest(array, num) {
+        var i = 0;
+        var minDiff = 1000;
+        var ans;
+        for (i in array) {
+          var m = Math.abs(num - array[i]);
+          if (m < minDiff) {
+            minDiff = m;
+            ans = array[i];
+          }
+        }
+        return ans;
+    }
+
+    function getObjectKey(obj, value) {
+        return Object.keys(obj).find(key => obj[key] === value);
+    }
+
       function getMarkerColor(info) {
-        if (info.disColorRank == 3 && info.angleColorRank == 3)
-          return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-        if (info.disColorRank == 3 && info.angleColorRank == 1)
-          return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 1 && info.angleColorRank == 3)
-          return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 1 && info.angleColorRank == 1)
-          return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 1 && info.angleColorRank == 2)
-          return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 2 && info.angleColorRank == 1)
-          return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 2 && info.angleColorRank == 2)
-          return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
-        if (info.disColorRank == 2 && info.angleColorRank == 3)
-          return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
-        if (info.disColorRank == 3 && info.angleColorRank == 2)
-          return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
-      }
+        let alertArr = [];
+        if( info.alertCheck1 == 1) {
+            alertArr.push(info.alertOne);
+        }
+        if( info.alertCheck2 == 1) {
+            alertArr.push(info.alertTwo);
+        }
+        if( info.alertCheck3 == 1) {
+            alertArr.push( info.alertThree);
+        }
+
+        let dict = {
+            'al1': info.alertOne,
+            'al2': info.alertTw0,
+            'al3': info.alertThree
+        }
+        //console.log(info, "info")
+        if(info.disColorRank == 3 && info.angleColorRank == 3) return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+        if(info.disColorRank == 3 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+        if(info.disColorRank == 1 && info.angleColorRank == 3) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+        if(info.disColorRank == 1 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+        if(info.disColorRank == 1 && info.angleColorRank == 2) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+        if(info.disColorRank == 2 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+        if(info.disColorRank == 2 && info.angleColorRank == 2) {
+            var value = closest( alertArr , dict.distance);
+			var result = getObjectKey(dict, value);
+            console.log(value, result)
+			if( result == 'al3') {
+				imgpath = './img/triangle-01.png';
+			}
+
+			if( result == 'al2') {
+				imgpath = './img/square-01.png';
+			}
+
+			if( result == 'al1' ) {
+				imgpath = './img/circle-01.png';
+			}
+            return imgpath;
+        }
+        if(info.disColorRank == 2 && info.angleColorRank == 3) {
+            var value = closest( alertArr , info.distance);
+			var result = getObjectKey(dict, value);
+           
+			if( result == 'al3') {
+				imgpath = './img/triangle-01.png';
+			}
+
+			if( result == 'al2') {
+				imgpath = './img/square-01.png';
+			}
+
+			if( result == 'al1' ) {
+				imgpath = './img/circle-01.png';
+			}
+            return imgpath;
+        } 
+        if(info.disColorRank == 3 && info.angleColorRank == 2) return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+       
+    }
 
       const convertDateStringToISOString = function (dateString) {
         const dateArray = dateString.split("_");
@@ -585,15 +645,35 @@ angular
           distance_value = "";
         }
 
+
+        var distanceHeight = parseInt(info.distanceValue);
+                if (distanceHeight > 3998) {
+                  distanceHeight = "";
+                }
+                if (distanceHeight < 400) {
+                  distanceHeight = 400; 
+                }
+
         if(info.totalAlerts !=undefined){
-          console.log("v",info.full,info.empty,info.totalAlerts,"l");
-        var relativeDistanceCal = Math.round((((info.empty - info.full)-(info.distanceValue - info.full)) / (info.empty - info.full)) * 100)
+
+        var relativeDistanceCal = Math.round((((info.empty - info.full)-(distanceHeight - info.full)) / (info.empty - info.full)) * 100)
         if(relativeDistanceCal < 0){
             relativeDistanceCal = 0;
         }
         if(relativeDistanceCal > 100){
             relativeDistanceCal = 100;
         }
+      }else{
+
+        var relativeDistanceCal = Math.round((((3998 - 400)-(distanceHeight - 400)) / (3998 - 400)) * 100)
+        if(relativeDistanceCal < 0){
+          console.log(info.distanceValue,info,"height");
+            relativeDistanceCal = 0;
+        }
+        if(relativeDistanceCal > 100){
+            relativeDistanceCal = 100;
+        }
+
       }
 
 
@@ -903,10 +983,18 @@ angular
             apiBaseUrl+"newtraknetApiList", {headers:customeHeader}
           )
           .then(function (res) {
-            const response = res.data.data;
-            var convertedAlertCountData = [];
-            for (var i = response.length - 1; i >= 0; i--) {
+            const response = res.data.data;               
+            const response_pointDis = res.data.pointDis;
+            var allconvertedDatas = [];
+            for (var i = response.length - 1; i > 0; i--) {
               var data = response[i];
+              var objectId = data._id.$oid;
+
+              var existingObject = allconvertedDatas.find(
+                (obj) => obj.locationID === objectId
+              );
+
+              if (!existingObject) {
               if ( Number(data.point.angle) > 5) {
                 var angleColorRank = 1;
                 var angleColor = "Red";
@@ -930,7 +1018,7 @@ angular
               }
               if ("distance_alert" in data.point) {
                 var distanceAlertValue = parseInt(data.point.distance_alert);
-                if (distanceAlertValue != "undefined" && Number(data.point.height) < distanceAlertValue && data.point.alert_enable ==  1 ) {
+                if (distanceAlertValue != "undefined" && Number(data.point.height) < distanceAlertValue  ) {
                   var dis_color_rank = 2;
                   var dis_color = "Yellow";
                   var distance_alarm_tr = "Distance alert Triggered";
@@ -944,7 +1032,7 @@ angular
                   status = "Angle alarms triggered";
                 } else if ( Number(data.point.height) < 300 && Number(data.point.angle) > 5) {
                   status = "all alarms triggered";
-                } else if ("distance_alert" in data.point && Number(data.point.height) < distanceAlertValue && data.point.alert_enable ==  1) {
+                } else if ("distance_alert" in data.point && Number(data.point.height) < distanceAlertValue ) {
                   status = "Distance alert triggered";
                 } else {
                   status = "all clear";
@@ -1033,8 +1121,32 @@ angular
                 time: timeDate + " hours ago",
               };
 
-              convertedAlertCountData.push(convertedAlertCountPoint);
+              allconvertedDatas.push(convertedAlertCountPoint);
             }
+          }
+          const convertedAlertCountData = allconvertedDatas.map(item1 => {
+            const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
+              if (matchingItem2) {
+                if(matchingItem2.distance_alert !== null){
+                  var point_alt = JSON.parse(matchingItem2.distance_alert);
+                }else{
+                  var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
+                }
+                  return { ...item1, 
+                    totalAlerts: point_alt, 
+                    aCheck1: point_alt.alarmFirstCheck??0, 
+                    aCheck2: point_alt.alarmSecondCheck??0, 
+                    aCheck3: point_alt.alarmThirdCheck??0,
+                    alertOne: (point_alt.alert1)?parseInt(point_alt.alert1):400,
+                    alertTwo: (point_alt.alert2)?parseInt(point_alt.alert2):400,
+                    alertThree: (point_alt.alert3)?parseInt(point_alt.alert3):400,
+                    empty: (point_alt.empty)?parseInt(point_alt.empty):3998,
+                    full: (point_alt.full)?parseInt(point_alt.full):400,
+                    relative_distance: Math.round(((( (point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)-(item1.distance - (point_alt.full)?parseInt(point_alt.full):400 )) / ((point_alt.empty)?parseInt(point_alt.empty):3998 - (point_alt.full)?parseInt(point_alt.full):400)) * 100),
+                  };
+              }
+              return item1;
+          });
             
             var uniqueDataCount = [];
             var deviceIds = new Set(); // Using a Set to store unique device_ids
@@ -1398,32 +1510,33 @@ angular
 
     function loadRelativeDistance () {
 
-      // 
-
         const date = localStorage.getItem('singleDate');
-        Data.sendRequest(`temp_relative( read( aPortal and aCustomerRef->id_name == "Gold Coast Water" and id_name == "sewerage demo" )->id, ${date}..${date})` ,$rootScope.storage.skysparkVersion).then((response) => {
-            const rowsData = response.data.rows;
-            const allSeriesData = [];
-            for (var i=0; i < rowsData.length; i++){
-                if(1*rowsData[i]?.val_full>0) allSeriesData.push({y : rowsData[i]?.val_full , myData : rowsData[i], color: "#3255A2"});
-            }
-            $scope.relativedistance.series[0].data = allSeriesData;
-            if($scope.$parent && $scope.$parent.relativedistance){
-                $scope.$parent.relativedistance.series[0].data = allSeriesData;
-            }
-            const relativedistancechart = $('#relativedistance').highcharts();
-            relativedistancechart.series[0].update({
-                data: allSeriesData
-            });
+        $http.get(apiBaseUrl+"tracnet-chart", {headers:customeHeader}).then(function (res) {
+          const rowsData = res.data.data;
+    
+          const allSeriesData = [];
+          for (var i=0; i < rowsData.length; i++){
+              if(1*rowsData[i]?.val_full>0) allSeriesData.push({y : rowsData[i]?.val_full , myData : rowsData[i], color: "#3255A2"});
+          }
+          $scope.relativedistance.series[0].data = allSeriesData;
+          if($scope.$parent && $scope.$parent.relativedistance){
+              $scope.$parent.relativedistance.series[0].data = allSeriesData;
+          }
+
+
+          const relativedistancechart = $('#relativedistance').highcharts();
+          relativedistancechart.series[0].update({
+              data: allSeriesData
+          });
+
         });
+
+
     }
 
 
 
       function formatRDToolTip(pointClicked) {
-
-        console.log(pointClicked,"myaaa");
-        return false;
 
         const data = pointClicked.point.myData;
         const x = pointClicked.x;
@@ -1432,7 +1545,7 @@ angular
           ", " +
           data.street +
           ", " +
-          data.full +
+          data.val_full +
           "%"
         );
       }
@@ -1447,8 +1560,8 @@ angular
       $scope.weatherData = function () {
         Data.getRequest().then((response) => {
           $scope.res = response.data;
-          $scope.dynamicCity = $scope.res.location.name;
-          $scope.dynamicState = $scope.res.location.state;
+          $scope.dynamicCity = ($scope.res.location)?$scope.res.location.name:'';
+          $scope.dynamicState = ($scope.res.location)?$scope.res.location.state:'';
           $scope.temperature =
             $scope.res.observational.observations.temperature.temperature;
           $scope.humidity =
