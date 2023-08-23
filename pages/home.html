@@ -44,12 +44,9 @@
 	}
 	</style>
 <div class="homepage">
-	<div id="confirmBox" ng-show="deleteModel">
-		<button class="remove-button" ng-click="disableAlertModal()" data-dismiss="modal" aria-label="Close"> 
-			<span aria-hidden="true">×</span>
-		</button>
+	<div id="confirmBox">
 		<div class="message"></div>
-		<span class="button yes disable {{delClass}}">{{ btnValue }}</span>
+		<span class="button yes disable">{{ btnValue }}</span>
 		<span class="button no disable"> Delete</span>
 	</div>
 	<div class="withtree map-100" > 
@@ -121,30 +118,36 @@
 									</div>
 									<div class="mhole-alert boundaryOne">
 										<label for="">Full (100%)</label>
-										<input type="number" ng-readonly="isReadOnly" min="400" name="fullValue" id="fullValue" placeholder="400 mm" value="{{pointSettingData.full}}">
+										<input type="number" min="400" name="fullValue" id="fullValue" placeholder="400 mm" value="{{pointSettingData.full}}" ng-model="fullVal">
 										<span id="errorname" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
 									</div> 
-									<div class="mhole-alert traingles {{addClass}}" ng-show="showAlert1" >
-										<label for="" ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
-										<input type="number" ng-readonly="isReadOnly" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm" value="{{pointSettingData.alarm1}}">
+									<div class="mhole-alert traingles {{addAlt1Class}}" ng-show="showAlert1" >
+										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
+										<label ng-if="activeBtn == false" for="">Alert</label>
+										<input type="number" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm"  ng-change="onInputChange('alert1')" value="{{pointSettingData.alert1}}">
+										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt1 }}</span>
 									</div>
-									<div class="mhole-alert squares {{addClass}}" ng-show="showAlert2">
-										<label for="" ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
-										<input type="number" ng-readonly="isReadOnly" name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm" value="{{pointSettingData.alarm2}}">
+									<div class="mhole-alert squares {{addAlt2Class}}" ng-show="showAlert2">
+										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
+										<label ng-if="activeBtn == false" for="">Alert</label>
+										<input type="number"  name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm"  ng-change="onInputChange('alert2')" value="{{pointSettingData.alert2}}">
+										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt2 }}</span>
 									</div>
-									<div class="mhole-alert circles {{addClass}}" ng-show="showAlert3">
-										<label for="" ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
-										<input type="number" ng-readonly="isReadOnly" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm" value="{{pointSettingData.alarm3}}">
+									<div class="mhole-alert circles {{addAlt3Class}}" ng-show="showAlert3">
+										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
+										<label ng-if="activeBtn == false" for="">Alert</label>
+										<input type="number" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm"  ng-change="onInputChange('alert3')" value="{{pointSettingData.alert2}}">
+										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt3 }}</span>
 									</div>
 									<div class="mhole-alert boundaryTwo">
 										<label for="">Empty (0%)</label>
-										<input type="number" ng-readonly="isReadOnly" name="emptyValue" max="3998" id="emptyValue" placeholder="3998 mm" value="{{pointSettingData.empty}}">
+										<input type="number" name="emptyValue" max="3998" id="emptyValue" placeholder="3998 mm" value="{{pointSettingData.empty}}" ng-model="emptyVal">
 										<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
 									</div>
 								</div>
 								<div class="alert-input">								
 									<button type="button" class="addbtn {{disClass}}" id="myBtn2" ng-click="confirmCheck()"> Add Alert</button>
-									<button type="button" class="delbtn" ng-click="openDeleteWindow()"> Del. All</button>
+									<button type="button" class="delbtn {{delClass}}" ng-click="openDeleteWindow()"> Del. All</button>
 								</div>
 								<div class="alert-checkbox">
 									<div class="checkbox">
@@ -157,8 +160,8 @@
 									</div>
 								</div>
 								<div class="buttons">
-									<input type="button" value="Save Changes" ng-click="SavePoppupFormData()" class="save-btn submit__btn">
-									<input type="button" class="cancel-btn reset__btn" value="Cancel, Go Back" ng-click="closeModal()"/>
+									<input type="button" value="Save Changes" ng-click="SavePoppupFormData()" class="save-btn submit__btn disable">
+									<input type="button" class="cancel-btn reset__btn disable" value="Cancel, Go Back" ng-click="closeModal()"/>
 								</div>
 							</div>
 						</section>
@@ -171,15 +174,15 @@
 	<!--Add alert model starts-->
 	<div id="myModal2" class="modal2">
 		<div class="modal2-content">
-			<form action="" id="addAlertForm" name="LoginForm" >
+			<form id="addAlertForm"  method="post" name="addForm" ng-submit="addAlertValue()" autocomplete="off" >
 				<div class="sec-head">
 					<h3>Add a New Alert</h3>
 				</div>
 				<div class="modal2-content-wrp">
-					<label for="">Alert:</label>
-					<input type="number" id="alert" name="alert" ng-model="alert" autocomplete="off">
+					<label for="">Distance :</label>
+					<input type="number" id="alert" name="alert" ng-model="alert" autocomplete="off" placeholder="1000 mm" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
 					<span style="color:red; display:block; text-align:left; font-weight: bold;" ng-show="alertError">{{ errMsg }}</span>
-					<button type="button" class="modal-submit" ng-click="addAlertValue()">Add</button>
+					<button type="submit" class="modal-submit">Add</button>
 					<button type="button" class="close modal-close" ng-click="closeAddAlertModal()">Cancel, Go back</button>
 				</div>
 			</form>
