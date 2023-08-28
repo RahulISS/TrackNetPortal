@@ -234,7 +234,6 @@
                 <div class="ts-c">
                     <div class="btn_clps las_blocked">
                         <button id="btn_colps" ng-click="blockExpandRight=!blockExpandRight" class="SeeMore3"><img class="icon_clp" src="bootstrap5/img/expand.png" /></button>
-
                         <a class="openhis btn_open" style="float: right;" href="#" ng-click="loadData(false)" data-bs-toggle="modal" data-bs-target="#exampleModal">Open</a>
                     </div>
                     <div class="ul_li vides ctm-blc-1">
@@ -243,6 +242,17 @@
                         </div>
                         <div id="myDiv"></div>
                     </div>
+
+
+                    <div class="ul_li vides ctm-blc-1" >                       
+                        <div class="outer-block-4">
+                            <p>Relative Distance</p>
+                            <div class="chart">
+                                <highchart id="relativedistance" config="relativedistance"></highchart>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
