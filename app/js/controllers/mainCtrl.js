@@ -64,6 +64,13 @@ angular.module('mainCtrl', [])
                 $rootScope.storage.$reset();
                 $scope.refreshPage();
                 $state.go('login');
+            }) .catch(function (err) { // Corrected the syntax here
+                $window.localStorage.removeItem('authToken');
+                $rootScope.storage.loggedIn = false;
+                $rootScope.storage.authToken = false;
+                $rootScope.storage.$reset();
+                $scope.refreshPage();
+                $state.go('login');
             });
            
         }
