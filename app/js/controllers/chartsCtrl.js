@@ -1409,7 +1409,7 @@ angular
             $scope.checkRelativeDistanceSensor = $scope.tableStats[i].currentMeasurement.id_name;
             if($scope.checkRelativeDistanceSensor == "Relative Distance"){
                 
-                const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+                const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=64ae522eefa8baae8f106b9d&startDate=${startDate}&endDate=${endDate}&fold=actual`;
                 let queryInfo = { query: query , index: i };
                 $scope.queriesRelativeDistalceArray.push(queryInfo);
                 $scope.queryEmptyFull = apiBaseUrl+"getEmpltyFull/"+id_serial;
