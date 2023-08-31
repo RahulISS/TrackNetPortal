@@ -19,7 +19,8 @@ angular
       const skySparkFormat = "YYYY-MM-DD";
       const gridTickColor = "#b9b9b9";
       $scope.sensorType = "";
-
+      var fullAlarm = [];
+      var emptyAlarm = [];
       var currentLegend = 0;
 
       $scope.serverRequest = apiBaseUrl;
@@ -1185,6 +1186,7 @@ angular
       $scope.change = "Relative Distance";
       $scope.getVal = function () {
         $scope.change = $scope.selectedValue;
+        
       };
 
       $scope.selectedInsCount = 0;
@@ -1380,6 +1382,9 @@ angular
         }
       }
       var sensor_name = null;
+      $scope.queryEmptyFull = "";
+      $scope.fullAlarm = 0;
+      $scope.emptyAlarm = 0;
       function loadData() {
         var datespan = moment($rootScope.storage.chartsRangeStartDate).format( skySparkFormat ) + ".." + moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
         var startDate = moment($rootScope.storage.chartsRangeStartDate).format( skySparkFormat );
@@ -1395,6 +1400,7 @@ angular
           if ( $scope.tableStats[i].pointId !== "null" && $scope.tableStats[i].pointId !== null ) {
             $scope.activeItems.push(i);
             const id = $scope.tableStats[i].pointId;
+            const id_serial = $scope.tableStats[i].title;
              $scope.sensorType = $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
             localStorage.setItem("aTreeNodeId", id);
             localStorage.setItem("sensorId", $scope.sensorType);
@@ -1406,35 +1412,54 @@ angular
                 const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
                 let queryInfo = { query: query , index: i };
                 $scope.queriesRelativeDistalceArray.push(queryInfo);
+                $scope.queryEmptyFull = apiBaseUrl+"getEmpltyFull/"+id_serial;
+                
+                
             }else{
                 
                 const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+               
                 let queryInfo = { query: query , index: i };
                 $scope.queriesArray.push(queryInfo);
             }
           }
+          $http.get($scope.queryEmptyFull, {headers:customeHeader}).then(function (reqResult2) {
+             
+            const deviceData = reqResult2.data.data;
+            if( typeof deviceData === 'undefined') {
+              $scope.fullAlarm = 400;
+              $scope.emptyAlarm = 3998;
+          } else {
+              $scope.fullAlarm = deviceData.full;
+              $scope.emptyAlarm = deviceData.empty;
+          }
+            
+            console.log($scope.fullAlarm,'$scope.fullAlarm 1',$scope.emptyAlarm,'$scope.emptyAlarm 1')
+          });
+          
         }
-
+        
         if ($scope.queriesRelativeDistalceArray === undefined) {
         } else if ($scope.queriesRelativeDistalceArray.length === 0) {
             if($scope.queriesArray.length === 0) return;
             const promises_data1 = $scope.queriesArray.map(function (item) {
-                return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {                   
+                return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {           
                     return {
                         'index': item.index,
                         'data': reqResult
                     };
                 });
             })
+
             const data_completion = $q.all(promises_data1)
             data_completion.then(function (responses) {
                 if(responses.length === 0) return;
                 $scope.tableViewData = [];
-                for( let p = 0 ; p < responses[0].data.data.rows.length; p++){
-                   $scope.tableViewData.push( [ responses[0].data.data.rows[p].ts] ) 
+                for( let p = 0 ; p < responses[0].data.data.data.length; p++){
+                   $scope.tableViewData.push( [ responses[0].data.data.data[p].ts] ) 
                 }
                 for(let i = 0; i < responses.length; i++ ){
-                    const data = responses[i].data.data.rows;
+                    const data = responses[i].data.data.data;
                     if(sensor_name == "Distance") {
                         for(let k = data.length - 1; k >= 0; k--) {
                             if (data[k].v0 <= 400) {
@@ -1528,8 +1553,10 @@ angular
                 $scope.tableViewData = mergedArr.sort( (a,b) => a.ts < b.ts  );
             });
         } else {
-            if($scope.queriesRelativeDistalceArray.length === 0) return;
+            //if($scope.queriesRelativeDistalceArray.length === 1) return;
+
             const promises_data = $scope.queriesRelativeDistalceArray.map(function (item) {
+                
                 return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {
                    
                     return {
@@ -1537,16 +1564,21 @@ angular
                         'data': reqResult
                     };
                 });
+                 
             })
+            
+            
+            
             const data_completion = $q.all(promises_data)
             data_completion.then(function (responses) {
+            
                 if(responses.length === 0) return;
                 $scope.tableViewData = [];
-                for( let p = 0 ; p < responses[0].data.data.rows.length; p++){
-                   $scope.tableViewData.push( [ responses[0].data.data.rows[p].ts] ) 
+                for( let p = 0 ; p < responses[0].data.data.data.length; p++){
+                   $scope.tableViewData.push( [ responses[0].data.data.data[p].ts] ) 
                 }
                 for(let i = 0; i < responses.length; i++ ){
-                    const data = responses[i].data.data.rows;
+                    const data = responses[i].data.data.data;
                     if(sensor_name == "Distance") {
                         for(let k = data.length - 1; k >= 0; k--) {
                             if (data[k].v0 <= 400) {
@@ -1575,7 +1607,9 @@ angular
                         const xval = mmx.valueOf();
                         if(data[j].hasOwnProperty("v0")){
                             hasValue = true;
-                            var relativeDistance = Math.round((((3998-400)-(parseFloat(data[j].v0) - 400)) / (3998-400)) * 100);
+                            console.log($scope.fullAlarm,'$scope.fullAlarm',$scope.emptyAlarm,'$scope.emptyAlarm')
+                            var relativeDistance = Math.round(((($scope.emptyAlarm-$scope.fullAlarm)-(parseFloat(data[j].v0) - $scope.fullAlarm)) / ($scope.emptyAlarm-$scope.fullAlarm)) * 100);
+                           
                             if($scope.checkRelativeDistanceSensor == "Relative Distance"){
                                 if(relativeDistance < 0){
                                     relativeDistance = 0;
@@ -2114,9 +2148,9 @@ angular
               } else {
                 for (let index = 0; index < data.selected.length; index++) {
                   if (data.node.id === data.selected[index]) {
-                    scope.selectedValue = "Distance";
+                    scope.selectedValue = "Relative Distance";
                     $(this).jstree("disable_node", data.node);
-                    scope.selectedValue = "Distance";
+                    scope.selectedValue = "Relative Distance";
                   }
                 }
                 scope.$emit("checkedRef", data.node.text);

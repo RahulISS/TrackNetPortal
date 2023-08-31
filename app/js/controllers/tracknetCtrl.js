@@ -555,7 +555,6 @@ angular
         if(info.disColorRank == 2 && info.angleColorRank == 2) {
             var value = closest( alertArr , dict.distance);
 			var result = getObjectKey(dict, value);
-            console.log(value, result)
 			if( result == 'al3') {
 				imgpath = './img/triangle-01.png';
 			}
@@ -667,7 +666,6 @@ angular
 
         var relativeDistanceCal = Math.round((((3998 - 400)-(distanceHeight - 400)) / (3998 - 400)) * 100)
         if(relativeDistanceCal < 0){
-          console.log(info.distanceValue,info,"height");
             relativeDistanceCal = 0;
         }
         if(relativeDistanceCal > 100){
@@ -994,8 +992,9 @@ angular
                 (obj) => obj.locationID === objectId
               );
 
+
               if (!existingObject) {
-              if ( Number(data.point.angle) > 5) {
+              if ( Number(data.point.angle) >= 5) {
                 var angleColorRank = 1;
                 var angleColor = "Red";
                 var angle_alarm_tr = "Angle alarm Triggered";
@@ -1006,7 +1005,7 @@ angular
               }
 
 
-              if ( Number(data.point.height) < 300) {
+              if ( Number(data.point.height) <= 400) {
                // var distanceValue = 400;
                 var distance_alarm_tr = "Distance alarm Triggered";
                 var dis_color_rank = 1;
@@ -1016,21 +1015,35 @@ angular
                 var dis_color = "Green";
                 var distance_alarm_tr = "";
               }
+              
+          
+              // if ("distance_alert" in data.point) {
+              //   var distanceAlertValue = parseInt(data.point.distance_alert);
+              //   if (distanceAlertValue != "undefined" && Number(data.point.height) < distanceAlertValue  ) {
+              //     var dis_color_rank = 2;
+              //     var dis_color = "Yellow";
+              //     var distance_alarm_tr = "Distance alert Triggered";
+              //   } 
+
+              // }
+              var distanceAlertValue = parseInt(data.point.distance_alert);
               if ("distance_alert" in data.point) {
-                var distanceAlertValue = parseInt(data.point.distance_alert);
-                if (distanceAlertValue != "undefined" && Number(data.point.height) < distanceAlertValue  ) {
-                  var dis_color_rank = 2;
-                  var dis_color = "Yellow";
-                  var distance_alarm_tr = "Distance alert Triggered";
-                } 
+              if (data.point.height < data.point.distance_alert) {
+                var distance_alarm_tr = "Distance alert Triggered";
+                var dis_color_rank = 2;
+                var dis_color = "yellow";
               }
+
+            }
+
+
                 var status = "";
                 var disValue = "";
-                if (Number(data.point.height) < 300) {
+                if (Number(data.point.height) <= 400) {
                   status = "Distance alarms triggered";
-                } else if (Number(data.point.angle) > 5) {
+                } else if (Number(data.point.angle) >= 5) {
                   status = "Angle alarms triggered";
-                } else if ( Number(data.point.height) < 300 && Number(data.point.angle) > 5) {
+                } else if ( Number(data.point.height) <= 400 && Number(data.point.angle) >= 5) {
                   status = "all alarms triggered";
                 } else if ("distance_alert" in data.point && Number(data.point.height) < distanceAlertValue ) {
                   status = "Distance alert triggered";
@@ -1074,6 +1087,8 @@ angular
 
                 var timeDate = hours;
 
+//
+
                 if (Number(data.point.height) < 400) {
                   var disValue = 400;
                 } else if (Number(data.point.height) >= 3998) {
@@ -1081,17 +1096,68 @@ angular
                 } else {
                   var disValue = Number(data.point.height).toLocaleString();
                 }
+
+
+
+                if(data.distance_alert !=undefined){
+                  var info = JSON.parse(data.distance_alert);
+                  var relativeDistanceCal = Math.round((((parseInt(info.empty) - parseInt(info.full))-(parseInt(disValue) - parseInt(info.full))) / (parseInt(info.empty) - parseInt(info.full))) * 100)
+                  if(relativeDistanceCal < 0){
+                      relativeDistanceCal = 0;
+                  }
+                  if(relativeDistanceCal > 100){
+                      relativeDistanceCal = 100;
+                  }
+                }else{
+                  
+                  var relativeDistanceCal = Math.round((((3998 - 400)-(disValue - 400)) / (3998 - 400)) * 100)
+                  if(relativeDistanceCal < 0){
+                      relativeDistanceCal = 0;
+                  }
+                  if(relativeDistanceCal > 100){
+                      relativeDistanceCal = 100;
+                  }
+          
+                }
+
+
+                // if(data.distance_alert !== null){
+                //   var point_alt = JSON.parse(data.distance_alert);
+                // }else{
+                //   var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
+                // }
+
+                // var emptyVal = (point_alt.empty)?parseInt(point_alt.empty):3998;
+                // var fullVal= (point_alt.full)?parseInt(point_alt.full):400;
+                // var relative_distanceVal =  Math.round(((( (emptyVal)?parseInt(emptyVal):3998 - (fullVal)?parseInt(fullVal):400)-(disValue - (fullVal)?parseInt(fullVal):400 )) / ((emptyVal)?parseInt(emptyVal):3998 - (fullVal)?parseInt(fullVal):400)) * 100);
+
+              
+
+
                 var msg = "";
-                if (disValue != "") {
+                // if (disValue != "") {
                   var msg =
-                    "Distance: " +
-                    disValue +
-                    " mm, Angle: " +
+                    "Relative Distance: " +
+                    relativeDistanceCal +
+                    " %, Angle: " +
                     data.point.angle +
                     " deg";
-                } else {
-                  var msg = "Angle: " + data.point.angle + " deg";
-                }
+                // } else {
+                //   var msg = "Angle: " + data.point.angle + " deg";
+                // }
+
+
+                // var msg = "";
+                // if (disValue != "") {
+                //   var msg =
+                //     "Distance: " +
+                //     disValue +
+                //     " mm, Angle: " +
+                //     data.point.angle +
+                //     " deg";
+                // } else {
+                //   var msg = "Angle: " + data.point.angle + " deg";
+                // }
               var convertedAlertCountPoint = {
                 /*alert and alarm count response*/
                 angle: data.point.angle,
@@ -1168,33 +1234,26 @@ angular
             }
             var uniqueData = [];
             var deviceIds = new Set(); // Using a Set to store unique device_ids
-            
             $scope.alertLists = uniqueDataCount;
-
             var uniqueAlertData = [];
             
             for (var i = 0; i < $scope.alertLists.length; i++) {
+
               $scope.alertLists[i].class = "";
-              if ($scope.alertLists[i].status == "Distance alarms triggered") {
-                uniqueAlertData.push($scope.alertLists[i]);
 
-                $scope.alertLists[i].class = "distance danger";
-              }
-              if ($scope.alertLists[i].status == "Angle alarms triggered") {
-                uniqueAlertData.push($scope.alertLists[i]);
-
-                $scope.alertLists[i].class = "distance danger";
-              }
-              if ($scope.alertLists[i].status == "Distance alert triggered") {
+             
+              if ($scope.alertLists[i].disColor == "yellow") {
                 uniqueAlertData.push($scope.alertLists[i]);
 
                 $scope.alertLists[i].class = "distance warn";
               }
-              if ($scope.alertLists[i].status == "all alarms triggered") {
+              if ($scope.alertLists[i].disColor == "Red" || $scope.alertLists[i].angleColor ==  "Red") {
                 uniqueAlertData.push($scope.alertLists[i]);
 
                 $scope.alertLists[i].class = "distance danger";
               }
+
+
               last_comm_split =
                 $scope.alertLists[i].oldest_comm_date.split(" ");
 
@@ -1239,6 +1298,7 @@ angular
               //     $scope.alertLists[i].oldest_comm_date =  last_comm_split[0] + "y";
               // }
             }
+
             $scope.alertCount = uniqueAlertData.length;
             $scope.alertLists = uniqueAlertData.sort(customComparator);
           });
@@ -1398,66 +1458,74 @@ angular
 
   
 
-      $scope.relativedistance = {
-        options: {
-            chart : {
-                type: 'column',
-                height: 230,
-            },
-            yAxis: {
-                min: 0,
-                max: 100,
-                labels: {
-                    formatter: function(v) {
-                        return v.value + "%";
-                    }
-                },
-                title: {
-                    text : ''
-                }
-            },
-            xAxis: {
-                labels: {
-                    enabled: false
-                },
-                title: {
-                    text: ''
-                }
-            },
-            tooltip: {
-                formatter: function() {
-                    return formatRDToolTip(this);
-                }
-            },
-            plotOptions: {
-                column: {
-                    events: {
-                        click: function(e) {
-                            columnRDClick(e);
-                        }
-                    }
-                }
-            },
-            legend: {
-                enabled: false,
-            }
-        },
-        series: [
-            {
-                name: "test",
-                data : []
-            }
-        ],
-        title: {
-            text: ""
-        }
-    }
+    //   $scope.relativedistance = {
+    //     options: {
+    //         chart : {
+    //             type: 'column',
+    //             height: 230,
+    //             scrollablePlotArea: {
+    //               minWidth: 280,
+    //               scrollPositionX: 1
+    //           }
+    //         },
+    //         yAxis: {
+    //             min: 0,
+    //             max: 100,
+    //             labels: {
+    //                 formatter: function(v) {
+    //                     return v.value + "%";
+    //                 }
+    //             },
+    //             title: {
+    //                 text : ''
+    //             }
+    //         },
+    //         xAxis: {
+    //             labels: {
+    //                 enabled: false
+    //             },
+    //             title: {
+    //                 text: ''
+    //             }
+    //         },
+    //         tooltip: {
+    //             formatter: function() {
+    //                 return formatRDToolTip(this);
+    //             }
+    //         },
+    //         plotOptions: {
+    //             column: {
+    //                 events: {
+    //                     click: function(e) {
+    //                         columnRDClick(e);
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         legend: {
+    //             enabled: false,
+    //         }
+    //     },
+    //     series: [
+    //         {
+    //             name: "test",
+    //             data : []
+    //         }
+    //     ],
+    //     title: {
+    //         text: ""
+    //     }
+    // }
 
     $scope.relativedistance = {
         options: {
             chart : {
                 type: 'column',
                 height: 230,
+                scrollablePlotArea: {
+                  minWidth: 380,
+                  scrollPositionX: 1
+              }
             },
             yAxis: {
                 min: 0,
