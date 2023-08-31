@@ -178,7 +178,7 @@ angular.module('mainCtrl', [])
               .then(function (response){
                     const data = response.data.data
                     let sensors = [ {
-                        'id': '@2ac7dd09-7e4cd602',
+                        'id': '64ae522eefa8baae8f106b9d',
                         'unit': '%',
                         'id_name': 'Relative Distance',
                         'rank': 1,
