@@ -832,9 +832,9 @@ angular
                 if(relativeDistance > 100){
                   relativeDistance = 100;
                 }
-                tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ relativeDistance+"%</td></tr>";
+                
+                tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>"+ res.data.data.distance_percentage+"%</td></tr>";
 
-            
               }
               if (readings[i].id_name == "Battery Voltage") {
                 tempInnerHTML =
@@ -864,7 +864,10 @@ angular
               
               if(res.data.status==true)
               if(getTableAlert){
-                tempInnerHTML = tempInnerHTML + `<tr class="bottom-cl"><td><label for="">Distance at Empty (0%)</label></td><td><div class="ng-binding">${(getTableAlert.empty)??'3,998'}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance at Full (100%)</label></td><td><div class="ng-binding">${(getTableAlert.full)??'400'}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 1</label></td><td><div class="ng-binding">${(getTableAlert.alert1)??''}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 2</label></td><td><div class="ng-binding">${(getTableAlert.alert2)??''}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 3</label></td><td><div class="ng-binding">${(getTableAlert.alert3)??''}mm</div></td></tr>`;
+                tempInnerHTML = tempInnerHTML + `<tr class="bottom-cl"><td><label for="">Distance at Full (100%)</label></td><td><div class="ng-binding">${(getTableAlert.full)??'400'}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance at Empty (0%)</label></td><td><div class="ng-binding">${(getTableAlert.empty)??'3,998'}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 1</label></td><td><div class="ng-binding">${(getTableAlert.alert1)??''}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 2</label></td><td><div class="ng-binding">${(getTableAlert.alert2)??''}mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 3</label></td><td><div class="ng-binding">${(getTableAlert.alert3)??''}mm</div></td></tr>`;
+              }
+              else{
+                tempInnerHTML = tempInnerHTML + `<tr class="bottom-cl"><td><label for="">Distance at Full (100%)</label></td><td><div class="ng-binding">400 mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance at Empty (0%)</label></td><td><div class="ng-binding">3,998 mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 1</label></td><td><div class="ng-binding">mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 2</label></td><td><div class="ng-binding">mm</div></td></tr><tr class="bottom-cl"><td><label for="">Distance Alert 3</label></td><td><div class="ng-binding">mm</div></td></tr>`;
               }
 
               
