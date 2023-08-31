@@ -1,7 +1,9 @@
 <style>
-	body { font-family: sans-serif; }
-	#confirmBox
-	{
+	body {
+		font-family: sans-serif;
+	}
+
+	#confirmBox {
 		display: none;
 		background-color: #eee;
 		border-radius: 14px;
@@ -16,6 +18,7 @@
 		text-align: center;
 		z-index: 99999;
 	}
+
 	#confirmBox .button {
 		background-color: #ccc;
 		display: inline-block;
@@ -26,44 +29,46 @@
 		width: 150px;
 		cursor: pointer;
 	}
-	#confirmBox .button:hover
-	{
+
+	#confirmBox .button:hover {
 		background-color: #ddd;
 	}
-	#confirmBox .message
-	{
+
+	#confirmBox .message {
 		text-align: center;
 		margin-bottom: 8px;
 	}
 
-	.bgColor0{
-		background: #fff!important;
+	.bgColor0 {
+		background: #fff !important;
 	}
-	.opacity0{
+
+	.opacity0 {
 		opacity: 0.5;
 	}
-	</style>
+</style>
 <div class="homepage">
 	<div id="confirmBox">
 		<div class="message"></div>
 		<span class="button yes disable">{{ btnValue }}</span>
 		<span class="button no disable"> Delete</span>
 	</div>
-	<div class="withtree map-100" > 
+	<div class="withtree map-100">
 		<div class="viewtemplateInner">
 			<div class="homemaparea" id="item">
-				<div id="homeMap" class="homeleft" >
+				<div id="homeMap" class="homeleft">
 				</div>
 			</div>
 		</div>
 		<div class="view-style">
 			<button class="reset_btn" ng-click="resetMapClick()">Reset</button>
 			<div class="cale-ico">
-				
+
 				<img src="img/collapse.png" alt="">
 			</div>
-			<select ng-model="installation_name" id="" ng-change="GetTableItemsBySlected(installation_name)" ng-options="inst_item as inst_item.installationName for inst_item in dataLocation">
-			<option ng-selected="true" value="">Select Installation...</option>
+			<select ng-model="installation_name" id="" ng-change="GetTableItemsBySlected(installation_name)"
+				ng-options="inst_item as inst_item.installationName for inst_item in dataLocation">
+				<option ng-selected="true" value="">Select Installation...</option>
 			</select>
 		</div>
 		<script>
@@ -74,26 +79,28 @@
 		</script>
 	</div>
 	<div class="side-det">
-		<table class="elem" data-ng-init="init()" style="bottom: 1px solid black;"> 
-			<thead style="background-color: #3255a2">
-				<tr style="color: aliceblue;">
-					<th>Site Name/Location</th>
-					<th>Distance (%)</th>
-					<!-- <th>Bench Depth (mm)</th> -->
-					<th>Angle (deg)</th>
-					<th>Last Comm.</th>
-				</tr>
-			</thead>
+		<table class="elem" data-ng-init="init()" style="bottom: 1px solid black;">
+
 			<tbody>
-				
-				<a href="#"><tr ng-repeat="item in sortedArray_1 | filter : installation_name " ng-click="GetTableItemsByClick(item)">
-					<td class="changeMouse">{{item.installationName}}
-							<br>{{item.address}}</td>
-					<td class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ item.relative_distance }}% </td>
-					<!-- <td></td> -->
-					<td class="changeMouse" ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }" >{{item.angle}} deg</td>
-					<td class="changeMouse" ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered' }">{{item.oldest_comm_date}}</td>
-				</tr></a>
+
+				<a href="#">
+					<tr ng-repeat="item in sortedArray_1 | filter : installation_name "
+						ng-click="GetTableItemsByClick(item)">
+						<td class="changeMouse">{{item.installationName}}
+							<br>{{item.address}}
+						</td>
+						<td class="changeMouse"
+							ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }">
+							{{ item.relative_distance }}% </td>
+						<!-- <td></td> -->
+						<td class="changeMouse"
+							ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }">
+							{{item.angle}} deg</td>
+						<td class="changeMouse"
+							ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered' }">
+							{{item.oldest_comm_date}}</td>
+					</tr>
+				</a>
 			</tbody>
 		</table>
 	</div>
@@ -102,7 +109,8 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="popup-wrap">
-					<button type="button" class="close-button" ng-click="closeModal()" data-dismiss="modal" aria-label="Close">
+					<button type="button" class="close-button" ng-click="closeModal()" data-dismiss="modal"
+						aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 					<form action="" id="myForm" autocomplete="off">
@@ -110,7 +118,7 @@
 							<div class="mhole-mobile">
 								<h4>Manhole Specifications</h4>
 								<div class="mhole-image">
-								<img src="img/inner-image.png" alt="">
+									<img src="img/inner-image.png" alt="">
 								</div>
 								<div class="mhole-content">
 									<div class="mhole-text">
@@ -118,36 +126,60 @@
 									</div>
 									<div class="mhole-alert boundaryOne">
 										<label for="">Full (100%)</label>
-										<input type="number" min="400" name="fullValue" id="fullValue" placeholder="400 mm" value="{{pointSettingData.full}}" ng-model="fullVal">
-										<span id="errorname" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
-									</div> 
-									<div class="mhole-alert traingles {{addAlt1Class}}" ng-show="showAlert1" >
-										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
+										<input type="number" min="400" name="fullValue" id="fullValue"
+											placeholder="400 mm" value="{{pointSettingData.full}}" ng-model="fullVal">
+										<span id="errorname"
+											style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid
+											value*</span>
+									</div>
+									<div class="mhole-alert traingles {{addAlt1Class}}" ng-show="showAlert1">
+										<label ng-if="activeBtn == true" for=""
+											ng-click='onDecreaseAlertNumber("Alert1")'>Alert</label>
 										<label ng-if="activeBtn == false" for="">Alert</label>
-										<input type="number" name="alert1" id="alert1" ng-model="alert1" placeholder="1000 mm"  ng-change="onInputChange('alert1')" value="{{pointSettingData.alert1}}">
-										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt1 }}</span>
+										<input type="number" name="alert1" id="alert1" ng-model="alert1"
+											placeholder="1000 mm" ng-change="onInputChange('alert1')"
+											value="{{pointSettingData.alert1}}">
+										<span ng-show="alrErr"
+											style="color: red; position: absolute; top: 33px; right: -19px;">{{
+											errorAlt1 }}</span>
 									</div>
 									<div class="mhole-alert squares {{addAlt2Class}}" ng-show="showAlert2">
-										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
+										<label ng-if="activeBtn == true" for=""
+											ng-click='onDecreaseAlertNumber("Alert2")'>Alert</label>
 										<label ng-if="activeBtn == false" for="">Alert</label>
-										<input type="number"  name="alert2" id="alert2" ng-model="alert2" placeholder="2000 mm"  ng-change="onInputChange('alert2')" value="{{pointSettingData.alert2}}">
-										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt2 }}</span>
+										<input type="number" name="alert2" id="alert2" ng-model="alert2"
+											placeholder="2000 mm" ng-change="onInputChange('alert2')"
+											value="{{pointSettingData.alert2}}">
+										<span ng-show="alrErr"
+											style="color: red; position: absolute; top: 33px; right: -19px;">{{
+											errorAlt2 }}</span>
 									</div>
 									<div class="mhole-alert circles {{addAlt3Class}}" ng-show="showAlert3">
-										<label ng-if="activeBtn == true" for="" ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
+										<label ng-if="activeBtn == true" for=""
+											ng-click='onDecreaseAlertNumber("Alert3")'>Alert</label>
 										<label ng-if="activeBtn == false" for="">Alert</label>
-										<input type="number" name="alert3" id="alert3" ng-model="alert3" placeholder="3000 mm"  ng-change="onInputChange('alert3')" value="{{pointSettingData.alert2}}">
-										<span ng-show="alrErr" style="color: red; position: absolute; top: 33px; right: -19px;">{{ errorAlt3 }}</span>
+										<input type="number" name="alert3" id="alert3" ng-model="alert3"
+											placeholder="3000 mm" ng-change="onInputChange('alert3')"
+											value="{{pointSettingData.alert2}}">
+										<span ng-show="alrErr"
+											style="color: red; position: absolute; top: 33px; right: -19px;">{{
+											errorAlt3 }}</span>
 									</div>
 									<div class="mhole-alert boundaryTwo">
 										<label for="">Empty (0%)</label>
-										<input type="number" name="emptyValue" max="3998" id="emptyValue" placeholder="3998 mm" value="{{pointSettingData.empty}}" ng-model="emptyVal">
-										<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
+										<input type="number" name="emptyValue" max="3998" id="emptyValue"
+											placeholder="3998 mm" value="{{pointSettingData.empty}}"
+											ng-model="emptyVal">
+										<span id="errorn"
+											style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid
+											value*</span>
 									</div>
 								</div>
-								<div class="alert-input">								
-									<button type="button" class="addbtn {{disClass}}" id="myBtn2" ng-click="confirmCheck()"> Add Alert</button>
-									<button type="button" class="delbtn {{delClass}}" ng-click="openDeleteWindow()"> Del. All</button>
+								<div class="alert-input">
+									<button type="button" class="addbtn {{disClass}}" id="myBtn2"
+										ng-click="confirmCheck()"> Add Alert</button>
+									<button type="button" class="delbtn {{delClass}}" ng-click="openDeleteWindow()">
+										Del. All</button>
 								</div>
 								<div class="alert-checkbox">
 									<div class="checkbox">
@@ -160,8 +192,10 @@
 									</div>
 								</div>
 								<div class="buttons">
-									<input type="button" value="Save Changes" ng-click="SavePoppupFormData()" class="save-btn submit__btn disable">
-									<input type="button" class="cancel-btn reset__btn disable" value="Cancel, Go Back" ng-click="closeModal()"/>
+									<input type="button" value="Save Changes" ng-click="SavePoppupFormData()"
+										class="save-btn submit__btn disable">
+									<input type="button" class="cancel-btn reset__btn disable" value="Cancel, Go Back"
+										ng-click="closeModal()" />
 								</div>
 							</div>
 						</section>
@@ -174,26 +208,29 @@
 	<!--Add alert model starts-->
 	<div id="myModal2" class="modal2">
 		<div class="modal2-content">
-			<form id="addAlertForm"  method="post" name="addForm" ng-submit="addAlertValue()" autocomplete="off" >
+			<form id="addAlertForm" method="post" name="addForm" ng-submit="addAlertValue()" autocomplete="off">
 				<div class="sec-head">
 					<h3>Add a New Alert</h3>
 				</div>
 				<div class="modal2-content-wrp">
 					<label for="">Distance :</label>
-					<input type="number" id="alert" name="alert" ng-model="alert" autocomplete="off" placeholder="1000 mm" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
-					<span style="color:red; display:block; text-align:left; font-weight: bold;" ng-show="alertError">{{ errMsg }}</span>
+					<input type="number" id="alert" name="alert" ng-model="alert" autocomplete="off"
+						placeholder="1000 mm" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}">
+					<span style="color:red; display:block; text-align:left; font-weight: bold;" ng-show="alertError">{{
+						errMsg }}</span>
 					<button type="submit" class="modal-submit">Add</button>
-					<button type="button" class="close modal-close" ng-click="closeAddAlertModal()">Cancel, Go back</button>
+					<button type="button" class="close modal-close" ng-click="closeAddAlertModal()">Cancel, Go
+						back</button>
 				</div>
 			</form>
 		</div>
-  	</div>	
+	</div>
 	<div class="loader" ng-show="isLoading">
-			<div class="loader-spinner"></div>
-		</div>
+		<div class="loader-spinner"></div>
+	</div>
 	<script>
 		var enableDistanceAlarmCheckbox = document.getElementById("enableDistanceAlarm");
-		
+
 
 		function checkDistanceAlarmValidity() {
 			var input = document.getElementById("distance_alarm");
@@ -206,23 +243,23 @@
 		}
 
 		var enableDistanceAlarmCheckbox = document.getElementById("enableDistanceAlarm");
-		enableDistanceAlarmCheckbox.addEventListener("change", function() {
-		var attributeValue = enableDistanceAlarmCheckbox.getAttribute("myAttribute");
-		if (attributeValue === '1') {
-			enableDistanceAlarmCheckbox.value = "0";
-			enableDistanceAlarmCheckbox.classList.remove("checked-me");
-			enableDistanceAlarmCheckbox.setAttribute("myAttribute", "0");
-		} else {
-			enableDistanceAlarmCheckbox.value = "1";
-			enableDistanceAlarmCheckbox.classList.add("checked-me");
-			enableDistanceAlarmCheckbox.setAttribute("myAttribute", "1");
-		}
+		enableDistanceAlarmCheckbox.addEventListener("change", function () {
+			var attributeValue = enableDistanceAlarmCheckbox.getAttribute("myAttribute");
+			if (attributeValue === '1') {
+				enableDistanceAlarmCheckbox.value = "0";
+				enableDistanceAlarmCheckbox.classList.remove("checked-me");
+				enableDistanceAlarmCheckbox.setAttribute("myAttribute", "0");
+			} else {
+				enableDistanceAlarmCheckbox.value = "1";
+				enableDistanceAlarmCheckbox.classList.add("checked-me");
+				enableDistanceAlarmCheckbox.setAttribute("myAttribute", "1");
+			}
 		});
 
 	</script>
 	<script>
-		$(document).on("click", ".hideBoundaries", function() {
-			if($(this).is(":checked")) {
+		$(document).on("click", ".hideBoundaries", function () {
+			if ($(this).is(":checked")) {
 				$(".boundaryTwo").hide();
 				$(".boundaryOne").hide();
 			} else {
@@ -230,8 +267,8 @@
 				$(".boundaryOne").show();
 			}
 		});
-		$(document).on("click", ".hideAlerts", function() {
-			if($(this).is(":checked")) {
+		$(document).on("click", ".hideAlerts", function () {
+			if ($(this).is(":checked")) {
 				$('.circles').hide();
 				$('.traingles').hide();
 				$('.squares').hide();
@@ -242,37 +279,37 @@
 			}
 		});
 
-		$(document).on("input", "#fullValue", function() {
+		$(document).on("input", "#fullValue", function () {
 			var fValue = $(this).val();
-			if(parseInt(fValue) >= 400 && parseInt(fValue) <= 3998){
+			if (parseInt(fValue) >= 400 && parseInt(fValue) <= 3998) {
 				$('#errorname').hide();
-			}else{
+			} else {
 				$('#errorname').show();
 			}
 		});
-		$(document).on("input", "#emptyValue", function() {
+		$(document).on("input", "#emptyValue", function () {
 			var fullValue = $('#fullValue').val();
 			var eValue = $(this).val();
-			if((parseInt(eValue) > parseInt(fullValue) && parseInt(eValue) <= 3998 )){
+			if ((parseInt(eValue) > parseInt(fullValue) && parseInt(eValue) <= 3998)) {
 				$('#errorn').hide();
-			}else{
+			} else {
 				$('#errorn').show();
 			}
 		});
-	</script> 
-		
+	</script>
+
 	<!-- Popup end-->
 	<script>
 		// popup start
 		$(document).ready(function () {
 			$(".close-button").click(function () {
 				$("#popupModalCenter").removeClass("show-modal");
-			});	
+			});
 		});
 		$(document).ready(function () {
 			$(".cancel-btn").click(function () {
 				$("#popupModalCenter").removeClass("show-modal");
-			});	
+			});
 		});
 		// popup end
 		// Get the modal2
@@ -285,17 +322,17 @@
 		var span = document.getElementsByClassName("close")[0];
 
 		// When the user clicks the button, open the modal2 
-		btn.onclick = function() {
+		btn.onclick = function () {
 			modal2.style.display = "block";
 		}
 
 		// When the user clicks on <span> (x), close the modal2
-		span.onclick = function() {
+		span.onclick = function () {
 			modal2.style.display = "none";
 		}
 
 		// When the user clicks anywhere outside of the modal2, close it
-		window.onclick = function(event) {
+		window.onclick = function (event) {
 			if (event.target == modal2) {
 				modal2.style.display = "none";
 			}
