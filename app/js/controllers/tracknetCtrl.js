@@ -1098,6 +1098,7 @@ angular
                   var disValue = Number(data.point.height);
                 }
 
+
                 if(data.point.distance_alert){
                   var distanceValue = JSON.parse(data.point.distance_alert);
                   var relativeDistanceCal = Math.round((((parseInt(distanceValue.empty) - (distanceValue.full))-(disValue - parseInt(distanceValue.full))) / (parseInt(distanceValue.empty) - parseInt(distanceValue.full))) * 100)
