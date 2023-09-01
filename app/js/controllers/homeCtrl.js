@@ -1527,19 +1527,19 @@ angular
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 1) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "./img/red-dot.gif";
           }
           if (colorCode == 1 && colorCode2 == 3) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath =  "./img/red-dot.gif";
           }
           if (colorCode == 3 && colorCode2 == 1) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "./img/red-dot.gif";
           }
           if (colorCode == 1 && colorCode2 == 2) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "./img/red-dot.gif";
           }
           if (colorCode == 2 && colorCode2 == 1) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+            var imgpath = "./img/red-dot.gif";
           }
           if (colorCode == 2 && colorCode2 == 2) {
             let value = closest(alertArr , dict.distance)

@@ -11690,3 +11690,11 @@ table.homemaptable .bottom-cl td:last-child{
     opacity: 0.5;
 }
 
+.tdAllClear {
+    background-color: #00ff00a6;  /*green color*/
+}
+
+.alarmColor {
+    background-color: #ff0000a1;
+}
+

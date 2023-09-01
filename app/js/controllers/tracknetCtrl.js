@@ -555,6 +555,7 @@ angular
         if(info.disColorRank == 2 && info.angleColorRank == 2) {
             var value = closest( alertArr , dict.distance);
 			var result = getObjectKey(dict, value);
+            console.log(value, result)
 			if( result == 'al3') {
 				imgpath = './img/triangle-01.png';
 			}
@@ -666,6 +667,7 @@ angular
 
         var relativeDistanceCal = Math.round((((3998 - 400)-(distanceHeight - 400)) / (3998 - 400)) * 100)
         if(relativeDistanceCal < 0){
+          console.log(info.distanceValue,info,"height");
             relativeDistanceCal = 0;
         }
         if(relativeDistanceCal > 100){
@@ -1088,20 +1090,18 @@ angular
                 var timeDate = hours;
 
 //
-
                 if (Number(data.point.height) < 400) {
                   var disValue = 400;
                 } else if (Number(data.point.height) >= 3998) {
                   var disValue = "";
                 } else {
-                  var disValue = Number(data.point.height).toLocaleString();
+                  var disValue = Number(data.point.height);
                 }
 
 
-
-                if(data.distance_alert !=undefined){
-                  var info = JSON.parse(data.distance_alert);
-                  var relativeDistanceCal = Math.round((((parseInt(info.empty) - parseInt(info.full))-(parseInt(disValue) - parseInt(info.full))) / (parseInt(info.empty) - parseInt(info.full))) * 100)
+                if(data.point.distance_alert){
+                  var distanceValue = JSON.parse(data.point.distance_alert);
+                  var relativeDistanceCal = Math.round((((parseInt(distanceValue.empty) - (distanceValue.full))-(disValue - parseInt(distanceValue.full))) / (parseInt(distanceValue.empty) - parseInt(distanceValue.full))) * 100)
                   if(relativeDistanceCal < 0){
                       relativeDistanceCal = 0;
                   }
@@ -1109,9 +1109,10 @@ angular
                       relativeDistanceCal = 100;
                   }
                 }else{
-                  
+                 
                   var relativeDistanceCal = Math.round((((3998 - 400)-(disValue - 400)) / (3998 - 400)) * 100)
                   if(relativeDistanceCal < 0){
+
                       relativeDistanceCal = 0;
                   }
                   if(relativeDistanceCal > 100){
@@ -1667,6 +1668,38 @@ angular
         var timee = singaporeTime.format("h:mm:ss A");
         var datee = singaporeTime.format("ddd, MMMM Do YYYY");
 
+
+        var distanceHeight = parseInt(info.distanceValue);
+        if (distanceHeight > 3998) {
+          distanceHeight = "";
+        }
+        if (distanceHeight < 400) {
+          distanceHeight = 400; 
+        }
+
+
+        if(info.totalAlerts !=undefined){
+
+          var relativeDistanceCal = Math.round((((info.empty - info.full)-(distanceHeight - info.full)) / (info.empty - info.full)) * 100)
+          if(relativeDistanceCal < 0){
+              relativeDistanceCal = 0;
+          }
+          if(relativeDistanceCal > 100){
+              relativeDistanceCal = 100;
+          }
+        }else{
+  
+          var relativeDistanceCal = Math.round((((3998 - 400)-(distanceHeight - 400)) / (3998 - 400)) * 100)
+          if(relativeDistanceCal < 0){
+            console.log(info.distanceValue,info,"height");
+              relativeDistanceCal = 0;
+          }
+          if(relativeDistanceCal > 100){
+              relativeDistanceCal = 100;
+          }
+  
+        }
+
         if (
           (info.location == "undefined") |
           (info.location == "undefined undefined")
@@ -1707,6 +1740,8 @@ angular
             maximumFractionDigits: info.decimalPlaces,
           }) +
           " mm<br>" +
+          "<b>Relative Distance: </b>" + relativeDistanceCal + ' %<br>' +
+          "<b>Angle: </b>" +
           "<b>Angle: </b>" +
           info.angle +
           " deg<br>" +
@@ -1740,7 +1775,9 @@ angular
           " " +
           timee +
           '</span> <span class="data-date"></span> </li>' +
+          '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Relative Distance: </span>' + relativeDistanceCal + ' % <span class="data-date"></span> </li>' +
           '<li> <span class="data_name"><i class="fa fa-gg-circle" aria-hidden="true"></i> <span>Distance:</span> ' +
+
           distance_value.toLocaleString(undefined, {
             maximumFractionDigits: info.decimalPlaces,
           }) +
