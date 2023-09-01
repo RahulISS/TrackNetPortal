@@ -60,6 +60,43 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- legend addded here -->
+		<div class="legend-button">
+			<div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("all clear")'>
+					<div class="icoBg"><img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" /></div>
+					<div class="icoBg">
+						<span>All Clear</span>
+					</div>
+				</button>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("all alarms")'>
+					<div class="icoBg"><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" /></div>
+					<div class="icoBg">
+						<span>Alarm</span>
+					</div>
+				</button>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("triangle")'>
+					<div class="icoBg"><img src="img/triangle.svg" /></div>
+					<div class="icoBg">
+						<span>Distance Alert 3</span>
+					</div>
+				</button>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("square")'>
+					<div class="icoBg"><img src="img/square.svg" /></div>
+					<div class="icoBg">
+						<span>Distance Alert 2</span>
+					</div>
+				</button>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("circle")'>
+					<div class="icoBg"><img src="img/circle.svg" /></div>
+					<div class="icoBg">
+						<span>Distance Alert 1</span>
+					</div>
+				</button>
+			</div>
+		</div>
+
 		<div class="view-style">
 			<button class="reset_btn" ng-click="resetMapClick()">Reset</button>
 			<div class="cale-ico">
