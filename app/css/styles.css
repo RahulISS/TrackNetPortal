@@ -23,8 +23,12 @@ html {
 
 .tracnt-tab-legend-button {
     position: absolute;
-    top: 57px;
-    right: 305px;
+    top: 62%;
+    /* Adjust the vertical position as needed */
+    right: 21%;
+    /* Adjust the horizontal position as needed */
+    transform: translate(0, -50%);
+    /* Center vertically based on button height */
     color: #ffffff;
     z-index: 9;
     min-height: 45px;
@@ -33,6 +37,7 @@ html {
     padding: 5px;
     align-items: center;
 }
+
 
 .btn-group-vertical {
     width: 100%;
@@ -104,6 +109,11 @@ html {
     min-width: 32px;
 }
 
+
+/* hiding the map satellite button  */
+.gm-style-mtc {
+    display: none;
+}
 
 /* add */
 
