@@ -116,41 +116,32 @@
 			});
 		</script>
 	</div>
-	<div class="side-det">
-		<table class="elem" data-ng-init="init()" style="bottom: 1px solid black; text-align: center;">
-
+	<div class="side-det" style="text-align: center;">
+		<table class="elem" data-ng-init="init()" style="bottom: 1px solid black;">
+			<thead style="background-color: #202227">
+				<tr style="color: aliceblue;">
+					<th>Site</th>
+					<th>Distance</th>
+					<th>Angle</th>
+					<th>Last Comm.</th>
+				</tr>
+			</thead>
 			<tbody>
-
-				<thead style="background-color: #3255a2">
-					<tr style="color: aliceblue;">
-						<th>Site Name/Location</th>
-						<th>Distance (%)</th>
-						<th>Angle (deg)</th>
-						<th>Last <br> Comm.</th>
-					</tr>
-				</thead>
 				<a href="#">
 					<tr ng-repeat="item in sortedArray_1 | filter : installation_name "
 						ng-click="GetTableItemsByClick(item)">
-						<td class="changeMouse" style="text-align: center;">
-							{{item.installationName}}
+						<td class="changeMouse">{{item.installationName}}
 							<br>{{item.address}}
 						</td>
 						<td class="changeMouse"
-							ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }"
-							style="text-align: center;">
-							{{ item.relative_distance }}%
-						</td>
+							ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }">
+							{{ item.relative_distance }}% <br>{{item.distance | number : fractionSize }}mm</td>
 						<td class="changeMouse"
-							ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }"
-							style="text-align: center;">
-							{{item.angle}} deg
-						</td>
+							ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }">
+							{{item.angle}} deg.</td>
 						<td class="changeMouse"
-							ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered' }"
-							style="text-align: center;">
-							{{item.oldest_comm_date}}
-						</td>
+							ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered', 'alarmColor': item.last_comm_color === 'red' }">
+							{{item.oldest_comm_date}}</td>
 					</tr>
 				</a>
 			</tbody>

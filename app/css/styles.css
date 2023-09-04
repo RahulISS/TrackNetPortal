@@ -11910,3 +11910,188 @@ div#myModal2 {
 .alertLight {
     opacity: 0.5;
 }
+
+/* added */
+.tdAllClear {
+    background-color: #00ff00a6;
+    /*green color*/
+}
+
+.alarmColor {
+    background-color: #ff0000a1;
+}
+
+
+/* added for the settings form */
+
+.tablewrapper {
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.tablewrapper h2 {
+    text-align: center;
+}
+
+.openbtn {
+    color: white;
+    border: none;
+    margin-left: auto;
+    font-size: 16px;
+    padding: 8px 22px;
+    background-color: #3155a1;
+    display: block;
+}
+
+.tablewrapper table {
+    max-width: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 50px auto;
+}
+
+/* Zebra striping */
+.tablewrapper tr {
+    background: #efe6e7;
+}
+
+.tablewrapper th {
+    background: #3155a1;
+    color: white;
+    font-weight: bold;
+}
+
+.tablewrapper td,
+.tablewrapper th {
+    padding: 10px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 18px;
+    width: 110px;
+    font-weight: bold;
+    height: 50px;
+}
+
+.tablewrapper .edit {
+    background-color: blue;
+    border: 1px solid blue;
+}
+
+.tablewrapper .delete {
+    background-color: red;
+    border: 1px solid red;
+}
+
+.tablewrapper .fa {
+    font-size: 24px !important;
+    padding: 4px 2px;
+    color: white;
+}
+
+
+/* POP UP CSS */
+
+.tablewrapper .form-popup {
+    border: 8px solid #3155a1;
+    border-top: 30px solid #3155a1;
+    z-index: 9;
+    display: none;
+    position: fixed;
+    padding: 10px;
+    left: 0;
+    top: 10px;
+    background: #FFF;
+    right: 0;
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.tablewrapper .form-container {
+    width: 300px;
+    padding: 20px;
+    background: #fff;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}
+
+button.test {
+    position: absolute;
+    right: 0;
+}
+
+.tablewrapper .form-conatianer input[type=text],
+.tablewrapper input[type=password] {
+
+    padding: 12px;
+    margin: 5px 0 25px;
+}
+
+.tablewrapper .close {
+    right: -32px;
+    top: -38px;
+    position: absolute;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+}
+
+.tablewrapper input {
+    max-width: 100%;
+    width: 100%;
+    padding: 10px 5px;
+}
+
+.tablewrapper textarea {
+    margin-top: 5px
+}
+
+.tablewrapper label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.tablewrapper .elemDiv {
+    margin: 15px 0;
+}
+
+.tablewrapper .intl-tel-input,
+.tablewrapper .iti {
+    width: 100%;
+}
+
+.tablewrapper .radio {
+    display: flex;
+    gap: 30px;
+}
+
+.tablewrapper #mobilecode {
+    padding-left: 0;
+}
+
+.tablewrapper .form-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+}
+
+.tablewrapper .update,
+.tablewrapper .test {
+    padding: 5px 12px;
+    background-color: #3155a1;
+    color: #FFF;
+    border: none;
+}
+
+.tablewrapper .reset {
+    padding: 5px 12px;
+    background-color: grey;
+    color: #FFF;
+    border: none;
+}

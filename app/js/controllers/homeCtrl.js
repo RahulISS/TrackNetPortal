@@ -417,10 +417,17 @@ angular
           const mergedArray = convertedData.map(item1 => {
             const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
             if (matchingItem2) {
-              if (matchingItem2.distance_alert !== null) {
-                var point_alt = JSON.parse(matchingItem2.distance_alert);
+              if (matchingItem2.distance_alert != null && matchingItem2.distance_alert.trim() !== "") {
+                console.log(matchingItem2, 'matchingItem2 IF');
+                try {
+                  var point_alt = JSON.parse(matchingItem2.distance_alert);
+                } catch (error) {
+                  // Handle JSON parsing error here (e.g., log an error message or provide a default value)
+                  console.error('Error parsing JSON:', error);
+                  var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 };
+                }
               } else {
-                var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
+                var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 };
               }
               return {
                 ...item1,
