@@ -25,7 +25,7 @@ html {
     position: absolute;
     top: 62%;
     /* Adjust the vertical position as needed */
-    right: 21%;
+    right: 23%;
     /* Adjust the horizontal position as needed */
     transform: translate(0, -50%);
     /* Center vertically based on button height */
