@@ -492,7 +492,17 @@ angular
                   );
               });
             }
-          }).finally(function () {
+          }).catch(function(error){
+            if(error.status==401){
+              $window.localStorage.removeItem('authToken');
+              $rootScope.storage.loggedIn = false;
+              $rootScope.storage.authToken = false;
+              $rootScope.storage.$reset();
+              $scope.refreshPage();
+              $state.go('login');
+            }
+          })
+          .finally(function () {
             $scope.isFirstLoad = false;
           });
       };
@@ -1302,6 +1312,15 @@ angular
 
             $scope.alertCount = uniqueAlertData.length;
             $scope.alertLists = uniqueAlertData.sort(customComparator);
+          }).catch(function(error){
+            if(error.status==401){
+              $window.localStorage.removeItem('authToken');
+              $rootScope.storage.loggedIn = false;
+              $rootScope.storage.authToken = false;
+              $rootScope.storage.$reset();
+              $scope.refreshPage();
+              $state.go('login');
+            }
           });
       }
 
@@ -1598,6 +1617,15 @@ angular
               data: allSeriesData
           });
 
+        }).catch(function(error){
+          if(error.status==401){
+            $window.localStorage.removeItem('authToken');
+            $rootScope.storage.loggedIn = false;
+            $rootScope.storage.authToken = false;
+            $rootScope.storage.$reset();
+            $scope.refreshPage();
+            $state.go('login');
+          }
         });
 
 

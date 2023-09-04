@@ -1435,6 +1435,15 @@ angular
           }
             
             console.log($scope.fullAlarm,'$scope.fullAlarm 1',$scope.emptyAlarm,'$scope.emptyAlarm 1')
+          }).catch(function(error){
+            if(error.status==401){
+              $window.localStorage.removeItem('authToken');
+              $rootScope.storage.loggedIn = false;
+              $rootScope.storage.authToken = false;
+              $rootScope.storage.$reset();
+              $scope.refreshPage();
+              $state.go('login');
+            }
           });
           
         }

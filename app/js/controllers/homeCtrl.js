@@ -3,7 +3,7 @@ angular
 
   .controller(
     "homeController",
-    function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval,apiBaseUrl) {
+    function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval,apiBaseUrl,$window) {
       
       $scope.pointSettingData = '';
       $scope.emptyVal = 3998;
@@ -417,7 +417,7 @@ angular
             const mergedArray = convertedData.map(item1 => {
               const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
                 if (matchingItem2) {
-                  if(matchingItem2.distance_alert !== null){
+                  if(matchingItem2.distance_alert !== null && matchingItem2.distance_alert !== ''){
                     var point_alt = JSON.parse(matchingItem2.distance_alert);
                   }else{
                     var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
@@ -598,6 +598,15 @@ angular
               dict["point"] = marker.point;
               $scope.displayData.push(dict);
             }
+          }).catch(function(error){
+            if(error.status==401){
+              $window.localStorage.removeItem('authToken');
+              $rootScope.storage.loggedIn = false;
+              $rootScope.storage.authToken = false;
+              $rootScope.storage.$reset();
+              $scope.refreshPage();
+              $state.go('login');
+            }
           })
           .finally(function () {
             $scope.isLoading = false;
@@ -607,7 +616,8 @@ angular
       let beachMarker = [];
       $scope.altArr = [];
       function buildMarker(dict) {
-        
+         
+
         if (typeof dict.latitude === "undefined" &&typeof dict.longitude === "undefined")
           return;
 
@@ -635,6 +645,7 @@ angular
         var colorCode = dict.colorRank;
         var colorCode2 = dict.colorRank2;
         var imgpath = "";
+        console.log(colorCode,"color Code",colorCode2,"colorCode2");
         if (colorCode) {
           if (colorCode == 3 && colorCode2 == 3) {
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
@@ -658,31 +669,31 @@ angular
             var value = closest( $scope.altArr , dict.distance_main);
 					  var result = getObjectKey(dict.totalAlerts, value);
 						if( result == 'al3') {
-							imgpath = './img/triangle-01.png';
+							imgpath = './img/triangle.svg';
 						}
 
 						if( result == 'al2') {
-							imgpath = './img/square-01.png';
+							imgpath = './img/square.svg';
 						}
 
 						if( result == 'al1' ) {
-							imgpath = './img/circle-01.png';
+							imgpath = './img/circle.svg';
 						}
           }
           if (colorCode == 2 && colorCode2 == 3) {
             var value = closest( $scope.altArr , dict.distance_main );
 						var result = getObjectKey(dict.totalAlerts, value);
 						if( result == 'al3') {
-							imgpath = './img/triangle-01.png';
+							imgpath = './img/triangle.svg';
 						}
 
 						if( result == 'al2') {
 							
-							imgpath = './img/square-01.png';
+							imgpath = './img/square.svg';
 						}
 
 						if( result == 'al1' ) {
-							imgpath = './img/circle-01.png';
+							imgpath = './img/circle.svg';
 						}
           }
           if (colorCode == 3 && colorCode2 == 2) {
@@ -885,6 +896,15 @@ angular
               content: compiled[0],
             });
           });
+        }).catch(function(error){
+          if(error.status==401){
+            $window.localStorage.removeItem('authToken');
+            $rootScope.storage.loggedIn = false;
+            $rootScope.storage.authToken = false;
+            $rootScope.storage.$reset();
+            $scope.refreshPage();
+            $state.go('login');
+          }
         });
       }
 
@@ -894,7 +914,7 @@ angular
         var node_id = localStorage.getItem("node_id");
         $("#popupModalCenter").addClass("show-modal");
         $http.get(apiBaseUrl+"user-definded-distancealert?aTreeNodeRef=" +node_id, {headers:customeHeader}).then(function (response) {
-          if(response.data.data.distance_alert === undefined) { 
+          if(response.data.data.distance_alert === undefined || response.data.data.distance_alert == '') { 
             $scope.alarmCount = 0;
             $scope.alert1 = 0;
             $scope.alert2 = 0;
@@ -917,53 +937,68 @@ angular
               $scope.showAlert3 = true;
 
               /** Setting alert blur as per thier check value starts*/
-              if( $scope.alert1Check == 0) {
+              if( $scope.pointSettingData.alarmFirstCheck === undefined ) {
                 $scope.addAlt1Class = 'alertLight';
+                $scope.disAlt1 = '';						
+                $scope.altStatus1 = 'Disabled';
               } else {
                 $scope.addAlt1Class = '';
+                $scope.disAlt1 = Math.round(((( $scope.emptyVal - $scope.fullVal)-($scope.alert1 - $scope.fullVal )) / ($scope.emptyVal - $scope.fullVal)) * 100);
+                $scope.altStatus1 = '';
               }
-
-              if( $scope.alert2Check == 0) {
+    
+              if( $scope.pointSettingData.alarmSecondCheck === undefined ) {
                 $scope.addAlt2Class = 'alertLight';
+                $scope.disAlt2 = '';
+                $scope.altStatus2 = 'Disabled';
               } else {
                 $scope.addAlt2Class = '';
+                $scope.disAlt2 = Math.round(((( $scope.emptyVal - $scope.fullVal)-($scope.alert2 - $scope.fullVal )) / ($scope.emptyVal - $scope.fullVal)) * 100);
+                $scope.altStatus2 = '';
               }
-
-              if( $scope.alert3Check == 0) {
+    
+              if( $scope.pointSettingData.alarmThirdCheck === undefined ) {
                 $scope.addAlt3Class = 'alertLight';
+                $scope.disAlt3 = '';
+                $scope.altStatus3 = 'Disabled';
               } else {
                 $scope.addAlt3Class = '';
+                $scope.disAlt3 = Math.round(((( $scope.emptyVal - $scope.fullVal)-($scope.alert3 - $scope.fullVal )) / ($scope.emptyVal - $scope.fullVal)) * 100);
+                $scope.altStatus3 = '';
               }
               /**ends */
-              if($scope.alert1) {
-                $scope.showAlert1 = true;
-              } else {
-                $scope.showAlert1 = false;
-              }
-              if($scope.alert2) {
-                $scope.showAlert2 = true;
-              } else {
-                $scope.showAlert2 = false;
-              }
-              if($scope.alert3) {
-                $scope.showAlert3 = true;
-              } else {
-                $scope.showAlert3 = false;
-              }
-            }
-            if( $scope.alarmCount == 0 ) {
-              $scope.delClass = 'disable-alert';
-              $scope.showAlert3 = false;
-              $scope.showAlert2 = false;
-              $scope.showAlert1 = false;
-            } 
+
+            //   if($scope.alert1) {
+            //     $scope.showAlert1 = true;
+            //   } else {
+            //     $scope.showAlert1 = false;
+            //   }
+            //   if($scope.alert2) {
+            //     $scope.showAlert2 = true;
+            //   } else {
+            //     $scope.showAlert2 = false;
+            //   }
+            //   if($scope.alert3) {
+            //     $scope.showAlert3 = true;
+            //   } else {
+            //     $scope.showAlert3 = false;
+            //   }
+            // }
+            // if( $scope.alarmCount == 0 ) {
+            //   $scope.delClass = 'disable-alert';
+            //   $scope.showAlert3 = false;
+            //   $scope.showAlert2 = false;
+            //   $scope.showAlert1 = false;
+            // } 
     
-            if( $scope.alarmCount < 3) { 
-              $scope.disClass = '';
-            } else {
-              $scope.disClass = 'disable-alert';
-              $scope.delClass = '';
-            }
+            // if( $scope.alarmCount < 3) { 
+            //   $scope.disClass = '';
+            // } else {
+            //   $scope.disClass = 'disable-alert';
+            //   $scope.delClass = '';
+            // }
+
+           }
           }).catch(function(error) {
             $scope.alarmCount = 0;
             $scope.emptyVal = 3998;
@@ -979,6 +1014,11 @@ angular
             });
       };
 
+
+ 
+
+
+      
       /*open the poppup form click on setting icon in info window*/
       $scope.counter = 0;
       $scope.confirmCheck = function() {
@@ -1143,12 +1183,7 @@ angular
       }
 	    /** ends */
 
-      /*Close Model*/
-      $scope.closeModal = function () {
-        $scope.showModal = false;
-        document.getElementById("myModal2").style.display = "none";
-      };
-      /*End*/
+   
       /** Disable/Enable or Delete alerts starts */
 		$scope.onDecreaseAlertNumber = function(arg) {
 			$scope.deleteModel = true;
@@ -1207,24 +1242,29 @@ angular
 		}
 		/** ends */
 
-    
+
+
+    // Onchange event
+
+
     $scope.onInputChange = function(inputName) {
 			$timeout(function() {
-				var alert1Value = parseFloat($scope.alert1);
-				var alert2Value = parseFloat($scope.alert2);
-				var alert3Value = parseFloat($scope.alert3);
+				var alert1Value = parseInt($scope.alert1);
+				var alert2Value = parseInt($scope.alert2);
+				var alert3Value = parseInt($scope.alert3);
 				$scope.errorAlt1 = ''; $scope.errorAlt2 = ''; $scope.errorAlt3 = '';
 
 				let full = angular.element($("#fullValue")).val();
 				let empty = angular.element($("#emptyValue")).val();
 		
 				// Sort the alert values
-				var sortedValues = [alert1Value, alert2Value, alert3Value].filter(value => !isNaN(value)).sort(function(a, b) {
+				const values = [alert1Value, alert2Value, alert3Value];
+				var sortedValues = values.filter(value => !isNaN(value)).sort(function(a, b) {
 					return a - b;
 				});
 			
 		
-				let newValue = parseFloat($scope[inputName]);
+				let newValue = parseInt($scope[inputName]);
 				
 		
 				if (!isNaN(newValue)) {
@@ -1237,8 +1277,29 @@ angular
 							duplicateIndexes.push(i);
 						}
 					}
+					if(inputName === "full"){				
+						$scope.errorstatus = 'disabledprop';
+						if(alert3Value  < fullAlarm){
+							$scope.alrErr = true;
+							$scope.errorAlt3 =  "Alert Should be >= 'Full 100%' value or "+fullAlarm;
+							return false;
+						}
+						if(alert2Value  < fullAlarm){
+							$scope.alrErr = true;
+							$scope.errorAlt2 =  "Alert Should be >= 'Full 100%' value or "+fullAlarm;
+							return false;
+						}
+						if(alert1Value  < fullAlarm){
+							$scope.alrErr = true;
+							$scope.errorAlt1 =  "Alert Should be >= 'Full 100%' value or "+fullAlarm;
+							return false;
+						}
+						
+
+					}
 					
-					if (duplicateIndexes.length > 0) {
+					if (duplicateIndexes.length > 0) {						
+						$scope.errorstatus = 'disabledprop';
 						if(inputName === "alert1"){
 							$scope.alrErr = true;
 							$scope.errorAlt1 = 'Duplicate Alert!'; // Set error message
@@ -1256,7 +1317,8 @@ angular
 						}
 				
 					}
-					else if(parseInt(newValue) < fullAlarm){
+					else if(parseInt(newValue) < fullAlarm){						
+						$scope.errorstatus = 'disabledprop';
 						if(inputName === "alert1"){
 							$scope.alrErr = true;
 							$scope.errorAlt1 =  "Alert Should be >= 'Full 100%' value or 400"; // Set error message
@@ -1274,6 +1336,7 @@ angular
 						}
 					}
 					else if(parseInt(newValue) >= emptyAlarm){
+						$scope.errorstatus = 'disabledprop';
 						if(inputName === "alert1"){
 							$scope.alrErr = true;
 							$scope.errorAlt1 = "Alert Should be <= 'Empty 0%' value or 3998"; // Set error message
@@ -1291,16 +1354,80 @@ angular
 						}
 					}
 					else {
-						$scope.alert1 = sortedValues[0];
+						$scope.errorstatus = '';
+						$scope.alert1 = sortedValues[2];
 						$scope.alert2 = sortedValues[1];
-						$scope.alert3 = sortedValues[2];
+						$scope.alert3 = sortedValues[0];
+					}
+					if($scope.alert1){
+						$scope.addAlt1Class = '';
+						$scope.altStatus1 = '';
+						$scope.disAlt1 = Math.round(((( emptyAlarm - fullAlarm)-($scope.alert1 - fullAlarm )) / (emptyAlarm - fullAlarm)) * 100);
+					}
+					if($scope.alert2){
+						$scope.addAlt2Class = '';
+						$scope.altStatus2 = '';
+						$scope.disAlt2 = Math.round(((( emptyAlarm - fullAlarm)-($scope.alert2 - fullAlarm )) / (emptyAlarm - fullAlarm)) * 100);
+					}
+					if($scope.alert3){
+						$scope.addAlt3Class = '';
+						$scope.altStatus3 = '';
+						$scope.disAlt3 = Math.round(((( emptyAlarm - fullAlarm)-($scope.alert3 - fullAlarm )) / (emptyAlarm - fullAlarm)) * 100);
+					}
+					if($scope.alert3 === undefined){
+						$scope.addAlt3Class = 'alertLight';
+						$scope.errorstatus = '';
+						$scope.disAlt3 = '';
+						$scope.altStatus3 = 'Disabled';
+					}
+					if($scope.alert2 === undefined){
+						$scope.addAlt2Class = 'alertLight';
+						$scope.errorstatus = '';
+						$scope.disAlt2 = '';
+						$scope.altStatus2 = 'Disabled';
+					}
+					if($scope.alert1 === undefined){
+						$scope.addAlt1Class = 'alertLight';
+						$scope.errorstatus = '';
+						$scope.disAlt1 = '';
+						$scope.altStatus1 = 'Disabled';
+					}
+					
+				}else{
+					if(inputName === "alert1"){
+						$scope.addAlt1Class = 'alertLight';
+						$scope.errorstatus = '';
+						$scope.disAlt1 = '';
+						$scope.altStatus1 = 'Disabled';
+					}
+					if(inputName === "alert2"){
+						$scope.addAlt2Class = 'alertLight';
+						$scope.errorstatus = '';
+						$scope.disAlt2 = '';
+						$scope.altStatus2 = 'Disabled';
+					}
+					if(inputName === "alert3"){
+						$scope.addAlt3Class = 'alertLight';
+						$scope.errorstatus = '';
+						$scope.disAlt3 = '';
+						$scope.altStatus3 = 'Disabled';
 					}
 				}
 			}, 2000); // 3000 milliseconds = 3 seconds
 		};
 
-      /*save the settings poppup form data*/
-      $scope.SavePoppupFormData = function () {
+    /*Close Model*/
+		$scope.closeModal = function () {
+			$scope.showModal = false;			
+			$scope.errorAlt1 = ''; $scope.errorAlt2 = ''; $scope.errorAlt3 = '';
+			$scope.disAlt1 = ''; $scope.disAlt2 = ''; $scope.disAlt3 = '';
+		  };
+		  /*End*/
+
+
+    	/*saving relative distance alerts*/
+      $scope.saveAlertData = function(){
+
         var node_name = localStorage.getItem("node_name");
         let instName = localStorage.getItem("instName");
         var node_id = localStorage.getItem("node_id");
@@ -1314,6 +1441,7 @@ angular
         else $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
         //alert(angular.element($(".alertNumber")).val());return;
 
+
         const enabled = 1;
         var node_name = localStorage.getItem("node_name");
         var val = angular.element($(".alertNumber")).val();
@@ -1321,7 +1449,7 @@ angular
         var alertS = angular.element($('#alert2')).val();
         var alertT = angular.element($('#alert3')).val();
         
-        if( $scope.showAlert1 == true ) {
+        if( alertF ) {
           $scope.alert1 = alertF;
           $scope.alarmFirstCheck = enabled;	
         }  else {
@@ -1329,7 +1457,7 @@ angular
           $scope.alarmFirstCheck = null;	
         }
         
-        if( $scope.showAlert2 == true ) {
+        if( alertS ) {
           $scope.alert2 = alertS;
           $scope.alarmSecondCheck = enabled;	
         } else {
@@ -1337,7 +1465,7 @@ angular
           $scope.alarmSecondCheck = null;
         }
         
-        if( $scope.showAlert3 == true) {
+        if( alertT) {
           $scope.alert3 = alertT;
           $scope.alarmThirdCheck = enabled;	
         } else {
@@ -1346,72 +1474,34 @@ angular
         }
         /** disable starts*/
         if( $scope.enableBtn ) {
-          
-          if( 'alt1' in $scope.disableAlertArray && $scope.disableAlertArray.alt1 == true && 'alarmFirstCheck' in $scope.pointSettingData ) { 
-            
+          if( 'alt1' in $scope.disableAlertArray && $scope.disableAlertArray.alt1 === true && 'alarmFirstCheck' in $scope.pointSettingData ) {
             if($scope.pointSettingData.alarmFirstCheck === 0) {
               $scope.alarmFirstCheck = 1;
             } else {
-              $scope.alarmFirstCheck = 0;
-            }
-
-            if('alarmSecondCheck' in $scope.pointSettingData ) {
-              $scope.alarmSecondCheck = $scope.pointSettingData.alarmSecondCheck;
-            }
-            if('alarmThirdCheck' in $scope.pointSettingData ) {
-              $scope.alarmThirdCheck = $scope.pointSettingData.alarmThirdCheck;
+              $scope.alarmFirstCheck = null;
             }
           }
         
-          if( 'alt2' in $scope.disableAlertArray && $scope.disableAlertArray.alt2 == true && 'alarmSecondCheck' in $scope.pointSettingData ) {
+          if( 'alt2' in $scope.disableAlertArray && $scope.disableAlertArray.alt2 === true && 'alarmSecondCheck' in $scope.pointSettingData ) {
             if($scope.pointSettingData.alarmSecondCheck === 0) {
               $scope.alarmSecondCheck = 1;
             } else {
-              $scope.alarmSecondCheck = 0;
-            }
-            if('alarmFirstCheck' in $scope.pointSettingData ) {
-              $scope.alarmFirstCheck = $scope.pointSettingData.alarmFirstCheck;
-            }
-            if('alarmThirdCheck' in $scope.pointSettingData ) {
-              $scope.alarmThirdCheck = $scope.pointSettingData.alarmThirdCheck;
+              $scope.alarmSecondCheck = null;
             }
           }
-
-          if( 'alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 == true && 'alarmThirdCheck' in $scope.pointSettingData ) {//
+  
+          if( 'alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 === true && 'alarmThirdCheck' in $scope.pointSettingData ) {//console.log("3 disable");
             if($scope.pointSettingData.alarmThirdCheck === 0) {
               $scope.alarmThirdCheck = 1;
             } else {
-              $scope.alarmThirdCheck = 0;
-            }
-
-            if('alarmFirstCheck' in $scope.pointSettingData ) {
-              $scope.alarmFirstCheck = $scope.pointSettingData.alarmFirstCheck;
-            }
-            if('alarmSecondCheck' in $scope.pointSettingData ) {
-              $scope.alarmSecondCheck = $scope.pointSettingData.alarmSecondCheck;
+              $scope.alarmThirdCheck = null;
             }
           }
         }
-        /** ends */
-        /**delete alerts starts */
-        if( $scope.deleteBtn )
-        {
-          if ( 'al1' in $scope.deleteAlertArray && $scope.deleteAlertArray.al1 === true) { 
-            $scope.alert1 = null;
-            $scope.alarmFirstCheck = null;
-          }
-
-          if ( 'al2' in $scope.deleteAlertArray && $scope.deleteAlertArray.al2 === true ) {
-            $scope.alert2 = null;
-            $scope.alarmSecondCheck = null;
-          }
-
-          if ( 'al3' in $scope.deleteAlertArray && $scope.deleteAlertArray.al3 === true ) {
-            $scope.alert3 = null;
-            $scope.alarmThirdCheck = null;
-          }
-        }
-        /**ends */
+        //console.log( $scope.alarmFirstCheck ,$scope.alarmSecondCheck , $scope.alarmThirdCheck, "checks")
+        //console.log( $scope.disableAlertArray ,$scope.disableAlertArray.alt2 == true, "disableAlertArray" );
+        //return;
+        /** ends */    
         
         $scope.fullValue = angular.element($('#fullValue')).val();
         $scope.emptyValue = angular.element($('#emptyValue')).val();
@@ -1419,7 +1509,7 @@ angular
           alert("Setting Boundaries are Required")
           return;
         }
-
+  
         if( $scope.fullValue < 400 ) {
           alert("Full Value Should be >= 400")
           return false;
@@ -1429,30 +1519,35 @@ angular
           alert("Full Value Should be less than Empty Value")
           return false;
         }
-
-        if( parseInt($scope.emptyValue) < parseInt($scope.fullValue) || parseInt($scope.emptyValue) < parseInt(alertF) || parseInt($scope.emptyValue) < parseInt(alertS) || parseInt($scope.emptyValue) < parseInt(alertT)) {
+  
+        if( parseInt($scope.emptyValue) < parseInt($scope.fullValue) ) {
           alert("Empty Value Should be greater than Full Value")
           return false;
         }
-
+  
+        if(parseInt($scope.emptyValue) < parseInt(alertF) || parseInt($scope.emptyValue) < parseInt(alertS) || parseInt($scope.emptyValue) < parseInt(alertT)) {
+          alert("Invalid Alert Value")
+          return false;
+        }
+        
         if( parseInt($scope.emptyValue) > 3998 ) {
           alert("Empty Value Should be less than equal to 3998")
           return false;
         }
-
-        if( parseInt(alertF) < parseInt($scope.fullValue) || parseInt(alertF) > parseInt($scope.emptyValue) ) {
+  
+        if( parseInt(alertF) < parseInt($scope.fullValue) && parseInt(alertF) > parseInt($scope.emptyValue) ) {
           alert("Alert Values Should be in between Full and Empty value")
           return false;
         }
-        if( parseInt(alertS) < parseInt($scope.fullValue) || parseInt(alertS) > parseInt($scope.emptyValue) ) {
+        if( parseInt(alertS) < parseInt($scope.fullValue) && parseInt(alertS) > parseInt($scope.emptyValue) ) {
           alert("Alert Values Should be in between Full and Empty value")
           return false;
         }
-        if( parseInt(alertT) < parseInt($scope.fullValue) || parseInt(alertT) > parseInt($scope.emptyValue) ) {
+        if( parseInt(alertT) < parseInt($scope.fullValue) && parseInt(alertT) > parseInt($scope.emptyValue) ) {
           alert("Alert Values Should be in between Full and Empty value")
           return false;
         }
-
+        
         let formData = {
           "pointId": node_id,
           "distance_alert": {
@@ -1466,16 +1561,62 @@ angular
             "alarmThirdCheck": $scope.alarmThirdCheck
           }
         };
-        
+
+
         $http.post(apiBaseUrl+"add-user-definded-distancealert",formData, {headers:customeHeader}).then(function (response) {
-            if (response.data.status) {
-              alert("Data Saved");
-              $("#popupModalCenter").removeClass("show-modal");
-            } else if (data.status == 400) {
-              alert(data.msg);
-              $("#popupModalCenter").removeClass("show-modal");
-            }
-          });
+          if (response.data.status) {
+            // alert("Data Saved");
+
+            Swal.fire({
+              title: 'Alert Saved',
+              text: '',
+              icon: 'success',
+              allowOutsideClick: false, // Disable interactions with the background
+              showCancelButton: false, // Hide the cancel button
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'OK'
+            }).then((result) => {  
+              if (result.isConfirmed) {
+                $window.location.reload();
+              }
+            });
+
+
+            $("#popupModalCenter").removeClass("show-modal");
+          } else if (data.status == 400) {
+            alert(data.msg);
+            $("#popupModalCenter").removeClass("show-modal");
+          }
+        }).catch(function(error){
+          if(error.status==401){
+            $window.localStorage.removeItem('authToken');
+            $rootScope.storage.loggedIn = false;
+            $rootScope.storage.authToken = false;
+            $rootScope.storage.$reset();
+            $scope.refreshPage();
+            $state.go('login');
+          }
+        });
+
+
+        // $scope.serialNo = $scope.productIMEI;
+        // const portalRef = '2b930eb1-94544585';
+        // const query = `yvw_manhole_specification_01a( { productRef: read(product and productModelRef == 2ac7d4be-00e6238c and id_serial == "${$scope.serialNo}")->id, empty:${$scope.emptyValue}, full:${$scope.fullValue}, alarmFirst: ${$scope.alert1},alarmFirstCheck: ${$scope.alarmFirstCheck}, alarmSecond: ${$scope.alert2}, alarmSecondCheck: ${$scope.alarmSecondCheck} ,alarmThird: ${$scope.alert3}, alarmThirdCheck: ${$scope.alarmThirdCheck} },"${ node_name.trim()}", ${portalRef}, ${$scope.deleteBtn})`;
+        // // console.log(query,"query");
+        // // return;
+        // Data.sendRequest(query,$rootScope.storage.skysparkVersion).then(function(response){
+        //   const data = response.data.rows[0];
+        //     if(data.status == 200){
+        //       alert("Alert Saved!");
+        //       $window.location.reload();
+        //     }
+        //     else if(data.status == 400) {
+        //       alert(data.msg);
+        //       $("#popupModalCenter").removeClass("show-modal");
+        //     }
+        // });
+
+
       };
 
       /*Zoom out marker location by the click on installation*/
@@ -1546,30 +1687,30 @@ angular
             var result = getObjectKey(alertObj, value);
             
             if( result == 'al3') {
-              imgpath = './img/triangle-01.png';
+              imgpath = './img/triangle.svg';
             }
 
             if( result == 'al2') {
-              imgpath = './img/square-01.png';
+              imgpath = './img/square.svg';
             }
 
             if( result == 'al1' ) {
-              imgpath = './img/circle-01.png';
+              imgpath = './img/circle.svg';
             }
           }
           if (colorCode == 2 && colorCode2 == 3) {
             let value = closest(alertArr , dict.distance)
 					  var result = getObjectKey(alertObj, value);
             if( result == 'al3') {
-              imgpath = './img/triangle-01.png';
+              imgpath = './img/triangle.svg';
             }
   
             if( result == 'al2') {
-              imgpath = './img/square-01.png';
+              imgpath = './img/square.svg';
             }
   
             if( result == 'al1' ) {
-              imgpath = './img/circle-01.png';
+              imgpath = './img/circle.svg';
             }
           }
           if (colorCode == 3 && colorCode2 == 2) {

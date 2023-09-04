@@ -155,7 +155,16 @@ angular.module('mainCtrl', [])
                     getSensors(tree);
                     $rootScope.storage.treeData = tree;
                 });
-            });
+            }).catch(function(error){
+                if(error.status==401){
+                  $window.localStorage.removeItem('authToken');
+                  $rootScope.storage.loggedIn = false;
+                  $rootScope.storage.authToken = false;
+                  $rootScope.storage.$reset();
+                  $scope.refreshPage();
+                  $state.go('login');
+                }
+              });
         }
 
         $rootScope.$on("checkedRef", function(e,data){
@@ -196,7 +205,16 @@ angular.module('mainCtrl', [])
                         }
                     }
                     $rootScope.storage.sensorData = sensors;
-                });
+                }).catch(function(error){
+                    if(error.status==401){
+                      $window.localStorage.removeItem('authToken');
+                      $rootScope.storage.loggedIn = false;
+                      $rootScope.storage.authToken = false;
+                      $rootScope.storage.$reset();
+                      $scope.refreshPage();
+                      $state.go('login');
+                    }
+                  });
         }
 
         function getSensors(tree){
