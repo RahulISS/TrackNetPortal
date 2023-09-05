@@ -1,14 +1,59 @@
 <style>
-	body { font-family: sans-serif; }
-	.bgColor0{
-		background: #fff!important;
+	body {
+		font-family: sans-serif;
+	}
+
+	#confirmBox {
+		display: none;
+		background-color: #eee;
+		border-radius: 14px;
+		border: 1px solid #aaa;
+		position: fixed;
+		width: 30%;
+		left: 40%;
+		top: 40%;
+		margin-left: -82px;
+		padding: 50px 26px 49px;
+		box-sizing: border-box;
+		text-align: center;
+		z-index: 99999;
+	}
+
+	#confirmBox .button {
+		background-color: #ccc;
+		display: inline-block;
+		border-radius: 12px;
+		border: 0px solid #aaa;
+		padding: 20px;
+		text-align: center;
+		width: 150px;
+		cursor: pointer;
+	}
+
+	#confirmBox .button:hover {
+		background-color: #ddd;
+	}
+
+	#confirmBox .message {
+		text-align: center;
+		margin-bottom: 8px;
+	}
+
+	.bgColor0 {
+		background: #fff !important;
 	}
 	.opacity0{
 		opacity: 0.5;
 	}
 	</style>
 <div class="homepage">
-	<div class="withtree map-100" > 
+
+	<div id="confirmBox">
+		<div class="message"></div>
+		<span class="button yes disable">{{ btnValue }}</span>
+		<span class="button no disable"> Delete</span>
+	</div>
+	<div class="withtree map-100">
 		<div class="viewtemplateInner">
 			<div class="homemaparea" id="item">
 				<div id="homeMap" class="homeleft" >
@@ -56,8 +101,9 @@
 				
 				<img src="img/collapse.png" alt="">
 			</div>
-			<select ng-model="installation_name" id="" ng-change="GetTableItemsBySlected(installation_name)" ng-options="inst_item as inst_item.installationName for inst_item in dataLocation">
-			<option ng-selected="true" value="">Select Installation...</option>
+			<select ng-model="installation_name" id="" ng-change="GetTableItemsBySlected(installation_name)"
+				ng-options="inst_item as inst_item.installationName for inst_item in dataLocation">
+				<option ng-selected="true" value="">Select Installation...</option>
 			</select>
 		</div>
 		<script>
@@ -67,7 +113,7 @@
 			});
 		</script>
 	</div>
-	<div class="side-det">
+	<div class="side-det" style="text-align: center;">
 		<table class="elem" data-ng-init="init()" style="bottom: 1px solid black;">
 			<thead style="background-color: #202227">
 				<tr style="color: aliceblue;">
@@ -78,13 +124,23 @@
 				</tr>
 			</thead>  
 			<tbody>
-				<a href="#"><tr ng-repeat="item in sortedArray_1 | filter : installation_name " ng-click="GetTableItemsByClick(item)">
-					<td class="changeMouse">{{item.installationName}}
-							<br>{{item.address}}</td>
-					<td class="changeMouse" ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }" > {{ item.relative_distance }}% <br>{{item.distance | number : fractionSize }}mm</td>
-					<td class="changeMouse" ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }" >{{item.angle}} deg.</td>
-					<td class="changeMouse" ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered', 'alarmColor': item.last_comm_color === 'red' }">{{item.oldest_comm_date}}</td>
-				</tr></a>
+				<a href="#">
+					<tr ng-repeat="item in sortedArray_1 | filter : installation_name "
+						ng-click="GetTableItemsByClick(item)">
+						<td class="changeMouse">{{item.installationName}}
+							<br>{{item.address}}
+						</td>
+						<td class="changeMouse"
+							ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }">
+							{{ item.relative_distance }}% <br>{{item.distance | number : fractionSize }}mm</td>
+						<td class="changeMouse"
+							ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }">
+							{{item.angle}} deg.</td>
+						<td class="changeMouse"
+							ng-class="{'tdAllClear': item.lastCommColorRank == 3, 'alarmColor': item.lastComm_alarm_tr === 'Communications alarm Triggered', 'alertColor': item.lastComm_alarm_tr === 'Communications alert Triggered', 'alarmColor': item.last_comm_color === 'red' }">
+							{{item.oldest_comm_date}}</td>
+					</tr>
+				</a>
 			</tbody>
 		</table>
 	</div>
@@ -223,4 +279,9 @@
 		}
 
 	</script>
-</div>
+
+	<style>
+		.gm-style-mtc {
+			display: none;
+		}
+	</style>
