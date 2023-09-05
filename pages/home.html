@@ -141,9 +141,10 @@
 								</div>
 								
 								<div class="alert-checkbox buttons">
-									<input type="button" value="Save Changes" ng-click="saveAlertData()" class="save-btn submit__btn {{errorstatus}}" >
+									<input type="button" value="Save Changes" ng-click="saveAlertData()" class="save-btn submit__btn" ng-disabled="errorstatus" >
 									<input type="button" class="cancel-btn reset__btn" value="Cancel, Go Back" ng-click="closeModal()"/>
 								</div>
+								<a href="" class="edit-btn" ng-click="resetAlert()">Reset</a>
 							</div>
 						</section>
 					</form>

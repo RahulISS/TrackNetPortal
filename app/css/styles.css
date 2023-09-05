@@ -728,6 +728,7 @@ button.navTabButton:hover {
 }
 
 .withtree1 {
+    background-color: #000;
     height: 100%;
     width: 80%;
     float: left;
@@ -10779,18 +10780,35 @@ div.week_days {
     padding: 5px;
     align-items: center;
 }
+
+/* 04-09-2023 changes */
 .tracnt-tab-legend-button {
     position: absolute;
-    top: 57px;
+    top: 50px;
     right: 305px;
     color: #ffffff;
+    margin-right: 10px;
     z-index: 9;
     min-height: 45px;
+    right: 0;
     width: 98px;
     display: flex;
     padding: 5px;
     align-items: center;
 }
+.btn-group-vertica{
+    top: 0;
+    position: relative;
+    height: 100%;
+
+}
+.map_block_middle {
+    overflow: hidden;
+    padding-bottom: 29px;
+    position: relative;
+}
+/* 04-09-2023 changes end */
+
 .view-style {
     position: absolute;
     top: 8px;
@@ -10878,7 +10896,7 @@ table.elem td {
   
   .homepage.ng-scope .modal-content {
     position: absolute;
-    top: 0;
+    top: -109px;
     left: 50%;
     transform: translate(-50%, 0%);
     background-color: #FFF2DD !important;
@@ -11475,9 +11493,16 @@ form#userFrm .user-frm-wrp input {
   }
   
   .mhole-mobile .edit-btn{
+    color: white;
     position: absolute;
-    top: 45px;
-    left: 62px;
+    top: 28px;
+    border: 1px solid white;
+    border-radius: 9px;
+    background: blue;
+    padding: 3px;
+    font-size: 16px;
+    right: 15px;
+    left: unset;
     text-decoration: none;
     z-index: 9999999;
   }
@@ -11777,8 +11802,9 @@ table.homemaptable .bottom-cl td:last-child{
     border: none;
     margin-left: auto;
     font-size: 16px;
+    border-radius: 5px;
     padding: 8px 22px;
-    background-color: #3155a1;
+    background-color: #008000;
     display: block;
 }
 
@@ -11786,7 +11812,7 @@ table.homemaptable .bottom-cl td:last-child{
     max-width: 100%;
     width: 100%;
     border-collapse: collapse;
-    margin: 50px auto;
+    margin: 20px auto;
 }
 
 /* Zebra striping */
@@ -11807,7 +11833,7 @@ table.homemaptable .bottom-cl td:last-child{
     text-align: center;
     font-size: 18px;
     width: 110px;
-    font-weight: bold;
+    /* font-weight: bold; */
     height: 50px;
 }
 
@@ -11867,7 +11893,7 @@ button.test {
 
 .tablewrapper .close {
     right: -32px;
-    top: -38px;
+    top: -46px;
     position: absolute;
     border-radius: 50%;
     color: #fff;
@@ -11908,18 +11934,69 @@ button{
     display: grid;
     grid-template-columns: 140px 1fr;
 }
-.tablewrapper .update,.tablewrapper .test{
+.tablewrapper .update{
     padding: 5px 12px;
-    background-color: #3155a1;
+    background-color: #008000;
     color: #FFF;
     border: none;
+    border-radius: 5px;
+}
+.tablewrapper .test{
+    background-color: #3155a1;
+    border-radius: 5px;
+    color: #fff;
 }
 .tablewrapper .reset{
     padding: 5px 12px;
-    background-color: grey;
+    background-color: #FF0000;
     color: #FFF;
     border: none;
+    border-radius: 5px;
 }
+
+/* 09-04-2023 changes */
+
+.tablewrapper {
+    padding-top: 20px;    
+}
+/* .tablewrapper h2 {
+    display: inline-block;
+    margin-left: 425px;
+} */
+.openbtn {
+    color: white;
+    border: none;
+    margin-left: auto;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 8px 22px;
+    margin-left: 410px;
+    background-color: #008000;
+    display: inline-block;
+}
+.tablewrapper table {
+    max-width: 1300px;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px;
+}
+.tablewrapper {
+    position: relative;
+    margin-top: 100px;
+    max-width: 1350px;
+    border: 3px solid black;
+}
+
+
+.openbtn{
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    display: block;
+}
+
+/* 09-04-2023 changes end*/
+
 
 .btn-group-vertical {
     width: 100%;
@@ -11984,3 +12061,57 @@ button{
 .btn-group-vertical button.btn.btn-primary .icoBg-tracnet:nth-child(2) {
     min-width: 32px;
 }
+
+/* 04-09-2023 */
+.mhole-mobile .mhole-image {
+    width: 100%;
+    margin-top: 20px;
+}
+.mhole-mobile .mhole-content {
+    position: absolute;
+    top: 67px;
+    right: 17%;
+    z-index: 1;
+    padding-top: 20px;
+    /* margin-top: 20px; */
+    width: 100%;
+    padding: 0 55px 0 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+.mhole .mhole-mobile span{
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    margin: 0px auto;
+    justify-content: center;
+}
+.mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1) {
+    margin-bottom: 0px;
+    margin-top: 102px;
+}
+.mhole-mobile .mhole-content .circles {
+    position: absolute;
+    top: 332px;
+    /* width: 250px; */
+    margin-top: 80px;
+}
+.mhole-mobile .mhole-content .squares {
+    position: absolute;
+    top: 225px;
+    margin-top: 50px;
+}
+.mhole-mobile .mhole-content .traingles {
+    position: absolute !important;
+    top: 115px;
+    margin-top: 20px;
+}
+.mhole-mobile .mhole-image img {
+    display: block;
+    object-fit: cover;
+    height: 570px;
+    margin: 0 auto;
+    width: 60px;
+}
+/* 04-09-2023 */

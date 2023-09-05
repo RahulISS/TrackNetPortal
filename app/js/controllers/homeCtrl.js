@@ -417,7 +417,16 @@ angular
             const mergedArray = convertedData.map(item1 => {
               const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
                 if (matchingItem2) {
-                  if(matchingItem2.distance_alert !== null && matchingItem2.distance_alert !== ''){
+
+                  var distanceObjectValid=false;
+                  try {
+                    JSON.parse(matchingItem2.distance_alert);
+                    distanceObjectValid = true;
+                  } catch (e) {
+                    distanceObjectValid = false;  
+                  }
+
+                  if(distanceObjectValid && matchingItem2.distance_alert !== null && matchingItem2.distance_alert !== ''){
                     var point_alt = JSON.parse(matchingItem2.distance_alert);
                   }else{
                     var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
@@ -1413,7 +1422,7 @@ angular
 						$scope.altStatus3 = 'Disabled';
 					}
 				}
-			}, 2000); // 3000 milliseconds = 3 seconds
+			}, 1000); // 3000 milliseconds = 3 seconds
 		};
 
     /*Close Model*/
@@ -1423,6 +1432,27 @@ angular
 			$scope.disAlt1 = ''; $scope.disAlt2 = ''; $scope.disAlt3 = '';
 		  };
 		  /*End*/
+
+      //  Reset Alert function
+      $scope.resetAlert = function() {
+        $scope.errorstatus = false;
+        $scope.errorAlt1 = ''; 
+        $scope.errorAlt2 = ''; 
+        $scope.errorAlt3 = '';
+        $scope.addAlt1Class = 'alertLight';
+        $scope.disAlt1 = '';
+        $scope.alert1 = '';
+        $scope.altStatus1 = 'Disabled';
+        $scope.addAlt2Class = 'alertLight';
+        $scope.disAlt2 = '';
+        $scope.alert2 = '';
+        $scope.altStatus2 = 'Disabled';
+        $scope.addAlt3Class = 'alertLight';
+        $scope.disAlt3 = '';
+        $scope.alert3 = '';
+        $scope.altStatus3 = 'Disabled';
+  
+      };
 
 
     	/*saving relative distance alerts*/
@@ -1778,5 +1808,6 @@ angular
       };
 
       $scope.distanceAlert;
-    }
-  );
+    });
+
+  
