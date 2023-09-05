@@ -654,7 +654,7 @@ angular
         var colorCode = dict.colorRank;
         var colorCode2 = dict.colorRank2;
         var imgpath = "";
-        console.log(colorCode,"color Code",colorCode2,"colorCode2");
+      
         if (colorCode) {
           if (colorCode == 3 && colorCode2 == 3) {
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
