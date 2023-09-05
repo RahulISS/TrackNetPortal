@@ -418,63 +418,7 @@ angular
       $scope.flowReportComments = "";
       $scope.flowReportNode = "";
 
-      function isShowFlowReportButton() {
-        let queriesArray = [];
-        $scope.flowReportRangeStartDate =
-          $rootScope.storage.chartsRangeStartDate;
-        $scope.flowReportRangeEndDate = $rootScope.storage.chartsRangeEndDate;
-        let frmDate = moment($scope.flowReportRangeStartDate).format(
-          skySparkFormat
-        );
-        let toDate = moment($scope.flowReportRangeEndDate).format(
-          skySparkFormat
-        );
-        for (var i = 0; i < $scope.tableStats.length; i++) {
-          if (
-            $scope.tableStats[i].pointId == null ||
-            $scope.tableStats[i].pointId == "null"
-          )
-            continue;
-          let query = `html_aTreeNode_get_id_device_02_a( "Gold Coast Water", "TracNet Yarra Valley", 
-                "${$scope.tableStats[i].title}" , ${frmDate} , ${toDate} ).map( r => set( r , "productModel" , 
-                r->productRef->productModelRef->modelId ) )`;
-          queriesArray.push({ index: i, query: query });
-        }
-        if (queriesArray.length > 0) {
-          let promises_data = queriesArray.map(function (item) {
-            return Data.sendRequest(
-              item.query,
-              $rootScope.storage.skysparkVersion
-            ).then(function (reqResult) {
-              return {
-                idx: item.index,
-                data: reqResult.data,
-              };
-            });
-          });
-
-          $q.all(promises_data).then(function (responses) {
-            if (responses.length !== queriesArray.length) return;
-            $scope.flowReportBtn = false;
-            for (let j = 0; j < responses.length; j++) {
-              for (let k = 0; k < responses[j].data.rows.length; k++) {
-                if (
-                  responses[j].data.rows[k].productModel ==
-                  "TWP-FSPRO-2AV-RAD-8C"
-                ) {
-                  $scope.flowReportBtn = true;
-                  $scope.flowReportNode =
-                    $scope.tableStats[responses[j].idx].title;
-                  j = responses.length;
-                  break;
-                }
-              }
-            }
-          });
-        } else {
-          $scope.flowReportBtn = false;
-        }
-      }
+      
       function flowSensorDataSetup() {
         $scope.flowSensorData = [];
         for (let inc = 0; inc < $rootScope.storage.sensorData.length; inc++) {
@@ -497,9 +441,7 @@ angular
         flowSensorDataSetup();
         if (newNode == undefined || newNode == null || newNode == "null")
           return;
-        $timeout(function () {
-          isShowFlowReportButton();
-        }, 100);
+       
       });
 
       $scope.selectFlowRepSensor = function (idx) {
@@ -894,6 +836,7 @@ angular
       };
 
       $scope.switchYmin = function (page) {
+
         $scope.chartStatusSet[page].ymin = !$scope.chartStatusSet[page].ymin;
         if ($scope.chartStatusSet[page].ymin === true) {
           document
@@ -910,6 +853,7 @@ angular
           showMarkers(page);
         }, 100);
       };
+
 
       $scope.switchMarkers = function (page) {
         $scope.chartStatusSet[page].markers =
@@ -1108,7 +1052,7 @@ angular
         $scope.meterChartConfig.options.yAxis[index].max = null;
         setVisible();
         //setNextCurrentLegend();
-        isShowFlowReportButton(index);
+      
       };
 
       var args;
@@ -1413,6 +1357,11 @@ angular
                 let queryInfo = { query: query , index: i };
                 $scope.queriesRelativeDistalceArray.push(queryInfo);
                 $scope.queryEmptyFull = apiBaseUrl+"getEmpltyFull/"+id_serial;
+                $scope.meterChartConfig.options.yAxis[0] = generateYAxisConfig();
+               
+                 document
+                  .getElementById("meter_yminButton")
+                  .setAttribute("class", "btnTopBar");
                 
                 
             }else{
@@ -1421,6 +1370,10 @@ angular
                
                 let queryInfo = { query: query , index: i };
                 $scope.queriesArray.push(queryInfo);
+                $scope.meterChartConfig.options.yAxis[0] = generateYAxisConfigDisance();
+                document
+                  .getElementById("meter_yminButton")
+                  .setAttribute("class", "btnTopBarOff");
             }
           }
           $http.get($scope.queryEmptyFull, {headers:customeHeader}).then(function (reqResult2) {
@@ -1734,6 +1687,8 @@ angular
           chart: {
             type: "line",
             zoomType: "xy",
+           
+            
           },
           plotOptions: {
             series: {
@@ -2045,7 +2000,56 @@ angular
           text: "",
         },
       };
-
+      
+      function generateYAxisConfig() {
+        return {
+            tickColor: $scope.tableStats[0].colour,
+                    tickWidth: 2,
+                    lineWidth: 2,
+                    lineColor: $scope.tableStats[0].colour,
+                    min: -5,
+                    max: 105,
+                    tickPixelInterval: 50, // Set the tick interval to 5
+                    tickPositions: [ 0, , 20, 40,  60,80, 100],
+                    minPadding: 0.2,
+                    maxPadding: 0.2,
+                    gridLineWidth: 2,
+                    tickColor: gridTickColor,
+                    gridLineColor: gridTickColor,
+                    title: {
+                      text: " ",
+                    },
+                    labels: {
+                      style: {
+                        fontSize: "13px",
+                        color: $scope.tableStats[0].colour,
+                      },
+                    },
+                    
+        };
+      }
+      function generateYAxisConfigDisance() {
+        return {
+            tickColor: $scope.tableStats[0].colour,
+                    tickWidth: 2,
+                    lineWidth: 2,
+                    lineColor: $scope.tableStats[0].colour,
+                    minPadding: 0.2,
+                    maxPadding: 0.2,
+                    gridLineWidth: 2,
+                    tickColor: gridTickColor,
+                    gridLineColor: gridTickColor,
+                    title: {
+                      text: " ",
+                    },
+                    labels: {
+                      style: {
+                        fontSize: "13px",
+                        color: $scope.tableStats[0].colour,
+                      },
+                    },
+        };
+      }
       $scope.chartStatusSet = {
         meter: {
           charts: $scope.meterChartConfig,
