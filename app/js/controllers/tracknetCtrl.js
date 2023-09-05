@@ -410,7 +410,13 @@ angular
           const convertedData = allconvertedData.map(item1 => {
             const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
               if (matchingItem2) {
-                if(matchingItem2.distance_alert !== null){
+                try {
+                  JSON.parse(matchingItem2.distance_alert);
+                  distanceObjectValid = true;
+                } catch (e) {
+                  distanceObjectValid = false;  
+                }
+                if(distanceObjectValid && matchingItem2.distance_alert !== null){
                   var point_alt = JSON.parse(matchingItem2.distance_alert);
                 }else{
                   var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
@@ -1108,8 +1114,15 @@ angular
                   var disValue = Number(data.point.height);
                 }
 
+                
+                try {
+                  JSON.parse(matchingItem2.distance_alert);
+                  distanceObjectValid = true;
+                } catch (e) {
+                  distanceObjectValid = false;  
+                }
 
-                if(data.point.distance_alert){
+                if(distanceObjectValid && data.point.distance_alert){
                   var distanceValue = JSON.parse(data.point.distance_alert);
                   var relativeDistanceCal = Math.round((((parseInt(distanceValue.empty) - (distanceValue.full))-(disValue - parseInt(distanceValue.full))) / (parseInt(distanceValue.empty) - parseInt(distanceValue.full))) * 100)
                   if(relativeDistanceCal < 0){
@@ -1204,7 +1217,15 @@ angular
           const convertedAlertCountData = allconvertedDatas.map(item1 => {
             const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
               if (matchingItem2) {
-                if(matchingItem2.distance_alert !== null){
+
+                try {
+                  JSON.parse(matchingItem2.distance_alert);
+                  distanceObjectValid = true;
+                } catch (e) {
+                  distanceObjectValid = false;  
+                }
+
+                if(distanceObjectValid && matchingItem2.distance_alert !== null){
                   var point_alt = JSON.parse(matchingItem2.distance_alert);
                 }else{
                   var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
