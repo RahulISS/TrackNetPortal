@@ -924,10 +924,10 @@ angular
         $("#popupModalCenter").addClass("show-modal");
         $http.get(apiBaseUrl+"user-definded-distancealert?aTreeNodeRef=" +node_id, {headers:customeHeader}).then(function (response) {
           if(response.data.data.distance_alert === undefined || response.data.data.distance_alert == '') { 
-            $scope.alarmCount = 0;
-            $scope.alert1 = 0;
-            $scope.alert2 = 0;
-            $scope.alert3 = 0;
+            $scope.alarmCount = "";
+            $scope.alert1 = "";
+            $scope.alert2 = "";
+            $scope.alert3 = "";
           } else {
               localStorage.setItem("instName",response.data.data.installationName);
               $scope.pointSettingData = JSON.parse(response.data.data.distance_alert);              
