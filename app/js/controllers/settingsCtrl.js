@@ -336,7 +336,7 @@ angular.module('settingsCtrl', [])
         }
       };
       const url = apiBaseUrl + "alert-alarm-setting/edit/" + _id;
-
+      // reSetValue();
       const query3 = $http.get(url, config).then(function (response) {
 
         if (response.data.status) {
