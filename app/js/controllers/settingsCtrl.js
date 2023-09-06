@@ -85,6 +85,7 @@ angular.module('settingsCtrl', [])
     $scope.addShow = true;
     $scope.updateShow = false;
 
+    // ADD
     $scope.saveUserConfiguationSetting = function () {
       var contactName = $scope.contactName;
       var emailAddress = $scope.emailAddress;
@@ -168,6 +169,8 @@ angular.module('settingsCtrl', [])
     }
 
     $scope.configRecord = [];
+
+    // READ
     function getSaveedUserConfiguration() {
       $scope.portal = "TracNet Yarra Valley";
       // const query = `readAll(aEmailNotificationSetting and aPortalName == "${$scope.portal}")`;
@@ -192,6 +195,8 @@ angular.module('settingsCtrl', [])
 
 
     }
+
+    // Delete
     function deleteUserConfiguations(_id) {
       const config = {
         headers: {
@@ -249,7 +254,7 @@ angular.module('settingsCtrl', [])
 
 
 
-
+    // edit 
     $scope.editUserConfiguations = function (_id) {
       console.log(_id);
       const config = {
