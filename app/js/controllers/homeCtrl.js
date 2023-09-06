@@ -2089,7 +2089,6 @@ angular
 
             $("#popupModalCenter").removeClass("show-modal");
           } else if (data.status == 400) {
-            alert(data.msg);
             $("#popupModalCenter").removeClass("show-modal");
           }
         }).catch(function(error){
