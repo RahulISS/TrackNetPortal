@@ -370,7 +370,15 @@ angular.module('settingsCtrl', [])
     }
 
 
+    function updateConfigRecord(_id, updatedData) {
+      const index = $scope.configRecord.findIndex(item => item._id === _id);
+      if (index !== -1) {
+        // Update the specific item in the array
+        $scope.configRecord[index] = updatedData;
+      }
+    }
 
+    // update22
     $scope.updateUserConfiguationSetting = function () {
       console.log('inside the update');
       var contactName = $scope.contactName;
@@ -446,7 +454,13 @@ angular.module('settingsCtrl', [])
       const query3 = $http.put(url, query, config).then(function (response) {
         if (response.data.status) {
           console.log(response.data.status);
-
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Successfully Updated the record',
+          });
+          updateConfigRecord($scope.userId, response.data.data);
+          angular.element($("#form")).css('display', 'none');
         }
 
       });
