@@ -223,6 +223,8 @@ angular.module('settingsCtrl', [])
             console.error("An error occurred:", error);
           }
         });
+      angular.element($("#form")).css('display', 'none');
+
 
     }
 
