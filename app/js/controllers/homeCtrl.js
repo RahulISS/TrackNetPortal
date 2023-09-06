@@ -623,7 +623,7 @@ angular
       }
 
       let beachMarker = [];
-      $scope.altArr = [];
+      // $scope.altArr = [];
       function buildMarker(dict) {
          
         console.log(dict,"dist");
@@ -638,29 +638,31 @@ angular
             dict.relative_distance = 100;
           }
         
+        let altArr = [];
         if( dict.chk1 == 1) {
           if( dict.distance <= dict.totalAlerts.al1) {
-            $scope.altArr.push(dict.totalAlerts.al1);
+            altArr.push(dict.totalAlerts.al1);
           }          
         }
         if( dict.chk2 == 1) {
           if( dict.distance <= dict.totalAlerts.al2) {
-            $scope.altArr.push(dict.totalAlerts.al2);
+            altArr.push(dict.totalAlerts.al2);
           }
         }
         if( dict.chk3 == 1) {
           if( dict.distance <= dict.totalAlerts.al3) {
-            $scope.altArr.push(dict.totalAlerts.al3);
+            altArr.push(dict.totalAlerts.al3);
           }
           
         }
-      
+      console.log( altArr,"testtst");
         var infowindow = new google.maps.InfoWindow({
           content: dict.relative_distance.toLocaleString() +"%"+",  " + dict.angle + "\xBA"  ,
           });
 
         var colorCode = dict.colorRank;
         var colorCode2 = dict.colorRank2;
+        // console.log(colorCode,colorCode2,"dist11212");
         var imgpath = "";
       
         if (colorCode) {
@@ -683,8 +685,19 @@ angular
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 2) {
-            var value = closest( $scope.altArr , dict.distance_main);
-					  var result = getObjectKey(dict.totalAlerts, value);
+            if (altArr.length <= 1) {
+              var result = getObjectKey(dict.totalAlerts, altArr[0]);
+            }else{
+              let value = closest(altArr, dict.distance_main)
+              var result = getObjectKey(dict.totalAlerts, value);
+            }
+            // var value = closest(altArr, dict.distance_main);
+					  // var result = getObjectKey(dict.totalAlerts, value);
+
+            if (altArr.length == 0) {
+              imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            }
+
 						if( result == 'al1') {
 							imgpath = './img/triangle.svg';
 						}
@@ -698,8 +711,19 @@ angular
 						}
           }
           if (colorCode == 2 && colorCode2 == 3) {
-            var value = closest( $scope.altArr , dict.distance_main );
-						var result = getObjectKey(dict.totalAlerts, value);
+             console.log(altArr,"$scope.altArr");
+            console.log(imgpath,"dist11imgpath212");
+            if (altArr.length <= 1) {
+              var result = getObjectKey(dict.totalAlerts, altArr[0]);
+            }else{
+              let value = closest(altArr, dict.distance_main)
+              var result = getObjectKey(dict.totalAlerts, value);
+            }
+
+            if (altArr.length == 0) {
+              imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            }
+
 						if( result == 'al1') {
 							imgpath = './img/triangle.svg';
 						}
@@ -712,12 +736,13 @@ angular
 						if( result == 'al3' ) {
 							imgpath = './img/circle.svg';
 						}
+           
           }
           if (colorCode == 3 && colorCode2 == 2) {
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
           }
         }
-
+       
         let point = { lat: dict.latitude, lng: dict.longitude };
         let iconPath = imgpath;
         let iconTemp = {
@@ -2202,10 +2227,15 @@ angular
             var imgpath = "./img/red-dot.gif";
           }
           if (colorCode == 2 && colorCode2 == 2) {
-            let value = closest(alertArr , dict.distance)
-            var result = getObjectKey(alertObj, value);
+            if (alertArr.length <= 1) {
+              var result = getObjectKey(alertObj, alertArr[0]);
+            }
+            else{
+              let value = closest(alertArr , dict.distance)
+              var result = getObjectKey(alertObj, value);
+            }
             
-            if( result == 'al1') {
+            if( result == 'al3') {
               imgpath = './img/triangle.svg';
             }
 
@@ -2213,14 +2243,23 @@ angular
               imgpath = './img/square.svg';
             }
 
-            if( result == 'al3' ) {
+            if( result == 'al1' ) {
               imgpath = './img/circle.svg';
             }
           }
           if (colorCode == 2 && colorCode2 == 3) {
-            let value = closest(alertArr , dict.distance)
-					  var result = getObjectKey(alertObj, value);
-            if( result == 'al1') {
+            if (alertArr.length <= 1) {
+              var result = getObjectKey(alertObj, alertArr[0]);
+            }else{
+              let value = closest(alertArr , dict.distance)
+              var result = getObjectKey(alertObj, value);
+            }
+           console.log(alertObj,alertArr.length,"alertArralertArr");
+          
+            if (alertArr.length == 0) {
+              imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            }
+            if( result == 'al3') {
               imgpath = './img/triangle.svg';
             }
   
@@ -2228,7 +2267,7 @@ angular
               imgpath = './img/square.svg';
             }
   
-            if( result == 'al3' ) {
+            if( result == 'al1' ) {
               imgpath = './img/circle.svg';
             }
           }
@@ -2237,6 +2276,8 @@ angular
           }
         }
 
+        console.log(colorCode,colorCode2,"colorCode2colorCode2");
+        console.log(imgpath,"imgpathimgpath");
         let point = { lat: dict.latitude, lng: dict.longitude };
         const mapOptions = {
           center: point,
