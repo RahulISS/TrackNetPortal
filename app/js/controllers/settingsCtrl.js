@@ -210,10 +210,6 @@ angular.module('settingsCtrl', [])
               if (error.data.message.smsNumber) {
                 errortext = error.data.message.smsNumber[0];
               }
-              if (error.data.message) {
-                errortext = error.data.message;
-              }
-              // if(error)
             }
             Swal.fire({
               icon: 'error',
@@ -246,7 +242,23 @@ angular.module('settingsCtrl', [])
           $scope.smsNumber = data.smsNumber;
           $scope.configRecord = data;
 
+          if (data.length >= 4) {
+            // Hide the buttons with the class name "openbtn"
+            var buttons = document.getElementsByClassName("openbtn");
+            for (var i = 0; i < buttons.length; i++) {
+              buttons[i].style.display = "none";
+            }
+          } else {
+            // Show the buttons with the class name "openbtn"
+            var buttons = document.getElementsByClassName("openbtn");
+            for (var i = 0; i < buttons.length; i++) {
+              buttons[i].style.display = "block";
+            }
+          }
+          console.log("$scope.isCreateButtonDisabled:", $scope.isCreateButtonDisabled); // Check the value of the variable
         });
+
+
     }
 
     // Delete
@@ -295,6 +307,7 @@ angular.module('settingsCtrl', [])
           });
 
         });
+      getSaveedUserConfiguration();
 
     }
 
@@ -376,6 +389,7 @@ angular.module('settingsCtrl', [])
         // Update the specific item in the array
         $scope.configRecord[index] = updatedData;
       }
+      getSaveedUserConfiguration();
     }
 
     // update22
