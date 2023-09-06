@@ -115,19 +115,19 @@ angular.module('settingsCtrl', [])
       }
 
       if (distanceAlert_1 == null)
-        distanceAlert_1 == 0;
+        distanceAlert_1 = 0;
 
       if (distanceAlert_2 == null)
-        distanceAlert_2 == 0;
+        distanceAlert_2 = 0;
 
       if (distanceAlert_3 == null)
-        distanceAlert_3 == 0;
+        distanceAlert_3 = 0;
 
       if (angleAlarm == null)
-        angleAlarm == 0;
+        angleAlarm = 0;
 
       if (distanceAlarm == null)
-        distanceAlarm == 0;
+        distanceAlarm = 0;
 
       const query = `{ 
         
@@ -145,7 +145,7 @@ angular.module('settingsCtrl', [])
     }`;
 
 
-
+      console.log("addquery", query);
       const query1 = $http.post(apiBaseUrl + "alert-alarm-setting/store",
         query, { headers: customeHeader }
       )
@@ -189,14 +189,10 @@ angular.module('settingsCtrl', [])
     // READ
     function getSaveedUserConfiguration() {
       $scope.portal = "TracNet Yarra Valley";
-      // const query = `readAll(aEmailNotificationSetting and aPortalName == "${$scope.portal}")`;
-
-
       const query2 = $http
         .get(
           apiBaseUrl + "alert-alarm-setting",
           { headers: customeHeader },
-
         )
         .then(function (response) {
           const data = response.data.data;
@@ -207,17 +203,14 @@ angular.module('settingsCtrl', [])
           $scope.configRecord = data;
 
         });
-
-
-
     }
 
     // Delete
     function deleteUserConfiguations(_id) {
       const config = {
         headers: {
-          'Authorization': 'Bearer ' + customeHeader, // Replace 'yourAuthToken' with the actual token
-          ...customeHeader // Any additional headers you need
+          'Authorization': 'Bearer ' + customeHeader,
+          ...customeHeader
         }
       };
 
@@ -227,7 +220,7 @@ angular.module('settingsCtrl', [])
         .then(function (response) {
           if (response.data.status) {
 
-            // alert('Configuration deleted successfully.');
+
             Swal.fire({
               icon: 'success',
               title: 'Success',
@@ -242,7 +235,7 @@ angular.module('settingsCtrl', [])
 
           } else {
 
-            // alert('Failed to delete configuration. Please try again.');
+
             Swal.fire({
               icon: 'error',
               title: 'Error',
@@ -256,21 +249,11 @@ angular.module('settingsCtrl', [])
             title: 'Error',
             text: 'An error occurred while deleting the configuration.',
           });
-          // alert('An error occurred while deleting the configuration.');
+
         });
 
     }
 
-
-
-    // $scope.ShowConfirm = function (email) {
-    //   if ($window.confirm("Are you sure you want to delete this record ?")) {
-    //     deleteUserConfiguations(email);
-    //   } else {
-
-    //     console.log('You clicked No!');
-    //   }
-    // }
     $scope.ShowConfirm = function (email) {
       Swal.fire({
         title: 'Confirm Deletion',
@@ -288,8 +271,6 @@ angular.module('settingsCtrl', [])
       });
     };
 
-
-
     $scope.contactName = null;
     $scope.emailAddress = null;
     $scope.smsNumber = null;
@@ -298,8 +279,6 @@ angular.module('settingsCtrl', [])
     $scope.distanceAlert_3 = null;
     $scope.angleAlarm = null;
     $scope.distanceAlarm = null;
-
-
 
     // edit 
     $scope.userId = null;
@@ -331,7 +310,7 @@ angular.module('settingsCtrl', [])
             // Access specific properties from the first item in the permissions array
             const firstPermission = permissions[0];
             console.log("permissions", permissions[0])
-            // Adjust property names and comparisons as needed
+
             $scope.distanceAlert_1 = firstPermission.Distance_Alert1 == '0' ? '0' : '1';
             $scope.distanceAlert_2 = firstPermission.Distance_Alert2 == '0' ? '0' : '1';
             $scope.distanceAlert_3 = firstPermission.Distance_Alert3 == '0' ? '0' : '1';
@@ -407,7 +386,7 @@ angular.module('settingsCtrl', [])
       }]
     }`;
 
-      console.log('editinquery', query);
+      // console.log('editinquery', query);
 
 
 

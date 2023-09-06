@@ -1,6 +1,6 @@
 <div class="tablewrapper">
-    <h2>Configurable SMS and Email Notifications </h2>
-    <button type="button" onclick="openForm()" ng-click="reSetValue()" class="openbtn">ADD </button>
+    <h2>Notification Configuration</h2>
+    <button type="button" onclick="openForm()" ng-click="reSetValue()" class="openbtn">Create </button>
     <!-- POP UP FORM -->
     <div class="form-popup" id="form">
         <form class="form-container" action="/" method="post" id="settingForm">
@@ -17,8 +17,7 @@
             </div>
             <div class="elemDiv">
                 <label for="number">SMS Number</label>
-                <input type="text" ng-model="smsNumber" id="mobile_code" class="form-control" name="smsNumber"
-                    value="{{smsNumber}}">
+                <input type="number" ng-model="smsNumber" id="mobile_code" name="smsNumber" value="{{smsNumber}}">
                 <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span>
             </div>
             <div class="form-row">
@@ -33,7 +32,7 @@
                         <div class="dstRadio">
                             <label for="No">No</label>
                             <input type="radio" ng-model="distanceAlert_1" name="distanceAlert_1" value="0"
-                                ng-checked="{{distanceAlert_1 == 0 }}">
+                                ng-checked="{{distanceAlert_1 == 0 || distanceAlert_1 == null}}">
                         </div>
                     </div>
 
@@ -48,8 +47,8 @@
                         </div>
                         <div class="dstRadio">
                             <label for="No">No</label>
-                            <input type="radio" ng-model="angleAlarm" name="angleAlarm" ng-value="0"
-                                ng-checked="{{angleAlarm == 0}}">
+                            <input type="radio" ng-model="angleAlarm" name="angleAlarm" value="0"
+                                ng-checked="{{angleAlarm == 0 || angleAlarm == null}}">
                         </div>
                     </div>
                 </div>
@@ -66,7 +65,7 @@
                         <div class="dstRadio">
                             <label for="No">No</label>
                             <input type="radio" ng-model="distanceAlert_2" name="distanceAlert_2" value="0"
-                                ng-checked="{{distanceAlert_2 == 0}}">
+                                ng-checked="{{distanceAlert_2 == 0 || distanceAlert_2 == null}}">
                         </div>
                     </div>
                 </div>
@@ -81,7 +80,7 @@
                         <div class="dstRadio">
                             <label for="No">No</label>
                             <input type="radio" ng-model="distanceAlarm" name="disAlarm" value="0"
-                                ng-checked="{{distanceAlarm == 0}}">
+                                ng-checked="{{distanceAlarm == 0 || distanceAlarm == null}}">
                         </div>
                     </div>
                 </div>
@@ -98,18 +97,18 @@
                         <div class="dstRadio">
                             <label for="No">No</label>
                             <input type="radio" ng-model="distanceAlert_3" name="distanceAlert_3" value="0"
-                                ng-checked="{{distanceAlert_3 == 0}}">
+                                ng-checked="{{distanceAlert_3 == 0 || distanceAlert_3 == null}}">
                         </div>
                     </div>
                 </div>
 
             </div>
             <button type="button" class="update" ng-show="addShow" value="Add"
-                ng-click="saveUserConfiguationSetting()">Add</button>
+                ng-click="saveUserConfiguationSetting('Add')">Add</button>
             <button type="button" class="update" value="update" ng-show="updateShow"
-                ng-click="updateUserConfiguationSetting()">Update</button>
-            <button type="button" class="reset">Reset</button>
-            <button type="button" class="test">Test</button>
+                ng-click="saveUserConfiguationSetting('Edit')">Update</button>
+            <button type="button" class="reset" ng-click="clearForm()">Reset</button>
+            <button type="button" class="test" ng-click="sendTestMessage()">Test</button>
             <!-- <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span> -->
         </form>
 
@@ -120,7 +119,7 @@
             <tr>
                 <th>Group Name</th>
                 <th>Email</th>
-                <th>Phone No</th>
+                <th>SMS Number</th>
                 <th>Distance Alert 1</th>
                 <th>Distance Alert 2</th>
                 <th>Distance Alert 3</th>
@@ -134,18 +133,16 @@
                 <td>{{item.contactName}}</td>
                 <td>{{item.emailAddress}}</td>
                 <td>{{item.smsNumber}}</td>
-                <td>{{item.distanceAlert_1 == 1 ? 'Yes' : 'No'}}</td>
-                <td>{{item.distanceAlert_2 == 1 ? 'Yes' : 'No'}}</td>
-                <td>{{item.distanceAlert_3 == 1 ? 'Yes' : 'No'}}</td>
-                <td>{{item.distanceAlarm == 1 ? 'Yes' : 'No'}}</td>
-                <td>{{item.angleAlarm == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.alert1 == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.alert2 == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.alert3 == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.distance == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.angle == 1 ? 'Yes' : 'No'}}</td>
                 <td>
                     <button class="edit" type="button" onclick="openForm()"
                         ng-click="editUserConfiguations(item._id)"><i class="fa fa-edit"></i></button>
                     <button class="delete" type="button" ng-click="ShowConfirm( item._id )"><i class="fa fa-trash"
                             aria-hidden="true"></i></button>
-
-
                 </td>
             </tr>
         </tbody>
@@ -159,14 +156,24 @@
         document.getElementById("settingForm").reset();
     }
 
+    function resetForm() {
+        // document.getElementById("settingForm").reset();
+        // $('#settingForm').trigger("reset");
+        document.getElementById("settingForm").reset()
+    }
+
 
     function closeForm() {
         document.getElementById("form").style.display = "none";
     }
 
+    $('#reset').click(function () {
+        $('#settingForm')[0].reset();
+    });
+
     // -----Country Code Selection
     $("#mobile_code").intlTelInput({
-        initialCountry: "in",
+        initialCountry: "au",
         separateDialCode: true,
         // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
     });
