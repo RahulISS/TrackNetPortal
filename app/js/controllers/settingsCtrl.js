@@ -153,15 +153,31 @@ angular.module('settingsCtrl', [])
           const data = response.data;
           if (data.status) {
             getSaveedUserConfiguration()
-            alert(data.message);
+            // alert(data.message);
+            Swal.fire({
+              icon: 'success', // Set the SweetAlert icon
+              title: 'Success',
+              text: "Successfully Added the record",
+            });
           }
         })
         .catch(function (error) {
           if (error.status === 422) {
             // Handle the 422 error here (e.g., display an error message).
-            alert("Duplicate entry detected. Please check your input.");
+            // alert("Duplicate entry detected. Please check your input.");
+            Swal.fire({
+              icon: 'error', // Set the SweetAlert icon for an error
+              title: 'Error',
+              text: 'Duplicate entry detected. Please check your input.',
+            });
           } else {
             // Handle other errors as needed.
+            // console.error("An error occurred:", error);
+            Swal.fire({
+              icon: 'error', // Set the SweetAlert icon for an error
+              title: 'Error',
+              text: 'An error occurred: ' + error.statusText,
+            });
             console.error("An error occurred:", error);
           }
         });
@@ -211,7 +227,12 @@ angular.module('settingsCtrl', [])
         .then(function (response) {
           if (response.data.status) {
 
-            alert('Configuration deleted successfully.');
+            // alert('Configuration deleted successfully.');
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Configuration deleted successfully.',
+            });
 
 
             $scope.configRecord = $scope.configRecord.filter(function (item) {
@@ -221,26 +242,52 @@ angular.module('settingsCtrl', [])
 
           } else {
 
-            alert('Failed to delete configuration. Please try again.');
+            // alert('Failed to delete configuration. Please try again.');
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Failed to delete configuration. Please try again.',
+            });
           }
         })
         .catch(function (error) {
-
-          alert('An error occurred while deleting the configuration.');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while deleting the configuration.',
+          });
+          // alert('An error occurred while deleting the configuration.');
         });
 
     }
 
 
 
-    $scope.ShowConfirm = function (email) {
-      if ($window.confirm("Are you sure you want to delete this record ?")) {
-        deleteUserConfiguations(email);
-      } else {
+    // $scope.ShowConfirm = function (email) {
+    //   if ($window.confirm("Are you sure you want to delete this record ?")) {
+    //     deleteUserConfiguations(email);
+    //   } else {
 
-        console.log('You clicked No!');
-      }
-    }
+    //     console.log('You clicked No!');
+    //   }
+    // }
+    $scope.ShowConfirm = function (email) {
+      Swal.fire({
+        title: 'Confirm Deletion',
+        text: 'Are you sure you want to delete this record?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteUserConfiguations(email);
+        } else {
+          console.log('You clicked No!');
+        }
+      });
+    };
+
 
 
     $scope.contactName = null;
@@ -381,7 +428,7 @@ angular.module('settingsCtrl', [])
 
       });
 
-      getSaveedUserConfiguration();
+      // getSaveedUserConfiguration();
 
 
     }
