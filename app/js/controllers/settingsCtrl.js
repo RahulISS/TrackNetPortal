@@ -188,7 +188,11 @@ angular.module('settingsCtrl', [])
               errorMessage = validationErrors.emailAddress[0];
             } else if (validationErrors.smsNumber && validationErrors.smsNumber.length > 0) {
               errorMessage = validationErrors.smsNumber[0];
-            } else {
+            }
+            else if (validationErrors.message) {
+              errorMessage = validationErrors.message;
+            }
+            else {
               errorMessage = 'An error occurred';
             }
 
@@ -206,6 +210,10 @@ angular.module('settingsCtrl', [])
               if (error.data.message.smsNumber) {
                 errortext = error.data.message.smsNumber[0];
               }
+              if (error.data.message) {
+                errortext = error.data.message;
+              }
+              // if(error)
             }
             Swal.fire({
               icon: 'error',
