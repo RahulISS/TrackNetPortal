@@ -639,13 +639,20 @@ angular
           }
         
         if( dict.chk1 == 1) {
-          $scope.altArr.push(dict.totalAlerts.al3);
+          if( dict.distance <= dict.totalAlerts.al1) {
+            $scope.altArr.push(dict.totalAlerts.al1);
+          }          
         }
         if( dict.chk2 == 1) {
-          $scope.altArr.push(dict.totalAlerts.al2);
+          if( dict.distance <= dict.totalAlerts.al2) {
+            $scope.altArr.push(dict.totalAlerts.al2);
+          }
         }
         if( dict.chk3 == 1) {
-          $scope.altArr.push(dict.totalAlerts.al1);
+          if( dict.distance <= dict.totalAlerts.al3) {
+            $scope.altArr.push(dict.totalAlerts.al3);
+          }
+          
         }
       
         var infowindow = new google.maps.InfoWindow({
@@ -678,7 +685,7 @@ angular
           if (colorCode == 2 && colorCode2 == 2) {
             var value = closest( $scope.altArr , dict.distance_main);
 					  var result = getObjectKey(dict.totalAlerts, value);
-						if( result == 'al3') {
+						if( result == 'al1') {
 							imgpath = './img/triangle.svg';
 						}
 
@@ -686,14 +693,14 @@ angular
 							imgpath = './img/square.svg';
 						}
 
-						if( result == 'al1' ) {
+						if( result == 'al3' ) {
 							imgpath = './img/circle.svg';
 						}
           }
           if (colorCode == 2 && colorCode2 == 3) {
             var value = closest( $scope.altArr , dict.distance_main );
 						var result = getObjectKey(dict.totalAlerts, value);
-						if( result == 'al3') {
+						if( result == 'al1') {
 							imgpath = './img/triangle.svg';
 						}
 
@@ -702,7 +709,7 @@ angular
 							imgpath = './img/square.svg';
 						}
 
-						if( result == 'al1' ) {
+						if( result == 'al3' ) {
 							imgpath = './img/circle.svg';
 						}
           }
@@ -2136,21 +2143,29 @@ angular
       $scope.mapLocation = function (dict) {
         if (typeof dict.latitude === "undefined" && typeof dict.longitude === "undefined")
           return;
+        console.log(dict,"dictdict");
+        console.log(dict.alertOne,"dict.alertOnedict.alertOne");
 
           let alertObj = {
-            'al3': dict.alertOne,
+            'al1': dict.alertOne,
             'al2': dict.alertTwo,
-            'al1': dict.alertThree
+            'al3': dict.alertThree
           };
           let alertArr = [];
           if( dict.aCheck1 == 1) {
-            alertArr.push(dict.alertOne);
+            if( dict.distance <= dict.alertOne) {
+              alertArr.push(dict.alertOne);
+            }           
           }
           if( dict.aCheck2 == 1) {
-            alertArr.push(dict.alertTwo);
+            if( dict.distance <= dict.alertTwo) {
+              alertArr.push(dict.alertTwo);
+            }            
           }
           if( dict.aCheck3 == 1) {
-            alertArr.push(dict.alertThree);
+            if( dict.distance <= dict.alertThree) {
+              alertArr.push(dict.alertThree);
+            }            
           }
           
           if(dict.relative_distance < 0){
@@ -2190,7 +2205,7 @@ angular
             let value = closest(alertArr , dict.distance)
             var result = getObjectKey(alertObj, value);
             
-            if( result == 'al3') {
+            if( result == 'al1') {
               imgpath = './img/triangle.svg';
             }
 
@@ -2198,14 +2213,14 @@ angular
               imgpath = './img/square.svg';
             }
 
-            if( result == 'al1' ) {
+            if( result == 'al3' ) {
               imgpath = './img/circle.svg';
             }
           }
           if (colorCode == 2 && colorCode2 == 3) {
             let value = closest(alertArr , dict.distance)
 					  var result = getObjectKey(alertObj, value);
-            if( result == 'al3') {
+            if( result == 'al1') {
               imgpath = './img/triangle.svg';
             }
   
@@ -2213,7 +2228,7 @@ angular
               imgpath = './img/square.svg';
             }
   
-            if( result == 'al1' ) {
+            if( result == 'al3' ) {
               imgpath = './img/circle.svg';
             }
           }
