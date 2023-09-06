@@ -301,8 +301,8 @@ angular.module('settingsCtrl', [])
       //   $scope.angleAlarm = $scope.userRecord[0].angleAlarm;
       //   $scope.distanceAlarm = $scope.userRecord[0].distanceAlarm;
 
-      //   $scope.updateShow = true;
-      //   $scope.addShow = false;
+      $scope.updateShow = true;
+      $scope.addShow = false;
 
       // });
     }
