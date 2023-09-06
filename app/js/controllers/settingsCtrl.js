@@ -340,6 +340,7 @@ angular.module('settingsCtrl', [])
     // edit 
     $scope.userId = null;
     $scope.editUserConfiguations = function (_id) {
+      $scope.reSetValue();
       console.log(_id);
       $scope.userId = _id;
       const config = {
@@ -349,7 +350,7 @@ angular.module('settingsCtrl', [])
         }
       };
       const url = apiBaseUrl + "alert-alarm-setting/edit/" + _id;
-      // reSetValue();
+
       const query3 = $http.get(url, config).then(function (response) {
 
         if (response.data.status) {
@@ -360,24 +361,21 @@ angular.module('settingsCtrl', [])
           $scope.emailAddress = $scope.userRecord.emailAddress;
           $scope.smsNumber = $scope.userRecord.smsNumber;
 
-          // Parse the permissions JSON string into an array
-          const permissions = JSON.parse($scope.userRecord.permissions);
 
-          if (permissions && permissions.length > 0) {
-            // Access specific properties from the first item in the permissions array
-            const firstPermission = permissions[0];
-            console.log("permissions", permissions[0])
+          $scope.distanceAlert_1 = $scope.userRecord.alert1 == 0 ? '0' : '1';
+          $scope.distanceAlert_2 = $scope.userRecord.alert2 == 0 ? '0' : '1';
+          $scope.distanceAlert_3 = $scope.userRecord.alert3 == 0 ? '0' : '1';
+          $scope.angleAlarm = $scope.userRecord.angle == 0 ? '0' : '1';
+          $scope.distanceAlarm = $scope.userRecord.distance == 0 ? '0' : '1';
 
-            $scope.distanceAlert_1 = firstPermission.Distance_Alert1 == '0' ? '0' : '1';
-            $scope.distanceAlert_2 = firstPermission.Distance_Alert2 == '0' ? '0' : '1';
-            $scope.distanceAlert_3 = firstPermission.Distance_Alert3 == '0' ? '0' : '1';
-            $scope.angleAlarm = firstPermission.Angle_Alarm == '0' ? '0' : '1';
-            $scope.distanceAlarm = firstPermission.Distance_Alarm == '0' ? '0' : '1';
 
-            $scope.updateShow = true;
-            $scope.addShow = false;
-          }
+          console.log($scope.distanceAlert_1, $scope.distanceAlert_2, $scope.distanceAlert_3, $scope.angleAlarm, $scope.distanceAlarm);
+
+          $scope.updateShow = true;
+          $scope.addShow = false;
         }
+
+
       });
 
     }

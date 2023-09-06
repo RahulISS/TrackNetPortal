@@ -1,8 +1,7 @@
 <div class="tablewrapper">
     <h2>Notification Configuration</h2>
     <button type="button" onclick="openForm()" ng-click="reSetValue()" class="openbtn">Create </button>
-    <!-- <button type="button" onclick="openForm()" ng-click="reSetValue()" class="openbtn"
-        ng-if="data.length <= 4">Create</button> -->
+
 
 
     <!-- POP UP FORM -->
@@ -111,7 +110,7 @@
                 ng-click="saveUserConfiguationSetting('Add')">Add</button>
             <button type="button" class="update" value="update" ng-show="updateShow"
                 ng-click="updateUserConfiguationSetting('Edit')">Update</button>
-            <button type="button" class="reset" ng-click="clearForm()">Reset</button>
+            <button type="button" class="reset" ng-click="reSetValue()">Reset</button>
             <button type="button" class="test" ng-click="sendTestMessage()">Test</button>
             <!-- <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span> -->
         </form>
