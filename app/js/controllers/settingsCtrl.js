@@ -146,37 +146,71 @@ angular.module('settingsCtrl', [])
 
 
       console.log("addquery", query);
-      const query1 = $http.post(apiBaseUrl + "alert-alarm-setting/store",
-        query, { headers: customeHeader }
-      )
+
+      const query1 = $http
+        .post(apiBaseUrl + "alert-alarm-setting/store", query, { headers: customeHeader })
         .then(function (response) {
           const data = response.data;
+          console.log(data.status);
           if (data.status) {
-            getSaveedUserConfiguration()
-            // alert(data.message);
+            getSaveedUserConfiguration();
             Swal.fire({
-              icon: 'success', // Set the SweetAlert icon
+              icon: 'success',
               title: 'Success',
-              text: "Successfully Added the record",
+              text: 'Successfully Added the record',
+            });
+          } else {
+            // Extract and display the error message
+            let errorMessage = '';
+
+            if (data.message && data.message.smsNumber && data.message.smsNumber.length > 0) {
+              errorMessage = data.message.smsNumber[0];
+            } else if (data.message && data.message.emailAddress && data.message.emailAddress.length > 0) {
+              errorMessage = data.message.emailAddress[0];
+            } else {
+              errorMessage = 'An error occurred';
+            }
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: errorMessage,
             });
           }
         })
         .catch(function (error) {
-          if (error.status === 422) {
-            // Handle the 422 error here (e.g., display an error message).
-            // alert("Duplicate entry detected. Please check your input.");
+          if (error.response && error.response.status === 422) {
+            // Handle validation errors from the server response
+            const validationErrors = error.response.data.errors;
+            let errorMessage = '';
+
+            if (validationErrors.emailAddress && validationErrors.emailAddress.length > 0) {
+              errorMessage = validationErrors.emailAddress[0];
+            } else if (validationErrors.smsNumber && validationErrors.smsNumber.length > 0) {
+              errorMessage = validationErrors.smsNumber[0];
+            } else {
+              errorMessage = 'An error occurred';
+            }
+
             Swal.fire({
-              icon: 'error', // Set the SweetAlert icon for an error
+              icon: 'error',
               title: 'Error',
-              text: 'Duplicate entry detected. Please check your input.',
+              text: errorMessage,
             });
           } else {
-            // Handle other errors as needed.
-            // console.error("An error occurred:", error);
+            let errortext = '';
+            if (error.data) {
+              if (error.data.message.emailAddress) {
+                errortext = error.data.message.emailAddress[0];
+              }
+              if (error.data.message.smsNumber) {
+                errortext = error.data.message.smsNumber[0];
+              }
+            }
             Swal.fire({
-              icon: 'error', // Set the SweetAlert icon for an error
+              icon: 'error',
               title: 'Error',
-              text: 'An error occurred: ' + error.statusText,
+              text: 'An error occurred: ' + errortext,
             });
             console.error("An error occurred:", error);
           }
