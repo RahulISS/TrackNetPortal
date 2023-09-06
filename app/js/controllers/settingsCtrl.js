@@ -255,8 +255,10 @@ angular.module('settingsCtrl', [])
 
 
     // edit 
+    $scope.userId = null;
     $scope.editUserConfiguations = function (_id) {
       console.log(_id);
+      $scope.userId = _id;
       const config = {
         headers: {
           'Authorization': 'Bearer ' + customeHeader,
@@ -266,70 +268,122 @@ angular.module('settingsCtrl', [])
       const url = apiBaseUrl + "alert-alarm-setting/edit/" + _id;
 
       const query3 = $http.get(url, config).then(function (response) {
-        // if (response.data.status) {
-        //   // console.log(response.data.data);
-
-        //   const data = response.data.data;
-
-        //   $scope.userRecord = data;
-        //   console.log($scope.userRecord, "$scope.userRecord");
-        //   $scope.contactName = $scope.userRecord[0].contactName;
-        //   $scope.emailAddress = $scope.userRecord[0].emailAddress;
-        //   $scope.smsNumber = $scope.userRecord[0].smsNumber;
-        //   $scope.distanceAlert_1 = $scope.userRecord[0].distanceAlert_1;
-        //   $scope.distanceAlert_2 = $scope.userRecord[0].distanceAlert_2;
-        //   $scope.distanceAlert_3 = $scope.userRecord[0].distanceAlert_3;
-        //   $scope.angleAlarm = $scope.userRecord[0].angleAlarm;
-        //   $scope.distanceAlarm = $scope.userRecord[0].distanceAlarm;
-
-        //   $scope.updateShow = true;
-        //   $scope.addShow = false;
-        // }
 
         if (response.data.status) {
           const data = response.data.data;
-
           $scope.userRecord = data;
           console.log($scope.userRecord, "$scope.userRecord");
           $scope.contactName = $scope.userRecord.contactName;
           $scope.emailAddress = $scope.userRecord.emailAddress;
           $scope.smsNumber = $scope.userRecord.smsNumber;
 
-          // Parse the permissions JSON array
+          // Parse the permissions JSON string into an array
           const permissions = JSON.parse($scope.userRecord.permissions);
 
-          // Access specific properties from the permissions object
-          $scope.distanceAlert_1 = permissions[0].Distance_Alert1;
-          $scope.distanceAlert_2 = permissions[0].Distance_Alert2;
-          $scope.distanceAlert_3 = permissions[0].Distance_Alert3;
-          $scope.angleAlarm = permissions[0].Distance_Alarm;
-          $scope.distanceAlarm = permissions[0].Angle_Alarm;
+          if (permissions && permissions.length > 0) {
+            // Access specific properties from the first item in the permissions array
+            const firstPermission = permissions[0];
+            console.log("permissions", permissions[0])
+            // Adjust property names and comparisons as needed
+            $scope.distanceAlert_1 = firstPermission.Distance_Alert1 == '0' ? '0' : '1';
+            $scope.distanceAlert_2 = firstPermission.Distance_Alert2 == '0' ? '0' : '1';
+            $scope.distanceAlert_3 = firstPermission.Distance_Alert3 == '0' ? '0' : '1';
+            $scope.angleAlarm = firstPermission.Angle_Alarm == '0' ? '0' : '1';
+            $scope.distanceAlarm = firstPermission.Distance_Alarm == '0' ? '0' : '1';
 
-          $scope.updateShow = true;
-          $scope.addShow = false;
+            $scope.updateShow = true;
+            $scope.addShow = false;
+          }
         }
+      });
 
+    }
+
+
+
+    $scope.updateUserConfiguationSetting = function () {
+      console.log('inside the update');
+      var contactName = $scope.contactName;
+      var emailAddress = $scope.emailAddress;
+      var smsNumber = $scope.smsNumber;
+      var distanceAlert_1 = $scope.distanceAlert_1;
+      var distanceAlert_2 = $scope.distanceAlert_2;
+      var distanceAlert_3 = $scope.distanceAlert_3;
+      var angleAlarm = $scope.angleAlarm;
+      var distanceAlarm = $scope.distanceAlarm;
+
+      if (contactName == null || contactName == "") {
+        $scope.errorMsgName = "Field is required";
+        $scope.alrErrName = true;
+        return;
+      }
+
+      if (emailAddress == null || emailAddress == "") {
+        $scope.errorMsgEmail = "Field is required";
+        $scope.alrErrEmail = true;
+        return;
+      }
+
+      if (smsNumber == null || smsNumber == "") {
+        $scope.errorMsgNumber = "Field is required";
+        $scope.alrErrNumber = true;
+        return;
+      }
+
+      if (distanceAlert_1 == null)
+        distanceAlert_1 == 0;
+
+      if (distanceAlert_2 == null)
+        distanceAlert_2 == 0;
+
+      if (distanceAlert_3 == null)
+        distanceAlert_3 == 0;
+
+      if (angleAlarm == null)
+        angleAlarm == 0;
+
+      if (distanceAlarm == null)
+        distanceAlarm == 0;
+
+      const query = `{ 
+        
+        "contactName": "${contactName}" , 
+        "emailAddress": "${emailAddress}",
+         "smsNumber": "${smsNumber}", 
+        "permissions":[{
+       
+          "Distance_Alert1": "${distanceAlert_1}",
+           "Distance_Alert2": "${distanceAlert_2}", 
+           "Distance_Alert3": "${distanceAlert_3}" ,
+            "Distance_Alarm": "${distanceAlarm}",
+             "Angle_Alarm": "${angleAlarm}"
+      }]
+    }`;
+
+      console.log('editinquery', query);
+
+
+
+      // console.log(_id);
+      const config = {
+        headers: {
+          'Authorization': 'Bearer ' + customeHeader,
+          ...customeHeader
+        }
+      };
+      const url = apiBaseUrl + "alert-alarm-setting/update/" + $scope.userId;
+
+      const query3 = $http.put(url, query, config).then(function (response) {
+        if (response.data.status) {
+          console.log(response.data.status);
+
+        }
 
       });
 
+      getSaveedUserConfiguration();
 
-      // Data.sendRequest(query, $rootScope.storage.skysparkVersion).then(function (response) {
-      //   const data = response.data.rows;
-      //   $scope.userRecord = data;
-      //   console.log($scope.userRecord, "$scope.userRecord");
-      //   $scope.contactName = $scope.userRecord[0].contactName;
-      //   $scope.emailAddress = $scope.userRecord[0].emailAddress;
-      //   $scope.smsNumber = $scope.userRecord[0].smsNumber;
-      //   $scope.distanceAlert_1 = $scope.userRecord[0].distanceAlert_1;
-      //   $scope.distanceAlert_2 = $scope.userRecord[0].distanceAlert_2;
-      //   $scope.distanceAlert_3 = $scope.userRecord[0].distanceAlert_3;
-      //   $scope.angleAlarm = $scope.userRecord[0].angleAlarm;
-      //   $scope.distanceAlarm = $scope.userRecord[0].distanceAlarm;
 
-      //   $scope.updateShow = true;
-      //   $scope.addShow = false;
-
-      // });
     }
 
     $scope.reSetValue = function () {
