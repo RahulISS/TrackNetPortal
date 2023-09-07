@@ -12115,3 +12115,17 @@ button{
     width: 60px;
 }
 /* 04-09-2023 */
+
+.tablewrapper .test {
+    background-color: #3155a1;
+    border-radius: 5px;
+    color: #fff;
+    border: 0;
+    padding: 11px 12px;
+    top: 234px;
+}
+.tablewrapper .iti {
+    width: 100%;
+    max-width: 215px;
+}
+

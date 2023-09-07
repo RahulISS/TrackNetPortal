@@ -495,6 +495,20 @@ angular.module('settingsCtrl', [])
       $scope.addShow = true;
     }
 
+    $scope.reSet3 = function () {
+      $scope.reSetValue();
+      $scope.contactName = null;
+      $scope.emailAddress = null;
+      $scope.smsNumber = null;
+
+      $scope.distanceAlert_1 = '0';
+      $scope.distanceAlert_2 = '0';
+      $scope.distanceAlert_3 = '0';
+      $scope.angleAlarm = '0';
+      $scope.distanceAlarm = '0';
+      $scope.updateShow = false;
+    }
+
 
     $scope.configActive = false;
     function getStatusData(selectedLabel) {
@@ -729,8 +743,9 @@ angular.module('settingsCtrl', [])
     }
 
     $scope.sendTestMessage = function () {
-      let userInput = prompt("Please enter your contact no with country code", "+65");
+      var userInput = $scope.smsNumber;
       if (Number(userInput)) {
+        userInput = "+91" + userInput;
         const query = `emailSend( null ,"${userInput}@directsms.com.au", "", "Test Message Recieved!")`;
         Data.sendRequest(query, $rootScope.storage.skysparkVersion).then(function (response) {
           if (response.data.rows[0].val == "sent!")
