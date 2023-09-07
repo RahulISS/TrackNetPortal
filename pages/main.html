@@ -1,9 +1,10 @@
 <!-- Main Content Header , Content and Footer Area -->
 <header>
 	<div class="loginHeader flexBoxCenter">
-		<div class="loginSides alignLeft"><img class="sydneyWt_logo" src="/_common/img/tracwater.png" alt="cityofgoldcoast logo"></div>
+		<div class="loginSides alignLeft"><img class="sydneyWt_logo" src="/_common/img/tracwater.png"
+				alt="cityofgoldcoast logo"></div>
 		<img class="meterTracLogo" src="/_common/img/Final-Logo.png" alt="tracwater logo">
-		
+
 		<div class="navButtons">
 			<div class="img_tg_tp" ng-click="toggleMenu()">
 				<img id="tgl-sh-hd" src="img/tg_menu.png">
@@ -22,7 +23,7 @@
 </header>
 
 <main>
-	<div class="mainMain flexBoxCenter">
+	<div class="mainMain flexBoxCenter" style="background-color: white;">
 		<div class="mainTemplate" ui-view>
 		</div>
 	</div>
@@ -31,7 +32,8 @@
 <footer>
 	<div class="loginFooter">
 		<div class="footerCol0">
-			&copy; {{thisyear}} TracWater Pty Ltd. Patented and Patents Pending. Terms of Use and Privacy Policy are applicable to you. All rights reserved.
+			&copy; {{thisyear}} TracWater Pty Ltd. Patented and Patents Pending. Terms of Use and Privacy Policy are
+			applicable to you. All rights reserved.
 		</div>
 		<div class="footerCol3 flexBoxCenter">
 			<img src='img/mail.png' style="width: 26px;" /> &nbsp; support@tracwater.com.au
@@ -48,13 +50,13 @@
 
 
 <script>
-	$(document).ready(function(){
-	  $("#tgl-sh-hd").click(function(e){
-		$(".meterTree2").toggle(500);
-		$(".withtree1").toggleClass('wd_fll');
-		
-	  });
+	$(document).ready(function () {
+		$("#tgl-sh-hd").click(function (e) {
+			$(".meterTree2").toggle(500);
+			$(".withtree1").toggleClass('wd_fll');
 
-	
+		});
+
+
 	});
 </script>

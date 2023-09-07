@@ -1,63 +1,183 @@
-<div class="summaryContainer">
-    <!-- Tree -->
-    <div class="summaryTreeContainer">
-        <div id="settingsTree" class="chartsTree font_size_tree" jstreesettings></div>
-    </div>
-    <div class="summaryChartContainer">
+<div class="tablewrapper">
+    <h2>Notification Configuration</h2>
+    <button type="button" onclick="openForm()" ng-click="reSetValue()" class="openbtn">Create </button>
 
-        <div class="outerContainer">
-            <h1 style="text-align: center; padding: 10px;">User-configurable SMS and Email Notifications</h1>
-            <div ng-show=" statusView " class="innerContainer">
-                <form action="" id="userFrm" ng-if="configRecord.length > 0">
-                     <!-- <button ng-click='go()'>Go</button> -->
-                    <div class="user-frm-wrp">
-                        <label for="">Contact Name </label>
-                        <input type="text" id="contact_name" value="{{configRecord.contactName}}" placeholder="Enter your Contact Name">
-                    </div>
 
-                    <div class="user-frm-wrp">
-                        <label for="">Email Address</label>
-                        <input type="email"  id="email_address" value="" placeholder="Enter Email Address">
-                    </div>
-                    <div class="user-frm-wrp">
-                        <label for="">SMS Number</label>
-                        <input type="text"  id="sms_number" value="" placeholder="Enter SMS Number">
-                    </div>
 
-                    <div class="btn--flex userFrm-btn">                        
-                        <input type="submit" ng-click="saveUserConfiguations($event)" class="submit__btn" />
-                        <input type="reset" ng-click="" class="cancel__btn" />
-                        <input type="submit" value="Test" ng-click="sendTestMessage()" class="test_btn"/>
-                    </div>
-                </form>
-                <!-- ng-if="configRecord.length > 0" -->
-                <form action="" id="userFrm" >
-                    <div class="user-frm-wrp">
-                       
-                        <label for="">Contact Name</label>
-                        <input type="text" id="contact_name" ng-model="contactName" value="{{contactName}}" placeholder="Enter your Contact Name">
-                    </div>
-
-                    <div class="user-frm-wrp">
-                        <label for="">Email Address</label>
-                        <input type="email"  id="email_address" ng-model="emailAddress" value="{{emailAddress}}" placeholder="Enter Email Address">
-                    </div>
-                    <div class="user-frm-wrp">
-                        <label for="">SMS Number</label>
-                        <input type="text"  id="sms_number" ng-model="smsNumber" value="{{smsNumber}}" placeholder="Enter SMS Number">
-                    </div>
-
-                    <div class="btn--flex userFrm-btn w-100">                        
-                        <input type="submit" value="Update" ng-click="saveUserConfiguations($event)" class="submit__btn" />
-                        <input type="reset" ng-click="" class="cancel__btn" />
-                        <input type="submit" value="Test" ng-click="sendTestMessage()" class="test_btn"/>
-                    </div>
-                </form>
+    <!-- POP UP FORM -->
+    <div class="form-popup" id="form">
+        <form class="form-container" action="/" method="post" id="settingForm">
+            <span class="close" onclick="closeForm()"> &times; </span>
+            <div class="elemDiv">
+                <label for="username">Group Name</label>
+                <input type="text" ng-model="contactName" id="groupname" name="contactName" value="{{contactName}}">
+                <span ng-show="alrErrName" class="text-danger">{{ errorMsgName }}</span>
             </div>
-        </div>
+            <div class="elemDiv">
+                <label for="email">Email Address</label>
+                <input type="email" ng-model="emailAddress" id="email" name="emailAddress" value="{{emailAddress}}">
+                <span ng-show="alrErrEmail" class="text-danger">{{ errorMsgEmail }}</span>
+            </div>
+            <div class="elemDiv">
+                <label for="number">SMS Number</label>
+                <input type="number" ng-model="smsNumber" id="mobile_code" name="smsNumber" value="{{smsNumber}}">
+                <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span>
+            </div>
+            <div class="form-row">
+                <div class="elemDiv">
+                    <label for="gender">Distance Alert1</label>
+                    <div class="radio">
+                        <div class="dstRadio">
+                            <label for="Yes">Yes</label>
+                            <input type="radio" ng-model="distanceAlert_1" name="distanceAlert_1" value="1"
+                                ng-checked="{{distanceAlert_1 == 1}}">
+                        </div>
+                        <div class="dstRadio">
+                            <label for="No">No</label>
+                            <input type="radio" ng-model="distanceAlert_1" name="distanceAlert_1" value="0"
+                                ng-checked="{{distanceAlert_1 == 0 || distanceAlert_1 == null}}">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="elemDiv">
+                    <label for="gender">Angle Alarm</label>
+                    <div class="radio">
+                        <div class="dstRadio">
+                            <label for="Yes">Yes</label>
+                            <input type="radio" ng-model="angleAlarm" name="angleAlarm" value="1"
+                                ng-checked="{{angleAlarm == 1}}">
+                        </div>
+                        <div class="dstRadio">
+                            <label for="No">No</label>
+                            <input type="radio" ng-model="angleAlarm" name="angleAlarm" value="0"
+                                ng-checked="{{angleAlarm == 0 || angleAlarm == null}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="elemDiv">
+                    <label for="gender">Distance Alert2</label>
+                    <div class="radio">
+                        <div class="dstRadio">
+                            <label for="Yes">Yes</label>
+                            <input type="radio" ng-model="distanceAlert_2" name="distanceAlert_2" value="1"
+                                ng-checked="{{distanceAlert_2 == 1}}">
+                        </div>
+                        <div class="dstRadio">
+                            <label for="No">No</label>
+                            <input type="radio" ng-model="distanceAlert_2" name="distanceAlert_2" value="0"
+                                ng-checked="{{distanceAlert_2 == 0 || distanceAlert_2 == null}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="elemDiv">
+                    <label for="gender">Distance Alarm</label>
+                    <div class="radio">
+                        <div class="dstRadio">
+                            <label for="Yes">Yes</label>
+                            <input type="radio" ng-model="distanceAlarm" name="disAlarm" value="1"
+                                ng-checked="{{distanceAlarm == 1}}">
+                        </div>
+                        <div class="dstRadio">
+                            <label for="No">No</label>
+                            <input type="radio" ng-model="distanceAlarm" name="disAlarm" value="0"
+                                ng-checked="{{distanceAlarm == 0 || distanceAlarm == null}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="elemDiv">
+                    <label for="gender">Distance Alert3</label>
+                    <div class="radio">
+                        <div class="dstRadio">
+                            <label for="Yes">Yes</label>
+                            <input type="radio" ng-model="distanceAlert_3" name="distanceAlert_3" value="1"
+                                ng-checked="{{distanceAlert_3 == 1}}">
+                        </div>
+                        <div class="dstRadio">
+                            <label for="No">No</label>
+                            <input type="radio" ng-model="distanceAlert_3" name="distanceAlert_3" value="0"
+                                ng-checked="{{distanceAlert_3 == 0 || distanceAlert_3 == null}}">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" class="update" ng-show="addShow" value="Add"
+                ng-click="saveUserConfiguationSetting('Add')">Add</button>
+            <button type="button" class="update" value="update" ng-show="updateShow"
+                ng-click="updateUserConfiguationSetting('Edit')">Update</button>
+            <button type="button" class="reset" ng-click="reSetValue()">Reset</button>
+            <button type="button" class="test" ng-click="sendTestMessage()">Test</button>
+            <!-- <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span> -->
+        </form>
+
     </div>
 
-    <div ng-show=" ( !statusView && loading ) || ( !statusView && operationResult ) " class="overlay flexBoxCenter">
-        {{message}}
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Group Name</th>
+                <th>Email</th>
+                <th>SMS Number</th>
+                <th>Distance Alert 1</th>
+                <th>Distance Alert 2</th>
+                <th>Distance Alert 3</th>
+                <th>Distance Alarm</th>
+                <th>Angle Alarm</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in configRecord">
+                <td>{{item.contactName}}</td>
+                <td>{{item.emailAddress}}</td>
+                <td>{{item.smsNumber}}</td>
+                <td>{{item.alert1 == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.alert2 == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.alert3 == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.distance == 1 ? 'Yes' : 'No'}}</td>
+                <td>{{item.angle == 1 ? 'Yes' : 'No'}}</td>
+                <td>
+                    <button class="edit" type="button" onclick="openForm()"
+                        ng-click="editUserConfiguations(item._id)"><i class="fa fa-edit"></i></button>
+                    <button class="delete" type="button" ng-click="ShowConfirm( item._id )"><i class="fa fa-trash"
+                            aria-hidden="true"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+
+<script>
+    function openForm() {
+
+        document.getElementById("form").style.display = "block";
+        document.getElementById("settingForm").reset();
+    }
+
+    function resetForm() {
+        // document.getElementById("settingForm").reset();
+        // $('#settingForm').trigger("reset");
+        document.getElementById("settingForm").reset()
+    }
+
+
+    function closeForm() {
+        document.getElementById("form").style.display = "none";
+    }
+
+    $('#reset').click(function () {
+        $('#settingForm')[0].reset();
+    });
+
+    // -----Country Code Selection
+    $("#mobile_code").intlTelInput({
+        initialCountry: "au",
+        separateDialCode: true,
+        // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
+    });
+</script>
