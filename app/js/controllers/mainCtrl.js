@@ -64,6 +64,13 @@ angular.module('mainCtrl', [])
                 $rootScope.storage.$reset();
                 $scope.refreshPage();
                 $state.go('login');
+            }) .catch(function (err) { // Corrected the syntax here
+                $window.localStorage.removeItem('authToken');
+                $rootScope.storage.loggedIn = false;
+                $rootScope.storage.authToken = false;
+                $rootScope.storage.$reset();
+                $scope.refreshPage();
+                $state.go('login');
             });
            
         }
@@ -148,7 +155,16 @@ angular.module('mainCtrl', [])
                     getSensors(tree);
                     $rootScope.storage.treeData = tree;
                 });
-            });
+            }).catch(function(error){
+                if(error.status==401){
+                  $window.localStorage.removeItem('authToken');
+                  $rootScope.storage.loggedIn = false;
+                  $rootScope.storage.authToken = false;
+                  $rootScope.storage.$reset();
+                  $scope.refreshPage();
+                  $state.go('login');
+                }
+              });
         }
 
         $rootScope.$on("checkedRef", function(e,data){
@@ -171,7 +187,7 @@ angular.module('mainCtrl', [])
               .then(function (response){
                     const data = response.data.data
                     let sensors = [ {
-                        'id': '@2ac7dd09-7e4cd602',
+                        'id': '64ae522eefa8baae8f106b9d',
                         'unit': '%',
                         'id_name': 'Relative Distance',
                         'rank': 1,
@@ -189,7 +205,16 @@ angular.module('mainCtrl', [])
                         }
                     }
                     $rootScope.storage.sensorData = sensors;
-                });
+                }).catch(function(error){
+                    if(error.status==401){
+                      $window.localStorage.removeItem('authToken');
+                      $rootScope.storage.loggedIn = false;
+                      $rootScope.storage.authToken = false;
+                      $rootScope.storage.$reset();
+                      $scope.refreshPage();
+                      $state.go('login');
+                    }
+                  });
         }
 
         function getSensors(tree){

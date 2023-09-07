@@ -728,6 +728,7 @@ button.navTabButton:hover {
 }
 
 .withtree1 {
+    background-color: #000;
     height: 100%;
     width: 80%;
     float: left;
@@ -10767,6 +10768,47 @@ div.week_days {
     position: relative;
     transition: all 0.3s ease-in;
 }
+.legend-button {
+    position: absolute;
+    top: 8px;
+    left: 13px;
+    color: #ffffff;
+    z-index: 9;
+    min-height: 45px;
+    width: 98px;
+    display: flex;
+    padding: 5px;
+    align-items: center;
+}
+
+/* 04-09-2023 changes */
+.tracnt-tab-legend-button {
+    position: absolute;
+    top: 50px;
+    right: 305px;
+    color: #ffffff;
+    margin-right: 10px;
+    z-index: 9;
+    min-height: 45px;
+    right: 0;
+    width: 98px;
+    display: flex;
+    padding: 5px;
+    align-items: center;
+}
+.btn-group-vertica{
+    top: 0;
+    position: relative;
+    height: 100%;
+
+}
+.map_block_middle {
+    overflow: hidden;
+    padding-bottom: 29px;
+    position: relative;
+}
+/* 04-09-2023 changes end */
+
 .view-style {
     position: absolute;
     top: 8px;
@@ -10813,13 +10855,13 @@ div.week_days {
     display: none;
 }
 table.elem {
-     border: 1px solid #a9a9a9;
+     border: 1.5px solid #000;
      width: 98.5%;
 }
 table.elem th,table.elem td{
-    border: 1px solid #a9a9a9;
-    padding: 5px;
-    max-width: 200px;
+    border: 1px solid #171818;
+    padding: 5px 15px 5px 15px;
+    max-width: 145px;
     word-wrap: break-word;
 }
 table.elem td {
@@ -10854,7 +10896,7 @@ table.elem td {
   
   .homepage.ng-scope .modal-content {
     position: absolute;
-    top: 0;
+    top: -109px;
     left: 50%;
     transform: translate(-50%, 0%);
     background-color: #FFF2DD !important;
@@ -10890,6 +10932,7 @@ table.elem td {
     overflow: hidden;
     gap: 10px;
     padding: 15px 20px;
+    padding-top: 35px;
   }
   
   .homepage.ng-scope button.close-button {
@@ -10905,8 +10948,18 @@ table.elem td {
   .homepage.ng-scope button.close-button span {
     color: #fff;
   }
+
+  .homepage.ng-scope button.remove-button {
+    color: #000;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 30px;
+  }
   .homepage.ng-scope #popupModalCenter .modal-dialog {
-    max-width: 30%;
+    max-width: 600px;
   }
   .homepage.ng-scope #popupModalCenter form{
     width: 100%;
@@ -10914,10 +10967,10 @@ table.elem td {
 }
 .homepage.ng-scope #popupModalCenter form input{
     width: 100%;
-    border-radius: 5px;
-    border: 1px solid #808080;
-    margin-bottom: 10px;
-    padding: 5px 0px;
+    border-radius: 10;
+    text-align: right;
+    margin-bottom: 0px;
+    padding: 0px 5px;
 }
 .homepage.ng-scope #popupModalCenter form .btn--flex input:hover{
     color: #fff;
@@ -10934,12 +10987,12 @@ table.elem td {
 
 /* 29-03-2023 shuaib */
 .tdAngleDistanceAlarmTriggeredColor {
-    background-color: #FF0000; /*red color*/
+    background-color: #ff00009e; /*red color*/
     color: #ffffff; /*white color*/
 }
 
 .tdAllClear {
-    background-color: #00FF00;  /*green color*/
+    background-color: #00ff00a6;  /*green color*/
 }
 
 .btn--flex{
@@ -10958,11 +11011,11 @@ table.elem td {
 }
 
 .alarmColor{
-    background-color: #FF0000;  /*red color*/   
+    background-color: #ff0000a1;  /*red color*/   
 }
 
 .alertColor{
-    background-color: yellow;
+    background-color: #ffb836e8;
 }
 
 
@@ -11152,7 +11205,7 @@ form#userFrm .user-frm-wrp input {
     border-left: 15px solid red !important; 
  }
  .alert_changed ul .distance.warn{
-    border-left: 15px solid yellow !important; 
+    border-left: 15px solid orange !important; 
  }
  .alert_changed ul .distance.ok{
     border-left: 15px solid green !important;
@@ -11238,7 +11291,7 @@ form#userFrm .user-frm-wrp input {
   } */
   
   .mhole-mobile {
-    max-width: 375px;
+    max-width: 100%;
     width: 100%;
     margin: 0% auto;
     padding: 22px 0px;
@@ -11246,8 +11299,9 @@ form#userFrm .user-frm-wrp input {
     background-color: #fff;
   }
   .mhole-mobile h4{
+    font-size: 25px;
     text-align: center;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
   }
   .mhole-mobile .mhole-image{
     width: 100%;
@@ -11260,7 +11314,7 @@ form#userFrm .user-frm-wrp input {
   .mhole-mobile .mhole-content{
     position: absolute;
     top: 52px;
-    left: 0;
+    right: 17%;
     z-index: 1;
     width: 100%;
     padding: 0 55px 0 30px;
@@ -11275,21 +11329,22 @@ form#userFrm .user-frm-wrp input {
     justify-content: end;
     gap: 84px;
     position: relative;
-    /* margin-bottom: 61px; */
+    margin-bottom: 61px;
   }
   .mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1){
-    margin-bottom: 0;
+    margin-bottom: 0px;
   }
   .mhole-mobile .mhole-content .mhole-alert::before{
     position: absolute;
     content: "";
     border: 1.7px solid red;
-    width: 100%;
-    left: 0;
+    width: 89px;
+    left: 40%;
   }
   .mhole-mobile .mhole-content .mhole-alert label,
-  .mhole-mobile .mhole-content .mhole-alert input{
-    border: 3px solid red;
+  .mhole-mobile .mhole-content .mhole-alert input,
+  .mhole-mobile .mhole-content .mhole-alert button{
+    border: 3px solid orange;
     padding: 1px;
     background: #fff;
     z-index: 1;
@@ -11314,20 +11369,21 @@ form#userFrm .user-frm-wrp input {
   
   .mhole-mobile .mhole-content .traingles {
     position: absolute !important;
-    top: 130px;
+    top: 115px;
   }
   
   .mhole-mobile .mhole-content .squares{
     position: absolute;
-    top: 265px;
+    top: 225px;
   }
   .mhole-mobile .mhole-content .circles{
     position: absolute;
-    top: 355px;
+    top: 332px;
+    /* width: 250px; */
   }
   .mhole-mobile .mhole-content .boundaryTwo{
     position: absolute;
-    top: 430px;
+    top: 440px;
   }
   
   .mhole-mobile .mhole-content .traingles label,
@@ -11345,7 +11401,7 @@ form#userFrm .user-frm-wrp input {
   .mhole-mobile .mhole-content .squares::after,
   .mhole-mobile .mhole-content .circles::after{
     position: absolute;
-    right: -27px;
+    margin: 20% 22.5% 0% 0%;
     content: "";
     background: url(../../img/triangle.svg);
     background-repeat: no-repeat;
@@ -11363,25 +11419,25 @@ form#userFrm .user-frm-wrp input {
   }
   
   .mhole-mobile .mhole-content .mhole-text{
-  max-width: 215px;
-  width: 100%;
-  display: flex;
-  justify-content: end;
+    max-width: 215px;
+    width: 100%;
+    display: flex;
+    justify-content: end;
   }
   
   .mhole-mobile .mhole-content .mhole-text p{
     background: #fff;
     z-index: 1;
-    margin-left: 132px;
+    margin-left: 138px;
   }
   
   .mhole-mobile .mhole-content .mhole-text p::before{
     position: absolute;
     content: "";
     border: 1px solid red;
-    width: 25%;
+    width: 20%;
     top: 28px;
-    margin-left: -100px;
+    margin-left: -110px;
   }
   
   .mhole-mobile .alert-input{
@@ -11407,27 +11463,14 @@ form#userFrm .user-frm-wrp input {
     margin-left: 2px;
   }
   
-  .mhole-mobile .alert-checkbox{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .mhole-mobile .alert-checkbox label{
-    padding: 2px 5px;
-    border: 1px solid #cccccc45;
-    border-radius: 4px;
-  }
   
   .mhole-mobile .buttons{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 10px;
+    margin-top: 30px;
     /* flex-direction: column; */
-    gap: 40px;
+    gap: 10px;
   }
   
   .mhole-mobile .save-btn{
@@ -11437,7 +11480,7 @@ form#userFrm .user-frm-wrp input {
     color: #fff;
     font-size: 20px;
     border-radius: 6px;
-    padding: 4px 30px;
+    padding: 3px 47px !important;
   }
   .mhole-mobile .cancel-btn{
     outline: none;
@@ -11446,13 +11489,20 @@ form#userFrm .user-frm-wrp input {
     color: #fff;
     font-size: 20px;
     border-radius: 6px;
-    padding: 4px 22px;
+    padding: 3px 47px !important;
   }
   
   .mhole-mobile .edit-btn{
+    color: white;
     position: absolute;
-    top: 45px;
-    left: 62px;
+    top: 28px;
+    border: 1px solid white;
+    border-radius: 9px;
+    background: blue;
+    padding: 3px;
+    font-size: 16px;
+    right: 15px;
+    left: unset;
     text-decoration: none;
     z-index: 9999999;
   }
@@ -11497,44 +11547,30 @@ table.homemaptable .bottom-cl td:last-child{
     margin-left: 15px;
 }
 .bottom-cl td .ng-binding{
-    background: skyblue;
-    color: #fff;
+    background: #fff;
+    color: #000;
     text-align: left;
     padding: 5px 10px;
     width: calc(100% - 25px);
     margin-right: 15px;
+    font-weight: bold;
 }
-.mhole-mobile .alert-checkbox .checkbox{
-    height: unset;
-    width: unset;
-    display: flex;
-    gap: 5px;
-    width: 50%;
-    align-items: center;
-    justify-content: center;
-}
-.mhole-mobile .alert-checkbox .checkbox input {
-    height: 20px;
-    width: 100%;
-    max-width: 20px;
-    margin-bottom: 0 !important;
-}
-.mhole-mobile .alert-checkbox{
-    width: 100%;
-    max-width: 100%;
-    padding: 0 5px; 
-}
+
+
 .mhole-mobile .buttons{
-    padding: 0 15px;
+    padding: 0 55px;
 }
 
-
-
-/* 21 august */
 .alartNo {
     display: none;
 }
+.boundaryOne{
+    width: 62% !important;
+}
 
+.boundaryTwo{
+    width: 52% !important;
+}
 
 .mhole-mobile .mhole-content .mhole-alert.boundaryOne label,.mhole-mobile .mhole-content .mhole-alert.boundaryTwo label {
     border: 3px solid red;
@@ -11572,28 +11608,7 @@ table.homemaptable .bottom-cl td:last-child{
     margin-right: 20px;
     font-size: 20px;
 }
-.mhole-mobile .alert-input button.disable-alert {
-    background: grey;
-    color: #cbcbcb;
-    border: 3px solid #212121;
-    pointer-events: none;
-}
-.mhole-mobile .alert-checkbox+.buttons input {
-    max-width: 250px;
-    width: 100% !important;
-    border-radius: 5px !important;
-}
-.mhole-mobile .alert-checkbox+.buttons input.save-btn.submit__btn{
-    border: 3px solid #2f782f;
-}
-.mhole-mobile .alert-checkbox+.buttons input.cancel-btn.reset__btn{
-    border: 3px solid #970d0d;
-}
-.mhole-mobile .alert-checkbox+.buttons {
-    flex-direction: column !important;
-    gap: 5px;
-    margin-top: 20px;
-}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
@@ -11685,7 +11700,418 @@ table.homemaptable .bottom-cl td:last-child{
     border: 3px solid #970d0d;
 }
 
-.alertLight {
+.mhole-mobile .mhole-content .mhole-alert label {
+    position: relative !important;
+}
+.mhole-mobile .mhole-content .mhole-alert label:after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    opacity: 0;
+}
+/* .alertLight INPUT, .mhole-mobile .mhole-content .mhole-alert label:after, .alertLight .classmm, .alertLight .mhole-mobile .mhole-content .mhole-alert::before, .alertLight .mhole-mobile .mhole-content .squares::after {
     opacity: 0.5;
+} */
+.alertLight{
+    opacity: 0.5; 
 }
 
+
+#confirmBox
+	{
+		display: none;
+		background-color: #eee;
+		border-radius: 14px;
+		border: 1px solid #aaa;
+		position: fixed;
+		width: 430px;
+		left: 897px;
+		top: 40%;
+		margin-left: -82px;
+		padding: 50px 26px 49px;
+		box-sizing: border-box;
+		text-align: center;
+		z-index: 99999;
+	}
+	#confirmBox .button {
+		background-color: #ccc;
+		display: inline-block;
+		border-radius: 12px;
+		border: 0px solid #aaa;
+		padding: 20px;
+		text-align: center;
+		width: 150px;
+		cursor: pointer;
+	}
+	#confirmBox .button:hover
+	{
+		background-color: #ddd;
+	}
+	#confirmBox .message
+	{
+		text-align: center;
+		margin-bottom: 8px;
+	}
+.alert-show{
+    color: red;
+    position: absolute;
+    top: 60px !important;
+    right: -7.5rem !important;
+    letter-spacing: -1px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width: 163px !important;
+}
+
+.disTrigger{
+    position: absolute;
+    top: 31px !important;
+}
+.mhole-alert .classmm{
+    position: absolute;
+    top: 13px !important;
+    right: -3rem !important;
+}
+.mhole-alert .alt-status{
+    position: absolute;
+    top: 31px !important;
+    right: 22.4rem !important;
+    color: red;
+}
+.disabledprop{
+    opacity: 0.5;
+    cursor: not-allowed !important;
+}
+
+ /* 30-08-2023 */
+ .tablewrapper{
+    max-width: 1300px;
+    width: 100%;
+    margin: 0 auto;
+}
+.tablewrapper h2 {
+    text-align: center;
+}
+
+.openbtn {
+    color: white;
+    border: none;
+    margin-left: auto;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 8px 22px;
+    background-color: #008000;
+    display: block;
+}
+
+.tablewrapper table {
+    max-width: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+/* Zebra striping */
+.tablewrapper tr {
+    background: #efe6e7;
+}
+
+.tablewrapper th {
+    background: #3155a1;
+    color: white;
+    font-weight: bold;
+}
+
+.tablewrapper td,
+.tablewrapper th {
+    padding: 10px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 18px;
+    width: 110px;
+    /* font-weight: bold; */
+    height: 50px;
+}
+
+.tablewrapper .edit {
+    background-color: blue;
+    border: 1px solid blue;
+}
+
+.tablewrapper .delete {
+    background-color: red;
+    border: 1px solid red;
+}
+
+.tablewrapper .fa {
+    font-size: 24px!important;
+    padding: 4px 2px;
+    color: white;
+}
+
+
+/* POP UP CSS */
+
+.tablewrapper .form-popup {
+    border: 8px solid #3155a1;
+    border-top: 30px solid #3155a1;
+    z-index: 9;
+    display: none;
+    position: fixed;
+    padding: 10px;
+    left: 0;
+    top: 10px;
+    background: #FFF;
+    right: 0;
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.tablewrapper .form-container {
+    width: 300px;
+    padding: 20px;
+    background: #fff;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}
+button.test {
+    position: absolute;
+    right: 0;
+}
+
+.tablewrapper .form-conatianer input[type=text],
+.tablewrapper input[type=password] {
+
+    padding: 12px;
+    margin: 5px 0 25px;
+}
+
+.tablewrapper .close {
+    right: -32px;
+    top: -46px;
+    position: absolute;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 25px;
+    font-weight: 600;
+    cursor: pointer;
+}
+button{
+    cursor: pointer;
+}
+.tablewrapper input {
+    max-width: 100%;
+    width: 100%;
+    padding: 10px 5px;
+}
+.tablewrapper textarea {
+    margin-top: 5px
+  }
+  .tablewrapper label{
+    display: block;
+    margin-bottom: 6px;
+  }
+  .tablewrapper .elemDiv{
+    margin: 15px 0;
+  }
+  .tablewrapper .intl-tel-input,
+  .tablewrapper .iti{
+  width: 100%;
+}
+.tablewrapper .radio{
+    display: flex;
+    gap: 30px;
+}
+.tablewrapper #mobilecode{
+    padding-left: 0;
+}
+.tablewrapper .form-row{
+    display: grid;
+    grid-template-columns: 140px 1fr;
+}
+.tablewrapper .update{
+    padding: 5px 12px;
+    background-color: #008000;
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+}
+.tablewrapper .test{
+    background-color: #3155a1;
+    border-radius: 5px;
+    color: #fff;
+}
+.tablewrapper .reset{
+    padding: 5px 12px;
+    background-color: #FF0000;
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+}
+
+/* 09-04-2023 changes */
+
+.tablewrapper {
+    padding-top: 20px;    
+}
+/* .tablewrapper h2 {
+    display: inline-block;
+    margin-left: 425px;
+} */
+.openbtn {
+    color: white;
+    border: none;
+    margin-left: auto;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 8px 22px;
+    margin-left: 410px;
+    background-color: #008000;
+    display: inline-block;
+}
+.tablewrapper table {
+    max-width: 1300px;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px;
+}
+.tablewrapper {
+    position: relative;
+    margin-top: 100px;
+    max-width: 1350px;
+    border: 3px solid black;
+}
+
+
+.openbtn{
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    display: block;
+}
+
+/* 09-04-2023 changes end*/
+
+
+.btn-group-vertical {
+    width: 100%;
+}
+.btn-group-vertical button.btn.btn-primary {
+    display: flex;
+    background: #d6d6d6;
+    padding: 0;;
+    border-color: #000;
+    align-items: center;
+    width: 100%;
+}
+.icoBg {
+    padding: 5px 7px;
+    min-width: 35px;
+    max-width: fit-content;
+    position: relative;
+    text-align: left;
+    min-height: 30px;
+    color: #000;
+    font-weight: 600;
+    font-size: 9px;
+}
+.icoBg img {
+    height: 20px;
+}
+.btn-group-vertical button.btn.btn-primary .icoBg:nth-child(2):after {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0.5px;
+    background: #000;
+}
+
+
+.icoBg-tracnet {
+    padding: 5px 4px;
+    min-width: 55px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    color: #000;
+    line-height: 12px;
+    font-weight: 600;
+    font-size: 9px;
+    margin: 0 auto;
+    min-height: 34px;
+}
+.btn-group-vertical button.btn.btn-primary .icoBg-tracnet:nth-child(2):after {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0.5px;
+    background: #000;
+}
+
+.btn-group-vertical button.btn.btn-primary .icoBg-tracnet:nth-child(2) {
+    min-width: 32px;
+}
+
+/* 04-09-2023 */
+.mhole-mobile .mhole-image {
+    width: 100%;
+    margin-top: 20px;
+}
+.mhole-mobile .mhole-content {
+    position: absolute;
+    top: 67px;
+    right: 17%;
+    z-index: 1;
+    padding-top: 20px;
+    /* margin-top: 20px; */
+    width: 100%;
+    padding: 0 55px 0 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+.mhole .mhole-mobile span{
+    font-size: 12px;
+    line-height: 16px;
+    display: flex;
+    margin: 0px auto;
+    justify-content: center;
+}
+.mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1) {
+    margin-bottom: 0px;
+    margin-top: 102px;
+}
+.mhole-mobile .mhole-content .circles {
+    position: absolute;
+    top: 332px;
+    /* width: 250px; */
+    margin-top: 80px;
+}
+.mhole-mobile .mhole-content .squares {
+    position: absolute;
+    top: 225px;
+    margin-top: 50px;
+}
+.mhole-mobile .mhole-content .traingles {
+    position: absolute !important;
+    top: 115px;
+    margin-top: 20px;
+}
+.mhole-mobile .mhole-image img {
+    display: block;
+    object-fit: cover;
+    height: 570px;
+    margin: 0 auto;
+    width: 60px;
+}
+/* 04-09-2023 */
