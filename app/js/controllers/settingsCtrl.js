@@ -145,7 +145,6 @@ angular.module('settingsCtrl', [])
     }`;
 
 
-      console.log("addquery", query);
 
       const query1 = $http
         .post(apiBaseUrl + "alert-alarm-setting/store", query, { headers: customeHeader })
@@ -746,9 +745,10 @@ angular.module('settingsCtrl', [])
       var userInput = $scope.smsNumber;
       if (Number(userInput)) {
         userInput = "+61" + userInput;
-        const query = `emailSend( null ,"${userInput}@directsms.com.au", "", "Test Message Recieved!")`;
-        Data.sendRequest(query, $rootScope.storage.skysparkVersion).then(function (response) {
-          if (response.data.rows[0].val == "sent!")
+        let formData = { "smsNumber": userInput};
+          $http.post(apiBaseUrl+"sent-test-sms",formData, {headers:customeHeader}).then(function (response) {
+            console.log(response,"response");
+          if (response.data.status)
             alert("Test Message Sent!")
         });
       } else {
