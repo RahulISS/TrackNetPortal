@@ -2356,19 +2356,19 @@ angular
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 1) {
-            var imgpath = "./img/red-dot.gif";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 3) {
-            var imgpath = "./img/red-dot.gif";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 3 && colorCode2 == 1) {
-            var imgpath = "./img/red-dot.gif";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 2) {
-            var imgpath = "./img/red-dot.gif";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 1) {
-            var imgpath = "./img/red-dot.gif";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 2) {
             if (alertArr.length <= 1) {
@@ -2423,7 +2423,7 @@ angular
 
             console.log(parseInt(dict.height), 'heightdict');
             if (parseInt(dict.height) < 400) {
-              imgpath = "./img/red-dot.gif";
+              imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
             }
           }
           if (colorCode == 3 && colorCode2 == 2) {
