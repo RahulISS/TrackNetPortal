@@ -156,7 +156,6 @@
 						<section class="mhole">
 							<div class="mhole-mobile">
 								<h4>Manhole Specifications</h4>
-								<p>Reset button all distance alerts values</p>
 								<div class="mhole-image">
 									<img src="img/inner-image.png" alt="">
 								</div>
@@ -166,7 +165,7 @@
 									</div>
 									<div class="mhole-alert boundaryOne">
 										<label for="">Full (100%)</label>
-										<input type="text" onkeypress="return isNumber(event)" name="fullValue" id="fullValue" value="{{pointSettingData.full}}" ng-change="onInputChange('full')" ng-model="fullVal"><span class="classmm">mm</span> 
+										<input type="text" onkeypress="return isNumber(event)" name="fullValue" id="fullValue" value="{{pointSettingData.full}}" ng-change="onInputChange('fullVal')" ng-model="fullVal"><span class="classmm">mm</span> 
 										<span id="errorname" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
 									</div> 
 									<div class="mhole-alert traingles">
@@ -192,7 +191,7 @@
 									</div>
 									<div class="mhole-alert boundaryTwo">
 										<label for="">Empty (0%)</label>
-										<input type="text" onkeypress="return isNumber(event)" name="emptyValue" id="emptyValue" ng-change="onInputChange('empty')" value="{{pointSettingData.empty}}" ng-model="emptyVal"><span class="classmm">mm</span> 
+										<input type="text" onkeypress="return isNumber(event)" name="emptyValue" id="emptyValue" ng-change="onInputChange('emptyVal')" value="{{pointSettingData.empty}}" ng-model="emptyVal"><span class="classmm">mm</span> 
 										<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
 									</div>
 								</div>
@@ -201,7 +200,7 @@
 									<input type="button" value="Save Changes" ng-click="saveAlertData()" class="save-btn submit__btn" ng-disabled="errorstatus" >
 									<input type="button" class="cancel-btn reset__btn" value="Cancel, Go Back" ng-click="closeModal()"/>
 								</div>
-								<a href="" class="edit-btn" ng-click="resetAlert()">Reset</a>
+								<a href="" class="edit-btn" ng-click="resetAlert()">Reset All Alerts</a>
 							</div>
 						</section>
 					</form>

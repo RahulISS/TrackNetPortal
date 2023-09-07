@@ -775,8 +775,13 @@ angular
           $scope.displayData[index].infoBox.close();
         }
       }
+      
+      $scope.markers = '';
+		  $scope.nodes = '';
 
-      function getInfoWinData(node, marker) {
+		function getInfoWinData(node,marker){
+			$scope.markers = marker;			
+			$scope.nodes = node;
         
         let homeiw;
         let boxText = document.createElement("div");
@@ -947,7 +952,7 @@ angular
               $scope.showAlert3 = true;
 
               /** Setting alert blur as per thier check value starts*/
-              if( $scope.pointSettingData.alarmFirstCheck === undefined ) {
+              if( $scope.pointSettingData.alarmFirstCheck === null ) {
                 $scope.addAlt1Class = 'alertLight';
                 $scope.disAlt1 = '';						
                 $scope.altStatus1 = 'Disabled';
@@ -957,7 +962,7 @@ angular
                 $scope.altStatus1 = '';
               }
     
-              if( $scope.pointSettingData.alarmSecondCheck === undefined ) {
+              if( $scope.pointSettingData.alarmSecondCheck === null ) {
                 $scope.addAlt2Class = 'alertLight';
                 $scope.disAlt2 = '';
                 $scope.altStatus2 = 'Disabled';
@@ -967,7 +972,7 @@ angular
                 $scope.altStatus2 = '';
               }
     
-              if( $scope.pointSettingData.alarmThirdCheck === undefined ) {
+              if( $scope.pointSettingData.alarmThirdCheck === null ) {
                 $scope.addAlt3Class = 'alertLight';
                 $scope.disAlt3 = '';
                 $scope.altStatus3 = 'Disabled';
@@ -976,37 +981,6 @@ angular
                 $scope.disAlt3 = Math.round(((( $scope.emptyVal - $scope.fullVal)-($scope.alert3 - $scope.fullVal )) / ($scope.emptyVal - $scope.fullVal)) * 100);
                 $scope.altStatus3 = '';
               }
-              /**ends */
-
-            //   if($scope.alert1) {
-            //     $scope.showAlert1 = true;
-            //   } else {
-            //     $scope.showAlert1 = false;
-            //   }
-            //   if($scope.alert2) {
-            //     $scope.showAlert2 = true;
-            //   } else {
-            //     $scope.showAlert2 = false;
-            //   }
-            //   if($scope.alert3) {
-            //     $scope.showAlert3 = true;
-            //   } else {
-            //     $scope.showAlert3 = false;
-            //   }
-            // }
-            // if( $scope.alarmCount == 0 ) {
-            //   $scope.delClass = 'disable-alert';
-            //   $scope.showAlert3 = false;
-            //   $scope.showAlert2 = false;
-            //   $scope.showAlert1 = false;
-            // } 
-    
-            // if( $scope.alarmCount < 3) { 
-            //   $scope.disClass = '';
-            // } else {
-            //   $scope.disClass = 'disable-alert';
-            //   $scope.delClass = '';
-            // }
 
            }
           }).catch(function(error) {
@@ -1931,129 +1905,311 @@ angular
 
 
     	/*saving relative distance alerts*/
-      $scope.saveAlertData = function(){
-
-        var node_name = localStorage.getItem("node_name");
-        let instName = localStorage.getItem("instName");
-        var node_id = localStorage.getItem("node_id");
-        $scope.bench_height = angular.element($("#bench_height")).val();
-        $scope.angel_alarm = angular.element($("#angel_alarm")).val();
-        var distance = angular.element($("#distance_alarm")).val() || 0;
-        $scope.distance_alarm = distance;
-        $scope.serialNo = angular.element($("#serialNumber")).val();
-        $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
-        if ($scope.checkVal == "") $scope.checkVal = 0;
-        else $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
-        //alert(angular.element($(".alertNumber")).val());return;
+      // $scope.saveAlertData = function(){
+      //   var node_id = localStorage.getItem("node_id");
+      //   $scope.bench_height = angular.element($("#bench_height")).val();
+      //   $scope.angel_alarm = angular.element($("#angel_alarm")).val();
+      //   var distance = angular.element($("#distance_alarm")).val() || 0;
+      //   $scope.distance_alarm = distance;
+      //   $scope.serialNo = angular.element($("#serialNumber")).val();
+      //   $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
+      //   if ($scope.checkVal == "") $scope.checkVal = 0;
+      //   else $scope.checkVal = angular.element($("#enableDistanceAlarm")).val();
+      //   //alert(angular.element($(".alertNumber")).val());return;
 
 
-        const enabled = 1;
-        var node_name = localStorage.getItem("node_name");
-        var val = angular.element($(".alertNumber")).val();
-        var alertF = angular.element($('#alert1')).val();
-        var alertS = angular.element($('#alert2')).val();
-        var alertT = angular.element($('#alert3')).val();
+      //   const enabled = 1;
+      //   var node_name = localStorage.getItem("node_name");
+      //   var val = angular.element($(".alertNumber")).val();
+      //   var alertF = angular.element($('#alert1')).val();
+      //   var alertS = angular.element($('#alert2')).val();
+      //   var alertT = angular.element($('#alert3')).val();
         
-        if( alertF ) {
-          $scope.alert1 = alertF;
-          $scope.alarmFirstCheck = enabled;	
-        }  else {
-          $scope.alert1 = null;
-          $scope.alarmFirstCheck = null;	
-        }
+      //   if( alertF ) {
+      //     $scope.alert1 = alertF;
+      //     $scope.alarmFirstCheck = enabled;	
+      //   }  else {
+      //     $scope.alert1 = null;
+      //     $scope.alarmFirstCheck = null;	
+      //   }
         
-        if( alertS ) {
-          $scope.alert2 = alertS;
-          $scope.alarmSecondCheck = enabled;	
-        } else {
-          $scope.alert2 = null;
-          $scope.alarmSecondCheck = null;
-        }
+      //   if( alertS ) {
+      //     $scope.alert2 = alertS;
+      //     $scope.alarmSecondCheck = enabled;	
+      //   } else {
+      //     $scope.alert2 = null;
+      //     $scope.alarmSecondCheck = null;
+      //   }
         
-        if( alertT) {
-          $scope.alert3 = alertT;
-          $scope.alarmThirdCheck = enabled;	
-        } else {
-          $scope.alert3 = null;
-          $scope.alarmThirdCheck = null;
-        }
-        /** disable starts*/
-        if( $scope.enableBtn ) {
-          if( 'alt1' in $scope.disableAlertArray && $scope.disableAlertArray.alt1 === true && 'alarmFirstCheck' in $scope.pointSettingData ) {
-            if($scope.pointSettingData.alarmFirstCheck === 0) {
-              $scope.alarmFirstCheck = 1;
-            } else {
-              $scope.alarmFirstCheck = null;
-            }
-          }
+      //   if( alertT) {
+      //     $scope.alert3 = alertT;
+      //     $scope.alarmThirdCheck = enabled;	
+      //   } else {
+      //     $scope.alert3 = null;
+      //     $scope.alarmThirdCheck = null;
+      //   }
+      //   /** disable starts*/
+      //   if( $scope.enableBtn ) {
+      //     if( 'alt1' in $scope.disableAlertArray && $scope.disableAlertArray.alt1 === true && 'alarmFirstCheck' in $scope.pointSettingData ) {
+      //       if($scope.pointSettingData.alarmFirstCheck === 0) {
+      //         $scope.alarmFirstCheck = 1;
+      //       } else {
+      //         $scope.alarmFirstCheck = null;
+      //       }
+      //     }
         
-          if( 'alt2' in $scope.disableAlertArray && $scope.disableAlertArray.alt2 === true && 'alarmSecondCheck' in $scope.pointSettingData ) {
-            if($scope.pointSettingData.alarmSecondCheck === 0) {
-              $scope.alarmSecondCheck = 1;
-            } else {
-              $scope.alarmSecondCheck = null;
-            }
-          }
+      //     if( 'alt2' in $scope.disableAlertArray && $scope.disableAlertArray.alt2 === true && 'alarmSecondCheck' in $scope.pointSettingData ) {
+      //       if($scope.pointSettingData.alarmSecondCheck === 0) {
+      //         $scope.alarmSecondCheck = 1;
+      //       } else {
+      //         $scope.alarmSecondCheck = null;
+      //       }
+      //     }
   
-          if( 'alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 === true && 'alarmThirdCheck' in $scope.pointSettingData ) {//console.log("3 disable");
-            if($scope.pointSettingData.alarmThirdCheck === 0) {
-              $scope.alarmThirdCheck = 1;
-            } else {
-              $scope.alarmThirdCheck = null;
-            }
-          }
-        }
-        //console.log( $scope.alarmFirstCheck ,$scope.alarmSecondCheck , $scope.alarmThirdCheck, "checks")
-        //console.log( $scope.disableAlertArray ,$scope.disableAlertArray.alt2 == true, "disableAlertArray" );
-        //return;
-        /** ends */    
+      //     if( 'alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 === true && 'alarmThirdCheck' in $scope.pointSettingData ) {//console.log("3 disable");
+      //       if($scope.pointSettingData.alarmThirdCheck === 0) {
+      //         $scope.alarmThirdCheck = 1;
+      //       } else {
+      //         $scope.alarmThirdCheck = null;
+      //       }
+      //     }
+      //   }
+      //   //console.log( $scope.alarmFirstCheck ,$scope.alarmSecondCheck , $scope.alarmThirdCheck, "checks")
+      //   //console.log( $scope.disableAlertArray ,$scope.disableAlertArray.alt2 == true, "disableAlertArray" );
+      //   //return;
+      //   /** ends */    
         
-        $scope.fullValue = angular.element($('#fullValue')).val();
-        $scope.emptyValue = angular.element($('#emptyValue')).val();
-        if( !$scope.fullValue || !$scope.emptyValue) {
-          alert("Setting Boundaries are Required")
-          return;
-        }
+      //   $scope.fullValue = angular.element($('#fullValue')).val();
+      //   $scope.emptyValue = angular.element($('#emptyValue')).val();
+      //   if( !$scope.fullValue || !$scope.emptyValue) {
+      //     alert("Setting Boundaries are Required")
+      //     return;
+      //   }
   
-        if( $scope.fullValue < 400 ) {
-          alert("Full Value Should be >= 400")
-          return false;
-        }
+      //   if( $scope.fullValue < 400 ) {
+      //     alert("Full Value Should be >= 400")
+      //     return false;
+      //   }
         
-        if( parseInt($scope.emptyValue) <  parseInt($scope.fullValue) ) { 
-          alert("Full Value Should be less than Empty Value")
-          return false;
-        }
+      //   if( parseInt($scope.emptyValue) <  parseInt($scope.fullValue) ) { 
+      //     alert("Full Value Should be less than Empty Value")
+      //     return false;
+      //   }
   
-        if( parseInt($scope.emptyValue) < parseInt($scope.fullValue) ) {
-          alert("Empty Value Should be greater than Full Value")
-          return false;
-        }
+      //   if( parseInt($scope.emptyValue) < parseInt($scope.fullValue) ) {
+      //     alert("Empty Value Should be greater than Full Value")
+      //     return false;
+      //   }
   
-        if(parseInt($scope.emptyValue) < parseInt(alertF) || parseInt($scope.emptyValue) < parseInt(alertS) || parseInt($scope.emptyValue) < parseInt(alertT)) {
-          alert("Invalid Alert Value")
-          return false;
-        }
+      //   if(parseInt($scope.emptyValue) < parseInt(alertF) || parseInt($scope.emptyValue) < parseInt(alertS) || parseInt($scope.emptyValue) < parseInt(alertT)) {
+      //     alert("Invalid Alert Value")
+      //     return false;
+      //   }
         
-        if( parseInt($scope.emptyValue) > 3998 ) {
-          alert("Empty Value Should be less than equal to 3998")
-          return false;
-        }
+      //   if( parseInt($scope.emptyValue) > 3998 ) {
+      //     alert("Empty Value Should be less than equal to 3998")
+      //     return false;
+      //   }
   
-        if( parseInt(alertF) < parseInt($scope.fullValue) && parseInt(alertF) > parseInt($scope.emptyValue) ) {
-          alert("Alert Values Should be in between Full and Empty value")
-          return false;
-        }
-        if( parseInt(alertS) < parseInt($scope.fullValue) && parseInt(alertS) > parseInt($scope.emptyValue) ) {
-          alert("Alert Values Should be in between Full and Empty value")
-          return false;
-        }
-        if( parseInt(alertT) < parseInt($scope.fullValue) && parseInt(alertT) > parseInt($scope.emptyValue) ) {
-          alert("Alert Values Should be in between Full and Empty value")
-          return false;
-        }
+      //   if( parseInt(alertF) < parseInt($scope.fullValue) && parseInt(alertF) > parseInt($scope.emptyValue) ) {
+      //     alert("Alert Values Should be in between Full and Empty value")
+      //     return false;
+      //   }
+      //   if( parseInt(alertS) < parseInt($scope.fullValue) && parseInt(alertS) > parseInt($scope.emptyValue) ) {
+      //     alert("Alert Values Should be in between Full and Empty value")
+      //     return false;
+      //   }
+      //   if( parseInt(alertT) < parseInt($scope.fullValue) && parseInt(alertT) > parseInt($scope.emptyValue) ) {
+      //     alert("Alert Values Should be in between Full and Empty value")
+      //     return false;
+      //   }
         
-        let formData = {
+      //   let formData = {
+      //     "pointId": node_id,
+      //     "distance_alert": {
+      //       "full": $scope.fullValue,
+      //       "empty": $scope.emptyValue,  
+      //       "alert1": $scope.alert1, 
+      //       "alert2": $scope.alert2,
+      //       "alert3": $scope.alert3,
+      //       "alarmFirstCheck": $scope.alarmFirstCheck,
+      //       "alarmSecondCheck": $scope.alarmSecondCheck,
+      //       "alarmThirdCheck": $scope.alarmThirdCheck
+      //     }
+      //   };
+
+
+      //   $http.post(apiBaseUrl+"add-user-definded-distancealert",formData, {headers:customeHeader}).then(function (response) {
+      //     if (response.data.status) {
+      //       // alert("Data Saved");
+
+      //       Swal.fire({
+      //         title: 'Alert Saved',
+      //         text: '',
+      //         icon: 'success',
+      //         allowOutsideClick: false, // Disable interactions with the background
+      //         showCancelButton: false, // Hide the cancel button
+      //         confirmButtonColor: '#3085d6',
+      //         confirmButtonText: 'OK'
+      //       }).then((result) => {  
+      //         if (result.isConfirmed) {
+      //           $window.location.reload();
+      //         }
+      //       });
+
+
+      //       $("#popupModalCenter").removeClass("show-modal");
+      //     } else if (data.status == 400) {
+      //       $("#popupModalCenter").removeClass("show-modal");
+      //     }
+      //   }).catch(function(error){
+      //     if(error.status==401){
+      //       $window.localStorage.removeItem('authToken');
+      //       $rootScope.storage.loggedIn = false;
+      //       $rootScope.storage.authToken = false;
+      //       $rootScope.storage.$reset();
+      //       $scope.refreshPage();
+      //       $state.go('login');
+      //     }
+      //   });
+
+
+      //   // $scope.serialNo = $scope.productIMEI;
+      //   // const portalRef = '2b930eb1-94544585';
+      //   // const query = `yvw_manhole_specification_01a( { productRef: read(product and productModelRef == 2ac7d4be-00e6238c and id_serial == "${$scope.serialNo}")->id, empty:${$scope.emptyValue}, full:${$scope.fullValue}, alarmFirst: ${$scope.alert1},alarmFirstCheck: ${$scope.alarmFirstCheck}, alarmSecond: ${$scope.alert2}, alarmSecondCheck: ${$scope.alarmSecondCheck} ,alarmThird: ${$scope.alert3}, alarmThirdCheck: ${$scope.alarmThirdCheck} },"${ node_name.trim()}", ${portalRef}, ${$scope.deleteBtn})`;
+      //   // // console.log(query,"query");
+      //   // // return;
+      //   // Data.sendRequest(query,$rootScope.storage.skysparkVersion).then(function(response){
+      //   //   const data = response.data.rows[0];
+      //   //     if(data.status == 200){
+      //   //       alert("Alert Saved!");
+      //   //       $window.location.reload();
+      //   //     }
+      //   //     else if(data.status == 400) {
+      //   //       alert(data.msg);
+      //   //       $("#popupModalCenter").removeClass("show-modal");
+      //   //     }
+      //   // });
+
+
+      // };
+
+
+
+   //   ===============================================
+
+
+   	/*saving relative distance alerts*/
+		$scope.saveAlertData = function(){
+			const enabled = 1;
+      var node_id = localStorage.getItem("node_id");
+			var val = angular.element($(".alertNumber")).val();
+			var alertF = angular.element($('#alert1')).val();
+			var alertS = angular.element($('#alert2')).val();
+			var alertT = angular.element($('#alert3')).val();
+			
+			if( alertF ) {
+				$scope.alert1 = alertF;
+				$scope.alarmFirstCheck = enabled;	
+			}  else {
+				$scope.alert1 = null;
+				$scope.alarmFirstCheck = null;	
+			}
+			
+			if( alertS ) {
+				$scope.alert2 = alertS;
+				$scope.alarmSecondCheck = enabled;	
+			} else {
+				$scope.alert2 = null;
+				$scope.alarmSecondCheck = null;
+			}
+			
+			if( alertT) {
+				$scope.alert3 = alertT;
+				$scope.alarmThirdCheck = enabled;	
+			} else {
+				$scope.alert3 = null;
+				$scope.alarmThirdCheck = null;
+			}
+			/** disable starts*/
+			if( $scope.enableBtn ) {
+				if( 'alt1' in $scope.disableAlertArray && $scope.disableAlertArray.alt1 === true && 'alarmFirstCheck' in $scope.pointSettingData ) {
+					if($scope.pointSettingData.alarmFirstCheck === 0) {
+						$scope.alarmFirstCheck = 1;
+					} else {
+						$scope.alarmFirstCheck = null;
+					}
+				}
+			
+				if( 'alt2' in $scope.disableAlertArray && $scope.disableAlertArray.alt2 === true && 'alarmSecondCheck' in $scope.pointSettingData ) {
+					if($scope.pointSettingData.alarmSecondCheck === 0) {
+						$scope.alarmSecondCheck = 1;
+					} else {
+						$scope.alarmSecondCheck = null;
+					}
+				}
+
+				if( 'alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 === true && 'alarmThirdCheck' in $scope.pointSettingData ) {//console.log("3 disable");
+					if($scope.pointSettingData.alarmThirdCheck === 0) {
+						$scope.alarmThirdCheck = 1;
+					} else {
+						$scope.alarmThirdCheck = null;
+					}
+				}
+			}
+			//console.log( $scope.alarmFirstCheck ,$scope.alarmSecondCheck , $scope.alarmThirdCheck, "checks")
+			//console.log( $scope.disableAlertArray ,$scope.disableAlertArray.alt2 == true, "disableAlertArray" );
+			//return;
+			/** ends */
+			
+			
+			$scope.fullValue = angular.element($('#fullValue')).val();
+			$scope.emptyValue = angular.element($('#emptyValue')).val();
+			if( !$scope.fullValue || !$scope.emptyValue) {
+				alert("Setting Boundaries are Required")
+				return;
+			}
+
+			if( $scope.fullValue < 400 ) {
+				alert("Full Value Should be >= 400")
+				return false;
+			}
+			
+			if( parseInt($scope.emptyValue) <  parseInt($scope.fullValue) ) { 
+				alert("Full Value Should be less than Empty Value")
+				return false;
+			}
+
+			if( parseInt($scope.emptyValue) < parseInt($scope.fullValue) ) {
+				alert("Empty Value Should be greater than Full Value")
+				return false;
+			}
+
+			if(parseInt($scope.emptyValue) < parseInt(alertF) || parseInt($scope.emptyValue) < parseInt(alertS) || parseInt($scope.emptyValue) < parseInt(alertT)) {
+				alert("Invalid Alert Value")
+				return false;
+			}
+			
+			if( parseInt($scope.emptyValue) > 3998 ) {
+				alert("Empty Value Should be less than equal to 3998")
+				return false;
+			}
+
+			if( parseInt(alertF) < parseInt($scope.fullValue) && parseInt(alertF) > parseInt($scope.emptyValue) ) {
+				alert("Alert Values Should be in between Full and Empty value")
+				return false;
+			}
+			if( parseInt(alertS) < parseInt($scope.fullValue) && parseInt(alertS) > parseInt($scope.emptyValue) ) {
+				alert("Alert Values Should be in between Full and Empty value")
+				return false;
+			}
+			if( parseInt(alertT) < parseInt($scope.fullValue) && parseInt(alertT) > parseInt($scope.emptyValue) ) {
+				alert("Alert Values Should be in between Full and Empty value")
+				return false;
+			}
+
+
+          let formData = {
           "pointId": node_id,
           "distance_alert": {
             "full": $scope.fullValue,
@@ -2066,62 +2222,31 @@ angular
             "alarmThirdCheck": $scope.alarmThirdCheck
           }
         };
+			
+      $http.post(apiBaseUrl+"add-user-definded-distancealert",formData, {headers:customeHeader}).then(function (response) {
+
+				const data = response.data;
+					if(data.status ){
+           //console.log(node_id,this,"new log");
+           getInfoWinData($scope.nodes,$scope.markers)
+				
+						$window.Swal.fire({
+							title: "Alert Saved!",
+							text: " ",
+							icon: "success"
+						});
+						$("#popupModalCenter").removeClass("show-modal");
+						//html_aTreeNode_hisEndVal_02_c(, "")
+					}
+					else if(data.status == 400) {
+						alert(data.msg);
+						$("#popupModalCenter").removeClass("show-modal");
+					}
+			});
+		};
 
 
-        $http.post(apiBaseUrl+"add-user-definded-distancealert",formData, {headers:customeHeader}).then(function (response) {
-          if (response.data.status) {
-            // alert("Data Saved");
 
-            Swal.fire({
-              title: 'Alert Saved',
-              text: '',
-              icon: 'success',
-              allowOutsideClick: false, // Disable interactions with the background
-              showCancelButton: false, // Hide the cancel button
-              confirmButtonColor: '#3085d6',
-              confirmButtonText: 'OK'
-            }).then((result) => {  
-              if (result.isConfirmed) {
-                $window.location.reload();
-              }
-            });
-
-
-            $("#popupModalCenter").removeClass("show-modal");
-          } else if (data.status == 400) {
-            $("#popupModalCenter").removeClass("show-modal");
-          }
-        }).catch(function(error){
-          if(error.status==401){
-            $window.localStorage.removeItem('authToken');
-            $rootScope.storage.loggedIn = false;
-            $rootScope.storage.authToken = false;
-            $rootScope.storage.$reset();
-            $scope.refreshPage();
-            $state.go('login');
-          }
-        });
-
-
-        // $scope.serialNo = $scope.productIMEI;
-        // const portalRef = '2b930eb1-94544585';
-        // const query = `yvw_manhole_specification_01a( { productRef: read(product and productModelRef == 2ac7d4be-00e6238c and id_serial == "${$scope.serialNo}")->id, empty:${$scope.emptyValue}, full:${$scope.fullValue}, alarmFirst: ${$scope.alert1},alarmFirstCheck: ${$scope.alarmFirstCheck}, alarmSecond: ${$scope.alert2}, alarmSecondCheck: ${$scope.alarmSecondCheck} ,alarmThird: ${$scope.alert3}, alarmThirdCheck: ${$scope.alarmThirdCheck} },"${ node_name.trim()}", ${portalRef}, ${$scope.deleteBtn})`;
-        // // console.log(query,"query");
-        // // return;
-        // Data.sendRequest(query,$rootScope.storage.skysparkVersion).then(function(response){
-        //   const data = response.data.rows[0];
-        //     if(data.status == 200){
-        //       alert("Alert Saved!");
-        //       $window.location.reload();
-        //     }
-        //     else if(data.status == 400) {
-        //       alert(data.msg);
-        //       $("#popupModalCenter").removeClass("show-modal");
-        //     }
-        // });
-
-
-      };
 
       /*Zoom out marker location by the click on installation*/
       $scope.GetTableItemsByClick = function (item) {
