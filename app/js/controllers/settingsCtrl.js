@@ -745,7 +745,7 @@ angular.module('settingsCtrl', [])
     $scope.sendTestMessage = function () {
       var userInput = $scope.smsNumber;
       if (Number(userInput)) {
-        userInput = "+91" + userInput;
+        userInput = "+61" + userInput;
         const query = `emailSend( null ,"${userInput}@directsms.com.au", "", "Test Message Recieved!")`;
         Data.sendRequest(query, $rootScope.storage.skysparkVersion).then(function (response) {
           if (response.data.rows[0].val == "sent!")
