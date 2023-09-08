@@ -1039,7 +1039,7 @@ angular
           $scope.alert2 = '';
           $scope.alert3 = '';
           // Error callback, handle the error here
-          console.error('Error occurred:', error);
+          // console.error('Error occurred:', error);
         });
       };
 
@@ -2310,7 +2310,7 @@ angular
         let alertArr = [];
 
 
-        console.log("dict112", dict);
+        // console.log("dict112", dict);
 
 
         if (dict.aCheck1 == 1) {
@@ -2344,7 +2344,7 @@ angular
         var colorCode2 = dict.angleColorRank;
 
 
-        console.log(colorCode, colorCode2, 'volot');
+        // console.log(colorCode, colorCode2, 'volot');
         var imgpath = "";
         if (colorCode) {
           if (colorCode == 3 && colorCode2 == 3) {
@@ -2421,7 +2421,7 @@ angular
               imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
             }
           }
-          if (colorCode == 3 && colorCode2 == 2 || colorCode == 2 && colorCode2 == 3) {
+          if (colorCode == 3 && colorCode2 == 2) {
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
           }
         }
