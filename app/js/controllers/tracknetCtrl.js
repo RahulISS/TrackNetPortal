@@ -345,24 +345,18 @@ angular
               var convertedPoint = {
                 installationName: data.treenode.textLabel,
                 locationID: data.location._id.$oid,
-                address:
-                  data.location.street +
-                  " " +
-                  data.location.city +
-                  " " +
-                  data.location.tz,
+                address: data.location.street + " " + data.location.city + " " + data.location.tz,
                 location: data.point._id.$oid,
-                latitude: parseFloat(data.location.latitude), // Populate with the appropriate value from the response
-                longitude: parseFloat(data.location.longitude), // Populate with the appropriate value from the response
-                city: data.location.city, // Populate with the appropriate value from the response
-                serialNumber: data.product.id_serial, // Populate with the appropriate value from the response
-                installationId: data.treenode._id.$oid, // Populate with the appropriate value from the response
-                // installationName: data.treenode.textLabel, // Populate with the appropriate value from the response
+                latitude: parseFloat(data.location.latitude), 
+                longitude: parseFloat(data.location.longitude), 
+                city: data.location.city, 
+                serialNumber: data.product.id_serial, 
+                installationId: data.treenode._id.$oid, 
 
                 angle: angleValue,
-                angleColorRank: angleColorRank, // Populate with the appropriate value from the response
-                angleColor: angleColor, // Populate with the appropriate value from the response
-                angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+                angleColorRank: angleColorRank, 
+                angleColor: angleColor, 
+                angle_alarm_tr: angle_alarm_tr, 
 
                 lastCommColorRank: 0,
                 lastComm_alarm_tr: "",
@@ -373,23 +367,17 @@ angular
                 color: "green",
                 oldest_comm_date: "2 days ago",
                 customDistance: 500,
-                area: data.location.street, // Populate with the appropriate value from the response
-                // batterySta: data.location.street, // Populate with the appropriate value from the response
+                area: data.location.street, 
                 batteryStatus: data.point.battery_status,
-                batteryVolt: data.point.battery_voltage, // Populate with the appropriate value from the response
-                //dis: data.point.distanceValue, // Populate with the appropriate value from the response
+                batteryVolt: data.point.battery_voltage, 
                 distance: distanceValue,
-                disColorRank: dis_color_rank, // Populate with the appropriate value from the response
-                disColor: dis_color, // Populate with the appropriate value from the response
-                distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
+                disColorRank: dis_color_rank, 
+                disColor: dis_color, 
+                distance_alarm_tr: distance_alarm_tr, 
                 distanceValue: distanceValue,
-                //levelAl: '', // Populate with the appropriate value from the response
                 levelAlarm: data.point.manholeLevelAlarm,
-                //movedAl: '', // Populate with the appropriate value from the response
                 movedAlarm: data.point.manholeMovedAlarm,
-                //signalStre: '', // Populate with the appropriate value from the response
                 signalStrength: data.point.signal_strength,
-                //temp: '', // Populate with the appropriate value from the response
                 temperature: data.point.temperature,
                 ts: timeDate,
                 realts: data.point.created_at,
@@ -1004,10 +992,10 @@ angular
             var allconvertedDatas = [];
             for (var i = response.length - 1; i > 0; i--) {
               var data = response[i];
-              var objectId = data._id.$oid;
+              var objectId = data.point.device_id;
 
               var existingObject = allconvertedDatas.find(
-                (obj) => obj.locationID === objectId
+                (obj) => obj.product_serialNumber === objectId
               );
 
 
@@ -1033,27 +1021,16 @@ angular
                 var dis_color = "Green";
                 var distance_alarm_tr = "";
               }
-              
-          
-              // if ("distance_alert" in data.point) {
-              //   var distanceAlertValue = parseInt(data.point.distance_alert);
-              //   if (distanceAlertValue != "undefined" && Number(data.point.height) < distanceAlertValue  ) {
-              //     var dis_color_rank = 2;
-              //     var dis_color = "Yellow";
-              //     var distance_alarm_tr = "Distance alert Triggered";
-              //   } 
 
-              // }
               var distanceAlertValue = parseInt(data.point.distance_alert);
               if ("distance_alert" in data.point) {
-              if (data.point.height < data.point.distance_alert) {
-                var distance_alarm_tr = "Distance alert Triggered";
-                var dis_color_rank = 2;
-                var dis_color = "yellow";
+                if (data.point.height < data.point.distance_alert) {
+                  var distance_alarm_tr = "Distance alert Triggered";
+                  var dis_color_rank = 2;
+                  var dis_color = "yellow";
+                }
+
               }
-
-            }
-
 
                 var status = "";
                 var disValue = "";
@@ -1104,8 +1081,6 @@ angular
                 }
 
                 var timeDate = hours;
-
-//
                 if (Number(data.point.height) < 400) {
                   var disValue = 400;
                 } else if (Number(data.point.height) >= 3998) {
@@ -1143,65 +1118,24 @@ angular
                   }
           
                 }
+              var msg = "Relative Distance: " + relativeDistanceCal + " %, Angle: " + data.point.angle + " deg";
 
-
-                // if(data.distance_alert !== null){
-                //   var point_alt = JSON.parse(data.distance_alert);
-                // }else{
-                //   var point_alt = { alarmFirstCheck: 0, alarmSecondCheck: 0, alarmThirdCheck: 0, alert1: 400, alert2: 400, alert3: 400, full: 400, empty: 3998 }
-                // }
-
-                // var emptyVal = (point_alt.empty)?parseInt(point_alt.empty):3998;
-                // var fullVal= (point_alt.full)?parseInt(point_alt.full):400;
-                // var relative_distanceVal =  Math.round(((( (emptyVal)?parseInt(emptyVal):3998 - (fullVal)?parseInt(fullVal):400)-(disValue - (fullVal)?parseInt(fullVal):400 )) / ((emptyVal)?parseInt(emptyVal):3998 - (fullVal)?parseInt(fullVal):400)) * 100);
-
-              
-
-
-                var msg = "";
-                // if (disValue != "") {
-                  var msg =
-                    "Relative Distance: " +
-                    relativeDistanceCal +
-                    " %, Angle: " +
-                    data.point.angle +
-                    " deg";
-                // } else {
-                //   var msg = "Angle: " + data.point.angle + " deg";
-                // }
-
-
-                // var msg = "";
-                // if (disValue != "") {
-                //   var msg =
-                //     "Distance: " +
-                //     disValue +
-                //     " mm, Angle: " +
-                //     data.point.angle +
-                //     " deg";
-                // } else {
-                //   var msg = "Angle: " + data.point.angle + " deg";
-                // }
               var convertedAlertCountPoint = {
-                /*alert and alarm count response*/
                 angle: data.point.angle,
-                angleColorRank: angleColorRank, // Populate with the appropriate value from the response
-                angleColor: angleColor, // Populate with the appropriate value from the response
-                angle_alarm_tr: angle_alarm_tr, // Populate with the appropriate value from the response
+                angleColorRank: angleColorRank, 
+                angleColor: angleColor, 
+                angle_alarm_tr: angle_alarm_tr, 
                 product_serialNumber: data.point.device_id,
                 distance: data.point.height,
-                disColorRank: dis_color_rank, // Populate with the appropriate value from the response
-                disColor: dis_color, // Populate with the appropriate value from the response
-                distance_alarm_tr: distance_alarm_tr, // Populate with the appropriate value from the response
+                disColorRank: dis_color_rank, 
+                disColor: dis_color, 
+                distance_alarm_tr: distance_alarm_tr, 
                 distanceValue: data.point.height,
-                /*alert and alarm list response*/
                 aTreeNodeRef: data.aTreeNodeRef.$oid,
                 aTreeNode_textLabel: data.point.textLabel,
                 latitude: parseFloat(data.location.latitude),
                 longitude: parseFloat(data.location.longitude),
                 message: msg,
-                  //oldest_comm_date: data.date + " hours",
-                product_serialNumber: data.point.device_id,
                 status: status,
                 myTime: timeDate,
                 oldest_comm_date: timeDate,
@@ -1214,6 +1148,7 @@ angular
               allconvertedDatas.push(convertedAlertCountPoint);
             }
           }
+          
           const convertedAlertCountData = allconvertedDatas.map(item1 => {
             const matchingItem2 = response_pointDis.find(item2 => item2.id_serial === item1.serialNumber);
               if (matchingItem2) {
@@ -1259,10 +1194,10 @@ angular
            
             for (var i = 0; i < uniqueDataCount.length; i++) {
               if ( uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3 )
-                $scope.realtimesummery.series[0].data[0].y++;
-              if ( uniqueDataCount[i].disColorRank == 2) $scope.realtimesummery.series[0].data[1].y++
+                {$scope.realtimesummery.series[0].data[0].y++;}
+              if ( uniqueDataCount[i].disColorRank == 2 && uniqueDataCount[i].angleColorRank != 1) {$scope.realtimesummery.series[0].data[1].y++}
               if ( uniqueDataCount[i].disColorRank == 1 || uniqueDataCount[i].angleColorRank == 1 )
-                $scope.realtimesummery.series[0].data[2].y++;
+                {$scope.realtimesummery.series[0].data[2].y++;}
             }
             var uniqueData = [];
             var deviceIds = new Set(); // Using a Set to store unique device_ids
@@ -1273,66 +1208,41 @@ angular
 
               $scope.alertLists[i].class = "";
 
-             
-              if ($scope.alertLists[i].disColor == "yellow") {
-                uniqueAlertData.push($scope.alertLists[i]);
-
-                $scope.alertLists[i].class = "distance warn";
-              }
-              if ($scope.alertLists[i].disColor == "Red" || $scope.alertLists[i].angleColor ==  "Red") {
+             if ($scope.alertLists[i].disColor == "Red" || $scope.alertLists[i].angleColor ==  "Red") {
                 uniqueAlertData.push($scope.alertLists[i]);
 
                 $scope.alertLists[i].class = "distance danger";
               }
+              else if ($scope.alertLists[i].disColor == "yellow") {
+                uniqueAlertData.push($scope.alertLists[i]);
 
-
-              last_comm_split =
-                $scope.alertLists[i].oldest_comm_date.split(" ");
-
-              if (
-                last_comm_split[1] == "minutes" ||
-                last_comm_split[1] == "minute"
-              ) {
-                $scope.alertLists[i].oldest_comm_date =
-                  last_comm_split[0] + "min";
-              } else if (
-                last_comm_split[1] == "hours" ||
-                last_comm_split[1] == "hour"
-              ) {
-                $scope.alertLists[i].oldest_comm_date =
-                  last_comm_split[0] + "h";
-              } else if (
-                last_comm_split[1] == "day" ||
-                last_comm_split[1] == "days"
-              ) {
-                $scope.alertLists[i].oldest_comm_date =
-                  last_comm_split[0] + "d";
-              } else if (
-                last_comm_split[1] == "weeks" ||
-                last_comm_split[1] == "week"
-              ) {
-                $scope.alertLists[i].oldest_comm_date =
-                  last_comm_split[0] + "wk";
-              } else if (
-                last_comm_split[1] == "month" ||
-                last_comm_split[1] == "months"
-              ) {
-                $scope.alertLists[i].oldest_comm_date =
-                  last_comm_split[0] + "mo";
-              } else if (
-                last_comm_split[1] == "year" ||
-                last_comm_split[1] == "year"
-              ) {
-                $scope.alertLists[i].oldest_comm_date =
-                  last_comm_split[0] + "y";
+                $scope.alertLists[i].class = "distance warn";
               }
+              
+
+
+              last_comm_split = $scope.alertLists[i].oldest_comm_date.split(" ");
+
+              if ( last_comm_split[1] == "minutes" || last_comm_split[1] == "minute" ) {
+                $scope.alertLists[i].oldest_comm_date = last_comm_split[0] + "min";
+              } else if ( last_comm_split[1] == "hours" || last_comm_split[1] == "hour" ) {
+                $scope.alertLists[i].oldest_comm_date = last_comm_split[0] + "h";
+              } else if ( last_comm_split[1] == "day" || last_comm_split[1] == "days" ) {
+                $scope.alertLists[i].oldest_comm_date = last_comm_split[0] + "d";
+              } else if ( last_comm_split[1] == "weeks" || last_comm_split[1] == "week" ) {
+                $scope.alertLists[i].oldest_comm_date = last_comm_split[0] + "wk";
+              } else if ( last_comm_split[1] == "month" || last_comm_split[1] == "months" ) {
+                $scope.alertLists[i].oldest_comm_date = last_comm_split[0] + "mo";
+              } else if (  last_comm_split[1] == "year" || last_comm_split[1] == "year" ) {
+                $scope.alertLists[i].oldest_comm_date = last_comm_split[0] + "y";
+              } 
               // else {
-              //     $scope.alertLists[i].oldest_comm_date =  last_comm_split[0] + "y";
+              //   $scope.alertLists[i].oldest_comm_date =  last_comm_split[0] + "y";
               // }
             }
-
             $scope.alertCount = uniqueAlertData.length;
             $scope.alertLists = uniqueAlertData.sort(customComparator);
+console.log($scope.alertLists);
           }).catch(function(error){
             if(error.status==401){
               $window.localStorage.removeItem('authToken');
@@ -1497,76 +1407,11 @@ angular
         }
       };
 
-  
-
-    //   $scope.relativedistance = {
-    //     options: {
-    //         chart : {
-    //             type: 'column',
-    //             height: 230,
-    //             scrollablePlotArea: {
-    //               minWidth: 280,
-    //               scrollPositionX: 1
-    //           }
-    //         },
-    //         yAxis: {
-    //             min: 0,
-    //             max: 100,
-    //             labels: {
-    //                 formatter: function(v) {
-    //                     return v.value + "%";
-    //                 }
-    //             },
-    //             title: {
-    //                 text : ''
-    //             }
-    //         },
-    //         xAxis: {
-    //             labels: {
-    //                 enabled: false
-    //             },
-    //             title: {
-    //                 text: ''
-    //             }
-    //         },
-    //         tooltip: {
-    //             formatter: function() {
-    //                 return formatRDToolTip(this);
-    //             }
-    //         },
-    //         plotOptions: {
-    //             column: {
-    //                 events: {
-    //                     click: function(e) {
-    //                         columnRDClick(e);
-    //                     }
-    //                 }
-    //             }
-    //         },
-    //         legend: {
-    //             enabled: false,
-    //         }
-    //     },
-    //     series: [
-    //         {
-    //             name: "test",
-    //             data : []
-    //         }
-    //     ],
-    //     title: {
-    //         text: ""
-    //     }
-    // }
-
     $scope.relativedistance = {
         options: {
             chart : {
                 type: 'column',
-                height: 230,
-                scrollablePlotArea: {
-                  minWidth: 380,
-                  scrollPositionX: 1
-              }
+                height: 230
             },
             yAxis: {
                 min: 0,
@@ -1617,26 +1462,47 @@ angular
         }
     }
 
+    var currentPage = 1;
+    var totalPage = 1;
+    var limit = 5;
+
+   $scope.nextPage = function() {    
+      if(totalPage > currentPage){
+        currentPage++;
+        loadRelativeDistance()
+      }
+  }
+
+  $scope.previousPage = function() {
+    if (currentPage > 1) {
+      currentPage--;
+      loadRelativeDistance();   
+    }
+  }
+
     function loadRelativeDistance () {
 
         const date = localStorage.getItem('singleDate');
-        $http.get(apiBaseUrl+"tracnet-chart", {headers:customeHeader}).then(function (res) {
-          const rowsData = res.data.data;
-    
-          const allSeriesData = [];
+        $http.get(apiBaseUrl+"tracnet-chart?page="+currentPage+"&limit="+limit, {headers:customeHeader}).then(function (res) {
+          var rowsData = Object.values(res.data.data);
+          if(limit < rowsData.length){
+            totalPage++;
+          }
+          
+          var allSeriesData = [];
           for (var i=0; i < rowsData.length; i++){
               if(1*rowsData[i]?.val_full>0) allSeriesData.push({y : rowsData[i]?.val_full , myData : rowsData[i], color: "#3255A2"});
           }
+
+          allSeriesData.sort((a, b) => b.y - a.y);
+
           $scope.relativedistance.series[0].data = allSeriesData;
           if($scope.$parent && $scope.$parent.relativedistance){
               $scope.$parent.relativedistance.series[0].data = allSeriesData;
           }
-
-
+          
           const relativedistancechart = $('#relativedistance').highcharts();
-          relativedistancechart.series[0].update({
-              data: allSeriesData
-          });
+          relativedistancechart.series[0].update({ data: allSeriesData });
 
         }).catch(function(error){
           if(error.status==401){
