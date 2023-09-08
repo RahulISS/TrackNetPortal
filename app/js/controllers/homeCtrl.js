@@ -263,6 +263,7 @@ angular
 
             if (!existingObject) {
 
+              console.log(data);
               if (data.point.angle > 5) {
                 var angleColorRank = 1;
                 var angleColor = "Red";
@@ -283,18 +284,22 @@ angular
                 var dis_color = "";
                 var distanceValue = "";
               }
-              if (data.point.height < 400) {
-                var distanceValue = 400;
-                var distance_alarm_tr = "Distance alarm Triggered";
-                var dis_color_rank = 1;
-                var dis_color = "Red";
-              }
 
               if (data.point.height < data.point.distance_alert) {
                 var distance_alarm_tr = "Distance alert Triggered";
                 var dis_color_rank = 2;
                 var dis_color = "yellow";
               }
+              // value of the <= 400 comparator
+              if (data.point.height <= 400) {
+                console.log("inside 400");
+                var distanceValue = 400;
+                var distance_alarm_tr = "Distance alarm Triggered";
+                var dis_color_rank = 1;
+                var dis_color = "Red";
+              }
+
+
 
               if (data.point.manhole_level_alarm == "Not full alarm") {
                 var manhole_level_alarm = 0;
@@ -575,7 +580,7 @@ angular
           }
 
           $scope.sortedArray_1 = $scope.sortedArray;
-
+          console.log($scope.sortedArray_1, 'scopearray1')
           // sorted end
           for (var i = 0; i < $scope.sortedArray_1.length; i++) {
             arr.push(aLocation[i].installationId.split(" ")[0]);
