@@ -10759,7 +10759,7 @@ div.week_days {
 
 /* ak 24-03 */
 .withtree.map-50,.withtree.map-50.map-100 {
-    width: 65%;
+    width: calc(100% - 500px);
     position: relative;
     transition: all 0.3s ease-in;
 }
@@ -10837,7 +10837,7 @@ div.week_days {
     object-fit: contain
 }
 .withtree.map-100.map-50+.side-det{
-    width: 35%;
+    width: 500px;
     display: block;
 }
 .green{
