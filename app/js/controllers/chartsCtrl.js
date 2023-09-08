@@ -711,6 +711,9 @@ angular
         $scope.flowReportBtn = false;
         deselectAllTreeNodep("#chartTree");
         $scope.selectedValue = "";
+        $scope.changedSensorIds = null;
+        $scope.previousSensorNames = {};
+        document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
       };
 
       function clearChartData() {
@@ -731,6 +734,9 @@ angular
           $scope.meterChartConfig.options.yAxis[i].min = null;
           $scope.meterChartConfig.options.yAxis[i].max = null;
           $scope.tableViewData = [];
+          $scope.changedSensorIds = null;
+          $scope.changeSensor = null;
+          $scope.previousSensorNames = {};
         }
       }
 
@@ -1034,13 +1040,26 @@ angular
         } catch (err) {}
       };
 
-      $scope.clearNodeData = function (index) {
+      $scope.clearNode = function(index,pointID){
+        $('#chartTree').jstree(true).deselect_node(pointID);
+        $('#chartTree').jstree(true).enable_node(pointID);
+        $('#chartTree').jstree('deselect_node', pointID);
+        $('#chartTree').jstree('enable_node', pointID);
+        $.jstree.reference('#chartTree').deselect_node(pointID);
+        $.jstree.reference('#chartTree').enable_node(pointID);
+        $scope.selectLegend(index);
+      }
+
+
+    $scope.clearNodeData = function (index,node) {
+        var pointID = node.pointId+"_anchor"
+        $scope.clearNode(index,pointID);
         $scope.tableStats[index].title = "";
         $scope.tableStats[index].pointId = "null";
         $scope.tableStats[index].measurements = [];
         $scope.tableStats[index].fold = {
-          name: "null",
-          value: "null",
+            name: "null",
+            value: "null"
         };
         $scope.tableStats[index].max = 0;
         $scope.tableStats[index].min = 0;
@@ -1051,9 +1070,8 @@ angular
         $scope.meterChartConfig.options.yAxis[index].min = null;
         $scope.meterChartConfig.options.yAxis[index].max = null;
         setVisible();
-        //setNextCurrentLegend();
-      
-      };
+       // isShowFlowReportButton(index);
+    };
 
       var args;
       $scope.dataLegendFull = false;
@@ -1135,7 +1153,7 @@ angular
 
       $scope.selectedInsCount = 0;
       $scope.compareNode = "";
-      $scope.valueAngle = "Relative Distance";
+      //$scope.valueAngle = "Relative Distance";
       countNode = [];
       var countInstallation = 0;
 
@@ -1169,13 +1187,15 @@ angular
         }else if($scope.selectedValue == "Distance") {
           for (var i = 0; i < $scope.tableStats.length; i++) {
               if($scope.tableStats[i].title != '') {
-                  $scope.tableStats[i].currentMeasurement = $scope.tableStats[i].measurements[1];                 
+                  $scope.tableStats[i].currentMeasurement = $scope.tableStats[i].measurements[1];
+                  document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");                 
               }
           }               
       } else if ($scope.selectedValue == "Angle") {
           for (var i = 0; i < $scope.tableStats.length; i++) {
             if ($scope.tableStats[i].title != "") {
               $scope.tableStats[i].currentMeasurement = $scope.tableStats[i].measurements[2];
+              document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");  
             }
           }
         } else {
@@ -1317,6 +1337,35 @@ angular
         }
       }
 
+      function cloneGetYminMax() {
+        var minUnit = {}, maxUnit = {};
+        for(let i = 0; i < $scope.tableStats.length; i++){
+            if( $scope.tableStats[i].pointId !== 'null' && $scope.tableStats[i].pointId !== null ){
+                if(minUnit[$scope.tableStats[i].currentMeasurement.unit]==undefined) {
+                    minUnit[$scope.tableStats[i].currentMeasurement.unit] = $scope.tableStats[i].min;
+                } else {
+                    minUnit[$scope.tableStats[i].currentMeasurement.unit] = ($scope.tableStats[i].min<minUnit[$scope.tableStats[i].currentMeasurement.unit]) ? $scope.tableStats[i].min : minUnit[$scope.tableStats[i].currentMeasurement.unit];
+                }
+
+                if(maxUnit[$scope.tableStats[i].currentMeasurement.unit]==undefined) {
+                    maxUnit[$scope.tableStats[i].currentMeasurement.unit] = $scope.tableStats[i].max;
+                } else {
+                    maxUnit[$scope.tableStats[i].currentMeasurement.unit] = ($scope.tableStats[i].max>maxUnit[$scope.tableStats[i].currentMeasurement.unit]) ? $scope.tableStats[i].max : maxUnit[$scope.tableStats[i].currentMeasurement.unit];
+                }
+            }
+        }
+        
+        for(let k = 0; k < $scope.tableStats.length; k++ ){
+            if( $scope.tableStats[k].pointId === 'null' || $scope.tableStats[k].pointId === null ) continue;
+            if ($scope.chartStatusSet["meter"].ymin) {
+                $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = 0;
+            } else {
+                $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = 0;
+            }
+            $scope.chartStatusSet["meter"].charts.options.yAxis[k].max = 105;
+        }
+    }
+
       function resetYaxes() {
         for (let k = 0; k < $scope.tableStats.length; k++) {
           $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = null;
@@ -1325,10 +1374,27 @@ angular
           $scope.meterChartConfig.options.yAxis[k].max = null;
         }
       }
-      var sensor_name = null;
+      //var sensor_name = null;
       $scope.queryEmptyFull = "";
       $scope.fullAlarm = 0;
       $scope.emptyAlarm = 0;
+      var sensor_name = null;
+      let sensorName = null;
+      $scope.myCustSensor = null;
+      $scope.sensor1 = null;
+      $scope.changeSensor = null;
+      $scope.sensor2 = null;
+      $scope.checkRelativeDistanceSensor = null;
+      $scope.aTreeNodeId = null;
+      // $scope.fullAlarm = null;
+      // $scope.emptyAlarm = null;
+      $scope.changedSensorIds = null;
+      $scope.previousSensorNames = {};
+      $scope.outPreviousSensorNames = null;
+      $scope.distanceAlert = null;
+      //$scope.getAllSensor = [];
+      
+      var distanceAlert = "";
       function loadData() {
         var datespan = moment($rootScope.storage.chartsRangeStartDate).format( skySparkFormat ) + ".." + moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
         var startDate = moment($rootScope.storage.chartsRangeStartDate).format( skySparkFormat );
@@ -1343,41 +1409,64 @@ angular
         for (let i = 0; i < $scope.tableStats.length; i++) {
           if ( $scope.tableStats[i].pointId !== "null" && $scope.tableStats[i].pointId !== null ) {
             $scope.activeItems.push(i);
+            sensorName = $scope.tableStats[i].currentMeasurement.id_name;
+            const previousSensorName = $scope.previousSensorNames[$scope.tableStats[i].pointId] || null;
+            if (previousSensorName !== null && previousSensorName !== $scope.tableStats[i].currentMeasurement.id_name) {
+              // Sensor ID has changed, add the ID to the changedSensorIds array
+              const sensorId = $scope.tableStats[i].pointId;
+              $scope.changedSensorIds = sensorId;
+              $scope.changeSensor = $scope.tableStats[i].currentMeasurement.id_name;
+           }
+          // Store the previous sensor name
+          $scope.previousSensorNames[$scope.tableStats[i].pointId] = sensorName;
+          $scope.outPreviousSensorNames = $scope.previousSensorNames[$scope.tableStats[i].pointId];
+          $scope.checkRelativeDistanceSensor = $scope.tableStats[i].currentMeasurement.id_name;
+          sensorName =  $scope.checkRelativeDistanceSensor;
             const id = $scope.tableStats[i].pointId;
             const id_serial = $scope.tableStats[i].title;
              $scope.sensorType = $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
             localStorage.setItem("aTreeNodeId", id);
             localStorage.setItem("sensorId", $scope.sensorType);
-
+            //$scope.getAllSensor = $scope.tableStats[i].currentMeasurement.id_name;
             sensor_name = $scope.tableStats[i].currentMeasurement.id_name;
-            $scope.checkRelativeDistanceSensor = $scope.tableStats[i].currentMeasurement.id_name;
+            $scope.checkRelativeDistanceSensor = sensor_name;
             if($scope.checkRelativeDistanceSensor == "Relative Distance"){
-                
-                const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=64ae522eefa8baae8f106b9d&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+                const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
                 let queryInfo = { query: query , index: i };
                 $scope.queriesRelativeDistalceArray.push(queryInfo);
                 $scope.queryEmptyFull = apiBaseUrl+"getEmpltyFull/"+id_serial;
-                $scope.meterChartConfig.options.yAxis[0] = generateYAxisConfig();
+                document.getElementById("meter_yminButton").setAttribute("class", "btnTopBar");
                
-                 document
-                  .getElementById("meter_yminButton")
-                  .setAttribute("class", "btnTopBar");
-                
                 
             }else{
                 
                 const query = apiBaseUrl+`html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
-               
+                
                 let queryInfo = { query: query , index: i };
                 $scope.queriesArray.push(queryInfo);
-                $scope.meterChartConfig.options.yAxis[0] = generateYAxisConfigDisance();
-                document
-                  .getElementById("meter_yminButton")
-                  .setAttribute("class", "btnTopBarOff");
+                document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
+               // $scope.meterChartConfig.options.yAxis[0] = generateYAxisConfigDisance();
+               
             }
+            // if($scope.getAllSensor = "Relative Distance" ){
+            //   document.getElementById("meter_yminButton").setAttribute("class", "btnTopBar");
+            //   console.log("if");
+            // } 
+            // else{
+            //   document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
+            //   console.log("else")
+            // }
+              
+            //console.log($scope.getAllSensor,'$scope.getAllSensor')
           }
+          
+        }
+        if( $scope.changedSensorIds == null || $scope.changedSensorIds == $scope.tableStats[i].pointId && $scope.changeSensor == null || $scope.changeSensor == $scope.outPreviousSensorNames && $scope.checkRelativeDistanceSensor == "Relative Distance") {
+          
+          if($scope.queriesRelativeDistalceArray.length === 0) return;
+          
           $http.get($scope.queryEmptyFull, {headers:customeHeader}).then(function (reqResult2) {
-             
+           
             const deviceData = reqResult2.data.data;
             if( typeof deviceData === 'undefined') {
               $scope.fullAlarm = 400;
@@ -1386,8 +1475,6 @@ angular
               $scope.fullAlarm = deviceData.full;
               $scope.emptyAlarm = deviceData.empty;
           }
-            
-            console.log($scope.fullAlarm,'$scope.fullAlarm 1',$scope.emptyAlarm,'$scope.emptyAlarm 1')
           }).catch(function(error){
             if(error.status==401){
               $window.localStorage.removeItem('authToken');
@@ -1398,14 +1485,138 @@ angular
               $state.go('login');
             }
           });
+          const promises_data = $scope.queriesRelativeDistalceArray.map(function (item) {
+              
+              return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {
+                 
+                  return {
+                      'index': item.index,
+                      'data': reqResult
+                  };
+              });
+               
+          })
           
-        }
-        
-        if ($scope.queriesRelativeDistalceArray === undefined) {
-        } else if ($scope.queriesRelativeDistalceArray.length === 0) {
-            if($scope.queriesArray.length === 0) return;
+          
+          
+          const data_completion = $q.all(promises_data)
+          data_completion.then(function (responses) {
+          
+              if(responses.length === 0) return;
+              $scope.tableViewData = [];
+              for( let p = 0 ; p < responses[0].data.data.data.length; p++){
+                 $scope.tableViewData.push( [ responses[0].data.data.data[p].ts] ) 
+              }
+              for(let i = 0; i < responses.length; i++ ){
+                  const data = responses[i].data.data.data;
+                  if(sensor_name == "Distance") {
+                      for(let k = data.length - 1; k >= 0; k--) {
+                          if (data[k].v0 <= 400) {
+                              data[k].v0 = 400;
+                            } else if (data[k].v0 >= 3998) {
+                                data.splice(k, 1); // Remove the element at index k
+                            } 
+                      }
+                  } 
+                  const index = responses[i].index;
+                  $scope.tableStats[index].max = 0;
+                  $scope.tableStats[index].min = 0;
+                  $scope.tableStats[index].avg = "";
+                  $scope.tableStats[index].sum = 0;
+                  $scope.tableStats[index].data = [];
+                  let values = [];
+                  let measurements = [];
+                  $scope.meterChartConfig.series[index].data = [];
+                  $scope.tableViewData.push([]);
+                  const valueName = 'x' + i;
+                  let hasValue = false;
+                  
+                  for (var j = 0; j < data.length; j++) {
+                      var ttemp = data[j].ts.slice(0, data[j].ts.indexOf("+"));
+                      var mmx = moment.utc(ttemp);
+                      const xval = mmx.valueOf();
+                      if(data[j].hasOwnProperty("v0")){
+                          hasValue = true;
+                          var relativeDistance = Math.round(((($scope.emptyAlarm-$scope.fullAlarm)-(parseFloat(data[j].v0) - $scope.fullAlarm)) / ($scope.emptyAlarm-$scope.fullAlarm)) * 100);
+                      
+                          if($scope.checkRelativeDistanceSensor == "Relative Distance"){
+                              if(relativeDistance < 0){
+                                  relativeDistance = 0;
+                              }
+                              if(relativeDistance > 100){
+                                  relativeDistance = 100;
+                              }
+                          }
+                          const yval = relativeDistance;
+                          measurements.push(yval);
+                          values.push( [xval,yval] );
+                          let dict = {};
+                          dict["ts"] = data[j].ts;
+                          dict[valueName] = yval
+                          $scope.tableViewData[i].push(dict);
+                      }else{
+                          let dict = {};
+                          dict["ts"] = data[j].ts;
+                          dict[valueName] = null
+                          $scope.tableViewData[i].push(dict);
+                          values.push( [xval,null] );
+                      }
+                  }
+                  if( hasValue === false ){
+                      $scope.tableStats[index].noData = true;
+                      continue;
+                  }else{
+                      $scope.tableStats[index].noData = false;
+                  }
+                  $scope.tableStats[index].data = values;
+                  $scope.tableStats[index].min = Math.min(...measurements);
+                  $scope.tableStats[index].max = Math.max(...measurements);
+                  const sum = measurements.reduce( function(pre,curr){return pre + curr;},0);
+                  $scope.tableStats[index].sum = sum.toFixed(2);
+                  $scope.tableStats[index].avg = (sum / measurements.length).toFixed(0);
+                  updateSeriesData();
+                  $scope.meterChartConfig.series[index].name = $scope.tableStats[index].title + " - " + $scope.tableStats[index].currentMeasurement.id_name;
+                  $scope.meterChartConfig.series[index].marker.enabled = $scope.chartStatusSet.meter.markers;
+                  $scope.meterChartConfig.series[index]['tooltip']['pointFormatter'] = function(){
+                      return dataPointFormaterFunction(this,$scope.tableStats[index].currentMeasurement);
+                  }
+                  let sensorName;
+                  sensorName = $scope.tableStats[index].currentMeasurement.id_name;
+                  $scope.meterChartConfig.options.yAxis[index].labels['formatter'] =  function(){
+                      return yAxisLabelFormaterFunction(this,$scope.tableStats[index].currentMeasurement.kind,$scope.tableStats[index].currentMeasurement.id_name,$scope.tableStats[index].currentMeasurement.unit);
+                  }
+                  if( sensorName === 'Flow Switch' || sensorName === 'Door Switch' || sensorName  === 'Flow Valve' ){
+                      $scope.meterChartConfig.options.yAxis[index].tickWidth = 0;
+                  }else{
+                      $scope.meterChartConfig.options.yAxis[index].tickWidth = 2;
+                  }
+              }
+              const filteredNoData = $scope.tableStats.filter( (element) => {
+                   if( element.noData === false){
+                      return element
+                   }
+              });
+              if(filteredNoData.length === 0){
+                  resetYaxes();
+                  return;
+              }
+              cloneGetYminMax();
+              const map = new Map();
+              $scope.tableViewData[0].forEach( item => map.set( item.ts, item ) );
+              for(let i = 1; i < $scope.tableViewData.length; i++){
+                  $scope.tableViewData[i].forEach( item => map.set( item.ts, {...map.get(item.ts), ...item} ) );
+              }
+              let mergedArr = Array.from(map.values());
+              $scope.tableViewData = [];
+              $scope.tableViewData = mergedArr.sort( (a,b) => a.ts < b.ts  );
+          });
+          $scope.changedSensorIds = null;
+        } 
+        else {
+          if($scope.queriesArray.length === 0) return;
+          //if($scope.queriesArray.length === 0) return;
             const promises_data1 = $scope.queriesArray.map(function (item) {
-                return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {           
+                return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {  
                     return {
                         'index': item.index,
                         'data': reqResult
@@ -1514,151 +1725,8 @@ angular
                 $scope.tableViewData = [];
                 $scope.tableViewData = mergedArr.sort( (a,b) => a.ts < b.ts  );
             });
-        } else {
-            //if($scope.queriesRelativeDistalceArray.length === 1) return;
-
-            const promises_data = $scope.queriesRelativeDistalceArray.map(function (item) {
-                
-                return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {
-                   
-                    return {
-                        'index': item.index,
-                        'data': reqResult
-                    };
-                });
-                 
-            })
-            
-            
-            
-            const data_completion = $q.all(promises_data)
-            data_completion.then(function (responses) {
-            
-                if(responses.length === 0) return;
-                $scope.tableViewData = [];
-                for( let p = 0 ; p < responses[0].data.data.data.length; p++){
-                   $scope.tableViewData.push( [ responses[0].data.data.data[p].ts] ) 
-                }
-                for(let i = 0; i < responses.length; i++ ){
-                    const data = responses[i].data.data.data;
-                    if(sensor_name == "Distance") {
-                        for(let k = data.length - 1; k >= 0; k--) {
-                            if (data[k].v0 <= 400) {
-                                data[k].v0 = 400;
-                              } else if (data[k].v0 >= 3998) {
-                                  data.splice(k, 1); // Remove the element at index k
-                              } 
-                        }
-                    } 
-                    const index = responses[i].index;
-                    $scope.tableStats[index].max = 0;
-                    $scope.tableStats[index].min = 0;
-                    $scope.tableStats[index].avg = "";
-                    $scope.tableStats[index].sum = 0;
-                    $scope.tableStats[index].data = [];
-                    let values = [];
-                    let measurements = [];
-                    $scope.meterChartConfig.series[index].data = [];
-                    $scope.tableViewData.push([]);
-                    const valueName = 'x' + i;
-                    let hasValue = false;
-                    
-                    for (var j = 0; j < data.length; j++) {
-                        var ttemp = data[j].ts.slice(0, data[j].ts.indexOf("+"));
-                        var mmx = moment.utc(ttemp);
-                        const xval = mmx.valueOf();
-                        if(data[j].hasOwnProperty("v0")){
-                            hasValue = true;
-                            console.log($scope.fullAlarm,'$scope.fullAlarm',$scope.emptyAlarm,'$scope.emptyAlarm')
-                            var relativeDistance = Math.round(((($scope.emptyAlarm-$scope.fullAlarm)-(parseFloat(data[j].v0) - $scope.fullAlarm)) / ($scope.emptyAlarm-$scope.fullAlarm)) * 100);
-                           
-                            if($scope.checkRelativeDistanceSensor == "Relative Distance"){
-                                if(relativeDistance < 0){
-                                    relativeDistance = 0;
-                                }
-                                if(relativeDistance > 100){
-                                    relativeDistance = 100;
-                                }
-                            }
-                            const yval = relativeDistance;
-                            measurements.push(yval);
-                            values.push( [xval,yval] );
-                            let dict = {};
-                            dict["ts"] = data[j].ts;
-                            dict[valueName] = yval
-                            $scope.tableViewData[i].push(dict);
-                        }else{
-                            let dict = {};
-                            dict["ts"] = data[j].ts;
-                            dict[valueName] = null
-                            $scope.tableViewData[i].push(dict);
-                            values.push( [xval,null] );
-                        }
-                    }
-                    if( hasValue === false ){
-                        $scope.tableStats[index].noData = true;
-                        continue;
-                    }else{
-                        $scope.tableStats[index].noData = false;
-                    }
-                    $scope.tableStats[index].data = values;
-                    $scope.tableStats[index].min = Math.min(...measurements);
-                    $scope.tableStats[index].max = Math.max(...measurements);
-                    const sum = measurements.reduce( function(pre,curr){return pre + curr;},0);
-                    $scope.tableStats[index].sum = sum.toFixed(2);
-                    $scope.tableStats[index].avg = (sum / measurements.length).toFixed(0);
-                    updateSeriesData();
-                    $scope.meterChartConfig.series[index].name = $scope.tableStats[index].title + " - " + $scope.tableStats[index].currentMeasurement.id_name;
-                    $scope.meterChartConfig.series[index].marker.enabled = $scope.chartStatusSet.meter.markers;
-                    $scope.meterChartConfig.series[index]['tooltip']['pointFormatter'] = function(){
-                        return dataPointFormaterFunction(this,$scope.tableStats[index].currentMeasurement);
-                    }
-                    let sensorName;
-                    sensorName = $scope.tableStats[index].currentMeasurement.id_name;
-                    $scope.meterChartConfig.options.yAxis[index].labels['formatter'] =  function(){
-                        return yAxisLabelFormaterFunction(this,$scope.tableStats[index].currentMeasurement.kind,$scope.tableStats[index].currentMeasurement.id_name,$scope.tableStats[index].currentMeasurement.unit);
-                    }
-                    if( sensorName === 'Flow Switch' || sensorName === 'Door Switch' || sensorName  === 'Flow Valve' ){
-                        $scope.meterChartConfig.options.yAxis[index].tickWidth = 0;
-                    }else{
-                        $scope.meterChartConfig.options.yAxis[index].tickWidth = 2;
-                    }
-                }
-                const filteredNoData = $scope.tableStats.filter( (element) => {
-                     if( element.noData === false){
-                        return element
-                     }
-                });
-                if(filteredNoData.length === 0){
-                    resetYaxes();
-                    return;
-                }
-                getYminMax();
-                const map = new Map();
-                $scope.tableViewData[0].forEach( item => map.set( item.ts, item ) );
-                for(let i = 1; i < $scope.tableViewData.length; i++){
-                    $scope.tableViewData[i].forEach( item => map.set( item.ts, {...map.get(item.ts), ...item} ) );
-                }
-                let mergedArr = Array.from(map.values());
-                $scope.tableViewData = [];
-                $scope.tableViewData = mergedArr.sort( (a,b) => a.ts < b.ts  );
-            });
         }
-
-        // if ($scope.queriesArray.length === 0) return;
-        // const promises_data = $scope.queriesArray.map(function (item) {
-        //   return $http.get(item.query, {headers:customeHeader}).then(function (reqResult) {
-        //     return {
-        //       index: item.index,
-        //       data: reqResult,
-        //     };
-        //   });
-        // });
-
-        
-      
       }
-
       $scope.meterChartConfig = {
         options: {
           lang: {
@@ -2140,14 +2208,6 @@ angular
             .bind("loaded.jstree", function (event, data) {
               $(this).jstree("open_all");
               $(this).jstree("select_node", [""], true);
-            })
-            .bind("loaded.jstree", function (event, data2) {
-              $(this).jstree("open_all");
-              $(this).jstree("deselect_node", [""], true);
-            })
-            .bind("deselect_node.jstree", function (e, data) {
-              scope.$emit("checkedRef", data.node.text);
-              scope.deselceted = data.node.original;
             })
             .bind("select_node.jstree", async function (e, data) {
               if (data.node.id == "@2b931fe5-f624c0c6") {

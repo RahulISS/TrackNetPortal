@@ -42,10 +42,11 @@
 	.bgColor0 {
 		background: #fff !important;
 	}
-	.opacity0{
+
+	.opacity0 {
 		opacity: 0.5;
 	}
-	</style>
+</style>
 <div class="homepage">
 
 	<div id="confirmBox">
@@ -56,7 +57,7 @@
 	<div class="withtree map-100">
 		<div class="viewtemplateInner">
 			<div class="homemaparea" id="item">
-				<div id="homeMap" class="homeleft" >
+				<div id="homeMap" class="homeleft">
 				</div>
 			</div>
 		</div>
@@ -73,32 +74,32 @@
 					<div class="icoBg">
 						<span>Alarm</span>
 					</div>
-					</button>
+				</button>
 				<button type="button" class="btn btn-primary" ng-click='addMarker1("triangle")'>
-					<div class="icoBg"><img src="img/triangle.svg"/></div>
+					<div class="icoBg"><img src="img/triangle.svg" /></div>
 					<div class="icoBg">
 						<span>Distance Alert 3</span>
 					</div>
 				</button>
 				<button type="button" class="btn btn-primary" ng-click='addMarker1("square")'>
-					<div class="icoBg"><img src="img/square.svg"/></div>
-				<div class="icoBg">
+					<div class="icoBg"><img src="img/square.svg" /></div>
+					<div class="icoBg">
 						<span>Distance Alert 2</span>
 					</div>
 				</button>
 				<button type="button" class="btn btn-primary" ng-click='addMarker1("circle")'>
-					<div class="icoBg"><img src="img/circle.svg"/></div>
-				<div class="icoBg">
+					<div class="icoBg"><img src="img/circle.svg" /></div>
+					<div class="icoBg">
 						<span>Distance Alert 1</span>
 					</div>
 				</button>
-			  </div>
+			</div>
 		</div>
-		
+
 		<div class="view-style">
 			<button class="reset_btn" ng-click="resetMapClick()">Reset</button>
 			<div class="cale-ico">
-				
+
 				<img src="img/collapse.png" alt="">
 			</div>
 			<select ng-model="installation_name" id="" ng-change="GetTableItemsBySlected(installation_name)"
@@ -120,9 +121,10 @@
 					<th>Site</th>
 					<th>Distance</th>
 					<th>Angle</th>
-					<th>Last Comm.</th>
+					<th>Last <br>
+						Comm.</th>
 				</tr>
-			</thead>  
+			</thead>
 			<tbody>
 				<a href="#">
 					<tr ng-repeat="item in sortedArray_1 | filter : installation_name "
@@ -149,7 +151,8 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="popup-wrap">
-					<button type="button" class="close-button" ng-click="closeModal()" data-dismiss="modal" aria-label="Close">
+					<button type="button" class="close-button" ng-click="closeModal()" data-dismiss="modal"
+						aria-label="Close">
 						<span aria-hidden="true">×</span>
 					</button>
 					<form action="" id="myForm" autocomplete="off">
@@ -165,40 +168,61 @@
 									</div>
 									<div class="mhole-alert boundaryOne">
 										<label for="">Full (100%)</label>
-										<input type="text" onkeypress="return isNumber(event)" name="fullValue" id="fullValue" value="{{pointSettingData.full}}" ng-change="onInputChange('fullVal')" ng-model="fullVal"><span class="classmm">mm</span> 
-										<span id="errorname" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
-									</div> 
+										<input type="text" onkeypress="return isNumber(event)" name="fullValue"
+											id="fullValue" value="{{pointSettingData.full}}"
+											ng-change="onInputChange('fullVal')" ng-model="fullVal"><span
+											class="classmm">mm</span>
+										<span id="errorname"
+											style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid
+											value*</span>
+									</div>
 									<div class="mhole-alert traingles">
 										<samp class="alt-status">{{altStatus3}}</samp>
 										<label class="{{addAlt3Class}}" for="">Distance Alert 3</label>
-										<input type="text" class="{{addAlt3Class}}" onkeypress="return isNumber(event)" name="alert3" id="alert3" ng-model="alert3"  ng-change="onInputChange('alert3')" value="{{pointSettingData.alarmThird}}"><span class="classmm">mm</span> 
+										<input type="text" class="{{addAlt3Class}}" onkeypress="return isNumber(event)"
+											name="alert3" id="alert3" ng-model="alert3"
+											ng-change="onInputChange('alert3')"
+											value="{{pointSettingData.alarmThird}}"><span class="classmm">mm</span>
 										<span class="disTrigger" ng-if="disAlt3">{{disAlt3}}%</span>
 										<span ng-show="alrErr" class="alert-show">{{ errorAlt3 }}</span>
 									</div>
 									<div class="mhole-alert squares">
 										<samp class="alt-status">{{altStatus2}}</samp>
 										<label class="{{addAlt2Class}}" for="">Distance Alert 2</label>
-										<input type="text" class="{{addAlt2Class}}" onkeypress="return isNumber(event)"  name="alert2" id="alert2" ng-model="alert2" ng-change="onInputChange('alert2')" value="{{pointSettingData.alarmSecond}}"><span class="classmm">mm</span> 
+										<input type="text" class="{{addAlt2Class}}" onkeypress="return isNumber(event)"
+											name="alert2" id="alert2" ng-model="alert2"
+											ng-change="onInputChange('alert2')"
+											value="{{pointSettingData.alarmSecond}}"><span class="classmm">mm</span>
 										<span class="disTrigger" ng-if="disAlt2">{{disAlt2}}%</span>
 										<span ng-show="alrErr" class="alert-show">{{ errorAlt2 }}</span>
 									</div>
 									<div class="mhole-alert circles">
-										<samp  class="alt-status">{{altStatus1}}</samp>
+										<samp class="alt-status">{{altStatus1}}</samp>
 										<label class="{{addAlt1Class}}" for="">Distance Alert 1</label>
-										<input type="text" class="{{addAlt1Class}}" onkeypress="return isNumber(event)" name="alert1" id="alert1" ng-model="alert1" ng-change="onInputChange('alert1')" value="{{pointSettingData.alarmFirst}}"><span class="classmm">mm</span> 
+										<input type="text" class="{{addAlt1Class}}" onkeypress="return isNumber(event)"
+											name="alert1" id="alert1" ng-model="alert1"
+											ng-change="onInputChange('alert1')"
+											value="{{pointSettingData.alarmFirst}}"><span class="classmm">mm</span>
 										<span class="disTrigger" ng-if="disAlt1">{{disAlt1}}%</span>
 										<span ng-show="alrErr" class="alert-show">{{ errorAlt1 }}</span>
 									</div>
 									<div class="mhole-alert boundaryTwo">
 										<label for="">Empty (0%)</label>
-										<input type="text" onkeypress="return isNumber(event)" name="emptyValue" id="emptyValue" ng-change="onInputChange('emptyVal')" value="{{pointSettingData.empty}}" ng-model="emptyVal"><span class="classmm">mm</span> 
-										<span id="errorn" style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid value*</span>
+										<input type="text" onkeypress="return isNumber(event)" name="emptyValue"
+											id="emptyValue" ng-change="onInputChange('emptyVal')"
+											value="{{pointSettingData.empty}}" ng-model="emptyVal"><span
+											class="classmm">mm</span>
+										<span id="errorn"
+											style="display: none; color: red; position: absolute; top: 33px; right: -19px;">Invalid
+											value*</span>
 									</div>
 								</div>
-								
+
 								<div class="alert-checkbox buttons">
-									<input type="button" value="Save Changes" ng-click="saveAlertData()" class="save-btn submit__btn" ng-disabled="errorstatus" >
-									<input type="button" class="cancel-btn reset__btn" value="Cancel, Go Back" ng-click="closeModal()"/>
+									<input type="button" value="Save Changes" ng-click="saveAlertData()"
+										class="save-btn submit__btn" ng-disabled="errorstatus">
+									<input type="button" class="cancel-btn reset__btn" value="Cancel, Go Back"
+										ng-click="closeModal()" />
 								</div>
 								<a href="" class="edit-btn" ng-click="resetAlert()">Reset All Alerts</a>
 							</div>
@@ -213,8 +237,8 @@
 		<div class="loader-spinner"></div>
 	</div>
 	<script>
-		$(document).on("click", ".hideBoundaries", function() {
-			if($(this).is(":checked")) {
+		$(document).on("click", ".hideBoundaries", function () {
+			if ($(this).is(":checked")) {
 				$(".boundaryTwo").hide();
 				$(".boundaryOne").hide();
 			} else {
@@ -222,8 +246,8 @@
 				$(".boundaryOne").show();
 			}
 		});
-		$(document).on("click", ".hideAlerts", function() {
-			if($(this).is(":checked")) {
+		$(document).on("click", ".hideAlerts", function () {
+			if ($(this).is(":checked")) {
 				$('.circles').hide();
 				$('.traingles').hide();
 				$('.squares').hide();
@@ -234,24 +258,24 @@
 			}
 		});
 
-		$(document).on("input", "#fullValue", function() {
+		$(document).on("input", "#fullValue", function () {
 			var fValue = $(this).val();
-			if(parseInt(fValue) >= 400 && parseInt(fValue) <= 3998){
+			if (parseInt(fValue) >= 400 && parseInt(fValue) <= 3998) {
 				$('#errorname').hide();
 				$('.save-btn').removeClass("disabledprop");
-			}else{
+			} else {
 				$('#errorname').show();
 				$('.save-btn').addClass("disabledprop");
 				return false;
 			}
 		});
-		$(document).on("input", "#emptyValue", function() {
+		$(document).on("input", "#emptyValue", function () {
 			var fullValue = $('#fullValue').val();
 			var eValue = $(this).val();
-			if((parseInt(eValue) > parseInt(fullValue) && parseInt(eValue) <= 3998 )){
-				$('#errorn').hide();				
+			if ((parseInt(eValue) > parseInt(fullValue) && parseInt(eValue) <= 3998)) {
+				$('#errorn').hide();
 				$('.save-btn').removeClass("disabledprop");
-			}else{
+			} else {
 				$('#errorn').show();
 				$('.save-btn').addClass("disabledprop");
 			}
@@ -261,12 +285,12 @@
 		$(document).ready(function () {
 			$(".close-button").click(function () {
 				$("#popupModalCenter").removeClass("show-modal");
-			});	
+			});
 		});
 		$(document).ready(function () {
 			$(".cancel-btn").click(function () {
 				$("#popupModalCenter").removeClass("show-modal");
-			});	
+			});
 		});
 		// popup end
 		function isNumber(evt) {

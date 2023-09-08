@@ -10,7 +10,7 @@ angular.module('settingsCtrl', [])
     $scope.loading = false;
     $scope.operationResult = false;
 
-
+    // we are setting the token to pass in header here
     $scope.serverRequest = apiBaseUrl;
     const token = localStorage.getItem("authToken");
     const customeHeader = {
@@ -44,6 +44,7 @@ angular.module('settingsCtrl', [])
       $scope.configActive = false;
     });
 
+    // setting the null values 
     $scope.statusObj = {
       productName: null,
       tracwaterSerialNumber: null,
@@ -67,6 +68,7 @@ angular.module('settingsCtrl', [])
         $scope.statusView = false;
       }
     }
+    // calling the function here to display 
     getSaveedUserConfiguration();
 
     $scope.navigationArray = [{
@@ -85,7 +87,7 @@ angular.module('settingsCtrl', [])
     $scope.addShow = true;
     $scope.updateShow = false;
 
-    // ADD
+    // ADD the record using the form
     $scope.saveUserConfiguationSetting = function () {
       var contactName = $scope.contactName;
       var emailAddress = $scope.emailAddress;
@@ -145,7 +147,6 @@ angular.module('settingsCtrl', [])
     }`;
 
 
-      console.log("addquery", query);
 
       const query1 = $http
         .post(apiBaseUrl + "alert-alarm-setting/store", query, { headers: customeHeader })
@@ -226,7 +227,7 @@ angular.module('settingsCtrl', [])
 
     $scope.configRecord = [];
 
-    // READ
+    // READ the values from database to display function
     function getSaveedUserConfiguration() {
       $scope.portal = "TracNet Yarra Valley";
       const query2 = $http
@@ -261,7 +262,7 @@ angular.module('settingsCtrl', [])
 
     }
 
-    // Delete
+    // Delete the user query
     function deleteUserConfiguations(_id) {
       const config = {
         headers: {
@@ -311,6 +312,8 @@ angular.module('settingsCtrl', [])
 
     }
 
+    // showconfirm popup
+
     $scope.ShowConfirm = function (email) {
       Swal.fire({
         title: 'Confirm Deletion',
@@ -337,7 +340,7 @@ angular.module('settingsCtrl', [])
     $scope.angleAlarm = null;
     $scope.distanceAlarm = null;
 
-    // edit 
+    // editing the user function called on edit button
     $scope.userId = null;
     $scope.editUserConfiguations = function (_id) {
       $scope.reSetValue();
@@ -380,7 +383,7 @@ angular.module('settingsCtrl', [])
 
     }
 
-
+    // updating the user function called on update button press
     function updateConfigRecord(_id, updatedData) {
       const index = $scope.configRecord.findIndex(item => item._id === _id);
       if (index !== -1) {
@@ -450,11 +453,7 @@ angular.module('settingsCtrl', [])
       }]
     }`;
 
-      // console.log('editinquery', query);
 
-
-
-      // console.log(_id);
       const config = {
         headers: {
           'Authorization': 'Bearer ' + customeHeader,
@@ -477,11 +476,12 @@ angular.module('settingsCtrl', [])
 
       });
 
-      // getSaveedUserConfiguration();
 
 
     }
 
+
+    // reset value funtion called before displaying
     $scope.reSetValue = function () {
       $scope.contactName = null;
       $scope.emailAddress = null;
@@ -495,6 +495,8 @@ angular.module('settingsCtrl', [])
       $scope.addShow = true;
     }
 
+
+    // reset function to just reset 3 fields and called on click of reset button
     $scope.reSet3 = function () {
       $scope.reSetValue();
       $scope.contactName = null;
@@ -742,13 +744,15 @@ angular.module('settingsCtrl', [])
       $scope.controlledFlowFrom.$setPristine();
     }
 
+    // sending text message function called on test button click
     $scope.sendTestMessage = function () {
       var userInput = $scope.smsNumber;
       if (Number(userInput)) {
-        userInput = "+91" + userInput;
-        const query = `emailSend( null ,"${userInput}@directsms.com.au", "", "Test Message Recieved!")`;
-        Data.sendRequest(query, $rootScope.storage.skysparkVersion).then(function (response) {
-          if (response.data.rows[0].val == "sent!")
+        userInput = "+61" + userInput;
+        let formData = { "smsNumber": userInput };
+        $http.post(apiBaseUrl + "sent-test-sms", formData, { headers: customeHeader }).then(function (response) {
+          console.log(response, "response");
+          if (response.data.status)
             alert("Test Message Sent!")
         });
       } else {
