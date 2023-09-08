@@ -2310,7 +2310,7 @@ angular
         let alertArr = [];
 
 
-
+        console.log("dict112", dict);
 
 
         if (dict.aCheck1 == 1) {
@@ -2342,27 +2342,30 @@ angular
 
         var colorCode = dict.disColorRank;
         var colorCode2 = dict.angleColorRank;
+
+
+        console.log(colorCode, colorCode2, 'volot');
         var imgpath = "";
         if (colorCode) {
           if (colorCode == 3 && colorCode2 == 3) {
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 1) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 3) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 3 && colorCode2 == 1) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 1 && colorCode2 == 2) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
           if (colorCode == 2 && colorCode2 == 1) {
-            var imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+            var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
-          if (colorCode == 2 && colorCode2 == 2) {
+          if (colorCode == 2 && colorCode2 == 2 || colorCode == 2 && colorCode2 == 3) {
             if (alertArr.length <= 1) {
               var result = getObjectKey(alertObj, alertArr[0]);
             }
@@ -2392,7 +2395,7 @@ angular
               let value = closest(alertArr, dict.distance)
               var result = getObjectKey(alertObj, value);
             }
-           
+
 
             if (dict.distance == '') {
               imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
@@ -2414,7 +2417,7 @@ angular
             }
 
 
-            if (parseInt(dict.height) < 400) {
+            if (parseInt(dict.height) <= 400) {
               imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
             }
           }
@@ -2478,6 +2481,11 @@ angular
           marker: beachMarker[dict.installationId.split(" ")[0]],
         };
       };
+
+
+
+
+
       $scope.resetMapClick = function () {
         $scope.refreshPage();
       };
