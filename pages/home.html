@@ -132,9 +132,17 @@
 						<td class="changeMouse">{{item.installationName}}
 							<br>{{item.address}}
 						</td>
-						<td class="changeMouse"
+						<!-- <td class="changeMouse"
 							ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }">
-							{{ item.relative_distance }}% <br>{{item.distance | number : fractionSize }}mm</td>
+							{{ item.relative_distance }}% <br>{{item.distance | number : fractionSize }}mm</td> -->
+						<td class="changeMouse"
+							ng-class="{'tdAllClear': item.disColorRank == 3, 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor': item.distance_alarm_tr === 'Distance alert Triggered' }">
+							<span>{{ item.relative_distance }}%</span>
+							<span ng-if="item.distance > 0"> <br>{{item.distance | number
+								:
+								fractionSize }}mm</span>
+						</td>
+
 						<td class="changeMouse"
 							ng-class="{'tdAllClear': item.angleColorRank == 3, 'alarmColor': item.angle_alarm_tr === 'Angle alarm Triggered', 'alertColor': item.angle_alarm_tr === 'Angle alert Triggered' }">
 							{{item.angle}} deg.</td>
