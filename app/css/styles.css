@@ -12129,3 +12129,16 @@ button{
     max-width: 215px;
 }
 
+.chart-btn-wrp {
+    max-width: 140px;
+    width: 100%;
+    margin-left: auto;
+}
+
+.chart-btn-wrp button {
+    background: #3255a2;
+    color: #fff;
+    border: 0;
+    border-radius: 3px;
+    padding: 2px 10px 5px;
+}
