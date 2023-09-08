@@ -2365,7 +2365,7 @@ angular
           if (colorCode == 2 && colorCode2 == 1) {
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
-          if (colorCode == 2 && colorCode2 == 2 || colorCode == 2 && colorCode2 == 3) {
+          if ((colorCode == 2 && colorCode2 == 2) || (colorCode == 2 && colorCode2 == 3)) {
             if (alertArr.length <= 1) {
               var result = getObjectKey(alertObj, alertArr[0]);
             }
@@ -2421,7 +2421,7 @@ angular
               imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
             }
           }
-          if (colorCode == 3 && colorCode2 == 2) {
+          if (colorCode == 3 && colorCode2 == 2 || colorCode == 2 && colorCode2 == 3) {
             var imgpath = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
           }
         }
