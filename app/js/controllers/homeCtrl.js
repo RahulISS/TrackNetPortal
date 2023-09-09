@@ -244,14 +244,13 @@ angular
 
       /*showing all markers*/
       var arr = [];
-      function addMarker( type ) {
+      function addMarker(type) {
         $scope.isLoading = true;
-        
-        $http.get(apiBaseUrl + "newtraknetApiList?type=" + type, { headers: customeHeader }).then(function (res) {
+        $scope.getParam = type;
+        $http.get(apiBaseUrl + "newtraknetApiList", { headers: customeHeader }).then(function (res) {
           const response = res.data.data;
           const response_pointDis = res.data.pointDis;
           var convertedData = [];
-          $scope.getParam = type;
           for (var i = response.length - 1; i > 0; i--) {
             var data = response[i];
             var objectId = data._id.$oid;
@@ -306,21 +305,6 @@ angular
               if( 'alert3' in data.point && distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
                 var alertT = data.point.alert3;
                 var al3Check = data.point.alarmThirdCheck;
-              }
-              
-              /**map marker shapes starts */
-              if( data.point.angle >= 5 ) {
-                var markerShape = "red";
-              } else if( distanceValue <= 400 ) {
-                var markerShape = "red";
-              } else if( 'alert1' in data.point && distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1) {
-                var markerShape = "circle";
-              } else if( 'alert2' in data.point && distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1) {
-                var markerShape = "square";
-              } else if( 'alert3' in data.point && distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
-                var markerShape = "triangle";
-              } else {
-                var markerShape = "green";
               }
               /** ends */
 
@@ -438,7 +422,6 @@ angular
                 temperature: data.point.temperature,
                 ts: data.ts,
                 height: data.point.height,
-                mapShape: markerShape,
                 alertOne: alertF,
                 alertTwo: alertS,
                 alertThree: alertT,
@@ -450,7 +433,7 @@ angular
               convertedData.push(convertedPoint);
             }
           }
-          console.log(convertedData, "convertedData")
+         
           const aLocation = convertedData;
           $scope.dataLocation = aLocation;
 
@@ -584,6 +567,28 @@ angular
           for (var i = 0; i < $scope.sortedArray_1.length; i++) {
             arr.push(aLocation[i].installationId.split(" ")[0]);
             let dict = {};
+            if( aLocation[i].angle >= 5 ) {
+              var markerShape = "red";
+            } else if( aLocation[i].distanceValue <= 400 ) {
+              var markerShape = "red";
+            } else {
+
+                if( aLocation[i].alertOne != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne) && aLocation[i].aCheck1 == 1 ) {
+                  var markerShape = "circle";
+                }
+                
+                if( aLocation[i].alertTwo != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo) && aLocation[i].aCheck2
+                == 1 ) {
+                  var markerShape = "square";
+                } 
+                
+                if( aLocation[i].alertThree != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree) && aLocation[i].aCheck3 == 1 ) {
+                  var markerShape = "triangle";
+                } else {
+                  var markerShape = "green";
+                }
+            } 
+            
             dict["id"] = aLocation[i].installationId.split(" ")[0];
             dict["latitude"] = aLocation[i].latitude;
             dict["longitude"] = aLocation[i].longitude;
@@ -609,11 +614,12 @@ angular
             dict['chk2'] = aLocation[i].aCheck2;
             dict['chk3'] = aLocation[i].aCheck3;
             dict['queryParam'] = $scope.getParam;
-            dict['mapMarkerShape'] = aLocation[i].mapShape;
+            dict['mapMarkerShape'] = markerShape;
             let marker = buildMarker(dict);
             dict["marker"] = marker;
             dict["point"] = marker.point;
             $scope.displayData.push(dict);
+            console.log(dict , "dictionary");
           }
         }).catch(function (error) {
           if (error.status == 401) {
@@ -667,9 +673,8 @@ angular
         var colorCode = dict.colorRank;
         var colorCode2 = dict.colorRank2;
         let customParam = dict.queryParam;
-        console.log(customParam, "customParam")
-        if( colorCode && customParam == "all" ) {
-          
+        //console.log(customParam, "customParam")
+        if( colorCode && customParam == "") {
           if(colorCode == 3 && colorCode2 == 3) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
@@ -731,7 +736,7 @@ angular
               imgpath = './img/circle-01.png';
             }
         }
-        console.log(imgpath, "imgpath")
+        
         let point = { lat: dict.latitude, lng: dict.longitude };
         let iconPath = imgpath;
         let iconTemp = {
@@ -741,7 +746,7 @@ angular
           anchor: new google.maps.Point(20, 20),
         };
         /** sorting map markers starts */
-        if( customParam == 'all' ) {
+        if( customParam == '' ) {
           beachMarker[dict.id] = new google.maps.Marker({
             position: point,
             map: map,
@@ -765,8 +770,8 @@ angular
         }
 			  /** ends */ 
 
-        if( (customParam == "all") || (customParam == "all clear" && dict['mapMarkerShape'] == 'green') || (customParam == "all alarms" && dict['mapMarkerShape'] == 'red') || (customParam == "triangle" && dict['mapMarkerShape'] == 'triangle') || (customParam == "square" && dict['mapMarkerShape'] == 'square') || (customParam == "circle" && dict['mapMarkerShape'] == 'circle')
-        ) {
+        if((customParam == '') || (customParam == "all clear" && dict['mapMarkerShape'] == 'green') || (customParam == "all alarms" && dict['mapMarkerShape'] == 'red') || (customParam == "triangle" && dict['mapMarkerShape'] == 'triangle') || (customParam == "square" && dict['mapMarkerShape'] == 'square') || (customParam == "circle" && dict['mapMarkerShape'] == 'circle')
+			) {
           beachMarker[dict.id].setMap(map)
         } else {
           beachMarker[dict.id].setMap(null)
@@ -1036,15 +1041,11 @@ angular
 
       /** Home Page markers sorting starts*/
       $scope.addMarker1 = function( params = '' ) {
-        if( params == '') {
-          addMarker( params = 'all');
-        } else {
-          addMarker( params );
-        }
-        			
+        addMarker( params );
       }
 
       $scope.addMarker1(params = '');
+      //addMarker();
       /** ends */
 
       /*open the poppup form click on setting icon in info window*/
