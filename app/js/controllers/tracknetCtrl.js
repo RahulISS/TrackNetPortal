@@ -1497,11 +1497,14 @@ console.log($scope.alertLists);
             }
         },
         series: [
-            {
-                name: "test",
-                data : []
-            }
-        ],
+          {
+              name: "test",
+              data: [],
+              groupPadding: 0,
+              pointPadding: 0,
+              minPointLength: 3
+          }
+      ],
         title: {
             text: ""
         }
