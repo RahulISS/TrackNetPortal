@@ -1144,6 +1144,13 @@ angular
                 street: data.location.street,
                 city: data.location.city,
                 time: timeDate + " hours ago",
+                empty: data.point.empty !== null && data.point.empty !== undefined ? data.point.empty : "3998",
+                full: data.point.full,
+                totalAlerts:{
+                  'al1': data.point.alert1,
+                  'al2': data.point.alert2,
+                  'al3': data.point.alert3
+                }
               };
 
               allconvertedDatas.push(convertedAlertCountPoint);
@@ -1192,6 +1199,7 @@ angular
                 deviceIds.add(data.product_serialNumber);
               }
             }
+            console.log(uniqueDataCount,"ffffff");
            
             for (var i = 0; i < uniqueDataCount.length; i++) {
               if ( uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3 )
@@ -1204,21 +1212,52 @@ angular
             var deviceIds = new Set(); // Using a Set to store unique device_ids
             $scope.alertLists = uniqueDataCount;
             var uniqueAlertData = [];
-            
             for (var i = 0; i < $scope.alertLists.length; i++) {
 
               $scope.alertLists[i].class = "";
+              
 
-             if ($scope.alertLists[i].disColor == "Red" || $scope.alertLists[i].angleColor ==  "Red") {
+              if (
+                ($scope.alertLists[i].angle >= 5 && $scope.alertLists[i].distance <= 400 && $scope.alertLists[i].empty <= $scope.alertLists[i].distance)) {
                 uniqueAlertData.push($scope.alertLists[i]);
 
                 $scope.alertLists[i].class = "distance danger";
               }
-              else if ($scope.alertLists[i].disColor == "yellow") {
+              else if ($scope.alertLists[i].distance <= 400){
+                uniqueAlertData.push($scope.alertLists[i]);
+
+                $scope.alertLists[i].class = "distance danger";
+              }
+              else if ($scope.alertLists[i].angle >= 5){
+                uniqueAlertData.push($scope.alertLists[i]);
+
+                $scope.alertLists[i].class = "distance danger";
+              }
+              else if (parseInt($scope.alertLists[i].empty) <= parseInt($scope.alertLists[i].distance)) {
+                uniqueAlertData.push($scope.alertLists[i]);
+
+                $scope.alertLists[i].class = "distance danger";
+              }
+              else if (
+                $scope.alertLists[i].distance > 400 && $scope.alertLists[i].angle <= 5 &&
+                $scope.alertLists[i].empty < 3999 &&
+                ($scope.alertLists[i].totalAlerts.al1 !== null ||
+                  $scope.alertLists[i].totalAlerts.al2 !== null ||
+                  $scope.alertLists[i].totalAlerts.al3 !== null)
+              ) {
                 uniqueAlertData.push($scope.alertLists[i]);
 
                 $scope.alertLists[i].class = "distance warn";
               }
+              else if (
+                ($scope.alertLists[i].totalAlerts.al1 === null &&
+                  $scope.alertLists[i].totalAlerts.al2 === null &&
+                  $scope.alertLists[i].totalAlerts.al3 === null) &&
+                $scope.alertLists[i].distance > 400 &&
+                $scope.alertLists[i].empty < 3999
+              ) {
+                $scope.alertLists[i].class = "green";
+              } 
               
 
 
