@@ -27,7 +27,8 @@ angular
       $scope.clockTime();
       $interval($scope.clockTime, 1000);
       $scope.blockExpandLeft = false;
-      $scope.blockExpandRight = false;
+      $scope.blockExpandRight = false;      
+      $scope.isLoading = false;
 
 
       $scope.serverRequest = apiBaseUrl;
@@ -1464,17 +1465,21 @@ console.log($scope.alertLists);
 
     var currentPage = 1;
     var totalPage = 1;
-    var limit = 5;
+    var limit = 10;
 
-   $scope.nextPage = function() {    
+   $scope.nextPage = function() { 
+    console.log('nextPage');  
       if(totalPage > currentPage){
+        console.log('api');
         currentPage++;
         loadRelativeDistance()
       }
   }
 
   $scope.previousPage = function() {
+    console.log('nextPage');
     if (currentPage > 1) {
+      console.log('api');
       currentPage--;
       loadRelativeDistance();   
     }
@@ -1483,9 +1488,10 @@ console.log($scope.alertLists);
     function loadRelativeDistance () {
 
         const date = localStorage.getItem('singleDate');
+        $scope.isLoading = true;
         $http.get(apiBaseUrl+"tracnet-chart?page="+currentPage+"&limit="+limit, {headers:customeHeader}).then(function (res) {
           var rowsData = Object.values(res.data.data);
-          if(limit < rowsData.length){
+          if(limit <= rowsData.length){
             totalPage++;
           }
           
@@ -1513,6 +1519,8 @@ console.log($scope.alertLists);
             $scope.refreshPage();
             $state.go('login');
           }
+        }).finally(function(){
+          $scope.isLoading = false;
         });
 
 
