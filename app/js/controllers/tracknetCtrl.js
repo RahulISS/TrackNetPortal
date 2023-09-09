@@ -1199,14 +1199,20 @@ angular
                 deviceIds.add(data.product_serialNumber);
               }
             }
-            console.log(uniqueDataCount,"ffffff");
+            console.log(typeof(uniqueDataCount[2].distance),"ffffff");
+            console.log(typeof(uniqueDataCount[2].empty),"ffffff");
            
             for (var i = 0; i < uniqueDataCount.length; i++) {
-              if ( uniqueDataCount[i].angleColorRank == 3 && uniqueDataCount[i].disColorRank == 3 )
-                {$scope.realtimesummery.series[0].data[0].y++;}
-              if ( uniqueDataCount[i].disColorRank == 2 && uniqueDataCount[i].angleColorRank != 1) {$scope.realtimesummery.series[0].data[1].y++}
-              if ( uniqueDataCount[i].disColorRank == 1 || uniqueDataCount[i].angleColorRank == 1 )
-                {$scope.realtimesummery.series[0].data[2].y++;}
+              
+              if ((uniqueDataCount[i].angle >= 5 && uniqueDataCount[i].distance <= 400 && uniqueDataCount[i].empty <= uniqueDataCount[i].distance)) {$scope.realtimesummery.series[0].data[2].y++;}
+              else if (uniqueDataCount[i].distance <= 400 || uniqueDataCount[i].angle >= 5 || parseInt(uniqueDataCount[i].empty) <= parseInt(uniqueDataCount[i].distance)){$scope.realtimesummery.series[0].data[2].y++;}
+              else if (uniqueDataCount[i].distance > 400 && uniqueDataCount[i].angle <= 5 &&
+                (uniqueDataCount[i].totalAlerts.al1 !== null ||
+                  uniqueDataCount[i].totalAlerts.al2 !== null ||
+                  uniqueDataCount[i].totalAlerts.al3 !== null)) {$scope.realtimesummery.series[0].data[1].y++}
+
+              else{$scope.realtimesummery.series[0].data[0].y++;}
+
             }
             var uniqueData = [];
             var deviceIds = new Set(); // Using a Set to store unique device_ids
@@ -1240,7 +1246,6 @@ angular
               }
               else if (
                 $scope.alertLists[i].distance > 400 && $scope.alertLists[i].angle <= 5 &&
-                $scope.alertLists[i].empty < 3999 &&
                 ($scope.alertLists[i].totalAlerts.al1 !== null ||
                   $scope.alertLists[i].totalAlerts.al2 !== null ||
                   $scope.alertLists[i].totalAlerts.al3 !== null)
