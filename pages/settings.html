@@ -21,8 +21,13 @@
             </div>
             <div class="elemDiv">
                 <label for="number">SMS Number</label>
-                <input type="number" ng-model="smsNumber" id="mobile_code" name="smsNumber" value="{{smsNumber}}">
+                <div class="test-div">
+                    <input type="number" ng-model="smsNumber" id="mobile_code" name="smsNumber" value="{{smsNumber}}">
+                    <button type="button" class="test" ng-click="sendTestMessage()">Test</button>
+                </div>
+
                 <span ng-show="alrErrNumber" style="display: block;" class="text-danger">{{ errorMsgNumber }}</span>
+
             </div>
             <div class="form-row">
                 <div class="elemDiv">
@@ -112,7 +117,7 @@
             <button type="button" class="update" value="update" ng-show="updateShow"
                 ng-click="updateUserConfiguationSetting('Edit')">Update</button>
             <button type="button" class="reset" ng-click="reSet3()">Reset</button>
-            <button type="button" class="test" ng-click="sendTestMessage()">Test</button>
+            <!-- <button type="button" class="test" ng-click="sendTestMessage()">Test</button> -->
             <!-- <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span> -->
         </form>
 

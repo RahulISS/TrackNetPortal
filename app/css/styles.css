@@ -10758,16 +10758,19 @@ div.week_days {
 }
 
 /* ak 24-03 */
-.withtree.map-50,.withtree.map-50.map-100 {
+.withtree.map-50,
+.withtree.map-50.map-100 {
     width: calc(100% - 500px);
     position: relative;
     transition: all 0.3s ease-in;
 }
+
 .withtree.map-100 {
     width: 100%;
     position: relative;
     transition: all 0.3s ease-in;
 }
+
 .legend-button {
     position: absolute;
     top: 8px;
@@ -10796,17 +10799,20 @@ div.week_days {
     padding: 5px;
     align-items: center;
 }
-.btn-group-vertica{
+
+.btn-group-vertica {
     top: 0;
     position: relative;
     height: 100%;
 
 }
+
 .map_block_middle {
     overflow: hidden;
     padding-bottom: 29px;
     position: relative;
 }
+
 /* 04-09-2023 changes end */
 
 .view-style {
@@ -10816,31 +10822,36 @@ div.week_days {
     color: blue;
     z-index: 9;
     min-height: 45px;
-    background:grey;
+    background: grey;
     width: 300px;
     display: flex;
     padding: 5px;
     align-items: center;
 }
+
 .view-style select {
     width: 200px;
     height: 35px;
 }
+
 .cale-ico {
     width: 50px;
     text-align: center;
 }
-.cale-ico img{
+
+.cale-ico img {
     max-width: 35px;
     width: 100%;
     height: 30px;
     object-fit: contain
 }
-.withtree.map-100.map-50+.side-det{
+
+.withtree.map-100.map-50+.side-det {
     width: 500px;
     display: block;
 }
-.green{
+
+.green {
     color: green;
 }
 
@@ -10854,19 +10865,24 @@ div.week_days {
     transition: all 0.3s ease-in;
     display: none;
 }
+
 table.elem {
-     border: 1.5px solid #000;
-     width: 98.5%;
+    border: 1.5px solid #000;
+    width: 98.5%;
 }
-table.elem th,table.elem td{
+
+table.elem th,
+table.elem td {
     border: 1px solid #171818;
     padding: 5px 15px 5px 15px;
     max-width: 145px;
     word-wrap: break-word;
 }
+
 table.elem td {
     /*color: #474747;*/
 }
+
 /* ak 27-03 */
 /*play video popup */
 .homepage.ng-scope .trigger {
@@ -10879,9 +10895,9 @@ table.elem td {
     border: none;
     border-radius: 5px;
     font-family: cursive;
-  }
-  
-  .homepage.ng-scope .modal {
+}
+
+.homepage.ng-scope .modal {
     position: fixed;
     left: 0;
     top: 0;
@@ -10892,9 +10908,9 @@ table.elem td {
     visibility: hidden;
     transform: scale(1.1);
     transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
-  }
-  
-  .homepage.ng-scope .modal-content {
+}
+
+.homepage.ng-scope .modal-content {
     position: absolute;
     top: -109px;
     left: 50%;
@@ -10903,9 +10919,9 @@ table.elem td {
     padding: 0;
     overflow: hidden;
     min-height: 300px;
-  }
-  
-  .homepage.ng-scope .close-button {
+}
+
+.homepage.ng-scope .close-button {
     float: right;
     width: 1.5rem;
     line-height: 1.5rem;
@@ -10913,17 +10929,17 @@ table.elem td {
     cursor: pointer;
     border-radius: 0.25rem;
     background-color: lightgray;
-  }
-  
-  
-  .homepage.ng-scope .show-modal {
+}
+
+
+.homepage.ng-scope .show-modal {
     opacity: 1;
     visibility: visible;
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
-  }
-  
-  .homepage.ng-scope .popup-wrap {
+}
+
+.homepage.ng-scope .popup-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10933,23 +10949,23 @@ table.elem td {
     gap: 10px;
     padding: 15px 20px;
     padding-top: 35px;
-  }
-  
-  .homepage.ng-scope button.close-button {
+}
+
+.homepage.ng-scope button.close-button {
     position: absolute;
     top: 10px;
     right: 20px;
     background: transparent;
     border: none;
     font-size: 30px;
-  
-  }
-  
-  .homepage.ng-scope button.close-button span {
-    color: #fff;
-  }
 
-  .homepage.ng-scope button.remove-button {
+}
+
+.homepage.ng-scope button.close-button span {
+    color: #fff;
+}
+
+.homepage.ng-scope button.remove-button {
     color: #000;
     position: absolute;
     top: 10px;
@@ -10957,29 +10973,35 @@ table.elem td {
     background: transparent;
     border: none;
     font-size: 30px;
-  }
-  .homepage.ng-scope #popupModalCenter .modal-dialog {
+}
+
+.homepage.ng-scope #popupModalCenter .modal-dialog {
     max-width: 600px;
-  }
-  .homepage.ng-scope #popupModalCenter form{
+}
+
+.homepage.ng-scope #popupModalCenter form {
     width: 100%;
     border: none;
 }
-.homepage.ng-scope #popupModalCenter form input{
+
+.homepage.ng-scope #popupModalCenter form input {
     width: 100%;
     border-radius: 10;
     text-align: right;
     margin-bottom: 0px;
     padding: 0px 5px;
 }
-.homepage.ng-scope #popupModalCenter form .btn--flex input:hover{
+
+.homepage.ng-scope #popupModalCenter form .btn--flex input:hover {
     color: #fff;
 }
-.homepage.ng-scope #popupModalCenter .modal-content{
+
+.homepage.ng-scope #popupModalCenter .modal-content {
     background-color: #3255A2 !important;
     /* color: #fff; */
 }
-.homepage.ng-scope #popupModalCenter h2{
+
+.homepage.ng-scope #popupModalCenter h2 {
     font-size: 32px;
     color: #fdfdfd;
 }
@@ -10987,17 +11009,23 @@ table.elem td {
 
 /* 29-03-2023 shuaib */
 .tdAngleDistanceAlarmTriggeredColor {
-    background-color: #ff00009e; /*red color*/
-    color: #ffffff; /*white color*/
+    background-color: #ff00009e;
+    /*red color*/
+    color: #ffffff;
+    /*white color*/
 }
 
 .tdAllClear {
-    background-color: #00ff00a6;  /*green color*/
+    background-color: #00ff00a6;
+    /*green color*/
 }
 
-.btn--flex{
-    display: flex; gap: 20px; padding-top: 10px;
+.btn--flex {
+    display: flex;
+    gap: 20px;
+    padding-top: 10px;
 }
+
 #popupModalCenter form .btn--flex input {
     padding: 10px;
 }
@@ -11006,15 +11034,17 @@ table.elem td {
     background: #333;
     color: #fff;
 }
+
 #popupModalCenter form input:disabled {
     background: rgb(225 228 236 / 85%);
 }
 
-.alarmColor{
-    background-color: #ff0000a1;  /*red color*/   
+.alarmColor {
+    background-color: #ff0000a1;
+    /*red color*/
 }
 
-.alertColor{
+.alertColor {
     background-color: #ffb836e8;
 }
 
@@ -11022,17 +11052,21 @@ table.elem td {
 .changeMouse {
     cursor: pointer;
 }
-.reset_btn{
+
+.reset_btn {
     color: #fff;
     background-color: #dc3545;
     border-color: #dc3545;
 }
-.min-440,.chartmdl .modal-body.min-440{
+
+.min-440,
+.chartmdl .modal-body.min-440 {
     min-height: 440px;
     height: auto;
 }
 
-.min-440,.chartmdl .modal-body.min-440{
+.min-440,
+.chartmdl .modal-body.min-440 {
     min-height: 440px;
     height: auto;
 }
@@ -11041,22 +11075,27 @@ table.elem td {
 .changeMouse {
     cursor: pointer;
 }
-.reset_btn{
+
+.reset_btn {
     color: #fff;
     background-color: #dc3545;
     border-color: #dc3545;
 }
+
 .updated-btn-wrp {
     display: inline;
     width: 19px;
     margin: 5px;
 }
-.min-440,.chartmdl .modal-body.min-440{
+
+.min-440,
+.chartmdl .modal-body.min-440 {
     min-height: 440px;
     height: auto;
 }
 
-.min-440,.chartmdl .modal-body.min-440{
+.min-440,
+.chartmdl .modal-body.min-440 {
     min-height: 440px;
     height: auto;
 }
@@ -11079,6 +11118,7 @@ table.elem td {
     height: 20px;
     background: #fff;
 }
+
 .chkbx-wrp input#enableDistanceAlarm.checked-me {
     background-image: url(https://cdn-icons-png.flaticon.com/512/33/33281.png);
     background-size: 20px;
@@ -11101,7 +11141,8 @@ form#userFrm .user-frm-wrp {
     width: 100%;
 }
 
-form#userFrm input.submit__btn, input.cancel__btn {
+form#userFrm input.submit__btn,
+input.cancel__btn {
     max-width: 100px;
     width: 100px;
     display: inline-block;
@@ -11111,53 +11152,61 @@ form#userFrm input.submit__btn, input.cancel__btn {
     border-radius: 3px;
     height: 46px;
 }
-input.cancel__btn{
+
+input.cancel__btn {
     background: #625d5d;
     border: 1px solid #454242;
 }
+
 form#userFrm .user-frm-wrp input {
     height: 50px;
     padding: 10px 15px;
 }
+
 .side-det::-webkit-scrollbar {
     width: 20px;
-  }
-  
-  .side-det::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey; 
-    border-radius: 0px;
-  }
-  
-  .side-det::-webkit-scrollbar-thumb {
-    background: #3255a2; 
-    border-radius: 0px;
-  }
-  .side-det::-webkit-scrollbar-thumb:hover {
-    background: #3255a2; 
-  }
+}
 
-  .outer-block-3.last_block_3 {
+.side-det::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 0px;
+}
+
+.side-det::-webkit-scrollbar-thumb {
+    background: #3255a2;
+    border-radius: 0px;
+}
+
+.side-det::-webkit-scrollbar-thumb:hover {
+    background: #3255a2;
+}
+
+.outer-block-3.last_block_3 {
     height: calc(100% - 477px);
-  }
-  .alert_changed ul{
-    max-height: calc(100vh - 685px ) !important;
+}
+
+.alert_changed ul {
+    max-height: calc(100vh - 685px) !important;
     min-height: 67px;
- }
- .sp-mng{
+}
+
+.sp-mng {
     position: relative;
- }
- .sp-mng h5{
+}
+
+.sp-mng h5 {
     position: absolute;
     top: 15px;
     left: calc(100% - 70px);
- }
- .tooltipvalue {
+}
+
+.tooltipvalue {
     position: relative;
     display: inline-block;
     border-bottom: 1px dotted black;
-  }
-  
-  .tooltipvalue .tooltiptext {
+}
+
+.tooltipvalue .tooltiptext {
     visibility: hidden;
     width: 140px;
     background-color: black;
@@ -11165,58 +11214,64 @@ form#userFrm .user-frm-wrp input {
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
-  
+
     /* Position the tooltip */
     position: absolute;
     z-index: 1;
     top: -22px;
     left: -185%;
-  }
-  
-  .tooltipvalue:hover .tooltiptext {
+}
+
+.tooltipvalue:hover .tooltiptext {
     visibility: visible;
-  }
-  
-  @media(max-width: 1750px){
+}
+
+@media(max-width: 1750px) {
     .sp-mng h5 {
-    position: absolute;
-    top: 15px;
-    left: unset;
-    right: 10px;
+        position: absolute;
+        top: 15px;
+        left: unset;
+        right: 10px;
     }
 }
 
 .outer-block-3 .distance p {
     border-bottom: none;
 }
-.alert_changed ul li{
+
+.alert_changed ul li {
     border-top: 1px solid #ffffff !important;
     margin-bottom: 0 !important;
     padding: 0 !important;
- }
- .alert_changed ul .distance{
+}
+
+.alert_changed ul .distance {
     border-color: inherit !important;
     border: none;
     margin-bottom: 1px;
     padding-bottom: 0;
     margin-top: 1.4px;
- }
- .alert_changed ul .distance.danger{
-    border-left: 15px solid red !important; 
- }
- .alert_changed ul .distance.warn{
-    border-left: 15px solid orange !important; 
- }
- .alert_changed ul .distance.ok{
+}
+
+.alert_changed ul .distance.danger {
+    border-left: 15px solid red !important;
+}
+
+.alert_changed ul .distance.warn {
+    border-left: 15px solid orange !important;
+}
+
+.alert_changed ul .distance.ok {
     border-left: 15px solid green !important;
- }
+}
 
 /* 05-07 btn update */
-.w-100{
+.w-100 {
     max-width: 100%;
     width: 10%;
 }
-.test_btn{
+
+.test_btn {
     margin-left: auto;
     max-width: 100px;
     width: 100px;
@@ -11227,6 +11282,7 @@ form#userFrm .user-frm-wrp input {
     border-radius: 3px;
     height: 46px;
 }
+
 .loader {
     position: fixed;
     top: 0;
@@ -11238,26 +11294,40 @@ form#userFrm .user-frm-wrp input {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  .loader-spinner {
+}
+
+.loader-spinner {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     border: 4px solid #f3f3f3;
     border-top: 4px solid #3498db;
-    -webkit-animation: spin 2s linear infinite; /* Safari */
+    -webkit-animation: spin 2s linear infinite;
+    /* Safari */
     animation: spin 2s linear infinite;
-  }
-  /* Safari */
-    @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
     }
 
-    @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    100% {
+        -webkit-transform: rotate(360deg);
     }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* CSS styles for the modal container */
 .modal-container {
     position: fixed;
@@ -11269,17 +11339,17 @@ form#userFrm .user-frm-wrp input {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  /* CSS styles for the modal content */
-  .modal-content {
+}
+
+/* CSS styles for the modal content */
+.modal-content {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
-  }
-  
-  /* Additional styles to center the modal */
-  /* .modal {
+}
+
+/* Additional styles to center the modal */
+/* .modal {
     display: flex !important;
     justify-content: center;
     align-items: center;
@@ -11289,29 +11359,32 @@ form#userFrm .user-frm-wrp input {
   .mhole{
     background-color: #000;
   } */
-  
-  .mhole-mobile {
+
+.mhole-mobile {
     max-width: 100%;
     width: 100%;
     margin: 0% auto;
     padding: 22px 0px;
     position: relative;
     background-color: #fff;
-  }
-  .mhole-mobile h4{
+}
+
+.mhole-mobile h4 {
     font-size: 25px;
     text-align: center;
     padding-bottom: 0px;
-  }
-  .mhole-mobile .mhole-image{
+}
+
+.mhole-mobile .mhole-image {
     width: 100%;
-  } 
-  .mhole-mobile .mhole-image img{
+}
+
+.mhole-mobile .mhole-image img {
     display: block;
     margin: 0 auto;
-  }
-  
-  .mhole-mobile .mhole-content{
+}
+
+.mhole-mobile .mhole-content {
     position: absolute;
     top: 52px;
     right: 17%;
@@ -11321,42 +11394,45 @@ form#userFrm .user-frm-wrp input {
     display: flex;
     flex-direction: column;
     align-items: end;
-  }  
-  
-  .mhole-mobile .mhole-content .mhole-alert{
+}
+
+.mhole-mobile .mhole-content .mhole-alert {
     display: flex;
     align-items: center;
     justify-content: end;
     gap: 84px;
     position: relative;
     margin-bottom: 61px;
-  }
-  .mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1){
+}
+
+.mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1) {
     margin-bottom: 0px;
-  }
-  .mhole-mobile .mhole-content .mhole-alert::before{
+}
+
+.mhole-mobile .mhole-content .mhole-alert::before {
     position: absolute;
     content: "";
     border: 1.7px solid red;
     width: 89px;
     left: 40%;
-  }
-  .mhole-mobile .mhole-content .mhole-alert label,
-  .mhole-mobile .mhole-content .mhole-alert input,
-  .mhole-mobile .mhole-content .mhole-alert button{
+}
+
+.mhole-mobile .mhole-content .mhole-alert label,
+.mhole-mobile .mhole-content .mhole-alert input,
+.mhole-mobile .mhole-content .mhole-alert button {
     border: 3px solid orange;
     padding: 1px;
     background: #fff;
     z-index: 1;
-  }
-  
-  .mhole-mobile .mhole-content .mhole-alert input{
+}
+
+.mhole-mobile .mhole-content .mhole-alert input {
     outline: none;
     max-width: 90px;
     position: relative;
-  }
-  
-  .mhole-mobile .mhole-content .mhole-alert .cross-btn{
+}
+
+.mhole-mobile .mhole-content .mhole-alert .cross-btn {
     position: absolute;
     top: -15px;
     right: -8px;
@@ -11365,41 +11441,42 @@ form#userFrm .user-frm-wrp input {
     background: none;
     z-index: 1;
     font-size: 18px;
-  }
-  
-  .mhole-mobile .mhole-content .traingles {
+}
+
+.mhole-mobile .mhole-content .traingles {
     position: absolute !important;
     top: 115px;
-  }
-  
-  .mhole-mobile .mhole-content .squares{
+}
+
+.mhole-mobile .mhole-content .squares {
     position: absolute;
     top: 225px;
-  }
-  .mhole-mobile .mhole-content .circles{
+}
+
+.mhole-mobile .mhole-content .circles {
     position: absolute;
     top: 332px;
     /* width: 250px; */
-  }
-  .mhole-mobile .mhole-content .boundaryTwo{
+}
+
+.mhole-mobile .mhole-content .boundaryTwo {
     position: absolute;
     top: 440px;
-  }
-  
-  .mhole-mobile .mhole-content .traingles label,
-  .mhole-mobile .mhole-content .squares label,
-  .mhole-mobile .mhole-content .circles label,
-  .mhole-mobile .mhole-content .traingles input,
-  .mhole-mobile .mhole-content .squares input,
-  .mhole-mobile .mhole-content .circles input
-  {
+}
+
+.mhole-mobile .mhole-content .traingles label,
+.mhole-mobile .mhole-content .squares label,
+.mhole-mobile .mhole-content .circles label,
+.mhole-mobile .mhole-content .traingles input,
+.mhole-mobile .mhole-content .squares input,
+.mhole-mobile .mhole-content .circles input {
     border: 3px solid orange;
-  }
-  
-  
-  .mhole-mobile .mhole-content .traingles::after,
-  .mhole-mobile .mhole-content .squares::after,
-  .mhole-mobile .mhole-content .circles::after{
+}
+
+
+.mhole-mobile .mhole-content .traingles::after,
+.mhole-mobile .mhole-content .squares::after,
+.mhole-mobile .mhole-content .circles::after {
     position: absolute;
     margin: 20% 22.5% 0% 0%;
     content: "";
@@ -11407,82 +11484,86 @@ form#userFrm .user-frm-wrp input {
     background-repeat: no-repeat;
     width: 24px;
     height: 24px;
-  }
-  
-  .mhole-mobile .mhole-content .squares::after{
+}
+
+.mhole-mobile .mhole-content .squares::after {
     background: url(../../img/square.svg);
     background-repeat: no-repeat;
-  }
-  .mhole-mobile .mhole-content .circles::after{
+}
+
+.mhole-mobile .mhole-content .circles::after {
     background: url(../../img/circle.svg);
     background-repeat: no-repeat;
-  }
-  
-  .mhole-mobile .mhole-content .mhole-text{
+}
+
+.mhole-mobile .mhole-content .mhole-text {
     max-width: 215px;
     width: 100%;
     display: flex;
     justify-content: end;
-  }
-  
-  .mhole-mobile .mhole-content .mhole-text p{
+}
+
+.mhole-mobile .mhole-content .mhole-text p {
     background: #fff;
     z-index: 1;
     margin-left: 138px;
-  }
-  
-  .mhole-mobile .mhole-content .mhole-text p::before{
+}
+
+.mhole-mobile .mhole-content .mhole-text p::before {
     position: absolute;
     content: "";
     border: 1px solid red;
     width: 20%;
     top: 28px;
     margin-left: -110px;
-  }
-  
-  .mhole-mobile .alert-input{
+}
+
+.mhole-mobile .alert-input {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 10px;
     gap: 15px;
-  }
-  .mhole-mobile .alert-input input{
+}
+
+.mhole-mobile .alert-input input {
     max-width: 35px;
     width: 100%;
     border: 2px solid orange;
     /* border-radius: 4px; */
     text-align: center;
     padding: 5px 0;
-  }
-  
-  .mhole-mobile .alert-input p{
+}
+
+.mhole-mobile .alert-input p {
     margin-bottom: 0px;
     padding: 4px 12px;
     border: 2px solid orange;
     margin-left: 2px;
-  }
-  
-  
-  .mhole-mobile .buttons{
+}
+
+
+.mhole-mobile .buttons {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 30px;
     /* flex-direction: column; */
     gap: 10px;
-  }
-  
-  .mhole-mobile .save-btn{
+}
+
+.mhole-mobile .save-btn {
     outline: none;
     border: 1px solid #000;
-    background: rgb(91 180 91);;
+    background: rgb(91 180 91);
+    ;
     color: #fff;
     font-size: 20px;
     border-radius: 6px;
     padding: 3px 47px !important;
-  }
-  .mhole-mobile .cancel-btn{
+}
+
+.mhole-mobile .cancel-btn {
     outline: none;
     border: none;
     background: #b40505;
@@ -11490,9 +11571,9 @@ form#userFrm .user-frm-wrp input {
     font-size: 20px;
     border-radius: 6px;
     padding: 3px 47px !important;
-  }
-  
-  .mhole-mobile .edit-btn{
+}
+
+.mhole-mobile .edit-btn {
     color: white;
     position: absolute;
     top: 28px;
@@ -11505,40 +11586,47 @@ form#userFrm .user-frm-wrp input {
     left: unset;
     text-decoration: none;
     z-index: 9999999;
-  }
-  
-  .error-msg{
-      color: #f9cb00;
-      font-size: 12px;
-  }
-  /* 08 update */
-  #homeMap .homemaptable{
-    background: #fff;
+}
+
+.error-msg {
+    color: #f9cb00;
     font-size: 12px;
-    padding: 0 5px;
-    color: #000;
-  }
-  #homeMap table.homemaptable tbody {
+}
+
+/* 08 update */
+#homeMap .homemaptable {
     background: #fff;
     font-size: 12px;
     padding: 0 5px;
     color: #000;
 }
-#homeMap table.homemaptable tbody tr{
+
+#homeMap table.homemaptable tbody {
+    background: #fff;
+    font-size: 12px;
+    padding: 0 5px;
+    color: #000;
+}
+
+#homeMap table.homemaptable tbody tr {
     background: #ececec;
 }
+
 table.homemaptable td {
     padding: 0 15px;
 }
-table.homemaptable .bottom-cl td:first-child{
+
+table.homemaptable .bottom-cl td:first-child {
     width: 70%;
     padding: 0;
 }
-table.homemaptable .bottom-cl td:last-child{
-    width: 30%;padding: 0;
+
+table.homemaptable .bottom-cl td:last-child {
+    width: 30%;
+    padding: 0;
 }
 
-.bottom-cl td label{
+.bottom-cl td label {
     background: #3255a2;
     color: #fff;
     text-align: left;
@@ -11546,7 +11634,8 @@ table.homemaptable .bottom-cl td:last-child{
     width: calc(100% - 15px);
     margin-left: 15px;
 }
-.bottom-cl td .ng-binding{
+
+.bottom-cl td .ng-binding {
     background: #fff;
     color: #000;
     text-align: left;
@@ -11557,29 +11646,33 @@ table.homemaptable .bottom-cl td:last-child{
 }
 
 
-.mhole-mobile .buttons{
+.mhole-mobile .buttons {
     padding: 0 55px;
 }
 
 .alartNo {
     display: none;
 }
-.boundaryOne{
+
+.boundaryOne {
     width: 62% !important;
 }
 
-.boundaryTwo{
+.boundaryTwo {
     width: 52% !important;
 }
 
-.mhole-mobile .mhole-content .mhole-alert.boundaryOne label,.mhole-mobile .mhole-content .mhole-alert.boundaryTwo label {
+.mhole-mobile .mhole-content .mhole-alert.boundaryOne label,
+.mhole-mobile .mhole-content .mhole-alert.boundaryTwo label {
     border: 3px solid red;
 }
 
-.mhole-mobile .mhole-content .mhole-alert.boundaryOne input#fullValue, .mhole-mobile .mhole-content .mhole-alert.boundaryTwo input#emptyValue {
+.mhole-mobile .mhole-content .mhole-alert.boundaryOne input#fullValue,
+.mhole-mobile .mhole-content .mhole-alert.boundaryTwo input#emptyValue {
     border: 3px solid red;
     border-radius: 0;
 }
+
 .mhole-mobile .alert-input button.addbtn {
     background: orange;
     border-radius: 5px;
@@ -11594,6 +11687,7 @@ table.homemaptable .bottom-cl td:last-child{
     margin-left: 20px;
     font-size: 20px;
 }
+
 .mhole-mobile .alert-input button.delbtn {
     background: red;
     border-radius: 5px;
@@ -11611,31 +11705,40 @@ table.homemaptable .bottom-cl td:last-child{
 
 /* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    padding-top: 100px;
+    /* Location of the box */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal Content */
-  .modal-content {
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-  }
-  
-  /* The Close Button */
+}
 
-  div#myModal2 {
+/* The Close Button */
+
+div#myModal2 {
     position: fixed;
     z-index: 9999;
     top: 0;
@@ -11648,12 +11751,12 @@ table.homemaptable .bottom-cl td:last-child{
     bottom: 0;
     border: 1.5px solid orange;
     border-radius: 10px 10px 30px 30px;
-    box-shadow: 3rem 3rem 10rem 10rem rgba(0,0,0,.175);
+    box-shadow: 3rem 3rem 10rem 10rem rgba(0, 0, 0, .175);
     overflow: hidden;
     display: none;
-  }
+}
 
-  .sec-head {
+.sec-head {
     padding: 20px 10px;
     background: orange;
     color: #fff;
@@ -11683,7 +11786,8 @@ table.homemaptable .bottom-cl td:last-child{
     padding: 10px 15px;
     margin-top: 20px;
 }
-.modal-submit{
+
+.modal-submit {
     background: rgb(91 180 91);
     color: #fff;
     font-size: 20px;
@@ -11691,7 +11795,8 @@ table.homemaptable .bottom-cl td:last-child{
     padding: 4px 30px;
     border: 3px solid #2f782f;
 }
-.modal-close{
+
+.modal-close {
     background: #b40505;
     color: #fff;
     font-size: 20px;
@@ -11703,6 +11808,7 @@ table.homemaptable .bottom-cl td:last-child{
 .mhole-mobile .mhole-content .mhole-alert label {
     position: relative !important;
 }
+
 .mhole-mobile .mhole-content .mhole-alert label:after {
     position: absolute;
     content: '';
@@ -11713,50 +11819,52 @@ table.homemaptable .bottom-cl td:last-child{
     background: #fff;
     opacity: 0;
 }
+
 /* .alertLight INPUT, .mhole-mobile .mhole-content .mhole-alert label:after, .alertLight .classmm, .alertLight .mhole-mobile .mhole-content .mhole-alert::before, .alertLight .mhole-mobile .mhole-content .squares::after {
     opacity: 0.5;
 } */
-.alertLight{
-    opacity: 0.5; 
+.alertLight {
+    opacity: 0.5;
 }
 
 
-#confirmBox
-	{
-		display: none;
-		background-color: #eee;
-		border-radius: 14px;
-		border: 1px solid #aaa;
-		position: fixed;
-		width: 430px;
-		left: 897px;
-		top: 40%;
-		margin-left: -82px;
-		padding: 50px 26px 49px;
-		box-sizing: border-box;
-		text-align: center;
-		z-index: 99999;
-	}
-	#confirmBox .button {
-		background-color: #ccc;
-		display: inline-block;
-		border-radius: 12px;
-		border: 0px solid #aaa;
-		padding: 20px;
-		text-align: center;
-		width: 150px;
-		cursor: pointer;
-	}
-	#confirmBox .button:hover
-	{
-		background-color: #ddd;
-	}
-	#confirmBox .message
-	{
-		text-align: center;
-		margin-bottom: 8px;
-	}
-.alert-show{
+#confirmBox {
+    display: none;
+    background-color: #eee;
+    border-radius: 14px;
+    border: 1px solid #aaa;
+    position: fixed;
+    width: 430px;
+    left: 897px;
+    top: 40%;
+    margin-left: -82px;
+    padding: 50px 26px 49px;
+    box-sizing: border-box;
+    text-align: center;
+    z-index: 99999;
+}
+
+#confirmBox .button {
+    background-color: #ccc;
+    display: inline-block;
+    border-radius: 12px;
+    border: 0px solid #aaa;
+    padding: 20px;
+    text-align: center;
+    width: 150px;
+    cursor: pointer;
+}
+
+#confirmBox .button:hover {
+    background-color: #ddd;
+}
+
+#confirmBox .message {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.alert-show {
     color: red;
     position: absolute;
     top: 60px !important;
@@ -11767,32 +11875,36 @@ table.homemaptable .bottom-cl td:last-child{
     width: 163px !important;
 }
 
-.disTrigger{
+.disTrigger {
     position: absolute;
     top: 31px !important;
 }
-.mhole-alert .classmm{
+
+.mhole-alert .classmm {
     position: absolute;
     top: 13px !important;
     right: -3rem !important;
 }
-.mhole-alert .alt-status{
+
+.mhole-alert .alt-status {
     position: absolute;
     top: 31px !important;
     right: 22.4rem !important;
     color: red;
 }
-.disabledprop{
+
+.disabledprop {
     opacity: 0.5;
     cursor: not-allowed !important;
 }
 
- /* 30-08-2023 */
- .tablewrapper{
+/* 30-08-2023 */
+.tablewrapper {
     max-width: 1300px;
     width: 100%;
     margin: 0 auto;
 }
+
 .tablewrapper h2 {
     text-align: center;
 }
@@ -11848,7 +11960,7 @@ table.homemaptable .bottom-cl td:last-child{
 }
 
 .tablewrapper .fa {
-    font-size: 24px!important;
+    font-size: 24px !important;
     padding: 4px 2px;
     color: white;
 }
@@ -11879,6 +11991,7 @@ table.homemaptable .bottom-cl td:last-child{
     margin: 0 auto;
     position: relative;
 }
+
 button.test {
     position: absolute;
     right: 0;
@@ -11901,52 +12014,64 @@ button.test {
     font-weight: 600;
     cursor: pointer;
 }
-button{
+
+button {
     cursor: pointer;
 }
+
 .tablewrapper input {
     max-width: 100%;
     width: 100%;
     padding: 10px 5px;
 }
+
 .tablewrapper textarea {
     margin-top: 5px
-  }
-  .tablewrapper label{
+}
+
+.tablewrapper label {
     display: block;
     margin-bottom: 6px;
-  }
-  .tablewrapper .elemDiv{
-    margin: 15px 0;
-  }
-  .tablewrapper .intl-tel-input,
-  .tablewrapper .iti{
-  width: 100%;
 }
-.tablewrapper .radio{
+
+.tablewrapper .elemDiv {
+    margin: 15px 0;
+}
+
+.tablewrapper .intl-tel-input,
+.tablewrapper .iti {
+    width: 100%;
+}
+
+.tablewrapper .radio {
     display: flex;
     gap: 30px;
 }
-.tablewrapper #mobilecode{
+
+.tablewrapper #mobilecode {
     padding-left: 0;
 }
-.tablewrapper .form-row{
+
+.tablewrapper .form-row {
     display: grid;
     grid-template-columns: 140px 1fr;
 }
-.tablewrapper .update{
+
+.tablewrapper .update {
     padding: 5px 12px;
     background-color: #008000;
     color: #FFF;
     border: none;
     border-radius: 5px;
 }
-.tablewrapper .test{
+
+.tablewrapper .test {
     background-color: #3155a1;
     border-radius: 5px;
     color: #fff;
 }
-.tablewrapper .reset{
+
+.tablewrapper .reset {
     padding: 5px 12px;
     background-color: #FF0000;
     color: #FFF;
@@ -11957,8 +12082,9 @@ button{
 /* 09-04-2023 changes */
 
 .tablewrapper {
-    padding-top: 20px;    
+    padding-top: 20px;
 }
+
 /* .tablewrapper h2 {
     display: inline-block;
     margin-left: 425px;
@@ -11974,12 +12100,14 @@ button{
     background-color: #008000;
     display: inline-block;
 }
+
 .tablewrapper table {
     max-width: 1300px;
     width: 100%;
     border-collapse: collapse;
     margin: 20px;
 }
+
 .tablewrapper {
     position: relative;
     margin-top: 100px;
@@ -11988,7 +12116,7 @@ button{
 }
 
 
-.openbtn{
+.openbtn {
     position: absolute;
     top: 20px;
     right: 25px;
@@ -12001,14 +12129,17 @@ button{
 .btn-group-vertical {
     width: 100%;
 }
+
 .btn-group-vertical button.btn.btn-primary {
     display: flex;
     background: #d6d6d6;
-    padding: 0;;
+    padding: 0;
+    ;
     border-color: #000;
     align-items: center;
     width: 100%;
 }
+
 .icoBg {
     padding: 5px 7px;
     min-width: 35px;
@@ -12020,9 +12151,11 @@ button{
     font-weight: 600;
     font-size: 9px;
 }
+
 .icoBg img {
     height: 20px;
 }
+
 .btn-group-vertical button.btn.btn-primary .icoBg:nth-child(2):after {
     position: absolute;
     content: '';
@@ -12048,6 +12181,7 @@ button{
     margin: 0 auto;
     min-height: 34px;
 }
+
 .btn-group-vertical button.btn.btn-primary .icoBg-tracnet:nth-child(2):after {
     position: absolute;
     content: '';
@@ -12067,6 +12201,7 @@ button{
     width: 100%;
     margin-top: 20px;
 }
+
 .mhole-mobile .mhole-content {
     position: absolute;
     top: 67px;
@@ -12080,33 +12215,39 @@ button{
     flex-direction: column;
     align-items: end;
 }
-.mhole .mhole-mobile span{
+
+.mhole .mhole-mobile span {
     font-size: 12px;
     line-height: 16px;
     display: flex;
     margin: 0px auto;
     justify-content: center;
 }
+
 .mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1) {
     margin-bottom: 0px;
     margin-top: 102px;
 }
+
 .mhole-mobile .mhole-content .circles {
     position: absolute;
     top: 332px;
     /* width: 250px; */
     margin-top: 80px;
 }
+
 .mhole-mobile .mhole-content .squares {
     position: absolute;
     top: 225px;
     margin-top: 50px;
 }
+
 .mhole-mobile .mhole-content .traingles {
     position: absolute !important;
     top: 115px;
     margin-top: 20px;
 }
+
 .mhole-mobile .mhole-image img {
     display: block;
     object-fit: cover;
@@ -12114,6 +12255,7 @@ button{
     margin: 0 auto;
     width: 60px;
 }
+
 /* 04-09-2023 */
 
 .tablewrapper .test {
@@ -12122,8 +12264,8 @@ button{
     color: #fff;
     border: 0;
     padding: 11px 12px;
-    top: 234px;
 }
+
 .tablewrapper .iti {
     width: 100%;
     max-width: 215px;
@@ -12141,4 +12283,8 @@ button{
     border: 0;
     border-radius: 3px;
     padding: 2px 10px 5px;
+}
+
+.elemDiv .test-div {
+    display: flex;
 }
