@@ -748,7 +748,7 @@ angular.module('settingsCtrl', [])
     $scope.sendTestMessage = function () {
       var userInput = $scope.smsNumber;
       if (Number(userInput)) {
-        userInput = "+61" + userInput;
+        userInput = "+65" + userInput;
         let formData = { "smsNumber": userInput };
         $http.post(apiBaseUrl + "sent-test-sms", formData, { headers: customeHeader }).then(function (response) {
           console.log(response, "response");
