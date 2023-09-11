@@ -265,14 +265,16 @@ angular
         }
       });
       $scope.apiUrlAlarm = "";
-      $scope.loadData = function (initset) {
+      $scope.loadData = function (initset, customParam = "") {
+        localStorage.setItem( "paramval" , customParam );
+        console.log(initset,customParam)
         $scope.device = {};
         /** IS-384 - change old api tracNet_getAllInstallations_02_a with new tracNet_getAllInstallations_03_a http://127.0.0.1:8000/api/v1/ */
         // Define the API URL based on the isFirstLoad flag
-        const apiUrl = $scope.isFirstLoad
+        var apiUrl = $scope.isFirstLoad
           ? apiBaseUrl + "newtraknetApiList"
           : apiBaseUrl + "newtraknetApiList/" + localStorage.getItem("singleDate");
-
+        
 
         $http
           .get(apiUrl, { headers: customeHeader })
@@ -310,12 +312,14 @@ angular
                 if (data.point.height > 3998) {
                   var dis_color_rank = 3;
                   var dis_color = "Green";
+                  console.log(dis_color_rank,'dis_color_rank 3',data.product.id_serial,'serial id')
                 }
-                if (data.point.height < 300) {
+                if (data.point.height < 400) {
                   var distanceValue = 400;
                   var distance_alarm_tr = "Distance alarm Triggered";
                   var dis_color_rank = 1;
                   var dis_color = "Red";
+                  console.log(dis_color_rank,'dis_color_rank 1',data.product.id_serial,'serial id')
                 }
 
                 if (
@@ -324,6 +328,7 @@ angular
                   var distance_alarm_tr = "Distance alert Triggered";
                   var dis_color_rank = 2;
                   var dis_color = "yellow";
+                  console.log(dis_color_rank,'dis_color_rank 2',data.product.id_serial,'serial id')
                 }
 
                 if (data.point.manhole_level_alarm == "Not full alarm") {
@@ -416,17 +421,19 @@ angular
                   aCheck1: point_alt.alarmFirstCheck ?? 0,
                   aCheck2: point_alt.alarmSecondCheck ?? 0,
                   aCheck3: point_alt.alarmThirdCheck ?? 0,
-                  alertOne: (point_alt.alert1) ? parseInt(point_alt.alert1) : 400,
-                  alertTwo: (point_alt.alert2) ? parseInt(point_alt.alert2) : 400,
-                  alertThree: (point_alt.alert3) ? parseInt(point_alt.alert3) : 400,
+                  alertOne: (point_alt.alert1) ? parseInt(point_alt.alert1) : 0,
+                  alertTwo: (point_alt.alert2) ? parseInt(point_alt.alert2) : 0,
+                  alertThree: (point_alt.alert3) ? parseInt(point_alt.alert3) : 0,
                   empty: (point_alt.empty) ? parseInt(point_alt.empty) : 3998,
                   full: (point_alt.full) ? parseInt(point_alt.full) : 400,
+                  shape: 'red',
                   relative_distance: Math.round(((((point_alt.empty) ? parseInt(point_alt.empty) : 3998 - (point_alt.full) ? parseInt(point_alt.full) : 400) - (item1.distance - (point_alt.full) ? parseInt(point_alt.full) : 400)) / ((point_alt.empty) ? parseInt(point_alt.empty) : 3998 - (point_alt.full) ? parseInt(point_alt.full) : 400)) * 100),
                 };
               }
               return item1;
             });
             for (i = 0; i < convertedData.length; i++) {
+              console.log(convertedData[i].disColorRank,'disColorRank sorb',convertedData[i].installationName,'installationName')
               if ($scope.device[convertedData[i].serialNumber] == undefined)
                 $scope.device[convertedData[i].serialNumber] = [];
               let eachData = convertedData[i];
@@ -469,11 +476,28 @@ angular
                     $scope.device[responses[j].idx][
                     $scope.device[responses[j].idx].length - 1
                     ];
+                    console.log($scope.locationData[responses[j].idx],'$scope.locationData[responses[j].idx].position')
                   $scope.locationData[responses[j].idx].position =
                     responses[j].data[0];
+                    console.log($scope.locationData[responses[j].idx],'$scope.locationData[responses[j].idx].position')
                   $scope.locationData[responses[j].idx].marker = createMarker(
                     $scope.locationData[responses[j].idx]
                   );
+                  console.log($scope.locationData[responses[j].idx].angleColor,'$scope.locationData[responses[j].idx].angleColor')
+                  if( customParam == "") {
+                    $scope.locationData[responses[j].idx].marker = createMarker($scope.locationData[responses[j].idx], responses[j].idx);
+                } else {
+
+                    if(customParam == "all alarms" && $scope.locationData[responses[j].idx].angleColor == 'Green') {
+                        $scope.locationData[responses[j].idx].marker.setMap(tracknetMap.gMap);
+                        console.log($scope.locationData[responses[j].idx].marker,'saxena sorb if')
+                        
+                    } else {
+                        $scope.locationData[responses[j].idx].marker.setMap(null);
+                        console.log($scope.locationData[responses[j].idx].marker,'saxena sorb else')
+                    }
+                }
+                  
                 }
 
                 if (document.getElementById("myDiv"))
@@ -531,49 +555,91 @@ angular
       }
 
       function getObjectKey(obj, value) {
-        return Object.keys(obj).find(key => obj[key] === value);
-      }
+        if (obj && typeof obj === 'object') {
+            const keys = Object.keys(obj);
+            const keyWithMatchingValue = keys.find(key => obj[key] === value);
+    
+            if (keyWithMatchingValue !== undefined) {
+                return keyWithMatchingValue;
+            }
+        }
+    
+        return null; // or some other default value/error handling logic
+    }
+      
 
-      function getMarkerColor(info) {
+      function getMarkerColor(info, customParam = "") {
+        
         let alertArr = [];
-        if (info.alertCheck1 == 1) {
+        if (info.aCheck1 == 1) {
           alertArr.push(info.alertOne);
+          var dict = {
+            'al1': info.alertOne,
+            'al2': info.alertTw0,
+            'al3': info.alertThree
+          }
         }
-        if (info.alertCheck2 == 1) {
+        if (info.aCheck2 == 1) {
           alertArr.push(info.alertTwo);
+          var dict = {
+            'al1': info.alertOne,
+            'al2': info.alertTw0,
+            'al3': info.alertThree
+          }
         }
-        if (info.alertCheck3 == 1) {
+        if (info.aCheck3 == 1) {
           alertArr.push(info.alertThree);
+          var dict = {
+            'al1': info.alertOne,
+            'al2': info.alertTw0,
+            'al3': info.alertThree
+          }
         }
 
-        let dict = {
-          'al1': info.alertOne,
-          'al2': info.alertTw0,
-          'al3': info.alertThree
-        }
-        //console.log(info, "info")
-        if (info.disColorRank == 3 && info.angleColorRank == 3) return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-        if (info.disColorRank == 3 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 1 && info.angleColorRank == 3) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 1 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 1 && info.angleColorRank == 2) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        if (info.disColorRank == 2 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+        
+        console.log(info, "info")
+        console.log(info.disColorRank, "info.disColorRank",info.angleColorRank, "info.angleColorRank",info.angleColor, "info.angleColor")
+        if( customParam == "" ) {
+          if (info.disColorRank == 3 && info.angleColorRank == 3) return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+          if (info.disColorRank == 3 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+          if (info.disColorRank == 1 && info.angleColorRank == 3) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+          if (info.disColorRank == 1 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+          if (info.disColorRank == 1 && info.angleColorRank == 2) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+          if (info.disColorRank == 2 && info.angleColorRank == 1) return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+        }else {
+          if( customParam == "all alarms" ) {
+              return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+          } else if( customParam == "all clear" ) {
+              return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+          } else if( customParam == "triangle" ) {
+              return './img/triangle-01.png';
+          } else if( customParam == "square" ) {
+              return './img/square-01.png';
+          } else if( customParam == "circle" ) {
+              return './img/circle-01.png';
+          }
+      }
         if (info.disColorRank == 2 && info.angleColorRank == 2) {
           var value = closest(alertArr, dict.distance);
           var result = getObjectKey(dict, value);
           console.log(value, result)
           if (result == 'al3') {
             imgpath = './img/triangle-01.png';
-          }
-
+            console.log(result,'result al3 2 or 2')
+          } 
           if (result == 'al2') {
             imgpath = './img/square-01.png';
+            console.log(result,'result al2 2 or 2')
           }
 
           if (result == 'al1') {
             imgpath = './img/circle-01.png';
+            console.log(result,'result al1 2 or 2')
           }
           return imgpath;
+        } 
+        else {
+          imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
         }
         if (info.disColorRank == 2 && info.angleColorRank == 3) {
           var value = closest(alertArr, info.distance);
@@ -581,16 +647,21 @@ angular
 
           if (result == 'al3') {
             imgpath = './img/triangle-01.png';
+            console.log(result,'result al3 2 or 3')
           }
 
           if (result == 'al2') {
             imgpath = './img/square-01.png';
+            console.log(result,'result al1 2 or 3')
           }
 
           if (result == 'al1') {
             imgpath = './img/circle-01.png';
+            console.log(result,'result al1 2 or 3')
           }
           return imgpath;
+        }else {
+          imgpath =  "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
         }
         if (info.disColorRank == 3 && info.angleColorRank == 2) return "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
 
@@ -608,7 +679,9 @@ angular
       };
 
       function createMarker(info) {
-        const markericon = getMarkerColor(info);
+        let customParam = localStorage.getItem("paramval");
+        const markericon = getMarkerColor(info, customParam);
+       // const markericon = getMarkerColor(info);
         var marker = new google.maps.Marker({
           map: map,
           position: new google.maps.LatLng(info.latitude, info.longitude),
@@ -814,6 +887,7 @@ angular
         tracknetMap.gMap.setCenter(bounds.getCenter());
         //tracknetMap.gMap.setZoom(initZoomLevel);
         $scope.triggerMarkerClick();
+        
       };
 
       $scope.exitStreetViewMap = function () {
@@ -834,6 +908,11 @@ angular
           }
           infoWindow.close();
           $scope.recenterMap();
+        }
+        let params = localStorage.getItem( "paramval" );
+        if( params != "") {
+            localStorage.setItem( "trackNet" , 'trackNet');
+            window.location.reload();
         }
       };
 
@@ -1182,9 +1261,9 @@ angular
                   aCheck1: point_alt.alarmFirstCheck ?? 0,
                   aCheck2: point_alt.alarmSecondCheck ?? 0,
                   aCheck3: point_alt.alarmThirdCheck ?? 0,
-                  alertOne: (point_alt.alert1) ? parseInt(point_alt.alert1) : 400,
-                  alertTwo: (point_alt.alert2) ? parseInt(point_alt.alert2) : 400,
-                  alertThree: (point_alt.alert3) ? parseInt(point_alt.alert3) : 400,
+                  alertOne: point_alt.alert1 ,
+                  alertTwo: point_alt.alert2 ,
+                  alertThree: point_alt.alert3 ,
                   empty: (point_alt.empty) ? parseInt(point_alt.empty) : 3998,
                   full: (point_alt.full) ? parseInt(point_alt.full) : 400,
                   relative_distance: Math.round(((((point_alt.empty) ? parseInt(point_alt.empty) : 3998 - (point_alt.full) ? parseInt(point_alt.full) : 400) - (item1.distance - (point_alt.full) ? parseInt(point_alt.full) : 400)) / ((point_alt.empty) ? parseInt(point_alt.empty) : 3998 - (point_alt.full) ? parseInt(point_alt.full) : 400)) * 100),
