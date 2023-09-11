@@ -178,6 +178,8 @@ angular.module('settingsCtrl', [])
               text: errorMessage,
             });
           }
+          // calling the hide function on sucess on error it will not hide
+          angular.element($("#form")).css('display', 'none');
         })
         .catch(function (error) {
           if (error.response && error.response.status === 422) {
@@ -220,7 +222,7 @@ angular.module('settingsCtrl', [])
             console.error("An error occurred:", error);
           }
         });
-      angular.element($("#form")).css('display', 'none');
+      // angular.element($("#form")).css('display', 'none');
 
 
     }
