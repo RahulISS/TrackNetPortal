@@ -273,12 +273,12 @@ angular
                 var angle_alarm_tr = "";
               }
 
-              if (distanceValue > 3998) {
+              if (data.point.height > 3998) {
                 var dis_color_rank = 3;
                 var dis_color = "";
                 distanceValue = "";
               }
-              if ( distanceValue <= 400) {
+              if ( data.point.height <= 400) {
                 distanceValue = 400;
                 var distance_alarm_tr = "Distance alarm Triggered";
                 var dis_color_rank = 1;
@@ -334,7 +334,7 @@ angular
                   const dateArray = dateString.split("_");
                   const datePart = dateArray[0].split("-").map(Number);
                   const timePart = dateArray[1].split("-").map(Number);
-
+                
                   // Note: Months in JavaScript Date are zero-based (0-11)
                   const date = new Date(Date.UTC(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]));
                   return date;
@@ -343,20 +343,18 @@ angular
                 const inputDateString = data.point.date;
                 const ttemp = convertDateStringToISOString(inputDateString);
                 const specificDate = moment(ttemp).tz("Asia/Singapore");
-
+                
                 const currentDate = moment().tz("Asia/Singapore");
                 var timeDiff = Math.abs(currentDate - specificDate);
-
                 var lastCommColor = "";
-                  //90000000 ms is equal to 25days
-                  if( timeDiff >= 90000000 ){
-                    var lastComm = "Communications alarm Triggered";
-                    var lastCommColor = 1;
-                  } else {
-                    var lastComm = "";
-                    var lastCommColor = "";
-                  }
-                  
+                //90000000 ms is equal to 25hrs
+                if( timeDiff >= 90000000 ) {
+                  var lastComm = "Communications alarm Triggered";
+                  lastCommColor = "red";
+                } else {
+                  var lastComm = "";
+                  lastCommColor = "green";
+                }
                 var cd = 24 * 60 * 60 * 1000;
                 if (timeDiff < 1000) {
                   //miliseconds
@@ -408,8 +406,8 @@ angular
                 angleColorRank: parseInt(angleColorRank),
                 angleColor: angleColor,
                 angle_alarm_tr: angle_alarm_tr,
-                lastCommColorRank: lastCommColor,
                 lastComm_alarm_tr: lastComm,
+                last_comm_color: lastCommColor,
                 last_communication: timeDiff,
                 manhole_level_alarm: manhole_level_alarm,
                 manhole_moved_alarm: manhole_moved_alarm,
@@ -442,7 +440,7 @@ angular
               convertedData.push(convertedPoint);
             }
           }
-         
+          console.log(convertedData, "convertedData")
           const aLocation = convertedData;
           $scope.dataLocation = aLocation;
 
@@ -646,8 +644,6 @@ angular
             dict["marker"] = marker;
             dict["point"] = marker.point;
             $scope.displayData.push(dict);
-            console.log(dict , "dictionary");
-            console.log(markerShape,'markerShape')
           }
         }).catch(function (error) {
           if (error.status == 401) {
