@@ -493,6 +493,8 @@ angular.module('settingsCtrl', [])
       $scope.distanceAlarm = null;
       $scope.updateShow = false;
       $scope.addShow = true;
+      $scope.alrErrName = null;
+      $scope.alrErrNumber = null;
     }
 
 
