@@ -263,7 +263,7 @@ angular
               let distanceValue = parseInt(data.point.height);
               let angleValue = parseInt(data.point.angle);
 
-              if ( angleValue >= 5) {
+              if (angleValue >= 5) {
                 var angleColorRank = 1;
                 var angleColor = "Red";
                 var angle_alarm_tr = "Angle alarm Triggered";
@@ -278,12 +278,12 @@ angular
                 var dis_color = "";
                 distanceValue = "";
               }
-              if ( data.point.height <= 400) {
+              if (data.point.height <= 400) {
                 distanceValue = 400;
                 var distance_alarm_tr = "Distance alarm Triggered";
                 var dis_color_rank = 1;
                 var dis_color = "Red";
-              } else if ( distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1 || distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1 || distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1 ) {
+              } else if (distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1 || distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1 || distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
                 var distance_alarm_tr = "Distance alert Triggered";
                 var dis_color_rank = 2;
                 var dis_color = "orange";
@@ -292,27 +292,27 @@ angular
                 var dis_color_rank = 3;
                 var dis_color = "green";
               }
-              
+
               /** alerts value starts*/
-              if( 'alert1' in data.point && distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1) {
+              if ('alert1' in data.point && distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1) {
                 var alertF = data.point.alert1;
-                console.log(alertF,'alertF',data.product.id_serial,'id_serial')
+                console.log(alertF, 'alertF', data.product.id_serial, 'id_serial')
                 var al1Check = data.point.alarmFirstCheck;
-              } else{
+              } else {
                 var alertF = undefined;
               }
-              if( 'alert2' in data.point && distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1) {
+              if ('alert2' in data.point && distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1) {
                 var alertS = data.point.alert2;
-                console.log(alertS,'alertS',data.product.id_serial,'id_serial')
+                console.log(alertS, 'alertS', data.product.id_serial, 'id_serial')
                 var al2Check = data.point.alarmSecondCheck;
-              } else{
+              } else {
                 var alertS = undefined;
               }
-              if( 'alert3' in data.point && distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
+              if ('alert3' in data.point && distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
                 var alertT = data.point.alert3;
-                console.log(alertT,'alertT',data.product.id_serial,'id_serial')
+                console.log(alertT, 'alertT', data.product.id_serial, 'id_serial')
                 var al3Check = data.point.alarmThirdCheck;
-              } else{
+              } else {
                 var alertT = undefined;
               }
               /** ends */
@@ -334,7 +334,7 @@ angular
                   const dateArray = dateString.split("_");
                   const datePart = dateArray[0].split("-").map(Number);
                   const timePart = dateArray[1].split("-").map(Number);
-                
+
                   // Note: Months in JavaScript Date are zero-based (0-11)
                   const date = new Date(Date.UTC(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]));
                   return date;
@@ -343,12 +343,12 @@ angular
                 const inputDateString = data.point.date;
                 const ttemp = convertDateStringToISOString(inputDateString);
                 const specificDate = moment(ttemp).tz("Asia/Singapore");
-                
+
                 const currentDate = moment().tz("Asia/Singapore");
                 var timeDiff = Math.abs(currentDate - specificDate);
                 var lastCommColor = "";
                 //90000000 ms is equal to 25hrs
-                if( timeDiff >= 90000000 ) {
+                if (timeDiff >= 90000000) {
                   var lastComm = "Communications alarm Triggered";
                   lastCommColor = "red";
                 } else {
@@ -471,9 +471,9 @@ angular
               $scope.emptyVal = $scope.dataLocation[i].empty;
             }
 
-            let empty = ( $scope.dataLocation[i].empty ) ? $scope.dataLocation[i].empty: 3998;
-            let full = ( $scope.dataLocation[i].full ) ? $scope.dataLocation[i].full : 400;
-        
+            let empty = ($scope.dataLocation[i].empty) ? $scope.dataLocation[i].empty : 3998;
+            let full = ($scope.dataLocation[i].full) ? $scope.dataLocation[i].full : 400;
+
             $scope.dataLocation[i]['relative_distance'] = Math.round((((empty - full) - ($scope.dataLocation[i].distance - full)) / (empty - full)) * 100);
 
             if ($scope.dataLocation[i]['relative_distance'] < 0) {
@@ -573,54 +573,54 @@ angular
           // sorted end
           for (var i = 0; i < $scope.sortedArray_1.length; i++) {
             arr.push(aLocation[i].installationId.split(" ")[0]);
-            console.log(aLocation[i],'aLocation[i]')
+            console.log(aLocation[i], 'aLocation[i]')
             let dict = {};
-            if( aLocation[i].angle >= 5 ) {
+            if (aLocation[i].angle >= 5) {
               var markerShape = "red";
               aLocation[i].markerOnMap = markerShape;
-              console.log(markerShape,'markerShape if')
-            } else if( aLocation[i].distanceValue <= 400 && aLocation[i].distanceValue != "" ) {
+              console.log(markerShape, 'markerShape if')
+            } else if (aLocation[i].distanceValue <= 400 && aLocation[i].distanceValue != "") {
               var markerShape = "red";
               //aLocation[i].markerOnMap.push(markerShape);
               aLocation[i].markerOnMap = markerShape;
-              console.log(markerShape,'markerShape red else')
+              console.log(markerShape, 'markerShape red else')
             } else {
 
-                if( aLocation[i].alertOne != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
-                  var markerShape = "circle";
-                  //aLocation[i].markerOnMap.push(markerShape);
-                  aLocation[i].markerOnMap = markerShape;
-                  console.log(markerShape,'markerShape circle')
-                } 
-                
-                if( aLocation[i].alertTwo != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo) ) {
-                  var markerShape = "square";
-                  //aLocation[i].markerOnMap.push(markerShape);
-                  aLocation[i].markerOnMap = markerShape;
-                  console.log(markerShape,'markerShape square')
-                } else{
-                  var markerShape = "green";
-                  aLocation[i].markerOnMap = markerShape;
-                  console.log(markerShape,'markerShape green')
-                }
-                
-                if( aLocation[i].alertThree != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree) ) {
-                  var markerShape = "triangle";
-                  //aLocation[i].markerOnMap.push(markerShape);
-                  aLocation[i].markerOnMap = markerShape;
-                  console.log(markerShape,'markerShape triangle')
-                } 
-                else if(aLocation[i].alertOne == 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == 'undefined' && aLocation[i].alertThree == 'undefined'){
-                  var markerShape = "green";
-                  aLocation[i].markerOnMap = markerShape;
-                  console.log(markerShape,'markerShape green')
-                } else {
-                  var markerShape = "green";
-                  aLocation[i].markerOnMap = markerShape;
-                  console.log(markerShape,'markerShape green')
-                }
-            } 
-            
+              if (aLocation[i].alertOne != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
+                var markerShape = "circle";
+                //aLocation[i].markerOnMap.push(markerShape);
+                aLocation[i].markerOnMap = markerShape;
+                console.log(markerShape, 'markerShape circle')
+              }
+
+              if (aLocation[i].alertTwo != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
+                var markerShape = "square";
+                //aLocation[i].markerOnMap.push(markerShape);
+                aLocation[i].markerOnMap = markerShape;
+                console.log(markerShape, 'markerShape square')
+              } else {
+                var markerShape = "green";
+                aLocation[i].markerOnMap = markerShape;
+                console.log(markerShape, 'markerShape green')
+              }
+
+              if (aLocation[i].alertThree != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
+                var markerShape = "triangle";
+                //aLocation[i].markerOnMap.push(markerShape);
+                aLocation[i].markerOnMap = markerShape;
+                console.log(markerShape, 'markerShape triangle')
+              }
+              else if (aLocation[i].alertOne == 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == 'undefined' && aLocation[i].alertThree == 'undefined') {
+                var markerShape = "green";
+                aLocation[i].markerOnMap = markerShape;
+                console.log(markerShape, 'markerShape green')
+              } else {
+                var markerShape = "green";
+                aLocation[i].markerOnMap = markerShape;
+                console.log(markerShape, 'markerShape green')
+              }
+            }
+
             dict["id"] = aLocation[i].installationId.split(" ")[0];
             dict["latitude"] = aLocation[i].latitude;
             dict["longitude"] = aLocation[i].longitude;
@@ -695,85 +695,85 @@ angular
             altArr.push(dict.totalAlerts.al3);
           }
         }
-        var arrValue = closest( altArr , dict.distance_main);
-		  	var result = getObjectKey(dict.totalAlerts, arrValue);
-			  var infowindow = new google.maps.InfoWindow({
+        var arrValue = closest(altArr, dict.distance_main);
+        var result = getObjectKey(dict.totalAlerts, arrValue);
+        var infowindow = new google.maps.InfoWindow({
           content: dict.relative_distance.toLocaleString() + "%" + ",  " + dict.angle + "\xBA",
         });
-        
+
         var colorCode = dict.colorRank;
         var colorCode2 = dict.colorRank2;
         let customParam = dict.queryParam;
         //console.log(customParam, "customParam")
-        if( colorCode && customParam == "") {
-          if(colorCode == 3 && colorCode2 == 3) {
+        if (colorCode && customParam == "") {
+          if (colorCode == 3 && colorCode2 == 3) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
           }
-          if(colorCode == 1 && colorCode2 == 1){
+          if (colorCode == 1 && colorCode2 == 1) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
-          if( colorCode == 1 && colorCode2 == 3 ){
+          if (colorCode == 1 && colorCode2 == 3) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
-          if( colorCode == 3 && colorCode2 == 1 ){
+          if (colorCode == 3 && colorCode2 == 1) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
-          if( colorCode == 1 && colorCode2 == 2 ){
+          if (colorCode == 1 && colorCode2 == 2) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
-          if( colorCode == 2 && colorCode2 == 1 ) {
+          if (colorCode == 2 && colorCode2 == 1) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           }
-          if( colorCode == 2 && colorCode2 == 2 ) {					
-              if( result == 'al1') {
-                imgpath = './img/circle-01.png';
-              }
-  
-              if( result == 'al2') {
-                imgpath = './img/square-01.png';
-              }
-  
-              if( result == 'al3' ) {
-                imgpath = './img/triangle-01.png';
-              }
+          if (colorCode == 2 && colorCode2 == 2) {
+            if (result == 'al1') {
+              imgpath = './img/circle-01.png';
+            }
+
+            if (result == 'al2') {
+              imgpath = './img/square-01.png';
+            }
+
+            if (result == 'al3') {
+              imgpath = './img/triangle-01.png';
+            }
           }
-          if( colorCode == 2 && colorCode2 == 3 ) {
-              if( result == 'al1') {
-                imgpath = './img/circle-01.png';
-              }
-  
-              if( result == 'al2') {
-                
-                imgpath = './img/square-01.png';
-              }
-  
-              if( result == 'al3' ) {
-                imgpath = './img/triangle-01.png';
-              }
+          if (colorCode == 2 && colorCode2 == 3) {
+            if (result == 'al1') {
+              imgpath = './img/circle-01.png';
+            }
+
+            if (result == 'al2') {
+
+              imgpath = './img/square-01.png';
+            }
+
+            if (result == 'al3') {
+              imgpath = './img/triangle-01.png';
+            }
           }
-          if( colorCode == 3 && colorCode2 == 2 ){
+          if (colorCode == 3 && colorCode2 == 2) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
           }
         } //else {
-        if( customParam == "all alarms" ) {
+        if (customParam == "all alarms") {
           imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
-        }  if( customParam == "all clear" ) {
+        } if (customParam == "all clear") {
           imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-          console.log(imgpath,'imgpath green')
-        }  if( customParam == "triangle" ) {
+          console.log(imgpath, 'imgpath green')
+        } if (customParam == "triangle") {
           imgpath = './img/triangle-01.png';
-          console.log(imgpath,'imgpath triangle')
+          console.log(imgpath, 'imgpath triangle')
           imgpath = '';
-        }  if( customParam == "square" ) {
-          imgpath = './img/square-01.png'; 
-          console.log(imgpath,'imgpath square') 
+        } if (customParam == "square") {
+          imgpath = './img/square-01.png';
+          console.log(imgpath, 'imgpath square')
           imgpath = '';
-        }  if( customParam == "circle" ) {
+        } if (customParam == "circle") {
           imgpath = './img/circle-01.png';
           imgpath = '';
-            }
-       // }
-        
+        }
+        // }
+
         let point = { lat: dict.latitude, lng: dict.longitude };
         let iconPath = imgpath;
         let iconTemp = {
@@ -783,7 +783,7 @@ angular
           anchor: new google.maps.Point(20, 20),
         };
         /** sorting map markers starts */
-        if( customParam == '' ) {
+        if (customParam == '') {
           beachMarker[dict.id] = new google.maps.Marker({
             position: point,
             map: map,
@@ -791,24 +791,24 @@ angular
             title: dict.longName,
             id: dict.id,
           });
-          
-          
+
+
           beachMarker[dict.id].addListener('click', function () {
-            infowindow.open(map,beachMarker[dict.id]);
+            infowindow.open(map, beachMarker[dict.id]);
           });
-          
-          infowindow.open(map,beachMarker[dict.id]);
-          
+
+          infowindow.open(map, beachMarker[dict.id]);
+
           beachMarker[dict.id].addListener('click', function () {
             const node = dict
             if (node === null) return;
-              getInfoWinData(node,this);
-            });
+            getInfoWinData(node, this);
+          });
         }
-			  /** ends */ 
+        /** ends */
 
-        if((customParam == '') || (customParam == "all clear" && dict['mapMarkerShape'] == 'green') || (customParam == "all alarms" && dict['mapMarkerShape'] == 'red') || (customParam == "triangle" && dict['mapMarkerShape'] == 'triangle') || (customParam == "square" && dict['mapMarkerShape'] == 'square') || (customParam == "circle" && dict['mapMarkerShape'] == 'circle')
-			) {
+        if ((customParam == '') || (customParam == "all clear" && dict['mapMarkerShape'] == 'green') || (customParam == "all alarms" && dict['mapMarkerShape'] == 'red') || (customParam == "triangle" && dict['mapMarkerShape'] == 'triangle') || (customParam == "square" && dict['mapMarkerShape'] == 'square') || (customParam == "circle" && dict['mapMarkerShape'] == 'circle')
+        ) {
           beachMarker[dict.id].setMap(map)
         } else {
           beachMarker[dict.id].setMap(null)
@@ -860,6 +860,7 @@ angular
       function getInfoWinData(node, marker) {
         $scope.markers = marker;
         $scope.nodes = node;
+        $(".infoBox").css('display', 'none');
 
         let homeiw;
         let boxText = document.createElement("div");
@@ -1077,8 +1078,8 @@ angular
       };
 
       /** Home Page markers sorting starts*/
-      $scope.addMarker1 = function( params = '' ) {
-        addMarker( params );
+      $scope.addMarker1 = function (params = '') {
+        addMarker(params);
       }
 
       $scope.addMarker1(params = '');
