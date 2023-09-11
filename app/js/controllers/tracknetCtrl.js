@@ -897,7 +897,7 @@ angular
               {
                 name: "Distance Alert",
                 y: 0,
-                color: "#FFFF00",
+                color: "#ffa500",
               },
               {
                 name: "Alarms",
@@ -1146,6 +1146,9 @@ angular
                   time: timeDate + " hours ago",
                   empty: data.point.empty !== null && data.point.empty !== undefined ? data.point.empty : "3998",
                   full: data.point.full,
+                  alarmFirstCheck : data.point.alarmFirstCheck,
+                  alarmSecondCheck : data.point.alarmSecondCheck,
+                  alarmThirdCheck : data.point.alarmThirdCheck,
                   totalAlerts: {
                     'al1': data.point.alert1,
                     'al2': data.point.alert2,
@@ -1200,72 +1203,61 @@ angular
                 deviceIds.add(data.product_serialNumber);
               }
             }
-            console.log(typeof (uniqueDataCount[2].distance), "ffffff");
-            console.log(typeof (uniqueDataCount[2].empty), "ffffff");
-
+           
+            
             for (var i = 0; i < uniqueDataCount.length; i++) {
+              let distanceDataCValue = parseInt(uniqueDataCount[i].distance);
+              if (uniqueDataCount[i].angle >= 5) {
+                $scope.realtimesummery.series[0].data[2].y++;
+              }
 
-              if ((uniqueDataCount[i].angle >= 5 && uniqueDataCount[i].distance <= 400 && uniqueDataCount[i].empty <= uniqueDataCount[i].distance)) { $scope.realtimesummery.series[0].data[2].y++; }
-              else if (uniqueDataCount[i].distance <= 400 || uniqueDataCount[i].angle >= 5 || parseInt(uniqueDataCount[i].empty) <= parseInt(uniqueDataCount[i].distance)) { $scope.realtimesummery.series[0].data[2].y++; }
-              else if (uniqueDataCount[i].distance > 400 && uniqueDataCount[i].angle <= 5 &&
-                (uniqueDataCount[i].totalAlerts.al1 !== null ||
-                  uniqueDataCount[i].totalAlerts.al2 !== null ||
-                  uniqueDataCount[i].totalAlerts.al3 !== null)) { $scope.realtimesummery.series[0].data[1].y++ }
+              if(uniqueDataCount[i].angle <= 5 && uniqueDataCount[i].distance >400 && uniqueDataCount[i].alarmFirstCheck !=1  && uniqueDataCount[i].alarmSecondCheck !=1  && uniqueDataCount[i].alarmThirdCheck !=1  ){
+                console.log(uniqueDataCount[i].aTreeNode_textLabel,"greeenenenene");
+                $scope.realtimesummery.series[0].data[0].y++;
+              }
+              if (uniqueDataCount[i].distance <= 400) {
+                $scope.realtimesummery.series[0].data[2].y++;
+              }
+              else if ( distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al1) && uniqueDataCount[i].alarmFirstCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al2) && uniqueDataCount[i].alarmSecondCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al3) && uniqueDataCount[i].alarmThirdCheck == 1 ) {
+                $scope.realtimesummery.series[0].data[1].y++;
 
-              else { $scope.realtimesummery.series[0].data[0].y++; }
+              }
+
 
             }
             var uniqueData = [];
             var deviceIds = new Set(); // Using a Set to store unique device_ids
             $scope.alertLists = uniqueDataCount;
             var uniqueAlertData = [];
+            console.log($scope.alertLists, "sds");
             for (var i = 0; i < $scope.alertLists.length; i++) {
 
+              let distanceValue = parseInt($scope.alertLists[i].distance);
+              let angleValue = parseInt($scope.alertLists[i].angle);
               $scope.alertLists[i].class = "";
 
 
-              if (
-                ($scope.alertLists[i].angle >= 5 && $scope.alertLists[i].distance <= 400 && $scope.alertLists[i].empty <= $scope.alertLists[i].distance)) {
+              if (angleValue >= 5) {
                 uniqueAlertData.push($scope.alertLists[i]);
 
                 $scope.alertLists[i].class = "distance danger";
               }
-              else if ($scope.alertLists[i].distance <= 400) {
-                uniqueAlertData.push($scope.alertLists[i]);
-
-                $scope.alertLists[i].class = "distance danger";
-              }
-              else if ($scope.alertLists[i].angle >= 5) {
-                uniqueAlertData.push($scope.alertLists[i]);
-
-                $scope.alertLists[i].class = "distance danger";
-              }
-              else if (parseInt($scope.alertLists[i].empty) <= parseInt($scope.alertLists[i].distance)) {
-                uniqueAlertData.push($scope.alertLists[i]);
-
-                $scope.alertLists[i].class = "distance danger";
-              }
-              else if (
-                $scope.alertLists[i].distance > 400 && $scope.alertLists[i].angle <= 5 &&
-                ($scope.alertLists[i].totalAlerts.al1 !== null ||
-                  $scope.alertLists[i].totalAlerts.al2 !== null ||
-                  $scope.alertLists[i].totalAlerts.al3 !== null)
-              ) {
-                uniqueAlertData.push($scope.alertLists[i]);
-
-                $scope.alertLists[i].class = "distance warn";
-              }
-              else if (
-                ($scope.alertLists[i].totalAlerts.al1 === null &&
-                  $scope.alertLists[i].totalAlerts.al2 === null &&
-                  $scope.alertLists[i].totalAlerts.al3 === null) &&
-                $scope.alertLists[i].distance > 400 &&
-                $scope.alertLists[i].empty < 3999
-              ) {
+              else{
                 $scope.alertLists[i].class = "green";
               }
+              if ($scope.alertLists[i].distance > 3998) {
+                $scope.alertLists[i].class = "";
+              }
+              if ($scope.alertLists[i].distance <= 400) {
+                uniqueAlertData.push($scope.alertLists[i]);
 
-
+                $scope.alertLists[i].class = "distance danger";
+              }
+              else if ( distanceValue < parseInt($scope.alertLists[i].totalAlerts.al1) && $scope.alertLists[i].alarmFirstCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al2) && $scope.alertLists[i].alarmSecondCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al3) && $scope.alertLists[i].alarmThirdCheck == 1 ) {
+                uniqueAlertData.push($scope.alertLists[i]);
+                $scope.alertLists[i].class = "distance warn";
+              }
+           
 
               last_comm_split = $scope.alertLists[i].oldest_comm_date.split(" ");
 
