@@ -577,13 +577,16 @@ angular
             let dict = {};
             if( aLocation[i].angle >= 5 ) {
               var markerShape = "red";
-            } else if( aLocation[i].distanceValue <= 400 ) {
+              aLocation[i].markerOnMap = markerShape;
+              console.log(markerShape,'markerShape if')
+            } else if( aLocation[i].distanceValue <= 400 && aLocation[i].distanceValue != "" ) {
               var markerShape = "red";
               //aLocation[i].markerOnMap.push(markerShape);
               aLocation[i].markerOnMap = markerShape;
+              console.log(markerShape,'markerShape red else')
             } else {
 
-                if( aLocation[i].alertOne != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
+                if( aLocation[i].alertOne != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
                   var markerShape = "circle";
                   //aLocation[i].markerOnMap.push(markerShape);
                   aLocation[i].markerOnMap = markerShape;
@@ -601,17 +604,21 @@ angular
                   console.log(markerShape,'markerShape green')
                 }
                 
-                if( aLocation[i].alertThree != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree) ) {
+                if( aLocation[i].alertThree != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree) ) {
                   var markerShape = "triangle";
                   //aLocation[i].markerOnMap.push(markerShape);
                   aLocation[i].markerOnMap = markerShape;
                   console.log(markerShape,'markerShape triangle')
                 } 
-                // else if(aLocation[i].alertOne == 'undefined' && aLocation[i].alertTwo == 'undefined' && aLocation[i].alertThree == 'undefined'){
-                //   var markerShape = "green";
-                //   aLocation[i].markerOnMap = markerShape;
-                //   console.log(markerShape,'markerShape green')
-                // }
+                else if(aLocation[i].alertOne == 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == 'undefined' && aLocation[i].alertThree == 'undefined'){
+                  var markerShape = "green";
+                  aLocation[i].markerOnMap = markerShape;
+                  console.log(markerShape,'markerShape green')
+                } else {
+                  var markerShape = "green";
+                  aLocation[i].markerOnMap = markerShape;
+                  console.log(markerShape,'markerShape green')
+                }
             } 
             
             dict["id"] = aLocation[i].installationId.split(" ")[0];
