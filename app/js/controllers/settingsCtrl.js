@@ -131,6 +131,18 @@ angular.module('settingsCtrl', [])
       if (distanceAlarm == null)
         distanceAlarm = 0;
 
+
+      if (smsNumber.startsWith('+')) {
+        smsNumber = smsNumber;
+
+      }
+      else {
+        smsNumber = "+".smsNumber;
+        console.log(smsNumber);
+      }
+
+
+      smsNumber = numcheck(smsNumber);
       const query = `{ 
         
         "contactName": "${contactName}" , 
@@ -440,6 +452,9 @@ angular.module('settingsCtrl', [])
       if (distanceAlarm == null)
         distanceAlarm == 0;
 
+
+      smsNumber = numcheck(smsNumber);
+
       const query = `{ 
         
         "contactName": "${contactName}" , 
@@ -748,9 +763,20 @@ angular.module('settingsCtrl', [])
       $scope.controlledFlowFrom.$setPristine();
     }
 
+
+    function numcheck(number) {
+      let mobile_no = number;
+      const firstChar = number.substring(0, 1); // Gets the substring from index 0 to 1 (excluding 1)
+      if (firstChar != "+") {
+        mobile_no = '+' + mobile_no;
+      }
+      console.log("numn--", mobile_no);
+      return mobile_no;
+
+    }
     // sending text message function called on test button click
     $scope.sendTestMessage = function () {
-      var userInput = '+' + $scope.smsNumber;
+      var userInput = numcheck($scope.smsNumber);
       if (Number(userInput)) {
         userInput = userInput;
         let formData = { "smsNumber": userInput };
