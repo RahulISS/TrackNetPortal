@@ -130,7 +130,7 @@
 					<tr ng-repeat="item in sortedArray_1 | filter : installation_name "
 						ng-click="GetTableItemsByClick(item)">
 						<td style="word-wrap: normal;" class="changeMouse">{{item.installationName}}
-							<br>{{item.address}}
+							<br>{{item.street}}
 						</td>
 						<!-- <td class="changeMouse"
 							ng-class="{'tdAllClear': item.disColorRank == 3  , 'alarmColor': item.distance_alarm_tr === 'Distance alarm Triggered', 'alertColor':  item.distance_alarm_tr === 'Distance alert Triggered' }">
