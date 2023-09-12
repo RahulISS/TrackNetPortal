@@ -135,7 +135,7 @@ angular.module('settingsCtrl', [])
         
         "contactName": "${contactName}" , 
         "emailAddress": "${emailAddress}",
-         "smsNumber": "+${smsNumber}", 
+         "smsNumber": "${smsNumber}", 
         "permissions":[{
        
           "Distance_Alert1": "${distanceAlert_1}",
