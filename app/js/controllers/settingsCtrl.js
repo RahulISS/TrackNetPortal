@@ -750,7 +750,7 @@ angular.module('settingsCtrl', [])
 
     // sending text message function called on test button click
     $scope.sendTestMessage = function () {
-      var userInput = $scope.smsNumber;
+      var userInput = '+' + $scope.smsNumber;
       if (Number(userInput)) {
         userInput = userInput;
         let formData = { "smsNumber": userInput };
