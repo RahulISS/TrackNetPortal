@@ -12275,6 +12275,8 @@ button {
     max-width: 140px;
     width: 100%;
     margin-left: auto;
+    display: flex;
+    gap: 2px;
 }
 
 .chart-btn-wrp button {
@@ -12287,4 +12289,9 @@ button {
 
 .elemDiv .test-div {
     display: flex;
+}
+
+.iti--allow-dropdown .iti__flag-container,
+.iti--separate-dial-code .iti__flag-container {
+    display: none;
 }
