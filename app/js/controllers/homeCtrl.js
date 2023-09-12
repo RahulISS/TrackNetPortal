@@ -385,7 +385,7 @@ angular
                   var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 7)) + "wk";
                 } else {
                   //year
-                  var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + "y";
+                  var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 60 * 24 * 365)) + "y";
                 }
 
                 var timeDate = hours;
