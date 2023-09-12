@@ -80,21 +80,20 @@ angular.module('imageCtrl', [])
         });
 
         // Weeksdays Start
-        $scope.weekdays = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+        $scope.weekdays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
         $scope.availableWeekdays = {};
         for (var i = 0; i < $scope.weekdays.length; i++) {
             $scope.availableWeekdays[$scope.weekdays[i]] = true;
         }
 
-        function updateSeriesData()
-        {
+        function updateSeriesData() {
             var isReloadChart = false;
             for (var i = 0; i < $scope.tableStats.length; i++) {
-                if($scope.tableStats[i].pointId!=null && $scope.tableStats[i].pointId!='null') {
+                if ($scope.tableStats[i].pointId != null && $scope.tableStats[i].pointId != 'null') {
                     var weekData = [];
-                    for(var j = 0; j < $scope.tableStats[i].data.length; j++) {
+                    for (var j = 0; j < $scope.tableStats[i].data.length; j++) {
                         var currWday = moment.utc($scope.tableStats[i].data[j][0]).format('ddd').toUpperCase();
-                        if($scope.availableWeekdays[currWday] == true) {
+                        if ($scope.availableWeekdays[currWday] == true) {
                             weekData.push($scope.tableStats[i].data[j]);
                         }
                     }
@@ -107,7 +106,7 @@ angular.module('imageCtrl', [])
 
         $scope.toogleWeekDays = function (weekday) {
             $scope.availableWeekdays[weekday] = !$scope.availableWeekdays[weekday];
-            if(updateSeriesData()) {
+            if (updateSeriesData()) {
                 getYminMax();
                 gotoframeUsingTimeMili($scope.tableStats[0].data[0][0]);
             }
@@ -121,10 +120,10 @@ angular.module('imageCtrl', [])
         $scope.activeScatterChart = '';
 
         $scope.$watch("selected", function (newNode) {
-            if(newNode == undefined || newNode == null || newNode == 'null') return;
+            if (newNode == undefined || newNode == null || newNode == 'null') return;
             $scope.scatterChartConfig[newNode.id] = {
                 options: {
-                    lang:{
+                    lang: {
                         noData: noDataTxtScatter
                     },
                     noData: {
@@ -197,11 +196,11 @@ angular.module('imageCtrl', [])
                     },
                 },
                 title: {
-                    text: newNode.text.substring(0,38),
+                    text: newNode.text.substring(0, 38),
                     margin: 5
                 },
                 series: [{
-                    data: [] 
+                    data: []
                 }],
                 frmDate: '',
                 toDate: '',
@@ -209,7 +208,7 @@ angular.module('imageCtrl', [])
             };
             $scope.scatterChartConfigCount = Object.keys($scope.scatterChartConfig);
             $scope.activeScatterChart = newNode.id;
-            if($scope.showScatterPlot) $scope.displayScatterPlot();
+            if ($scope.showScatterPlot) $scope.displayScatterPlot();
         });
 
         $scope.showScatterPlot = false;
@@ -226,19 +225,19 @@ angular.module('imageCtrl', [])
         $scope.showGridToOne = $scope.optionGridToOne[0];
 
         $scope.toggleScatterPlot = function () {
-            for(let idx in $scope.scatterChartConfig) {
-                if($scope.showScatterPlot) {
+            for (let idx in $scope.scatterChartConfig) {
+                if ($scope.showScatterPlot) {
                     $scope.scatterChartConfig[idx].series[0].data = [];
                 } else {
                     $scope.scatterChartConfig[idx].options.lang.noData = loadingScatter;
                 }
             }
             $scope.showScatterPlot = !$scope.showScatterPlot;
-            if($scope.showScatterPlot) {
+            if ($scope.showScatterPlot) {
                 adjustGridToOne();
-                $timeout(function(){
+                $timeout(function () {
                     $scope.displayScatterPlot();
-                },500);
+                }, 500);
             }
         }
 
@@ -250,17 +249,17 @@ angular.module('imageCtrl', [])
         function adjustGridToOne() {
             let wFact = 1;
             let hFact = 1;
-            if($scope.showGridToOne.value==2) {
-                if($scope.scatterChartConfigCount.length==4) {
+            if ($scope.showGridToOne.value == 2) {
+                if ($scope.scatterChartConfigCount.length == 4) {
                     wFact = hFact = 2;
                 } else {
-                    hFact = $scope.scatterChartConfigCount.length<=3?1:($scope.scatterChartConfigCount.length<=6?2:3);
-                    wFact = $scope.scatterChartConfigCount.length>=3?3:$scope.scatterChartConfigCount.length;
+                    hFact = $scope.scatterChartConfigCount.length <= 3 ? 1 : ($scope.scatterChartConfigCount.length <= 6 ? 2 : 3);
+                    wFact = $scope.scatterChartConfigCount.length >= 3 ? 3 : $scope.scatterChartConfigCount.length;
                 }
             }
-            const spCW = (document.getElementById('scatterPlotCaontainer').clientWidth-18) / wFact;
-            const spCH = (document.getElementById('scatterPlotCaontainer').clientHeight-50) / hFact;
-            for(let idx in $scope.scatterChartConfig) {
+            const spCW = (document.getElementById('scatterPlotCaontainer').clientWidth - 18) / wFact;
+            const spCH = (document.getElementById('scatterPlotCaontainer').clientHeight - 50) / hFact;
+            for (let idx in $scope.scatterChartConfig) {
                 $scope.scatterChartConfig[idx].options.chart.width = spCW;
                 $scope.scatterChartConfig[idx].options.chart.height = spCH;
             }
@@ -275,8 +274,8 @@ angular.module('imageCtrl', [])
             let frmDate = moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat);
             let toDate = moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
             adjustGridToOne();
-            for(let idx in $scope.scatterChartConfig) {
-                if($scope.scatterChartConfig[idx].frmDate!=frmDate || $scope.scatterChartConfig[idx].toDate!=toDate || $scope.scatterChartConfig[idx].cachedData.length==0) {
+            for (let idx in $scope.scatterChartConfig) {
+                if ($scope.scatterChartConfig[idx].frmDate != frmDate || $scope.scatterChartConfig[idx].toDate != toDate || $scope.scatterChartConfig[idx].cachedData.length == 0) {
                     queriesArray.push({
                         'index': idx,
                         'query': `html_aTreeNode_scatterplot_hisRead_01_a(${idx},${frmDate},${toDate})`
@@ -305,13 +304,13 @@ angular.module('imageCtrl', [])
                 for (let j = 0; j < responses.length; j++) {
                     let serialData = [];
                     for (let i = 0; i < responses[j].data.rows.length; i++) {
-                        let tempEach = {name:'', x:'',y:''};
-                        if(responses[j].data.rows[i].ts!=undefined) {
+                        let tempEach = { name: '', x: '', y: '' };
+                        if (responses[j].data.rows[i].ts != undefined) {
                             tempEach.name = moment.utc(responses[j].data.rows[i].ts.split('+')[0]).format("D/M/YYYY h:mma");
                         }
-                        if(responses[j].data.rows[i].level1!=undefined) tempEach.y = responses[j].data.rows[i].level1;
-                        if(responses[j].data.rows[i].velocity1!=undefined) tempEach.x = responses[j].data.rows[i].velocity1;
-                        if(tempEach.x!='') serialData.push(tempEach);
+                        if (responses[j].data.rows[i].level1 != undefined) tempEach.y = responses[j].data.rows[i].level1;
+                        if (responses[j].data.rows[i].velocity1 != undefined) tempEach.x = responses[j].data.rows[i].velocity1;
+                        if (tempEach.x != '') serialData.push(tempEach);
                     }
                     $scope.scatterChartConfig[responses[j].idx].series[0].data = serialData;
                     $scope.scatterChartConfig[responses[j].idx].cachedData = serialData;
@@ -601,7 +600,7 @@ angular.module('imageCtrl', [])
                 document.body.appendChild(hiddenElement);
                 hiddenElement.click();
             }, function (err) {
-                console.log(err)
+                //console.log(err)
             });
         }
 
@@ -663,7 +662,7 @@ angular.module('imageCtrl', [])
                 if (typeof node === "undefined" || node === null) {
                     return;
                 }
-                if($scope.showScatterPlot) {
+                if ($scope.showScatterPlot) {
                     $scope.activeSelectionFromTree = node.id;
                     return;
                 }
@@ -684,9 +683,9 @@ angular.module('imageCtrl', [])
                     }
                 }
                 if (isSelectionChanged) clearChartData();
-               // const query = `html_flowSiren_getAll_aSensorType_flow_01_a(${node.id},${moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat)},${moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat)})`;
-               //const query = `html_flowSiren_getAll_aSensorType_flow_01_a(${node.id},${moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat)},${moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat)})`;
-               const query = `html_vision_getDefaultSensors_01_a( read( aPortal and id_name == "sewerage demo" and aCustomerRef->id_name == "Gold Coast Water" )->id )`;
+                // const query = `html_flowSiren_getAll_aSensorType_flow_01_a(${node.id},${moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat)},${moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat)})`;
+                //const query = `html_flowSiren_getAll_aSensorType_flow_01_a(${node.id},${moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat)},${moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat)})`;
+                const query = `html_vision_getDefaultSensors_01_a( read( aPortal and id_name == "sewerage demo" and aCustomerRef->id_name == "Gold Coast Water" )->id )`;
                 // added function for the first load time image and graphp will be visible.
                 let queryInfo = { query: query + (isSelectionChanged ? '' : '.first()') };
                 $scope.queriesArray_new.push(queryInfo);
@@ -696,7 +695,7 @@ angular.module('imageCtrl', [])
 
                     return Data.sendRequest(item.query, $rootScope.storage.skysparkVersion).then(function (reqResult) {
                         let lengthRows = reqResult.data.rows.length;
-                        if(lengthRows==0) {
+                        if (lengthRows == 0) {
                             clearChartData();
                             setVisible();
                             $scope.selectLegend(0);
@@ -739,7 +738,7 @@ angular.module('imageCtrl', [])
 
                 /*const query2 = 'readAll( aPortalSensorType and aPortalRef->id_name == "sewerage demo" ).findAll( row => not isEmpty( readAll( aTreeNodePortalMetric and aTreeNodeRef == read( aTreeNode and textLabel =="'+node.text+'" and aTreeRef->aPortalRef->id_name == "sewerage demo" )->id and aPortalMetricRef->aSensorTypeRef == row->aSensorTypeRef ) ) ).sort( "rank" ).map( row => set( row , "aSensorType_id_name" , row->aSensorTypeRef->id_name ) ).first()';
                 Data.sendRequest(query2,$rootScope.storage.skysparkVersion).then(function(response){
-                    console.log(response.data.rows);
+                    //console.log(response.data.rows);
                 });*/
             });
 
@@ -935,9 +934,9 @@ angular.module('imageCtrl', [])
                 url: 'php/getimageData.php',
                 headers: { Accept: 'application/json' },
                 success: function (data2) {
-                    if($scope.isEmptySmallBoxes) return;
+                    if ($scope.isEmptySmallBoxes) return;
                     var formData = { token: JSON.parse(data2).token, seldate: seldate, serial_number: serial_number };
-                    console.log(formData);
+                    //console.log(formData);
                     $.ajax({
                         url: "php/getimageData1.php",
                         type: "POST",
@@ -976,7 +975,7 @@ angular.module('imageCtrl', [])
                                 // $.each(data3.images, function (key, value) {
                                 //     var timestampFull = value.archiveFilename.match(/_(\d{12})/);
                                 //     var timestampInUTC = moment.utc(value.timestamp).utcOffset(timezoneObject.timeZone);
-                                //     console.log(value.timestamp, 'timezoneObject', timezoneObject.timeZone, timestampInUTC.format('YYYY-MM-DD HH:mm:ss'));
+                                //     //console.log(value.timestamp, 'timezoneObject', timezoneObject.timeZone, timestampInUTC.format('YYYY-MM-DD HH:mm:ss'));
                                 //     $('#add').trigger('add.owl.carousel', ['<div class="owl-item"><img class="pic" src=' + value.appServerFilepath + '/' + value.archiveFilename + ' /><div class="datetime">' + timestampInUTC.format('YYYY-MM-DD HH:mm:ss') + '</div></div>']);
                                 //     jQuery('.owl-carousel').trigger('refresh.owl.carousel');
                                 // });
@@ -1083,7 +1082,7 @@ angular.module('imageCtrl', [])
         $scope.nextImage = function () {
             if ($scope.on_frame < $scope.imageFrames.length - 1) {
                 $scope.on_frame = $scope.on_frame + 1;
-                if(Number($scope.on_frame) >= Number(slider.max)) {
+                if (Number($scope.on_frame) >= Number(slider.max)) {
                     $scope.on_frame = slider.max;
                 }
                 document.getElementById('rangeVal').value = $scope.on_frame;
@@ -1098,7 +1097,7 @@ angular.module('imageCtrl', [])
 
         slider.addEventListener('mousemove', function (event) {
             currentMouseXPos = (event.offsetX - Math.round(progressHvrImgCont.offsetWidth / 2));
-            var sliderValAtPos = Math.round((event.offsetX / event.target.clientWidth) *  parseInt(event.target.getAttribute('max'),10));
+            var sliderValAtPos = Math.round((event.offsetX / event.target.clientWidth) * parseInt(event.target.getAttribute('max'), 10));
             if (sliderValAtPos < 0) sliderValAtPos = 0;
             if (Number(sliderValAtPos) >= Number(slider.max)) sliderValAtPos = slider.max;
 
@@ -1124,7 +1123,7 @@ angular.module('imageCtrl', [])
             $.ajax({
                 url: 'php/imageFileVideo.php',
                 type: 'POST',
-                data: {imageFrames, isZipDownload: true, isVideoDownload: false},
+                data: { imageFrames, isZipDownload: true, isVideoDownload: false },
                 dataType: 'JSON',
                 success: function (response) {
                     var file_path = response.fileName;
@@ -1150,7 +1149,7 @@ angular.module('imageCtrl', [])
             $.ajax({
                 url: 'php/imageFileVideo.php',
                 type: 'POST',
-                data: {imageFrames, isZipDownload: false, isVideoDownload: true},
+                data: { imageFrames, isZipDownload: false, isVideoDownload: true },
                 dataType: 'JSON',
                 success: function (response) {
                     var file_path = response.fileName;
@@ -1171,7 +1170,7 @@ angular.module('imageCtrl', [])
 
         function load_img_chart(isDateChange = false) {
             $scope.$watch("selected", function (node, oldNode) {
-                if(!$scope.showScatterPlot) {   
+                if (!$scope.showScatterPlot) {
                     let tree_title;
 
                     if (isDateChange) {
@@ -1192,11 +1191,11 @@ angular.module('imageCtrl', [])
                         $scope.isSelectionChanged = false;
                     }
                     $scope.imageNodeSelection = node.id;
-                    const skySparkFormatwithTime = skySparkFormat+' HH:mm:ss';
+                    const skySparkFormatwithTime = skySparkFormat + ' HH:mm:ss';
                     const query_serial = `html_aTreeNode_get_id_device_02_a( "Gold Coast Water" , "sewerage demo" , "${tree_title}" ,${moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat)},${moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat)})`;
                     Data.sendRequest(query_serial, $rootScope.storage.skysparkVersion).then(function (response) {
                         const devices = response.data.rows;
-                        for(let i=0;i<devices.length;i++) {
+                        for (let i = 0; i < devices.length; i++) {
                             const serial_number = devices[i].id_serialNumber;
                             const ts_end = devices[i].ts_end.split('+');
                             const ts_start = devices[i].ts_start.split('+');
@@ -1206,7 +1205,7 @@ angular.module('imageCtrl', [])
                             }
                         }
                     });
-                } 
+                }
                 deselectAllTreeNode("#imageTree");
             });
         }
@@ -1221,14 +1220,14 @@ angular.module('imageCtrl', [])
                 if ($scope.tableStats[i].pointId !== 'null' && $scope.tableStats[i].pointId !== null) {
                     $scope.activeItems.push(i);
                     const id = $scope.tableStats[i].pointId;
-                    if($scope.tableStats[i].currentMeasurement==null) {
-                        // console.log($rootScope.storage.sensorData[0]);
+                    if ($scope.tableStats[i].currentMeasurement == null) {
+                        // //console.log($rootScope.storage.sensorData[0]);
                         $scope.tableStats[i].currentMeasurement = $rootScope.storage.sensorData[i];
                     }
                     const sensorType = $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
                     const interval = $scope.rollup.value;
                     const fold = $scope.tableStats[i].fold.value
-;                    const query = `html_plot_chart_06_b([${id}],${sensorType},${datespan},"${fold}",${interval})`;
+                        ; const query = `html_plot_chart_06_b([${id}],${sensorType},${datespan},"${fold}",${interval})`;
                     let queryInfo = { query: query, index: i };
                     $scope.queriesArray.push(queryInfo);
                 }
@@ -1357,22 +1356,22 @@ angular.module('imageCtrl', [])
 
         function gotoframeUsingTimeMili(clickedDate) {
             var clickedDateO = Highcharts.dateFormat('%Y-%m-%d', clickedDate);
-            var clickedDateH = 1*Highcharts.dateFormat('%H', clickedDate);
-            var clickedDateM = 1*Highcharts.dateFormat('%M', clickedDate);
+            var clickedDateH = 1 * Highcharts.dateFormat('%H', clickedDate);
+            var clickedDateM = 1 * Highcharts.dateFormat('%M', clickedDate);
             var gotoImgOwl = null;
             var isBreak = false;
             for (var i = 0; i < $scope.imageTimes.length; i++) {
                 gotoImgOwl = i;
                 var dateTimeOdate = $scope.imageTimes[i].split(':');
                 var dateTimeWithHour = dateTimeOdate[0].split(' ');
-                var dateTimeWithMin = 1*dateTimeOdate[1];
+                var dateTimeWithMin = 1 * dateTimeOdate[1];
 
                 if (clickedDateO == dateTimeWithHour[0] && ((clickedDateH == dateTimeWithHour[1] && clickedDateM <= dateTimeWithMin) || clickedDateH < dateTimeWithHour[1])) {
                     isBreak = true;
                     break;
                 }
             }
-            if(!isBreak) gotoImgOwl = null;
+            if (!isBreak) gotoImgOwl = null;
             if (gotoImgOwl != null && gotoImgOwl >= 0) {
                 $scope.on_frame = gotoImgOwl;
                 gotoframe();
@@ -1753,7 +1752,7 @@ angular.module('imageCtrl', [])
             //     ngOnInit() {
             //         loadData();
             //    }
-            if(useTimeoutDelay == true) setTimeout(loadData, 500);
+            if (useTimeoutDelay == true) setTimeout(loadData, 500);
             else loadData();
             chartInterval = $interval(loadData, 300 * 1000);//5minutes 300 * 1000
         }
@@ -1807,7 +1806,7 @@ angular.module('imageCtrl', [])
                             scope.$apply();
                         })
                         .bind('deselect_node.jstree', function (e) {
-                            console.log(e);
+                            //console.log(e);
                         })
                 });
             }

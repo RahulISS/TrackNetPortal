@@ -1,18 +1,20 @@
 <style>
-.loginHeader .img_tg_tp {
-   display: block;
-}
-.chartTopButtons .btn-flat {
-   padding: 2px 6px;
-}
-.flexBoxCenter{
-       overflow-y: scroll;
-    }
+   .loginHeader .img_tg_tp {
+      display: block;
+   }
+
+   .chartTopButtons .btn-flat {
+      padding: 2px 6px;
+   }
+
+   .flexBoxCenter {
+      overflow-y: scroll;
+   }
 </style>
 
 <div class="historypage">
    <div class="historypageInner">
-  
+
       <!-- Tree -->
       <div class="meterTree2 noprint">
          <div class="treeInnerchart">
@@ -50,7 +52,7 @@
                         </button>
                      </div>
                      <div class="chartTopButtons elspace">
-                       <!--  <div class="grid_btn">
+                        <!--  <div class="grid_btn">
                            <button id="meter_gridLinesButton" ng-click='switchGridLine("meter")' type="button"
                               id="meter_yminButton togglebtn" class="btnTopBar" ng-click='switchYmin("meter")'
                               class="togglebtn">Gridlines</button>
@@ -62,21 +64,26 @@
                            <button id="tableButton" ng-click='switchTable("meter",true)' class="btnTopBarOff" type="button">Table</button>
                           
                         </div> -->
-                           <button id="meter_gridLinesButton" ng-click='switchGridLine("meter")' class="btnTopBar" >Gridlines</button>
-                           <button id="meter_yminButton" ng-click='switchYmin("meter")' class="btnTopBarOff">Y-axis min 0</button>
-                                       <button id="meter_markersButton" ng-click='switchMarkers("meter")' class="btnTopBarOff" >Markers</button>
-                                       <button id="downloadButton" ng-click='download("meter")' class="btnTopBarOff" >
+                        <button id="meter_gridLinesButton" ng-click='switchGridLine("meter")'
+                           class="btnTopBar">Gridlines</button>
+                        <button id="meter_yminButton" ng-click='switchYmin("meter")' class="btnTopBarOff">Y-axis min
+                           0</button>
+                        <button id="meter_markersButton" ng-click='switchMarkers("meter")'
+                           class="btnTopBarOff">Markers</button>
+                        <button id="downloadButton" ng-click='download("meter")' class="btnTopBarOff">
                            Download
-                           </button>
-                                       <button id="tableButton" ng-click='switchTable("meter",true)' class="btnTopBarOff">
-                           	Table
-                           </button>
-                           <button id="tableButton" ng-click='toggleScatterPlot()' class="btnTopBarOff">
-                              Scatterplot
-                           </button>
+                        </button>
+                        <button id="tableButton" ng-click='switchTable("meter",true)' class="btnTopBarOff">
+                           Table
+                        </button>
+                        <button id="tableButton" ng-click='toggleScatterPlot()' class="btnTopBarOff">
+                           Scatterplot
+                        </button>
                      </div>
                      <div class="chartTopButtons week_days elspace">
-                        <button ng-click="toogleWeekDays(wd)" ng-class="availableWeekdays[wd] ? 'btn-flat btn-success' : 'btn-flat btn-danger'" ng-repeat="wd in weekdays">
+                        <button ng-click="toogleWeekDays(wd)"
+                           ng-class="availableWeekdays[wd] ? 'btn-flat btn-success' : 'btn-flat btn-danger'"
+                           ng-repeat="wd in weekdays">
                            {{ wd }}
                         </button>
                      </div>
@@ -94,8 +101,8 @@
                         </div> -->
                      <div class="flx_bx_main">
                         <div class="chart_bx">
-                           <highchart style="display: block; width: 100%; height:604px;"
-                              class="chartsArea chart_img" id="chartsMeterCompare1" config="meterChartConfig1">
+                           <highchart style="display: block; width: 100%; height:604px;" class="chartsArea chart_img"
+                              id="chartsMeterCompare1" config="meterChartConfig1">
                            </highchart>
                         </div>
                         <div class="img_slider_dt">
@@ -104,8 +111,10 @@
                            </div>
                            <div class="inner_cstm_slider">
                               <div>
-                                 <span class="left_slider_arrow" ng-click="previousImage()"><img src="img/left_arrow.png" ></span>
-                                 <span class="right_slider_arrow" ng-click="nextImage()"><img src="img/right_arrow.png" /></span>
+                                 <span class="left_slider_arrow" ng-click="previousImage()"><img
+                                       src="img/left_arrow.png"></span>
+                                 <span class="right_slider_arrow" ng-click="nextImage()"><img
+                                       src="img/right_arrow.png" /></span>
                               </div>
                               <img id="film" src="" />
 
@@ -150,16 +159,17 @@
                                  
                              </div> -->
 
-                             <div id="progressBarTp" class="progress_bar_tp">
-                              <div id="progressHvrImgCont" class="data_tp_thumb">
-                                 <img
-                                    src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                                    id="progressHvrImg">
-                                 <p id="progressHvrTime"></p>
-                              </div>
-                              <input class="pgress_bar" type="range" id="rangeVal" value="" min="" max="{{imageFrames.length - 1}}" />
+                              <div id="progressBarTp" class="progress_bar_tp">
+                                 <div id="progressHvrImgCont" class="data_tp_thumb">
+                                    <img
+                                       src="https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
+                                       id="progressHvrImg">
+                                    <p id="progressHvrTime"></p>
+                                 </div>
+                                 <input class="pgress_bar" type="range" id="rangeVal" value="" min=""
+                                    max="{{imageFrames.length - 1}}" />
 
-                           </div>
+                              </div>
 
                               <div class="time_stamp">
                                  <p id="currentImgTime"></p>
@@ -168,19 +178,20 @@
                                  <div class="cnrtl_pl">
                                     <button id="actionbutton">Play</button>
                                     <button ng-click="stop()">Stop</button>
-                                    <input type="checkbox" ng-change="autoRepeat(autoRepeatImage)" ng-model="autoRepeatImage">
-                                  
+                                    <input type="checkbox" ng-change="autoRepeat(autoRepeatImage)"
+                                       ng-model="autoRepeatImage">
+
                                  </div>
-                                 
+
                                  <div class="bx_dw_ps cnrtl_pl">
-                                     
+
                                     <button ng-click="downloadImages()">Download Images</button>
                                     <button ng-click="downloadVideo()">Download Video</button>
                                  </div>
                                  <div class="frame_speed">
                                     <div class="speed_block">
-                                       <p>Timelapse Time per Image 
-(milliseconds):</p>
+                                       <p>Timelapse Time per Image
+                                          (milliseconds):</p>
                                        <input type="text" id="framerate" value="250" />
                                     </div>
                                     <!--  <div class="jmp_frame">
@@ -320,23 +331,29 @@
                      </div>
                      <div class="measureTableRight">
                         <button ng-click='switchTable("meter",false)' class="btnSideBar">
-                     Chart
+                           Chart
                         </button>
-                      <!--   <button type="button" ng-click='switchTable("meter",false)'>Chart</button> -->
+                        <!--   <button type="button" ng-click='switchTable("meter",false)'>Chart</button> -->
                      </div>
                   </div>
                   <div class="measureTable scatterPlot" ng-show="showScatterPlot">
                      <div class="tptitlebar">
                         <div>
-                           Layout: &nbsp;<select id="showGridToOneVision" ng-model="showGridToOne" ng-options="item as item.label for item in optionGridToOne track by item.value"></select>
+                           Layout: &nbsp;<select id="showGridToOneVision" ng-model="showGridToOne"
+                              ng-options="item as item.label for item in optionGridToOne track by item.value"></select>
                         </div>
                         <div ng-if="showGridToOne.value==1">
-                           <button ng-click="setAsActiveScatter(sChartId)" ng-repeat="(idx, sChartId) in scatterChartConfigCount" ng-class="activeScatterChart==sChartId ? 'btn-flat btn-success' : 'btn-flat btn-danger'">{{ (idx*1) + 1 }}</button>
+                           <button ng-click="setAsActiveScatter(sChartId)"
+                              ng-repeat="(idx, sChartId) in scatterChartConfigCount"
+                              ng-class="activeScatterChart==sChartId ? 'btn-flat btn-success' : 'btn-flat btn-danger'">{{
+                              (idx*1) + 1 }}</button>
                         </div>
                         <button class="btnTopBarOff" ng-click="toggleScatterPlot()">Return to Charts</button>
                      </div>
-                     <div ng-if="showScatterPlot" class="chartContainerOne" ng-class="(showGridToOne.value==1 || scatterChartConfigCount>9) ? 'addScrollY' : ''">
-                        <div ng-if="showGridToOne.value==2 || (showGridToOne.value==1 && activeScatterChart==idx)" class="scatterWrap" ng-repeat="(idx, sChartConf) in scatterChartConfig">
+                     <div ng-if="showScatterPlot" class="chartContainerOne"
+                        ng-class="(showGridToOne.value==1 || scatterChartConfigCount>9) ? 'addScrollY' : ''">
+                        <div ng-if="showGridToOne.value==2 || (showGridToOne.value==1 && activeScatterChart==idx)"
+                           class="scatterWrap" ng-repeat="(idx, sChartConf) in scatterChartConfig">
                            <highchart config="sChartConf"></highchart>
                         </div>
                      </div>
@@ -349,10 +366,10 @@
 </div>
 <div ng-show="loading" class="se-pre-con">
    <div class="cssload-container">
-         <div class="cssload-whirlpool"></div>
+      <div class="cssload-whirlpool"></div>
    </div>
- </div>
- <div ng-show="loading" class="bg-overlay"></div>
+</div>
+<div ng-show="loading" class="bg-overlay"></div>
 <script src="app/js/owl.carousel.min.js"></script>
 <script type="text/javascript">
    $(document).ready(function () {
@@ -416,7 +433,7 @@
    });
 </script> -->
 <!-- <script>
-   console.log('data3Images', data3Images);
+   //console.log('data3Images', data3Images);
    var frames=['https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg','https://cdn3.vectorstock.com/i/1000x1000/35/52/placeholder-rgb-color-icon-vector-32173552.jpg','https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg'];
    var playing=true;
    var on_frame=0;
@@ -495,7 +512,7 @@
 
    setProgress = (progress) => {
       const value = `${progress}%`;
-      if(typeof radialProgress != 'undefined') {
+      if (typeof radialProgress != 'undefined') {
          radialProgress.style.setProperty('--progress', value)
          radialProgress.innerHTML = value
          radialProgress.setAttribute('aria-valuenow', value)

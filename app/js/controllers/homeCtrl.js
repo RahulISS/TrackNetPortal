@@ -301,21 +301,21 @@ angular
               /** alerts value starts*/
               if ('alert1' in data.point && distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1) {
                 var alertF = data.point.alert1;
-                console.log(alertF, 'alertF', data.product.id_serial, 'id_serial')
+                // //console.log(alertF, 'alertF', data.product.id_serial, 'id_serial')
                 var al1Check = data.point.alarmFirstCheck;
               } else {
                 var alertF = undefined;
               }
               if ('alert2' in data.point && distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1) {
                 var alertS = data.point.alert2;
-                console.log(alertS, 'alertS', data.product.id_serial, 'id_serial')
+                // //console.log(alertS, 'alertS', data.product.id_serial, 'id_serial')
                 var al2Check = data.point.alarmSecondCheck;
               } else {
                 var alertS = undefined;
               }
               if ('alert3' in data.point && distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
                 var alertT = data.point.alert3;
-                console.log(alertT, 'alertT', data.product.id_serial, 'id_serial')
+                // //console.log(alertT, 'alertT', data.product.id_serial, 'id_serial')
                 var al3Check = data.point.alarmThirdCheck;
               } else {
                 var alertT = undefined;
@@ -445,7 +445,7 @@ angular
               convertedData.push(convertedPoint);
             }
           }
-          console.log(convertedData, "convertedData")
+          //console.log(convertedData, "convertedData")
           const aLocation = convertedData;
           $scope.dataLocation = aLocation;
 
@@ -578,51 +578,51 @@ angular
           // sorted end
           for (var i = 0; i < $scope.sortedArray_1.length; i++) {
             arr.push(aLocation[i].installationId.split(" ")[0]);
-            console.log(aLocation[i], 'aLocation[i]')
+            //console.log(aLocation[i], 'aLocation[i]')
             let dict = {};
             if (aLocation[i].angle >= 5) {
               var markerShape = "red";
               aLocation[i].markerOnMap = markerShape;
-              console.log(markerShape, 'markerShape if')
+              //console.log(markerShape, 'markerShape if')
             } else if (aLocation[i].distanceValue <= 400 && aLocation[i].distanceValue != "") {
               var markerShape = "red";
               //aLocation[i].markerOnMap.push(markerShape);
               aLocation[i].markerOnMap = markerShape;
-              console.log(markerShape, 'markerShape red else')
+              //console.log(markerShape, 'markerShape red else')
             } else {
 
               if (aLocation[i].alertOne != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
                 var markerShape = "circle";
                 //aLocation[i].markerOnMap.push(markerShape);
                 aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape circle')
+                //console.log(markerShape, 'markerShape circle')
               }
 
               if (aLocation[i].alertTwo != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
                 var markerShape = "square";
                 //aLocation[i].markerOnMap.push(markerShape);
                 aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape square')
+                //console.log(markerShape, 'markerShape square')
               } else {
                 var markerShape = "green";
                 aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape green')
+                //console.log(markerShape, 'markerShape green')
               }
 
               if (aLocation[i].alertThree != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
                 var markerShape = "triangle";
                 //aLocation[i].markerOnMap.push(markerShape);
                 aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape triangle')
+                //console.log(markerShape, 'markerShape triangle')
               }
               else if (aLocation[i].alertOne == 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == 'undefined' && aLocation[i].alertThree == 'undefined') {
                 var markerShape = "green";
                 aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape green')
+                //console.log(markerShape, 'markerShape green')
               } else {
                 var markerShape = "green";
                 aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape green')
+                //console.log(markerShape, 'markerShape green')
               }
             }
 
@@ -709,7 +709,7 @@ angular
         var colorCode = dict.colorRank;
         var colorCode2 = dict.colorRank2;
         let customParam = dict.queryParam;
-        //console.log(customParam, "customParam")
+        ////console.log(customParam, "customParam")
         if (colorCode && customParam == "") {
           if (colorCode == 3 && colorCode2 == 3) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
@@ -764,14 +764,14 @@ angular
           imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
         } if (customParam == "all clear") {
           imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-          console.log(imgpath, 'imgpath green')
+          //console.log(imgpath, 'imgpath green')
         } if (customParam == "triangle") {
           imgpath = './img/triangle-01.png';
-          console.log(imgpath, 'imgpath triangle')
+          //console.log(imgpath, 'imgpath triangle')
           imgpath = '';
         } if (customParam == "square") {
           imgpath = './img/square-01.png';
-          console.log(imgpath, 'imgpath square')
+          //console.log(imgpath, 'imgpath square')
           imgpath = '';
         } if (customParam == "circle") {
           imgpath = './img/circle-01.png';
@@ -820,7 +820,7 @@ angular
         }
 
         reCenterMap(point);
-        //console.log(beachMarker[dict.id], "beachMarker[dict.id]")
+        ////console.log(beachMarker[dict.id], "beachMarker[dict.id]")
         return {
           id: dict.id,
           point: point,
@@ -1657,7 +1657,7 @@ angular
             }
           }
 
-          if ('alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 === true && 'alarmThirdCheck' in $scope.pointSettingData) {//console.log("3 disable");
+          if ('alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 === true && 'alarmThirdCheck' in $scope.pointSettingData) {////console.log("3 disable");
             if ($scope.pointSettingData.alarmThirdCheck === 0) {
               $scope.alarmThirdCheck = 1;
             } else {
@@ -1732,7 +1732,7 @@ angular
 
           const data = response.data;
           if (data.status) {
-            //console.log(node_id,this,"new log");
+            ////console.log(node_id,this,"new log");
             localStorage.setItem("refreshinfo", true);
             getInfoWinData($scope.nodes, $scope.markers)
 
@@ -1776,7 +1776,7 @@ angular
         let alertArr = [];
 
 
-        // console.log("dict112", dict);
+        // //console.log("dict112", dict);
 
 
         if (dict.aCheck1 == 1) {
@@ -1810,7 +1810,7 @@ angular
         var colorCode2 = dict.angleColorRank;
 
 
-        // console.log(colorCode, colorCode2, 'volot');
+        // //console.log(colorCode, colorCode2, 'volot');
         var imgpath = "";
         if (colorCode) {
           if (colorCode == 3 && colorCode2 == 3) {

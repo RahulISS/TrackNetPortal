@@ -1,6 +1,6 @@
 angular.module('overviewCtrl', [])
 
-	.controller('overviewController', function ($scope, $rootScope,Data, $timeout, $interval) {
+	.controller('overviewController', function ($scope, $rootScope, Data, $timeout, $interval) {
 		var overviewDatePickerFormat = "D/MM/YYYY";
 		var skysparkDateFormat = "YYYY-MM-DD";
 
@@ -10,54 +10,53 @@ angular.module('overviewCtrl', [])
 		$scope.measurementChartArray = [];
 		$scope.chartDataArray = [];
 		$scope.overviewTreeData = $rootScope.storage.treeData;
-		if( $scope.overviewTreeData.length > 0 ){
-			$timeout(function(){
+		if ($scope.overviewTreeData.length > 0) {
+			$timeout(function () {
 				$scope.$broadcast('treedataready');
-			},100)
+			}, 100)
 		}
 
-		$rootScope.$watch('storage.treeData',function(newVal,oldVal){
-			if( newVal == undefined ) return;
-            if( oldVal == undefined ) return;
-			if( (newVal.length === 0 && oldVal.length === 0) || (newVal === oldVal) ) return;
+		$rootScope.$watch('storage.treeData', function (newVal, oldVal) {
+			if (newVal == undefined) return;
+			if (oldVal == undefined) return;
+			if ((newVal.length === 0 && oldVal.length === 0) || (newVal === oldVal)) return;
 			$scope.overviewTreeData = newVal;
 			$scope.$broadcast('treedataready');
 		});
 
-		$rootScope.$watch('storage.sensorData',function(newVal,oldVal){
-			if( newVal == undefined ) return;
-            if( oldVal == undefined ) return;
-			if( (newVal.length === 0 && oldVal.length === 0) || (newVal === oldVal) ) return;
-			if(!$scope.$$phase) $scope.$apply();
+		$rootScope.$watch('storage.sensorData', function (newVal, oldVal) {
+			if (newVal == undefined) return;
+			if (oldVal == undefined) return;
+			if ((newVal.length === 0 && oldVal.length === 0) || (newVal === oldVal)) return;
+			if (!$scope.$$phase) $scope.$apply();
 		});
 
 		// Weeksdays Start
-        $scope.weekdays = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
-        $scope.availableWeekdays = {};
-        for (var i = 0; i < $scope.weekdays.length; i++) {
-            $scope.availableWeekdays[$scope.weekdays[i]] = true;
-        }
+		$scope.weekdays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+		$scope.availableWeekdays = {};
+		for (var i = 0; i < $scope.weekdays.length; i++) {
+			$scope.availableWeekdays[$scope.weekdays[i]] = true;
+		}
 
-        function updateSeriesData(chartDataArray)
-        {
-        	var weekData = [];
-            for(var j = 0; j < chartDataArray.length; j++) {
-                var currWday = moment.utc(chartDataArray[j][0]).format('ddd').toUpperCase();
-                if($scope.availableWeekdays[currWday] == true) {
-                    weekData.push(chartDataArray[j]);
-                }
-            }
-            return weekData;
-        }
+		function updateSeriesData(chartDataArray) {
+			var weekData = [];
+			for (var j = 0; j < chartDataArray.length; j++) {
+				var currWday = moment.utc(chartDataArray[j][0]).format('ddd').toUpperCase();
+				if ($scope.availableWeekdays[currWday] == true) {
+					weekData.push(chartDataArray[j]);
+				}
+			}
+			return weekData;
+		}
 
-        $scope.toogleWeekDays = function (weekday) {
-            $scope.availableWeekdays[weekday] = !$scope.availableWeekdays[weekday];
-            for (var i = 0; i < $scope.chartDataArray.length; i++) {
-            	$scope.measurementChartArray[i].config.series[0].data = updateSeriesData($scope.chartDataArray[i]);
-            }
-        };
-        // Weeksdays End
-		
+		$scope.toogleWeekDays = function (weekday) {
+			$scope.availableWeekdays[weekday] = !$scope.availableWeekdays[weekday];
+			for (var i = 0; i < $scope.chartDataArray.length; i++) {
+				$scope.measurementChartArray[i].config.series[0].data = updateSeriesData($scope.chartDataArray[i]);
+			}
+		};
+		// Weeksdays End
+
 		$scope.showTab = function (id) {
 			var tempDivClass = "oneChartRightActual";
 			if (id == "actualvalueTab") {
@@ -76,43 +75,43 @@ angular.module('overviewCtrl', [])
 				try {
 					$scope.$broadcast('highchartsng.reflow');
 				} catch (ex) {
-					console.log('Chart config not ready.');
+					//console.log('Chart config not ready.');
 				}
 			}, 100);
 		};
 
 		$('#overviewDateRange').daterangepicker({
-				dateLimit: {
-					years: 5
-				},
-				showDropdowns: false,
-				timePicker: false,
-				timePickerIncrement: 1,
-				timePicker12Hour: true,
-				ranges: {
-					'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
-					'Today': [moment(), moment()],
-					'Last 7 Days': [moment().subtract('days', 6), moment()],
-					'Last Week': [moment().subtract('week', 1).startOf('week'), moment().subtract('week', 1).endOf('week')],
-					'This Week': [moment().startOf('week'), moment().endOf('week')],
-					'Last 30 Days': [moment().subtract('days', 29), moment()],
-					'This Month': [moment().startOf('month'), moment().endOf('month')],
-					'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-				},
-				opens: 'right',
-				buttonClasses: ['btn btn-default'],
-				applyClass: 'btn-small btn-primary',
-				cancelClass: 'btn-small',
-				locale: {
-					applyLabel: 'Submit',
-					fromLabel: 'From',
-					toLabel: 'To',
-					customRangeLabel: 'Custom Range',
-					daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-					monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-					firstDay: 1
-				}
+			dateLimit: {
+				years: 5
 			},
+			showDropdowns: false,
+			timePicker: false,
+			timePickerIncrement: 1,
+			timePicker12Hour: true,
+			ranges: {
+				'Yesterday': [moment().subtract('days', 1), moment().subtract('days', 1)],
+				'Today': [moment(), moment()],
+				'Last 7 Days': [moment().subtract('days', 6), moment()],
+				'Last Week': [moment().subtract('week', 1).startOf('week'), moment().subtract('week', 1).endOf('week')],
+				'This Week': [moment().startOf('week'), moment().endOf('week')],
+				'Last 30 Days': [moment().subtract('days', 29), moment()],
+				'This Month': [moment().startOf('month'), moment().endOf('month')],
+				'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+			},
+			opens: 'right',
+			buttonClasses: ['btn btn-default'],
+			applyClass: 'btn-small btn-primary',
+			cancelClass: 'btn-small',
+			locale: {
+				applyLabel: 'Submit',
+				fromLabel: 'From',
+				toLabel: 'To',
+				customRangeLabel: 'Custom Range',
+				daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+				monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+				firstDay: 1
+			}
+		},
 			function (start, end) {
 				if (start.isSame(end, "day")) $('#overviewDateRange span').html(start.format(overviewDatePickerFormat));
 				else $('#overviewDateRange span').html(start.format(overviewDatePickerFormat) + ' - ' + end.format(overviewDatePickerFormat));
@@ -144,13 +143,13 @@ angular.module('overviewCtrl', [])
 		};
 
 		$scope.$watch("selected", function (newValue) {
-			if( typeof newValue == "undefined" || newValue === null ){
+			if (typeof newValue == "undefined" || newValue === null) {
 				$scope.measurementChartArray = [];
 				return;
 			}
 			const id = newValue.id;
 			let sensorArray = JSON.parse(JSON.stringify($rootScope.storage.sensorData));
-			//console.log(sensorArray);
+			////console.log(sensorArray);
 			//let sensorArray = newValue.sensors;
 			$scope.measurementChartArray = [];
 			for (var i = 0; i < sensorArray.length; i++) {
@@ -158,7 +157,7 @@ angular.module('overviewCtrl', [])
 				const sensorType = sensorArray[i].kind;
 				const measurement = sensorArray[i].id_name;
 				const unit = sensorArray[i].unit;
-				
+
 				$scope.measurementChartArray.push({
 					kind: sensorType,
 					name: newValue.text,
@@ -175,7 +174,7 @@ angular.module('overviewCtrl', [])
 					avgid: "avg_" + domIdName,
 				});
 			}
-			if($scope.actualvalueTab){
+			if ($scope.actualvalueTab) {
 				$scope.equipName = newValue.text;
 			}
 			$scope.cancelInterval();
@@ -184,15 +183,15 @@ angular.module('overviewCtrl', [])
 
 		function getAllData() {
 			for (var i = 0; i < $scope.measurementChartArray.length; i++) {
-				getData($scope.measurementChartArray[i],i,setSomeData);
+				getData($scope.measurementChartArray[i], i, setSomeData);
 			}
 		}
 
-		function setSomeData(obj,data){
+		function setSomeData(obj, data) {
 
 			obj['config'] = {
 				options: {
-					lang:{
+					lang: {
 						noData: "No Data Recorded."
 					},
 					noData: {
@@ -208,8 +207,8 @@ angular.module('overviewCtrl', [])
 					tooltip: {
 						xDateFormat: '%A, %b %e, %Y %H:%M',
 						shared: true,
-						formatter: function(){
-							return tooltipFormaterFunction(this,obj.kind,obj.measurement);
+						formatter: function () {
+							return tooltipFormaterFunction(this, obj.kind, obj.measurement);
 						},
 						crosshairs: {
 							color: 'black',
@@ -224,7 +223,7 @@ angular.module('overviewCtrl', [])
 							connectNulls: true,
 							events: {
 								afterAnimate: function () {
-									if(this.chart.resetZoomButton!=undefined) {
+									if (this.chart.resetZoomButton != undefined) {
 										this.chart.zoomOut();
 									}
 								}
@@ -239,8 +238,8 @@ angular.module('overviewCtrl', [])
 						gridLineWidth: 1,
 						lineWidth: 1,
 						labels: {
-							formatter: function(){
-								return yAxisLabelFormaterFunction(this,obj.kind,obj.measurement,obj.unit);
+							formatter: function () {
+								return yAxisLabelFormaterFunction(this, obj.kind, obj.measurement, obj.unit);
 							},
 						}
 					}],
@@ -275,21 +274,21 @@ angular.module('overviewCtrl', [])
 
 		}
 
-		function getData(obj,indexer,dataSetter) {
+		function getData(obj, indexer, dataSetter) {
 			$timeout(function () {
 				tempindex = obj.measurement.indexOf(" ");
 				if (tempindex == -1) {
-					if ( typeof obj.unit !== 'undefined' && obj.kind === 'Number' ){
-						temptdStr = obj.measurement  + "<br><br>" + obj.unit;
-					} else{
+					if (typeof obj.unit !== 'undefined' && obj.kind === 'Number') {
+						temptdStr = obj.measurement + "<br><br>" + obj.unit;
+					} else {
 						temptdStr = obj.measurement;
 					}
 				} else {
 					temptdStr = obj.measurement.substring(0, tempindex) + "<br>" +
 						obj.measurement.substring(tempindex + 1) + "<br><br>";
-						if (typeof obj.unit !== 'undefined' && obj.kind === 'Number'){
-							temptdStr += obj.unit ;
-						}
+					if (typeof obj.unit !== 'undefined' && obj.kind === 'Number') {
+						temptdStr += obj.unit;
+					}
 				}
 				document.getElementById(obj.tdid).innerHTML = temptdStr;
 				var tempDivClass = "oneChartRightActual";
@@ -299,7 +298,7 @@ angular.module('overviewCtrl', [])
 				try {
 					$scope.$broadcast('highchartsng.reflow');
 				} catch (ex) {
-					console.log('Chart config not ready.');
+					//console.log('Chart config not ready.');
 				}
 			}, 50);
 
@@ -307,15 +306,15 @@ angular.module('overviewCtrl', [])
 			var rollup = $scope.overviewInterval.value;
 			if (rollup == '') rollup = '15min';
 			let foldValue;
-			if( $scope.actualvalueTab ){
+			if ($scope.actualvalueTab) {
 				foldValue = 'actual';
-			}else{
+			} else {
 				foldValue = obj.fold;
 			}
 			const query = `html_plot_chart_06_b([${obj.id}],${obj.sensorId},${datespan},"${foldValue}",${rollup})`;
-			Data.sendRequest(query,$rootScope.storage.skysparkVersion).then(function (response) {
+			Data.sendRequest(query, $rootScope.storage.skysparkVersion).then(function (response) {
 				const data = response.data.rows;
-				if(data.length === 0 ) return;
+				if (data.length === 0) return;
 				var dataSet = [];
 				for (var i = 0; i < data.length; i++) {
 					var ttemp = data[i].ts.slice(0, data[i].ts.indexOf("+"));
@@ -326,7 +325,7 @@ angular.module('overviewCtrl', [])
 					dataSet.push([xval, yval]);
 				}
 				$scope.chartDataArray[indexer] = dataSet;
-				dataSetter(obj,dataSet);
+				dataSetter(obj, dataSet);
 			});
 		}
 
@@ -337,9 +336,9 @@ angular.module('overviewCtrl', [])
 					document.getElementById(a.oneChartItem.avgid).setAttribute("class", "btn btn-default overviewfoldbuttonOff stand_font");
 					document.getElementById(a.oneChartItem.maxid).setAttribute("class", "btn btn-default overviewfoldbuttonOff stand_font");
 					document.getElementById(a.oneChartItem.minid).setAttribute("class", "btn btn-default overviewfoldbuttonOff stand_font");
-					document.getElementById(fold + "_" + a.oneChartItem.measurement.replace(" ","")).setAttribute("class", "btn btn-default overviewfoldbuttonOn stand_font");
+					document.getElementById(fold + "_" + a.oneChartItem.measurement.replace(" ", "")).setAttribute("class", "btn btn-default overviewfoldbuttonOn stand_font");
 					clearOneChart(a.oneChartItem.chartid);
-					getData(a.oneChartItem,i,setSomeData);
+					getData(a.oneChartItem, i, setSomeData);
 					break;
 				}
 			}
@@ -354,21 +353,21 @@ angular.module('overviewCtrl', [])
 
 		let chartInterval = null;
 
-		$scope.startInterval = function(){
-			if(chartInterval) return;
-            getAllData();
-            chartInterval = $interval(getAllData,300 * 1000);//5minutes
+		$scope.startInterval = function () {
+			if (chartInterval) return;
+			getAllData();
+			chartInterval = $interval(getAllData, 300 * 1000);//5minutes
 		}
 
-        $scope.cancelInterval = function(){
+		$scope.cancelInterval = function () {
 			if (chartInterval) {
-            	$interval.cancel(chartInterval);
-            	chartInterval = null;
-          	}
+				$interval.cancel(chartInterval);
+				chartInterval = null;
+			}
 		}
 
-		$scope.$on('$destroy', function() {
-        	$scope.cancelInterval();
+		$scope.$on('$destroy', function () {
+			$scope.cancelInterval();
 		});
 
 		$scope.startInterval();
@@ -386,27 +385,27 @@ angular.module('overviewCtrl', [])
 
 				scope.$on("treedataready", function (event, data) {
 					$(element).jstree({
-							"core": {
-								'check_callback': true,
-								"multiple": false,
-								"themes": {
-									"name": "default",
-									"dots": false,
-									"icons": false
-								},
-								"data": scope.overviewTreeData
+						"core": {
+							'check_callback': true,
+							"multiple": false,
+							"themes": {
+								"name": "default",
+								"dots": false,
+								"icons": false
 							},
-							"checkbox": {
-								"three_state": true
-							},
-							"plugins": ["search", "checkbox"]
-						}, false)
+							"data": scope.overviewTreeData
+						},
+						"checkbox": {
+							"three_state": true
+						},
+						"plugins": ["search", "checkbox"]
+					}, false)
 						.bind("loaded.jstree", function (event, data) {
 							$(this).jstree("open_all");
-							$(this).jstree("select_node",['@29cd0ed2-43b2f4dc'],true);
+							$(this).jstree("select_node", ['@29cd0ed2-43b2f4dc'], true);
 						})
 						.bind('select_node.jstree', function (e, data) {
-							scope.$emit("checkedRef",data.node.text);
+							scope.$emit("checkedRef", data.node.text);
 							scope.selected = data.node.original;
 							// scope.$apply();
 						})
