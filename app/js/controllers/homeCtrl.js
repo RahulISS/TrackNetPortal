@@ -353,6 +353,8 @@ angular
                 var timeDiff = Math.abs(currentDate - specificDate);
                 var lastCommColor = "";
                 //90000000 ms is equal to 25hrs
+
+
                 if (timeDiff >= 90000000) {
                   var lastComm = "Communications alarm Triggered";
                   lastCommColor = "red";
@@ -375,12 +377,12 @@ angular
                 } else if (timeDiff >= 3600000 && timeDiff < 86400000) {
                   //hours
                   var hours = Math.floor(timeDiff / 3600000) + "h";
-                } else if (timeDiff >= 86400000 && timeDiff < 2592000000) {
+                } else if (timeDiff >= 86400000 && timeDiff < 604800000) {
                   //day
                   var hours = Math.floor(timeDiff / cd) + "d";
-                } else if (timeDiff >= 2592000000 && timeDiff < 31536000000) {
+                } else if (timeDiff >= 604800000 && timeDiff < 31536000000) {
                   //week
-                  var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + "wk";
+                  var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 7)) + "wk";
                 } else {
                   //year
                   var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + "y";
