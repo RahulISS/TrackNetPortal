@@ -4,6 +4,11 @@ angular
   .controller(
     "homeController",
     function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval, apiBaseUrl, $window) {
+      // refresh code
+      localStorage.setItem("refreshinfo", false);
+
+
+
 
       $scope.pointSettingData = '';
       $scope.emptyVal = 3998;
@@ -899,8 +904,13 @@ angular
             }
           }
         }
+        let infoRefresh = localStorage.getItem("refreshinfo");
         map.setCenter(marker.position);
-        homeiw.addListener("closeclick", function () {
+        homeiw.addListener('closeclick', function () {
+          if (JSON.parse(infoRefresh) === true) {
+            window.location.reload();
+            localStorage.removeItem("refreshinfo")
+          }
           reCenterMap(null);
         });
 
@@ -1723,6 +1733,7 @@ angular
           const data = response.data;
           if (data.status) {
             //console.log(node_id,this,"new log");
+            localStorage.setItem("refreshinfo", true);
             getInfoWinData($scope.nodes, $scope.markers)
 
             $window.Swal.fire({
