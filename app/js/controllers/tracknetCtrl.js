@@ -325,7 +325,6 @@ angular
                 }
 
                 /** map markers shape starts */
-                console.log( data.point , "data.point poonam")
                 var markerShape = "Green";
                 if( data.point.angle > 5 ) {
                   var markerShape = "Red";
@@ -335,16 +334,16 @@ angular
                   var markerShape = "Red";
                 }
                 
-                // if( data.point.alert1 != null && data.point.height < data.point.alert1 && data.point.alarmFirstCheck != null && data.point.alarmFirstCheck == 1) {
-                //   var markerShape = "circle";
-                // }  
-                // if(data.point.alert2 != null && data.point.height < data.point.alert2 && data.point.alarmSecondCheck != null && data.point.alarmSecondCheck == 1) {
-                //   var markerShape = "square";
-                // }  
+                if( data.point.alert1 != null && data.point.height < data.point.alert1 && data.point.alarmFirstCheck != null && data.point.alarmFirstCheck == 1) {
+                  var markerShape = "circle";
+                }  
+                if(data.point.alert2 != null && data.point.height < data.point.alert2 && data.point.alarmSecondCheck != null && data.point.alarmSecondCheck == 1) {
+                  var markerShape = "square";
+                }  
 
-                // if(data.point.alert3 != null && data.point.height < data.point.alert3 && data.point.alarmThirdCheck != null && data.point.alarmThirdCheck == 1) {
-                //   var markerShape = "triangle";
-                // } 
+                if(data.point.alert3 != null && data.point.height < data.point.alert3 && data.point.alarmThirdCheck != null && data.point.alarmThirdCheck == 1) {
+                  var markerShape = "triangle";
+                } 
                 /** ends */
 
                 if (
@@ -394,7 +393,7 @@ angular
                   manhole_level_alarm: manhole_level_alarm,
                   manhole_moved_alarm: manhole_moved_alarm,
                   status: localStorage.getItem("paramval"),
-                  color: "green",
+                  color: "Green",
                   oldest_comm_date: "2 days ago",
                   customDistance: 500,
                   area: data.location.street,
@@ -525,7 +524,7 @@ angular
                   $scope.locationData[responses[j].idx] = $scope.device[responses[j].idx][$scope.device[responses[j].idx].length - 1];
                   $scope.locationData[responses[j].idx].position = responses[j].data[0];
                   }
-                  console.log(customParam,responses[j].data.shape,responses[j].idx)
+                  
                   if(customParam == ""){
                     $scope.locationData[responses[j].idx].marker = createMarker($scope.locationData[responses[j].idx], responses[j].idx);
 
@@ -575,14 +574,16 @@ angular
         return getmap !== null && typeof getmap !== "undefined";
       }
 
-      function closest(array, num) {
+      function closest(obj, num) {
+        var array = Object.values(obj);
+        
         var i = 0;
         var minDiff = 1000;
         var ans;
         for (i in array) {
-          var m = Math.abs(num - array[i]);
-          if (m < minDiff) {
-            minDiff = m;
+          var diff = array[i] - num;
+          if (diff > 0 && diff < minDiff) {
+            minDiff = diff;
             ans = array[i];
           }
         }
@@ -594,7 +595,7 @@ angular
             const keys = Object.keys(obj);
             const keyWithMatchingValue = keys.find(key => obj[key] === value);
     
-            if (keyWithMatchingValue !== undefined) {
+            if (keyWithMatchingValue != undefined) {
                 return keyWithMatchingValue;
             }
         }
@@ -605,6 +606,7 @@ angular
 
       function getMarkerColor(info, customParam = "") {
         
+      //console.log(info,'info.disColorRankinfo.disColorRankinfo.disColorRankinfo.disColorRank');
         let alertArr = [];
         if (info.aCheck1 == 1) {
           alertArr.push(info.alertOne);
@@ -644,15 +646,16 @@ angular
               return "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
           } else if( customParam == "all clear" ) {
               return "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-          } else if( customParam == "triangle" ) {
+          } else if( info.data.shape == "triangle" ) {
               return './img/triangle-01.png';
-          } else if( customParam == "square" ) {
+          } else if( info.data.shape == "square" ) {
               return './img/square-01.png';
-          } else if( customParam == "circle" ) {
+          } else if( info.data.shape == "circle" ) {
               return './img/circle-01.png';
           }
       }
         if (info.disColorRank == 2 && info.angleColorRank == 2) {
+          console.log(alertArr,'alertArralertArralertArralertArralertArr');
           var value = closest(alertArr, dict.distance);
           var result = getObjectKey(dict, value);
           if (result == 'al3') {
@@ -672,8 +675,10 @@ angular
           imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
         }
         if (info.disColorRank == 2 && info.angleColorRank == 3) {
-          var value = closest(alertArr, info.distance);
+          var value = closest(alertArr, info.distanceValue);
           var result = getObjectKey(dict, value);
+          console.log(value,'valuevaluevaluevaluevaluevalue');
+          console.log(dict,result,'dddddddddddddddddddddddddddddddddddddddddddddddddddd');
 
           if (result == 'al3') {
             imgpath = './img/triangle-01.png';
