@@ -132,14 +132,6 @@ angular.module('settingsCtrl', [])
         distanceAlarm = 0;
 
 
-      if (smsNumber.startsWith('+')) {
-        smsNumber = smsNumber;
-
-      }
-      else {
-        smsNumber = "+".smsNumber;
-        console.log(smsNumber);
-      }
 
 
       smsNumber = numcheck(smsNumber);
