@@ -333,20 +333,23 @@ angular
                   var markerShape = "Red";
                 }
 
-                if (data.point.height < 400) {
+                else if (data.point.height < 400) {
                   var markerShape = "Red";
                 }
-
-                if (data.point.alert1 != null && data.point.height < data.point.alert1 && data.point.alarmFirstCheck != null && data.point.alarmFirstCheck == 1) {
+                else {
+                  var closestValue = closest({'al1':parseInt(data.point.alert1),'al2':parseInt(data.point.alert2),'al3': parseInt(data.point.alert3)}, data.point.height);
+                  
+                if (data.point.alert1 != null && data.point.height < data.point.alert1 && data.point.alarmFirstCheck != null && data.point.alarmFirstCheck == 1 && parseInt(data.point.alert1) == closestValue) {
                   var markerShape = "circle";
                 }
-                if (data.point.alert2 != null && data.point.height < data.point.alert2 && data.point.alarmSecondCheck != null && data.point.alarmSecondCheck == 1) {
+                if (data.point.alert2 != null && data.point.height < data.point.alert2 && data.point.alarmSecondCheck != null && data.point.alarmSecondCheck == 1 && parseInt(data.point.alert2) == closestValue) {
                   var markerShape = "square";
                 }
 
-                if (data.point.alert3 != null && data.point.height < data.point.alert3 && data.point.alarmThirdCheck != null && data.point.alarmThirdCheck == 1) {
+                if (data.point.alert3 != null && data.point.height < data.point.alert3 && data.point.alarmThirdCheck != null && data.point.alarmThirdCheck == 1 && parseInt(data.point.alert3) == closestValue) {
                   var markerShape = "triangle";
                 }
+              }
                 /** ends */
 
                 if (
@@ -906,7 +909,7 @@ angular
           alertArr.push(info.alertOne);
           var dict = {
             'al1': info.alertOne,
-            'al2': info.alertTw0,
+            'al2': info.alertTwo,
             'al3': info.alertThree
           }
         }
@@ -914,7 +917,7 @@ angular
           alertArr.push(info.alertTwo);
           var dict = {
             'al1': info.alertOne,
-            'al2': info.alertTw0,
+            'al2': info.alertTwo,
             'al3': info.alertThree
           }
         }
@@ -922,7 +925,7 @@ angular
           alertArr.push(info.alertThree);
           var dict = {
             'al1': info.alertOne,
-            'al2': info.alertTw0,
+            'al2': info.alertTwo,
             'al3': info.alertThree
           }
         }
@@ -971,8 +974,6 @@ angular
         if (info.disColorRank == 2 && info.angleColorRank == 3) {
           var value = closest(alertArr, info.distanceValue);
           var result = getObjectKey(dict, value);
-          console.log(value, 'valuevaluevaluevaluevaluevalue');
-          console.log(dict, result, 'dddddddddddddddddddddddddddddddddddddddddddddddddddd');
 
           if (result == 'al3') {
             imgpath = './img/triangle-01.png';
@@ -1724,12 +1725,7 @@ angular
             if (!eachEntry.full) {
               eachEntry.full = 400;
             }
-            console.log("eEachentry", eachEntry);
 
-
-
-            console.log("empty", eachEntry.empty);
-            console.log("full", eachEntry.full);
             var relativeDistance = Math.round((((eachEntry.empty - eachEntry.full) - (eachEntry.distance - eachEntry.full)) / (eachEntry.empty - eachEntry.full)) * 100);
 
             if ($scope.checkRelativeDistanceSensor == "Relative Distance") {
