@@ -1815,7 +1815,6 @@ angular
           " mm<br>" +
           "<b>Relative Distance: </b>" + relativeDistanceCal + ' %<br>' +
           "<b>Angle: </b>" +
-          "<b>Angle: </b>" +
           info.angle +
           " deg<br>" +
           "<b>Temperature: </b>" +
