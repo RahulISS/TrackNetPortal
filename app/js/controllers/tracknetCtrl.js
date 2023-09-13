@@ -3,7 +3,8 @@ angular
     this.locationData = {};
   }).controller(
     "tracknetController",
-    function (
+    function (      
+      $window,
       $scope,
       $rootScope,
       $http,
@@ -1335,17 +1336,10 @@ angular
               if (uniqueDataCount[i].angle <= 5 && uniqueDataCount[i].distance > 400 && uniqueDataCount[i].alarmFirstCheck != 1 && uniqueDataCount[i].alarmSecondCheck != 1 && uniqueDataCount[i].alarmThirdCheck != 1) {
                 $scope.realtimesummery.series[0].data[0].y++;
               }
-<<<<<<< HEAD
               // if (uniqueDataCount[i].distance <= 400) {
               //   $scope.realtimesummery.series[0].data[2].y++;
               // }
               else if ( distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al1) && uniqueDataCount[i].alarmFirstCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al2) && uniqueDataCount[i].alarmSecondCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al3) && uniqueDataCount[i].alarmThirdCheck == 1 ) {
-=======
-              if (uniqueDataCount[i].distance <= 400) {
-                $scope.realtimesummery.series[0].data[2].y++;
-              }
-              else if (distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al1) && uniqueDataCount[i].alarmFirstCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al2) && uniqueDataCount[i].alarmSecondCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al3) && uniqueDataCount[i].alarmThirdCheck == 1) {
->>>>>>> 9c4e3ec38ef4ab7bb2590ae921ad9c21828a266e
                 $scope.realtimesummery.series[0].data[1].y++;
 
               }
@@ -1376,15 +1370,9 @@ angular
               // if ($scope.alertLists[i].distance <= 400) {
               //   uniqueAlertData.push($scope.alertLists[i]);
 
-<<<<<<< HEAD
               //   $scope.alertLists[i].class = "distance danger";
               // }
               else if ( distanceValue < parseInt($scope.alertLists[i].totalAlerts.al1) && $scope.alertLists[i].alarmFirstCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al2) && $scope.alertLists[i].alarmSecondCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al3) && $scope.alertLists[i].alarmThirdCheck == 1 ) {
-=======
-                $scope.alertLists[i].class = "distance danger";
-              }
-              else if (distanceValue < parseInt($scope.alertLists[i].totalAlerts.al1) && $scope.alertLists[i].alarmFirstCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al2) && $scope.alertLists[i].alarmSecondCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al3) && $scope.alertLists[i].alarmThirdCheck == 1) {
->>>>>>> 9c4e3ec38ef4ab7bb2590ae921ad9c21828a266e
                 uniqueAlertData.push($scope.alertLists[i]);
                 $scope.alertLists[i].class = "distance warn";
               }

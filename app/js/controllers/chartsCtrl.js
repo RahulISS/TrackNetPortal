@@ -1539,6 +1539,11 @@ angular
                 const xval = mmx.valueOf();
                 if (data[j].hasOwnProperty("v0")) {
                   hasValue = true;
+                  // if points data record not find then
+                  if($scope.emptyAlarm == 0){
+                    $scope.emptyAlarm = 3998;
+                    $scope.fullAlarm = 400;
+                  }
                   var relativeDistance = Math.round(((($scope.emptyAlarm - $scope.fullAlarm) - (parseFloat(data[j].v0) - $scope.fullAlarm)) / ($scope.emptyAlarm - $scope.fullAlarm)) * 100);
 
                   if ($scope.checkRelativeDistanceSensor == "Relative Distance") {
