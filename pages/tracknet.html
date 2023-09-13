@@ -224,7 +224,7 @@
                                     <strong>Alerts and Alarms ({{alertCount}})</strong>
                                     <i ng-if="alertCount==0">ALL ALERTS ARE CLEAR</i>
                                     <ul ng-if="alertCount>0">
-                                        <li ng-repeat="alert in alertLists" ng-click="alertClick(alert)">
+                                        <li ng-repeat="alert in alertLists track by $index" ng-click="alertClick(alert)">
                                             <p class="{{alert.class}}">
                                                 {{ alert.aTreeNode_textLabel }}<br />
                                                 {{ alert.message }}<br />
