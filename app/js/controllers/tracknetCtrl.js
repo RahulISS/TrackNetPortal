@@ -3,7 +3,8 @@ angular
     this.locationData = {};
   }).controller(
     "tracknetController",
-    function (
+    function (      
+      $window,
       $scope,
       $rootScope,
       $http,
@@ -1382,6 +1383,7 @@ angular
 
         return hoursA - hoursB;
       }
+      
 
       function alarmApi() {
         $scope.realtimesummery.series[0].data[0].y = 0;
@@ -1600,6 +1602,13 @@ angular
             var uniqueDataCount = [];
             var deviceIds = new Set(); // Using a Set to store unique device_ids
 
+            // for (var i = 0; i < convertedAlertCountData.length; i++) {
+            //   var data = convertedAlertCountData[i];
+            //   if (!deviceIds.has(data.product_serialNumber)) {
+            //     uniqueDataCount.push(data);
+            //     deviceIds.add(data.product_serialNumber);
+            //   }
+            // }
             for (var i = 0; i < convertedAlertCountData.length; i++) {
               var data = convertedAlertCountData[i];
               if (!deviceIds.has(data.product_serialNumber)) {
@@ -1611,26 +1620,25 @@ angular
 
             for (var i = 0; i < uniqueDataCount.length; i++) {
               let distanceDataCValue = parseInt(uniqueDataCount[i].distance);
-              if (uniqueDataCount[i].angle >= 5) {
+              if (uniqueDataCount[i].angle >= 5 || uniqueDataCount[i].distance <= 400) {
                 $scope.realtimesummery.series[0].data[2].y++;
               }
 
               if (uniqueDataCount[i].angle <= 5 && uniqueDataCount[i].distance > 400 && uniqueDataCount[i].alarmFirstCheck != 1 && uniqueDataCount[i].alarmSecondCheck != 1 && uniqueDataCount[i].alarmThirdCheck != 1) {
                 $scope.realtimesummery.series[0].data[0].y++;
               }
-              if (uniqueDataCount[i].distance <= 400) {
-                $scope.realtimesummery.series[0].data[2].y++;
-              }
-              else if (distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al1) && uniqueDataCount[i].alarmFirstCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al2) && uniqueDataCount[i].alarmSecondCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al3) && uniqueDataCount[i].alarmThirdCheck == 1) {
+              // if (uniqueDataCount[i].distance <= 400) {
+              //   $scope.realtimesummery.series[0].data[2].y++;
+              // }
+              else if ( distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al1) && uniqueDataCount[i].alarmFirstCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al2) && uniqueDataCount[i].alarmSecondCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al3) && uniqueDataCount[i].alarmThirdCheck == 1 ) {
                 $scope.realtimesummery.series[0].data[1].y++;
 
               }
 
-
             }
-            var uniqueData = [];
-            var deviceIds = new Set(); // Using a Set to store unique device_ids
-            $scope.alertLists = uniqueDataCount;
+
+            $scope.alertLists = uniqueDataCount;           
+
             var uniqueAlertData = [];
             for (var i = 0; i < $scope.alertLists.length; i++) {
 
@@ -1639,7 +1647,7 @@ angular
               $scope.alertLists[i].class = "";
 
 
-              if (angleValue >= 5) {
+              if (angleValue >= 5 || $scope.alertLists[i].distance <= 400) {
                 uniqueAlertData.push($scope.alertLists[i]);
 
                 $scope.alertLists[i].class = "distance danger";
@@ -1650,12 +1658,12 @@ angular
               if ($scope.alertLists[i].distance > 3998) {
                 $scope.alertLists[i].class = "";
               }
-              if ($scope.alertLists[i].distance <= 400) {
-                uniqueAlertData.push($scope.alertLists[i]);
+              // if ($scope.alertLists[i].distance <= 400) {
+              //   uniqueAlertData.push($scope.alertLists[i]);
 
-                $scope.alertLists[i].class = "distance danger";
-              }
-              else if (distanceValue < parseInt($scope.alertLists[i].totalAlerts.al1) && $scope.alertLists[i].alarmFirstCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al2) && $scope.alertLists[i].alarmSecondCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al3) && $scope.alertLists[i].alarmThirdCheck == 1) {
+              //   $scope.alertLists[i].class = "distance danger";
+              // }
+              else if ( distanceValue < parseInt($scope.alertLists[i].totalAlerts.al1) && $scope.alertLists[i].alarmFirstCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al2) && $scope.alertLists[i].alarmSecondCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al3) && $scope.alertLists[i].alarmThirdCheck == 1 ) {
                 uniqueAlertData.push($scope.alertLists[i]);
                 $scope.alertLists[i].class = "distance warn";
               }
@@ -1680,6 +1688,7 @@ angular
               //   $scope.alertLists[i].oldest_comm_date =  last_comm_split[0] + "y";
               // }
             }
+            
             $scope.alertCount = uniqueAlertData.length;
             $scope.alertLists = uniqueAlertData.sort(customComparator);
           }).catch(function (error) {
