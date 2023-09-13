@@ -407,6 +407,7 @@ angular
                 latitude: parseFloat(data.location.latitude),
                 longitude: parseFloat(data.location.longitude),
                 city: data.location.city,
+                street: data.location.street,
                 serialNumber: data.product.id_serial,
                 installationId: data.point._id.$oid,
                 installationName: data.treenode.textLabel,
