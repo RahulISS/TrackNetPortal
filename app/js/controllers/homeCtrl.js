@@ -580,6 +580,7 @@ angular
           $scope.sortedArray_1 = $scope.sortedArray;
           // sorted end
           for (var i = 0; i < $scope.sortedArray_1.length; i++) {
+            console.log($scope.getParam,"sdasdas");
             arr.push(aLocation[i].installationId.split(" ")[0]);
             //console.log(aLocation[i], 'aLocation[i]')
             let dict = {};
@@ -593,35 +594,49 @@ angular
               aLocation[i].markerOnMap = markerShape;
               //console.log(markerShape, 'markerShape red else')
             } else {
-
-              if (aLocation[i].alertOne != undefined && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
+              if ($scope.getParam == 'circle' && aLocation[i].alertOne != undefined && parseInt(aLocation[i].alertTwo) > parseInt(aLocation[i].alertOne) && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
                 var markerShape = "circle";
                 //aLocation[i].markerOnMap.push(markerShape);
                 aLocation[i].markerOnMap = markerShape;
                 console.log(markerShape, 'markerShape circle')
               }
-                 if (aLocation[i].alertTwo != undefined && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
+              else if ($scope.getParam == 'square' && aLocation[i].alertTwo != undefined && parseInt(aLocation[i].alertTwo) > parseInt(aLocation[i].alertThree) && parseInt(aLocation[i].alertTwo) < parseInt(aLocation[i].alertOne) && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
                   var markerShape = "square";
                   //aLocation[i].markerOnMap.push(markerShape);
                   aLocation[i].markerOnMap = markerShape;
                   console.log(markerShape, 'markerShape square')
                 }
-                  if (aLocation[i].alertThree != undefined && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
+                else  if ($scope.getParam == 'triangle' && aLocation[i].alertThree != undefined && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
                     var markerShape = "triangle";
                     //aLocation[i].markerOnMap.push(markerShape);
                     aLocation[i].markerOnMap = markerShape;
                     console.log(markerShape, 'markerShape triangle')
                   }
-              
-              else if (aLocation[i].alertOne == undefined && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == undefined && aLocation[i].alertThree == undefined) {
-                var markerShape = "green";
-                aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape green')
-              } else {
-                var markerShape = "green";
-                aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape green')
+              else{
+                console.log(aLocation[i],"dfasdfasd");
+                if (aLocation[i].alertOne == undefined && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == undefined && aLocation[i].alertThree == undefined) {
+                  var markerShape = "green";
+                  aLocation[i].markerOnMap = markerShape;
+                  console.log(markerShape, 'markerShape green')
+                } else {
+                  if (
+                    (aLocation[i].alertOne !== undefined && !isNaN(parseInt(aLocation[i].alertOne))) ||
+                    (aLocation[i].alertTwo !== undefined && !isNaN(parseInt(aLocation[i].alertTwo))) ||
+                    (aLocation[i].alertThree !== undefined && !isNaN(parseInt(aLocation[i].alertThree)))
+                  ) {
+                    var markerShape = "";
+                    aLocation[i].markerOnMap = markerShape;
+                    console.log(markerShape, 'helloooo green')
+                  }else{
+                    var markerShape = "green";
+                    aLocation[i].markerOnMap = markerShape;
+                    console.log(markerShape, 'markerShape green')
+                  }
+                  
+                }
               }
+              
+               
             }
 
             dict["id"] = aLocation[i].installationId.split(" ")[0];
