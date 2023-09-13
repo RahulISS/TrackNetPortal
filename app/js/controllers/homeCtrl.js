@@ -6,6 +6,7 @@ angular
     function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval, apiBaseUrl, $window) {
       // refresh code
       localStorage.setItem("refreshinfo", false);
+      localStorage.setItem( "trackNet" , '');
 
 
 

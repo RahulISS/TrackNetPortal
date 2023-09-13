@@ -15,6 +15,8 @@ angular
       apiBaseUrl,
       LocationDataService
     ) {
+      
+		  localStorage.setItem( "trackNet" , '');
       const portalRef = "64ad1af2664396439a286273"; //tracnet trial 20230703
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";

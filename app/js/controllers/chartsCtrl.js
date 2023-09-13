@@ -14,6 +14,8 @@ angular
       $window,
       apiBaseUrl
     ) {
+      
+		  localStorage.setItem( "trackNet" , '');
       const isButtonVisible = true;
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";

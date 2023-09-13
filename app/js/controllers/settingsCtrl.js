@@ -3,6 +3,8 @@ angular.module('settingsCtrl', [])
   .controller('settingsController', function ($scope, $rootScope, Data, $http, $timeout, $window, $state, $location, apiBaseUrl) {
 
     const portalRef = 'read( aPortal and aCustomerRef->id_name == "Gold Coast Water" and id_name == "TracNet Master Network" )->id';
+    
+		localStorage.setItem( "trackNet" , '');
     let selectedNodeLabel;
     let selectedProduct;
     $scope.userRecord = [];

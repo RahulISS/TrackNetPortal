@@ -39,7 +39,11 @@ angular.module('mainCtrl', [])
             link: 'settings',
         }
         ];
-        $scope.selectedNavIndex = 0;
+        if(localStorage.getItem("trackNet") == 'trackNet'){
+            $scope.selectedNavIndex = 2;
+        }else{
+            $scope.selectedNavIndex = 0;
+        }
         $state.go('main.' + $scope.navigationArray[$scope.selectedNavIndex].link);
 
         $scope.changeTemplate = function (index) {
