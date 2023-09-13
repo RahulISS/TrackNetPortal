@@ -131,11 +131,23 @@ angular.module('settingsCtrl', [])
       if (distanceAlarm == null)
         distanceAlarm = 0;
 
+
+      if (smsNumber.startsWith('+')) {
+        smsNumber = smsNumber;
+
+      }
+      else {
+        smsNumber = "+".smsNumber;
+        console.log(smsNumber);
+      }
+
+
+      smsNumber = numcheck(smsNumber);
       const query = `{ 
         
         "contactName": "${contactName}" , 
         "emailAddress": "${emailAddress}",
-         "smsNumber": "+${smsNumber}", 
+         "smsNumber": "${smsNumber}", 
         "permissions":[{
        
           "Distance_Alert1": "${distanceAlert_1}",
@@ -152,7 +164,7 @@ angular.module('settingsCtrl', [])
         .post(apiBaseUrl + "alert-alarm-setting/store", query, { headers: customeHeader })
         .then(function (response) {
           const data = response.data;
-          //console.log(data.status);
+          console.log(data.status);
           if (data.status) {
             getSaveedUserConfiguration();
             Swal.fire({
@@ -239,7 +251,7 @@ angular.module('settingsCtrl', [])
         )
         .then(function (response) {
           const data = response.data.data;
-          //console.log("read", data);
+          console.log("read", data);
           $scope.contactName = data.contactName;
           $scope.emailAddress = data.emailAddress;
           $scope.smsNumber = data.smsNumber;
@@ -258,7 +270,7 @@ angular.module('settingsCtrl', [])
               buttons[i].style.display = "block";
             }
           }
-          //console.log("$scope.isCreateButtonDisabled:", $scope.isCreateButtonDisabled); // Check the value of the variable
+          console.log("$scope.isCreateButtonDisabled:", $scope.isCreateButtonDisabled); // Check the value of the variable
         });
 
 
@@ -328,7 +340,7 @@ angular.module('settingsCtrl', [])
         if (result.isConfirmed) {
           deleteUserConfiguations(email);
         } else {
-          //console.log('You clicked No!');
+          console.log('You clicked No!');
         }
       });
     };
@@ -346,7 +358,7 @@ angular.module('settingsCtrl', [])
     $scope.userId = null;
     $scope.editUserConfiguations = function (_id) {
       $scope.reSetValue();
-      //console.log(_id);
+      console.log(_id);
       $scope.userId = _id;
       const config = {
         headers: {
@@ -361,7 +373,7 @@ angular.module('settingsCtrl', [])
         if (response.data.status) {
           const data = response.data.data;
           $scope.userRecord = data;
-          //console.log($scope.userRecord, "$scope.userRecord");
+          console.log($scope.userRecord, "$scope.userRecord");
           $scope.contactName = $scope.userRecord.contactName;
           $scope.emailAddress = $scope.userRecord.emailAddress;
           $scope.smsNumber = $scope.userRecord.smsNumber;
@@ -374,7 +386,7 @@ angular.module('settingsCtrl', [])
           $scope.distanceAlarm = $scope.userRecord.distance == 0 ? '0' : '1';
 
 
-          //console.log($scope.distanceAlert_1, $scope.distanceAlert_2, $scope.distanceAlert_3, $scope.angleAlarm, $scope.distanceAlarm);
+          console.log($scope.distanceAlert_1, $scope.distanceAlert_2, $scope.distanceAlert_3, $scope.angleAlarm, $scope.distanceAlarm);
 
           $scope.updateShow = true;
           $scope.addShow = false;
@@ -397,7 +409,7 @@ angular.module('settingsCtrl', [])
 
     // update22
     $scope.updateUserConfiguationSetting = function () {
-      //console.log('inside the update');
+      console.log('inside the update');
       var contactName = $scope.contactName;
       var emailAddress = $scope.emailAddress;
       var smsNumber = $scope.smsNumber;
@@ -440,6 +452,9 @@ angular.module('settingsCtrl', [])
       if (distanceAlarm == null)
         distanceAlarm == 0;
 
+
+      smsNumber = numcheck(smsNumber);
+
       const query = `{ 
         
         "contactName": "${contactName}" , 
@@ -466,7 +481,7 @@ angular.module('settingsCtrl', [])
 
       const query3 = $http.put(url, query, config).then(function (response) {
         if (response.data.status) {
-          //console.log(response.data.status);
+          console.log(response.data.status);
           Swal.fire({
             icon: 'success',
             title: 'Success',
@@ -547,13 +562,13 @@ angular.module('settingsCtrl', [])
               $scope.configActive = false;
             }
           } else {
-            //console.log('no data or function error');
+            console.log('no data or function error');
           }
         } else {
-          //console.log('no data or function error');
+          console.log('no data or function error');
         }
       }, function (err) {
-        //console.log(err);
+        console.log(err);
       })
     }
 
@@ -658,7 +673,7 @@ angular.module('settingsCtrl', [])
         .then(function () {
         })
         .catch(function (err) {
-          //console.log(err)
+          console.log(err)
         });
     }
 
@@ -748,14 +763,25 @@ angular.module('settingsCtrl', [])
       $scope.controlledFlowFrom.$setPristine();
     }
 
+
+    function numcheck(number) {
+      let mobile_no = number;
+      const firstChar = number.substring(0, 1); // Gets the substring from index 0 to 1 (excluding 1)
+      if (firstChar != "+") {
+        mobile_no = '+' + mobile_no;
+      }
+      console.log("numn--", mobile_no);
+      return mobile_no;
+
+    }
     // sending text message function called on test button click
     $scope.sendTestMessage = function () {
-      var userInput = '+' + $scope.smsNumber;
+      var userInput = numcheck($scope.smsNumber);
       if (Number(userInput)) {
         userInput = userInput;
         let formData = { "smsNumber": userInput };
         $http.post(apiBaseUrl + "sent-test-sms", formData, { headers: customeHeader }).then(function (response) {
-          //console.log(response, "response");
+          console.log(response, "response");
           if (response.data.status)
             alert("Test Message Sent!")
         });
