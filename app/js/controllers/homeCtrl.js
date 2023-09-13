@@ -598,34 +598,31 @@ angular
                 var markerShape = "circle";
                 //aLocation[i].markerOnMap.push(markerShape);
                 aLocation[i].markerOnMap = markerShape;
-                //console.log(markerShape, 'markerShape circle')
-              }
-
-              if (aLocation[i].alertTwo != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
-                var markerShape = "square";
-                //aLocation[i].markerOnMap.push(markerShape);
-                aLocation[i].markerOnMap = markerShape;
-                //console.log(markerShape, 'markerShape square')
-              } else {
-                var markerShape = "green";
-                aLocation[i].markerOnMap = markerShape;
-                //console.log(markerShape, 'markerShape green')
-              }
-
-              if (aLocation[i].alertThree != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
-                var markerShape = "triangle";
-                //aLocation[i].markerOnMap.push(markerShape);
-                aLocation[i].markerOnMap = markerShape;
-                //console.log(markerShape, 'markerShape triangle')
+                console.log(markerShape, 'markerShape circle')
+                 if (aLocation[i].alertTwo != 'undefined' && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
+                  var markerShape = "square";
+                  //aLocation[i].markerOnMap.push(markerShape);
+                  aLocation[i].markerOnMap = markerShape;
+                  console.log(markerShape, 'markerShape square')
+                  if (aLocation[i].alertThree != 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
+                    var markerShape = "triangle";
+                    //aLocation[i].markerOnMap.push(markerShape);
+                    aLocation[i].markerOnMap = markerShape;
+                    console.log(markerShape, 'markerShape triangle')
+                  }
+                  
+                } 
+  
+                
               }
               else if (aLocation[i].alertOne == 'undefined' && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == 'undefined' && aLocation[i].alertThree == 'undefined') {
                 var markerShape = "green";
                 aLocation[i].markerOnMap = markerShape;
-                //console.log(markerShape, 'markerShape green')
+                console.log(markerShape, 'markerShape green')
               } else {
                 var markerShape = "green";
                 aLocation[i].markerOnMap = markerShape;
-                //console.log(markerShape, 'markerShape green')
+                console.log(markerShape, 'markerShape green')
               }
             }
 
