@@ -594,19 +594,21 @@ angular
               aLocation[i].markerOnMap = markerShape;
               //console.log(markerShape, 'markerShape red else')
             } else {
-              if ($scope.getParam == 'circle' && aLocation[i].alertOne != undefined && parseInt(aLocation[i].alertTwo) > parseInt(aLocation[i].alertOne) && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
+              var closestValue = closest({'al1':parseInt(aLocation[i].alertOne),'al2':parseInt(aLocation[i].alertTwo),'al3': parseInt(aLocation[i].alertThree)}, aLocation[i].distanceValue);
+          
+              if ($scope.getParam == 'circle' && aLocation[i].alertOne != undefined && parseInt(aLocation[i].alertOne) == closestValue && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
                 var markerShape = "circle";
                 //aLocation[i].markerOnMap.push(markerShape);
                 aLocation[i].markerOnMap = markerShape;
                 console.log(markerShape, 'markerShape circle')
               }
-              else if ($scope.getParam == 'square' && aLocation[i].alertTwo != undefined && parseInt(aLocation[i].alertTwo) > parseInt(aLocation[i].alertThree) && parseInt(aLocation[i].alertTwo) < parseInt(aLocation[i].alertOne) && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
+              else if ($scope.getParam == 'square' && aLocation[i].alertTwo != undefined && parseInt(aLocation[i].alertTwo) == closestValue && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
                   var markerShape = "square";
                   //aLocation[i].markerOnMap.push(markerShape);
                   aLocation[i].markerOnMap = markerShape;
                   console.log(markerShape, 'markerShape square')
                 }
-                else  if ($scope.getParam == 'triangle' && aLocation[i].alertThree != undefined && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
+                else  if ($scope.getParam == 'triangle' && aLocation[i].alertThree != undefined && aLocation[i].distanceValue != "" && parseInt(aLocation[i].alertThree) == closestValue && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
                     var markerShape = "triangle";
                     //aLocation[i].markerOnMap.push(markerShape);
                     aLocation[i].markerOnMap = markerShape;
