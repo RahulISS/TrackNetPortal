@@ -701,6 +701,7 @@ angular
                   signalStrength: data.point.signal_strength,
                   temperature: data.point.temperature,
                   ts: timeDate,
+                  height: data.point.height,
                   realts: data.point.created_at,
 
                   data: {
@@ -1062,7 +1063,7 @@ angular
 
         if (info.totalAlerts != undefined) {
 
-          var relativeDistanceCal = Math.round((((info.empty - info.full) - (distanceHeight - info.full)) / (info.empty - info.full)) * 100)
+          var relativeDistanceCal = Math.round((((info.empty - info.full) - (info.distanceValue - info.full)) / (info.empty - info.full)) * 100)
           if (relativeDistanceCal < 0) {
             relativeDistanceCal = 0;
           }
@@ -1071,7 +1072,7 @@ angular
           }
         } else {
 
-          var relativeDistanceCal = Math.round((((3998 - 400) - (distanceHeight - 400)) / (3998 - 400)) * 100)
+          var relativeDistanceCal = Math.round((((3998 - 400) - (info.distanceValue - 400)) / (3998 - 400)) * 100)
           if (relativeDistanceCal < 0) {
             console.log(info.distanceValue, info, "height");
             relativeDistanceCal = 0;
@@ -2081,7 +2082,7 @@ angular
 
         if (info.totalAlerts != undefined) {
 
-          var relativeDistanceCal = Math.round((((info.empty - info.full) - (distanceHeight - info.full)) / (info.empty - info.full)) * 100)
+          var relativeDistanceCal = Math.round((((info.empty - info.full) - (info.distanceValue - info.full)) / (info.empty - info.full)) * 100)
           if (relativeDistanceCal < 0) {
             relativeDistanceCal = 0;
           }
@@ -2090,7 +2091,7 @@ angular
           }
         } else {
 
-          var relativeDistanceCal = Math.round((((3998 - 400) - (distanceHeight - 400)) / (3998 - 400)) * 100)
+          var relativeDistanceCal = Math.round((((3998 - 400) - (info.distanceValue - 400)) / (3998 - 400)) * 100)
           if (relativeDistanceCal < 0) {
             console.log(info.distanceValue, info, "height");
             relativeDistanceCal = 0;
