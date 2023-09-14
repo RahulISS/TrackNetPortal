@@ -320,11 +320,18 @@ angular
                   var dis_color_rank = 3;
                   var dis_color = "Green";
                 }
-                if (data.point.height < 400) {
+                if ( parseInt(data.point.height) <= 400) {
                   var distanceValue = 400;
                   var distance_alarm_tr = "Distance alarm Triggered";
                   var dis_color_rank = 1;
                   var dis_color = "Red";
+                } else if ( data.point.height < data.point.distance_alert ) {
+                  var distance_alarm_tr = "Distance alert Triggered";
+                  var dis_color_rank = 2;
+                  var dis_color = "orange";
+                } else {
+                  var dis_color_rank = 3;
+                  var dis_color = "Green";
                 }
 
                 /** map markers shape starts */
@@ -351,14 +358,6 @@ angular
                 }
               }
                 /** ends */
-
-                if (
-                  data.point.height < data.point.distance_alert
-                ) {
-                  var distance_alarm_tr = "Distance alert Triggered";
-                  var dis_color_rank = 2;
-                  var dis_color = "yellow";
-                }
 
                 if (data.point.manhole_level_alarm == "Not full alarm") {
                   var manhole_level_alarm = 0;
@@ -1684,7 +1683,7 @@ angular
 
           var allSeriesData = [];
           for (var i = 0; i < rowsData.length; i++) {
-            if (1 * rowsData[i]?.val_full > 0) allSeriesData.push({ y: rowsData[i]?.val_full, myData: rowsData[i], color: "#3255A2" });
+            if (1 * rowsData[i]?.val_full >= 0) allSeriesData.push({ y: rowsData[i]?.val_full, myData: rowsData[i], color: "#3255A2" });
           }
 
           allSeriesData.sort((a, b) => b.y - a.y);
