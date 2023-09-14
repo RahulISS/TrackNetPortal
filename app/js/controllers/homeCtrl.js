@@ -254,6 +254,7 @@ angular
         $scope.isLoading = true;
         $scope.getParam = type;
         $http.get(apiBaseUrl + "newtraknetApiList", { headers: customeHeader }).then(function (res) {
+       
           const response = res.data.data;
           const response_pointDis = res.data.pointDis;
           var convertedData = [];
@@ -438,6 +439,8 @@ angular
                 temperature: data.point.temperature,
                 ts: data.ts,
                 height: data.point.height,
+                emptyVal: (data.point.empty) ? data.point.empty : 3998,
+                fullVal: (data.point.full) ? data.point.full: 400,
                 alertOne: alertF,
                 alertTwo: alertS,
                 alertThree: alertT,
@@ -452,7 +455,6 @@ angular
           
           const aLocation = convertedData;
           $scope.dataLocation = aLocation;
-
           const sorter = (a, b) => {
             return a.last_communication - b.last_communication;
           };
@@ -475,17 +477,11 @@ angular
             if ($scope.dataLocation[i].hasOwnProperty('full')) {
               $scope.fullVal = $scope.dataLocation[i].full;
             }
-
             if ($scope.dataLocation[i].hasOwnProperty('empty')) {
               $scope.emptyVal = $scope.dataLocation[i].empty;
             }
 
-            let empty = ($scope.dataLocation[i].empty) ? $scope.dataLocation[i].empty : 3998;
-            let full = ($scope.dataLocation[i].full) ? $scope.dataLocation[i].full : 400;
-            
-            $scope.dataLocation[i]['relative_distance'] = Math.round((((empty - full) - ($scope.dataLocation[i].height - full)) / (empty - full)) * 100);
-
-            console.log($scope.dataLocation[i], $scope.dataLocation[i]['relative_distance'],empty,full,'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
+            $scope.dataLocation[i]['relative_distance'] = Math.round(((($scope.dataLocation[i].emptyVal - $scope.dataLocation[i].fullVal) - ($scope.dataLocation[i].height - $scope.dataLocation[i].fullVal)) / ($scope.dataLocation[i].emptyVal - $scope.dataLocation[i].fullVal)) * 100);
 
             if ($scope.dataLocation[i]['relative_distance'] < 0) {
               $scope.dataLocation[i]['relative_distance'] = 0;
@@ -1112,7 +1108,6 @@ angular
           $scope.alert2 = '';
           $scope.alert3 = '';
           // Error callback, handle the error here
-          // console.error('Error occurred:', error);
         });
       };
 
