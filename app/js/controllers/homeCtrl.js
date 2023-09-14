@@ -948,9 +948,9 @@ angular
             for (let i = 0; i < readings.length; i++) {
               if (readings[i].id_name == "Distance") {
                 var sdistance = String(readings[i].hisEndVal);
-                sdistance = sdistance.replace(/ mm/g, '');
+                sdistance = parseInt(sdistance.replace(/,/g, ''), 10);
 
-                if (getTableAlert !== null && 'full' in getTableAlert) {
+                if (getTableAlert != null && 'full' in getTableAlert) {
                   var relativeDistance = Math.round((((parseInt(getTableAlert.empty) - parseInt(getTableAlert.full)) - (parseInt(sdistance) - parseInt(getTableAlert.full))) / (parseInt(getTableAlert.empty) - parseInt(getTableAlert.full))) * 100);
                 } else {
                   var relativeDistance = Math.round((((3998 - 400) - (parseInt(sdistance) - 400)) / (3998 - 400)) * 100);
