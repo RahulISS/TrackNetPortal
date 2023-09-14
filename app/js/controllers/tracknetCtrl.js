@@ -530,8 +530,9 @@ angular
                     $scope.locationData[responses[j].idx] = $scope.device[responses[j].idx][$scope.device[responses[j].idx].length - 1];
                     $scope.locationData[responses[j].idx].position = responses[j].data[0];
                   }
-
                   if (customParam == "") {
+                    $scope.locationData[responses[j].idx] = $scope.device[responses[j].idx][$scope.device[responses[j].idx].length - 1];
+                    $scope.locationData[responses[j].idx].position = responses[j].data[0];
                     $scope.locationData[responses[j].idx].marker = createMarker($scope.locationData[responses[j].idx], responses[j].idx);
 
                   } else {
