@@ -485,6 +485,8 @@ angular
             
             $scope.dataLocation[i]['relative_distance'] = Math.round((((empty - full) - ($scope.dataLocation[i].height - full)) / (empty - full)) * 100);
 
+            console.log($scope.dataLocation[i], $scope.dataLocation[i]['relative_distance'],empty,full,'uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
+
             if ($scope.dataLocation[i]['relative_distance'] < 0) {
               $scope.dataLocation[i]['relative_distance'] = 0;
             }
@@ -964,7 +966,7 @@ angular
                   relativeDistance = 100;
                 }
 
-                tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>" +relativeDistance + "%</td></tr>";
+                tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>" + relativeDistance + "%</td></tr>";
 
               }
               if (readings[i].id_name == "Battery Voltage") {
@@ -976,6 +978,17 @@ angular
                   readings[i].hisEndVal +
                   " " +
                   (readings[i].unit ? readings[i].unit : "");
+              } else  if (readings[i].id_name == "Distance") {
+                var distanceMM = String(readings[i].hisEndVal);
+                distanceMM = distanceMM.replace(/ mm/g, '');
+                if(distanceMM > 3998){
+                  distanceMM = '';
+                }else{
+                  distanceMM = distanceMM;
+                }
+
+                tempInnerHTML = tempInnerHTML + "<tr><td class='infowindow_td'>" + readings[i].id_name + "</td><td class='infowindow_td'>" +
+                distanceMM + " " + (readings[i].unit ? readings[i].unit : "");
               } else {
                 tempInnerHTML =
                   tempInnerHTML +
