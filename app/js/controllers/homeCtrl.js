@@ -302,21 +302,21 @@ angular
               /** alerts value starts*/
               if ('alert1' in data.point && distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1) {
                 var alertF = data.point.alert1;
-                // //console.log(alertF, 'alertF', data.product.id_serial, 'id_serial')
+                
                 var al1Check = data.point.alarmFirstCheck;
               } else {
                 var alertF = undefined;
               }
               if ('alert2' in data.point && distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1) {
                 var alertS = data.point.alert2;
-                // //console.log(alertS, 'alertS', data.product.id_serial, 'id_serial')
+                
                 var al2Check = data.point.alarmSecondCheck;
               } else {
                 var alertS = undefined;
               }
               if ('alert3' in data.point && distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
                 var alertT = data.point.alert3;
-                // //console.log(alertT, 'alertT', data.product.id_serial, 'id_serial')
+                
                 var al3Check = data.point.alarmThirdCheck;
               } else {
                 var alertT = undefined;
@@ -449,7 +449,7 @@ angular
               convertedData.push(convertedPoint);
             }
           }
-          //console.log(convertedData, "convertedData")
+          
           const aLocation = convertedData;
           $scope.dataLocation = aLocation;
 
@@ -482,8 +482,8 @@ angular
 
             let empty = ($scope.dataLocation[i].empty) ? $scope.dataLocation[i].empty : 3998;
             let full = ($scope.dataLocation[i].full) ? $scope.dataLocation[i].full : 400;
-
-            $scope.dataLocation[i]['relative_distance'] = Math.round((((empty - full) - ($scope.dataLocation[i].distance - full)) / (empty - full)) * 100);
+            
+            $scope.dataLocation[i]['relative_distance'] = Math.round((((empty - full) - ($scope.dataLocation[i].height - full)) / (empty - full)) * 100);
 
             if ($scope.dataLocation[i]['relative_distance'] < 0) {
               $scope.dataLocation[i]['relative_distance'] = 0;
@@ -581,46 +581,46 @@ angular
           $scope.sortedArray_1 = $scope.sortedArray;
           // sorted end
           for (var i = 0; i < $scope.sortedArray_1.length; i++) {
-            console.log($scope.getParam,"sdasdas");
+            
             arr.push(aLocation[i].installationId.split(" ")[0]);
-            //console.log(aLocation[i], 'aLocation[i]')
+            
             let dict = {};
             if (aLocation[i].angle >= 5) {
               var markerShape = "red";
               aLocation[i].markerOnMap = markerShape;
-              //console.log(markerShape, 'markerShape if')
+              
             } else if (aLocation[i].distanceValue <= 400 && aLocation[i].distanceValue != "") {
               var markerShape = "red";
-              //aLocation[i].markerOnMap.push(markerShape);
+              
               aLocation[i].markerOnMap = markerShape;
-              //console.log(markerShape, 'markerShape red else')
+              
             } else {
               var closestValue = closest({'al1':parseInt(aLocation[i].alertOne),'al2':parseInt(aLocation[i].alertTwo),'al3': parseInt(aLocation[i].alertThree)}, aLocation[i].distanceValue);
           
               if ($scope.getParam == 'circle' && aLocation[i].alertOne != undefined && parseInt(aLocation[i].alertOne) == closestValue && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
                 var markerShape = "circle";
-                //aLocation[i].markerOnMap.push(markerShape);
+                
                 aLocation[i].markerOnMap = markerShape;
-                console.log(markerShape, 'markerShape circle')
+                
               }
               else if ($scope.getParam == 'square' && aLocation[i].alertTwo != undefined && parseInt(aLocation[i].alertTwo) == closestValue && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
                   var markerShape = "square";
-                  //aLocation[i].markerOnMap.push(markerShape);
+                  
                   aLocation[i].markerOnMap = markerShape;
-                  console.log(markerShape, 'markerShape square')
+                  
                 }
                 else  if ($scope.getParam == 'triangle' && aLocation[i].alertThree != undefined && aLocation[i].distanceValue != "" && parseInt(aLocation[i].alertThree) == closestValue && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
                     var markerShape = "triangle";
-                    //aLocation[i].markerOnMap.push(markerShape);
+                    
                     aLocation[i].markerOnMap = markerShape;
-                    console.log(markerShape, 'markerShape triangle')
+                    
                   }
               else{
-                console.log(aLocation[i],"dfasdfasd");
+                
                 if (aLocation[i].alertOne == undefined && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == undefined && aLocation[i].alertThree == undefined) {
                   var markerShape = "green";
                   aLocation[i].markerOnMap = markerShape;
-                  console.log(markerShape, 'markerShape green')
+                  
                 } else {
                   if (
                     (aLocation[i].alertOne !== undefined && !isNaN(parseInt(aLocation[i].alertOne))) ||
@@ -629,11 +629,11 @@ angular
                   ) {
                     var markerShape = "";
                     aLocation[i].markerOnMap = markerShape;
-                    console.log(markerShape, 'helloooo green')
+                    
                   }else{
                     var markerShape = "green";
                     aLocation[i].markerOnMap = markerShape;
-                    console.log(markerShape, 'markerShape green')
+                    
                   }
                   
                 }
@@ -725,7 +725,7 @@ angular
         var colorCode = dict.colorRank;
         var colorCode2 = dict.colorRank2;
         let customParam = dict.queryParam;
-        ////console.log(customParam, "customParam")
+        
         if (colorCode && customParam == "") {
           if (colorCode == 3 && colorCode2 == 3) {
             imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
@@ -780,14 +780,14 @@ angular
           imgpath = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
         } if (customParam == "all clear") {
           imgpath = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-          //console.log(imgpath, 'imgpath green')
+          
         } if (customParam == "triangle") {
           imgpath = './img/triangle-01.png';
-          //console.log(imgpath, 'imgpath triangle')
+          
           imgpath = '';
         } if (customParam == "square") {
           imgpath = './img/square-01.png';
-          //console.log(imgpath, 'imgpath square')
+          
           imgpath = '';
         } if (customParam == "circle") {
           imgpath = './img/circle-01.png';
@@ -836,7 +836,7 @@ angular
         }
 
         reCenterMap(point);
-        ////console.log(beachMarker[dict.id], "beachMarker[dict.id]")
+        
         return {
           id: dict.id,
           point: point,
@@ -964,7 +964,7 @@ angular
                   relativeDistance = 100;
                 }
 
-                tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>" + res.data.data.distance_percentage + "%</td></tr>";
+                tempInnerHTML = tempInnerHTML + "<tr><td>Relative Distance</td><td>" +relativeDistance + "%</td></tr>";
 
               }
               if (readings[i].id_name == "Battery Voltage") {
@@ -1673,7 +1673,7 @@ angular
             }
           }
 
-          if ('alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 === true && 'alarmThirdCheck' in $scope.pointSettingData) {////console.log("3 disable");
+          if ('alt3' in $scope.disableAlertArray && $scope.disableAlertArray.alt3 === true && 'alarmThirdCheck' in $scope.pointSettingData) {
             if ($scope.pointSettingData.alarmThirdCheck === 0) {
               $scope.alarmThirdCheck = 1;
             } else {
@@ -1748,7 +1748,7 @@ angular
 
           const data = response.data;
           if (data.status) {
-            ////console.log(node_id,this,"new log");
+            
             localStorage.setItem("refreshinfo", true);
             getInfoWinData($scope.nodes, $scope.markers)
 
@@ -1758,7 +1758,7 @@ angular
               icon: "success"
             });
             $("#popupModalCenter").removeClass("show-modal");
-            //html_aTreeNode_hisEndVal_02_c(, "")
+            
           }
           else if (data.status == 400) {
             alert(data.msg);
@@ -1790,9 +1790,7 @@ angular
           'al3': dict.alertThree
         };
         let alertArr = [];
-
-
-        // //console.log("dict112", dict);
+        
 
 
         if (dict.aCheck1 == 1) {
@@ -1826,7 +1824,7 @@ angular
         var colorCode2 = dict.angleColorRank;
 
 
-        // //console.log(colorCode, colorCode2, 'volot');
+        
         var imgpath = "";
         if (colorCode) {
           if (colorCode == 3 && colorCode2 == 3) {
