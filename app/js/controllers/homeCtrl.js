@@ -480,8 +480,8 @@ angular
               $scope.emptyVal = $scope.dataLocation[i].empty;
             }
 
-            let empty = ($scope.dataLocation[i].empty) ? $scope.dataLocation[i].empty : 3998;
-            let full = ($scope.dataLocation[i].full) ? $scope.dataLocation[i].full : 400;
+            let empty = ($scope.dataLocation[i].empty != undefined) ? $scope.dataLocation[i].empty : 3998;
+            let full = ($scope.dataLocation[i].full != undefined) ? $scope.dataLocation[i].full : 400;
             
             $scope.dataLocation[i]['relative_distance'] = Math.round((((empty - full) - ($scope.dataLocation[i].height - full)) / (empty - full)) * 100);
 
