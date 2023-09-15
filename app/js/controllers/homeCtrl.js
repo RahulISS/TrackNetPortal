@@ -440,8 +440,8 @@ angular
                 temperature: data.point.temperature,
                 ts: data.ts,
                 height: data.point.height,
-                emptyVal: (data.point.empty) ? data.point.empty : 3998,
-                fullVal: (data.point.full) ? data.point.full: 400,
+                emptyVal: (data.distanceAlert.empty) ? data.distanceAlert.empty : 3998,
+                fullVal: (data.distanceAlert.full) ? data.distanceAlert.full: 400,
                 alertOne: alertF,
                 alertTwo: alertS,
                 alertThree: alertT,
@@ -491,7 +491,6 @@ angular
             if ($scope.dataLocation[i]['relative_distance'] > 100) {
               $scope.dataLocation[i]['relative_distance'] = 100;
             }
-            console.log( $scope.dataLocation[i]['relative_distance'],parseInt($scope.dataLocation[i].emptyVal),parseInt($scope.dataLocation[i].fullVal),$scope.dataLocation[i].height,'llllllllllllllllllllllll');
             if ($scope.dataLocation[i].disColorRank == 1 && $scope.dataLocation[i].angleColorRank == 1) {
               arrRed__1_1.push($scope.dataLocation[i]);
             }
@@ -1835,8 +1834,6 @@ angular
         if (dict.relative_distance > 100) {
           dict.relative_distance = 100;
         }
-
-        console.log(dict.relative_distance.toLocaleString(),"check");
 
         var infowindow = new google.maps.InfoWindow({
           content: dict.relative_distance.toLocaleString() + "%" + ",  " + dict.angle + "\xBA",
