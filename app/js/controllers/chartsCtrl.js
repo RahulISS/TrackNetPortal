@@ -1436,9 +1436,7 @@ angular
               const query = apiBaseUrl + `html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
               let queryInfo = { query: query, index: i };
               $scope.queriesRelativeDistalceArray.push(queryInfo);
-              $scope.queryEmptyFull = apiBaseUrl + "getEmpltyFull/" + id_serial;
               document.getElementById("meter_yminButton").setAttribute("class", "btnTopBar");
-
 
             } else {
 
@@ -1450,16 +1448,7 @@ angular
               // $scope.meterChartConfig.options.yAxis[0] = generateYAxisConfigDisance();
 
             }
-            // if($scope.getAllSensor = "Relative Distance" ){
-            //   document.getElementById("meter_yminButton").setAttribute("class", "btnTopBar");
-            //   //console.log("if");
-            // } 
-            // else{
-            //   document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
-            //   //console.log("else")
-            // }
-
-            ////console.log($scope.getAllSensor,'$scope.getAllSensor')
+            
           }
 
         }
@@ -1467,26 +1456,6 @@ angular
 
           if ($scope.queriesRelativeDistalceArray.length === 0) return;
 
-          $http.get($scope.queryEmptyFull, { headers: customeHeader }).then(function (reqResult2) {
-
-            const deviceData = reqResult2.data.data;
-            if (typeof deviceData === 'undefined') {
-              $scope.fullAlarm = 400;
-              $scope.emptyAlarm = 3998;
-            } else {
-              $scope.fullAlarm = deviceData.full;
-              $scope.emptyAlarm = deviceData.empty;
-            }
-          }).catch(function (error) {
-            if (error.status == 401) {
-              $window.localStorage.removeItem('authToken');
-              $rootScope.storage.loggedIn = false;
-              $rootScope.storage.authToken = false;
-              $rootScope.storage.$reset();
-              $scope.refreshPage();
-              $state.go('login');
-            }
-          });
           const promises_data = $scope.queriesRelativeDistalceArray.map(function (item) {
 
             return $http.get(item.query, { headers: customeHeader }).then(function (reqResult) {
@@ -1540,14 +1509,14 @@ angular
                 if (data[j].hasOwnProperty("v0")) {
                   hasValue = true;
                   // if points data record not find then
-                  if($scope.emptyAlarm == 0){
-                    $scope.emptyAlarm = 3998;
-                    $scope.fullAlarm = 400;
+                  if(data[j].hasOwnProperty("empty")){
+                    $scope.emptyAlarm = data[j].empty;
+                    $scope.fullAlarm = data[j].full;
                   }
                   var relativeDistance = Math.round(((($scope.emptyAlarm - $scope.fullAlarm) - (parseFloat(data[j].v0) - $scope.fullAlarm)) / ($scope.emptyAlarm - $scope.fullAlarm)) * 100);
 
                   if ($scope.checkRelativeDistanceSensor == "Relative Distance") {
-                    if (relativeDistance < 0) {
+                    if (relativeDistance < 0 || relativeDistance == -0) {
                       relativeDistance = 0;
                     }
                     if (relativeDistance > 100) {
