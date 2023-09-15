@@ -481,7 +481,7 @@ angular
               $scope.emptyVal = $scope.dataLocation[i].empty;
             }
 
-            $scope.dataLocation[i]['relative_distance'] = Math.round(((($scope.dataLocation[i].emptyVal - $scope.dataLocation[i].fullVal) - ($scope.dataLocation[i].height - $scope.dataLocation[i].fullVal)) / ($scope.dataLocation[i].emptyVal - $scope.dataLocation[i].fullVal)) * 100);
+            $scope.dataLocation[i]['relative_distance'] = Math.round((((parseInt($scope.dataLocation[i].emptyVal) - parseInt($scope.dataLocation[i].fullVal)) - ($scope.dataLocation[i].height - parseInt($scope.dataLocation[i].fullVal))) / (parseInt($scope.dataLocation[i].emptyVal) - parseInt($scope.dataLocation[i].fullVal))) * 100);
 
             if ($scope.dataLocation[i]['relative_distance'] < 0) {
               $scope.dataLocation[i]['relative_distance'] = 0;
