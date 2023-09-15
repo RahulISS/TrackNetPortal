@@ -42,7 +42,7 @@ angular.module('mainCtrl', [])
         if(localStorage.getItem("trackNet") == 'trackNet'){
             $scope.selectedNavIndex = 2;
         }else{
-            $scope.selectedNavIndex = 1;
+            $scope.selectedNavIndex = 0;
         }
         $state.go('main.' + $scope.navigationArray[$scope.selectedNavIndex].link);
 
