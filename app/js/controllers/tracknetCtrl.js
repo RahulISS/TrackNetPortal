@@ -1170,8 +1170,6 @@ angular
                 const singaporeTime = moment(ttemp).tz("Asia/Singapore");
                 var timeDiff = Math.abs(singaporeCurrentTime - singaporeTime);
                 var cd = 24 * 60 * 60 * 1000;
-                var hValue = Math.floor(timeDiff / cd);
-
                 if (timeDiff < 1000) {
                   //miliseconds
                   var hours = timeDiff + " ms";
@@ -1186,15 +1184,15 @@ angular
                 } else if (timeDiff >= 3600000 && timeDiff < 86400000) {
                   //hours
                   var hours = Math.floor(timeDiff / 3600000) + "h";
-                } else if (timeDiff >= 86400000 && timeDiff < 2592000000) {
+                } else if (timeDiff >= 86400000 && timeDiff < 604800000) {
                   //day
                   var hours = Math.floor(timeDiff / cd) + "d";
-                } else if (timeDiff >= 2592000000 && timeDiff < 31536000000) {
+                } else if (timeDiff >= 604800000 && timeDiff < 31536000000) {
                   //week
-                  var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + "wk";
+                  var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 7)) + "wk";
                 } else {
                   //year
-                  var hours = Math.floor(timeDiff / (1000 * 60 * 60)) + "y";
+                  var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 60 * 24 * 365)) + "y";
                 }
 
                 var timeDate = hours;
