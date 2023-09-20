@@ -744,23 +744,12 @@ angular
 
       function setVisible() {
         for (var i = 0; i < $scope.tableStats.length; i++) {
-          if (
-            $scope.tableStats[i].pointId == null ||
-            $scope.tableStats[i].pointId == "null"
-          ) {
-            document.getElementById(
-              $scope.tableStats[i].hideDivId
-            ).style.visibility = "hidden";
-            document.getElementById(
-              $scope.tableStats[i].hideCloseDivId
-            ).style.visibility = "hidden";
+          if ($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null") {
+            document.getElementById($scope.tableStats[i].hideDivId).style.visibility = "hidden";
+            document.getElementById($scope.tableStats[i].hideCloseDivId).style.visibility = "hidden";
           } else {
-            document.getElementById(
-              $scope.tableStats[i].hideDivId
-            ).style.visibility = "visible";
-            document.getElementById(
-              $scope.tableStats[i].hideCloseDivId
-            ).style.visibility = "visible";
+            document.getElementById($scope.tableStats[i].hideDivId).style.visibility = "visible";
+            document.getElementById($scope.tableStats[i].hideCloseDivId).style.visibility = "visible";
           }
         }
       }
@@ -781,49 +770,24 @@ angular
       };
 
       // set marker default active
-      document
-        .getElementById("meter" + "_markersButton")
-        .setAttribute("class", "btnTopBar");
+      document.getElementById("meter" + "_markersButton").setAttribute("class", "btnTopBar");
 
       $scope.switchGridLine = function (page) {
-        $scope.chartStatusSet[page].gridlines =
-          !$scope.chartStatusSet[page].gridlines;
+        $scope.chartStatusSet[page].gridlines = !$scope.chartStatusSet[page].gridlines;
         if ($scope.chartStatusSet[page].gridlines) {
-          document
-            .getElementById(page + "_gridLinesButton")
-            .setAttribute("class", "btnTopBar");
-          for (
-            var i = 0;
-            i < $scope.chartStatusSet[page].charts.options.yAxis.length;
-            i++
-          )
-            $scope.chartStatusSet[page].charts.options.yAxis[
-              i
-            ].gridLineWidth = 2;
+          document.getElementById(page + "_gridLinesButton").setAttribute("class", "btnTopBar");
+          for (var i = 0;i < $scope.chartStatusSet[page].charts.options.yAxis.length;i++)
+            $scope.chartStatusSet[page].charts.options.yAxis[i].gridLineWidth = 2;
           if (page == "meter")
             $scope.chartStatusSet[page].charts.options.xAxis.gridLineWidth = 2;
           else {
-            for (
-              var i = 0;
-              i < $scope.chartStatusSet[page].charts.options.xAxis.length;
-              i++
-            )
-              $scope.chartStatusSet[page].charts.options.xAxis[
-                i
-              ].gridLineWidth = 2;
+            for (var i = 0;i < $scope.chartStatusSet[page].charts.options.xAxis.length;i++)
+              $scope.chartStatusSet[page].charts.options.xAxis[i].gridLineWidth = 2;
           }
         } else {
-          document
-            .getElementById(page + "_gridLinesButton")
-            .setAttribute("class", "btnTopBarOff");
-          for (
-            var i = 0;
-            i < $scope.chartStatusSet[page].charts.options.yAxis.length;
-            i++
-          )
-            $scope.chartStatusSet[page].charts.options.yAxis[
-              i
-            ].gridLineWidth = 0;
+          document.getElementById(page + "_gridLinesButton").setAttribute("class", "btnTopBarOff");
+          for (var i = 0;i < $scope.chartStatusSet[page].charts.options.yAxis.length;i++)
+            $scope.chartStatusSet[page].charts.options.yAxis[i].gridLineWidth = 0;
           if (page == "meter")
             $scope.chartStatusSet[page].charts.options.xAxis.gridLineWidth = 0;
           else {
@@ -847,13 +811,9 @@ angular
 
         $scope.chartStatusSet[page].ymin = !$scope.chartStatusSet[page].ymin;
         if ($scope.chartStatusSet[page].ymin === true) {
-          document
-            .getElementById(page + "_yminButton")
-            .setAttribute("class", "btnTopBar");
+          document.getElementById(page + "_yminButton").setAttribute("class", "btnTopBar");
         } else {
-          document
-            .getElementById(page + "_yminButton")
-            .setAttribute("class", "btnTopBarOff");
+          document.getElementById(page + "_yminButton").setAttribute("class", "btnTopBarOff");
         }
 
         getYminMax();
@@ -864,16 +824,11 @@ angular
 
 
       $scope.switchMarkers = function (page) {
-        $scope.chartStatusSet[page].markers =
-          !$scope.chartStatusSet[page].markers;
+        $scope.chartStatusSet[page].markers = !$scope.chartStatusSet[page].markers;
         if ($scope.chartStatusSet[page].markers) {
-          document
-            .getElementById(page + "_markersButton")
-            .setAttribute("class", "btnTopBar");
+          document.getElementById(page + "_markersButton").setAttribute("class", "btnTopBar");
         } else {
-          document
-            .getElementById(page + "_markersButton")
-            .setAttribute("class", "btnTopBarOff");
+          document.getElementById(page + "_markersButton").setAttribute("class", "btnTopBarOff");
         }
         showMarkers(page);
       };
@@ -957,18 +912,8 @@ angular
         var tempDataList = [];
         var contents = "ts,";
         for (var i = 0; i < $scope.tableStats.length; i++) {
-          if (
-            !(
-              $scope.tableStats[i].pointId == null ||
-              $scope.tableStats[i].pointId == "null"
-            )
-          )
-            contents =
-              contents +
-              $scope.tableStats[i].title +
-              " - " +
-              $scope.tableStats[i].currentMeasurement.id_name +
-              ",";
+          if (!($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null"))
+            contents = contents + $scope.tableStats[i].title + " - " + $scope.tableStats[i].currentMeasurement.id_name + ",";
         }
         contents = contents.slice(0, contents.length - 1);
         contents = contents + "\n";
@@ -978,38 +923,41 @@ angular
 
         if (tempDataList.length == 0) return;
 
-        var tempArray = tempDataList[0];
+        function findLargestArray(arrays) {
+          return arrays.reduce((largestArray, currentArray) => {
+            return currentArray.length > largestArray.length ? currentArray : largestArray;
+          }, []);
+        }
+        
+        const largestArray = findLargestArray(tempDataList);
+        //var tempArray = tempDataList[0];
+        var tempArray = largestArray;
 
         for (var i = 0; i < tempArray.length; i++) {
-          contents =
-            contents +
-            moment.utc(tempArray[i][0]).format("YYYY-MM-DD  HH:mm") +
-            ",";
+          console.log(contents,i);
+          contents = contents + moment.utc(tempArray[i][0]).format("YYYY-MM-DD  HH:mm") + ",";
           for (var j = 0; j < tempDataList.length; j++) {
-            if (typeof tempDataList[j][i] != "undefined")
+            if (typeof tempDataList[j][i] != "undefined"){
               contents = contents + tempDataList[j][i][1] + ",";
+            }else{
+              contents = contents + ' ' + ",";
+            }
           }
           contents = contents.slice(0, contents.length - 1);
           contents = contents + "\n";
         }
-
-        $http
-          .post("php/charts/downloadcsv.php", {
-            filename: filename,
-            contents: contents,
-          })
-          .then(
+        
+        $http.post("php/charts/downloadcsv.php", {filename: filename, contents: contents,}).then(
             function (data) {
               var hiddenElement = document.createElement("a");
-              hiddenElement.href =
-                "data:attachment/csv," + encodeURI(data.data);
+              hiddenElement.href = "data:attachment/csv," + encodeURI(data.data);
               hiddenElement.target = "_blank";
               hiddenElement.download = filename;
               document.body.appendChild(hiddenElement);
               hiddenElement.click();
             },
             function (err) {
-              //console.log(err);
+              console.log(err);
             }
           );
       }
