@@ -910,10 +910,11 @@ angular
 
       function downloadCsvFile(series, filename) {
         var tempDataList = [];
-        var contents = "ts,";
+        var contents = "";
         for (var i = 0; i < $scope.tableStats.length; i++) {
-          if (!($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null"))
-            contents = contents + $scope.tableStats[i].title + " - " + $scope.tableStats[i].currentMeasurement.id_name + ",";
+          if (!($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null")){
+            contents = contents + "Timestamp," + $scope.tableStats[i].title + " - " + $scope.tableStats[i].currentMeasurement.id_name + ",";
+          }
         }
         contents = contents.slice(0, contents.length - 1);
         contents = contents + "\n";
@@ -934,20 +935,23 @@ angular
         var tempArray = largestArray;
 
         for (var i = 0; i < tempArray.length; i++) {
-          console.log(contents,i);
-          contents = contents + moment.utc(tempArray[i][0]).format("YYYY-MM-DD  HH:mm") + ",";
           for (var j = 0; j < tempDataList.length; j++) {
             if (typeof tempDataList[j][i] != "undefined"){
+              contents = contents + moment.utc(tempDataList[j][i][0]).format("YYYY-MM-DD  HH:mm") + ",";
               contents = contents + tempDataList[j][i][1] + ",";
             }else{
+              if(typeof tempArray[i][0] != "undefined"){
+                contents = contents + ' ' + ",";
+              }
               contents = contents + ' ' + ",";
             }
+            
           }
           contents = contents.slice(0, contents.length - 1);
           contents = contents + "\n";
         }
-        
-        $http.post("php/charts/downloadcsv.php", {filename: filename, contents: contents,}).then(
+        // return;
+            $http.post("php/charts/downloadcsv.php", {filename: filename, contents: contents,}).then(
             function (data) {
               var hiddenElement = document.createElement("a");
               hiddenElement.href = "data:attachment/csv," + encodeURI(data.data);
@@ -961,6 +965,48 @@ angular
             }
           );
       }
+
+      /*function downloadCsvFile(series, filename) {
+        var tempDataList = [];
+        var contents = "ts,";
+        for (var i = 0; i < $scope.tableStats.length; i++) {
+            if (!($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null"))
+                contents = contents + $scope.tableStats[i].title + " - " + $scope.tableStats[i].currentMeasurement.id_name + ",";
+        }
+        contents = contents.slice(0, contents.length - 1);
+        contents = contents + '\n';
+
+        for (var i = 0; i < series.length; i++)
+            if (series[i].data.length > 0) tempDataList.push(series[i].data);
+
+        if (tempDataList.length == 0) return;
+
+        var tempArray = tempDataList[0];
+
+        for (var i = 0; i < tempArray.length; i++) {
+            contents = contents + moment.utc(tempArray[i][0]).format("YYYY-MM-DD  HH:mm") + ",";
+            for (var j = 0; j < tempDataList.length; j++) {
+                if (typeof tempDataList[j][i] != "undefined")
+                    contents = contents + tempDataList[j][i][1] + ",";
+            }
+            contents = contents.slice(0, contents.length - 1);
+            contents = contents + '\n';
+        }
+
+        $http.post('php/charts/downloadcsv.php', {
+            'filename': filename,
+            'contents': contents
+        }).then(function (data) {
+            var hiddenElement = document.createElement('a');
+            hiddenElement.href = 'data:attachment/csv,' + encodeURI(data.data);
+            hiddenElement.target = '_blank';
+            hiddenElement.download = filename;
+            document.body.appendChild(hiddenElement);
+            hiddenElement.click();
+        },function(err){
+            console.log(err)
+        });
+    }*/
 
       $scope.switchTable = function (page, visible) {
         $scope.showMeasureTable = visible;
