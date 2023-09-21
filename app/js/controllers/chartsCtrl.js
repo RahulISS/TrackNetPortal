@@ -908,7 +908,7 @@ angular
         $window.open(downloadUrl, "_self");
       };
 
-      function downloadCsvFile(series, filename) {
+      /*function downloadCsvFile(series, filename) {
         var tempDataList = [];
         var contents = "";
         for (var i = 0; i < $scope.tableStats.length; i++) {
@@ -964,9 +964,9 @@ angular
               console.log(err);
             }
           );
-      }
+      }*/
 
-      /*function downloadCsvFile(series, filename) {
+      function downloadCsvFile(series, filename) {
         var tempDataList = [];
         var contents = "ts,";
         for (var i = 0; i < $scope.tableStats.length; i++) {
@@ -981,13 +981,24 @@ angular
 
         if (tempDataList.length == 0) return;
 
-        var tempArray = tempDataList[0];
+        function findLargestArray(arrays) {
+          return arrays.reduce((largestArray, currentArray) => {
+            return currentArray.length > largestArray.length ? currentArray : largestArray;
+          }, []);
+        }
+        
+        const largestArray = findLargestArray(tempDataList);
+        //var tempArray = tempDataList[0];
+        var tempArray = largestArray;
 
         for (var i = 0; i < tempArray.length; i++) {
             contents = contents + moment.utc(tempArray[i][0]).format("YYYY-MM-DD  HH:mm") + ",";
             for (var j = 0; j < tempDataList.length; j++) {
-                if (typeof tempDataList[j][i] != "undefined")
-                    contents = contents + tempDataList[j][i][1] + ",";
+                if (typeof tempDataList[j][i] != "undefined"){
+                  contents = contents + tempDataList[j][i][1] + ",";
+                }else{
+                  contents = contents + " " + ",";
+                }
             }
             contents = contents.slice(0, contents.length - 1);
             contents = contents + '\n';
@@ -1006,7 +1017,7 @@ angular
         },function(err){
             console.log(err)
         });
-    }*/
+    }
 
       $scope.switchTable = function (page, visible) {
         $scope.showMeasureTable = visible;
