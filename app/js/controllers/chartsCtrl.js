@@ -12,6 +12,7 @@ angular
       $timeout,
       $interval,
       $window,
+      $filter,
       apiBaseUrl
     ) {
       
@@ -908,7 +909,7 @@ angular
         $window.open(downloadUrl, "_self");
       };
 
-      /*function downloadCsvFile(series, filename) {
+      function downloadCsvFile(series, filename) {
         var tempDataList = [];
         var contents = "";
         for (var i = 0; i < $scope.tableStats.length; i++) {
@@ -937,7 +938,11 @@ angular
         for (var i = 0; i < tempArray.length; i++) {
           for (var j = 0; j < tempDataList.length; j++) {
             if (typeof tempDataList[j][i] != "undefined"){
-              contents = contents + moment.utc(tempDataList[j][i][0]).format("YYYY-MM-DD  HH:mm") + ",";
+
+              var date = new Date(tempDataList[j][i][0]);
+              var formattedDate = $filter('date')(date, 'dd MMM yyyy hh:mm:ss a');
+              contents = contents + " " +formattedDate + " " + ",";
+              //contents = contents + " " + moment.utc(tempDataList[j][i][0]).format("DD/MM/YYYY  HH:mm:ss")+ " " + ",";
               contents = contents + tempDataList[j][i][1] + ",";
             }else{
               if(typeof tempArray[i][0] != "undefined"){
@@ -950,7 +955,8 @@ angular
           contents = contents.slice(0, contents.length - 1);
           contents = contents + "\n";
         }
-        // return;
+        
+        
             $http.post("php/charts/downloadcsv.php", {filename: filename, contents: contents,}).then(
             function (data) {
               var hiddenElement = document.createElement("a");
@@ -964,9 +970,9 @@ angular
               console.log(err);
             }
           );
-      }*/
+      }
 
-      function downloadCsvFile(series, filename) {
+      /*function downloadCsvFile(series, filename) {
         var tempDataList = [];
         var contents = "ts,";
         for (var i = 0; i < $scope.tableStats.length; i++) {
@@ -1017,7 +1023,7 @@ angular
         },function(err){
             console.log(err)
         });
-    }
+    }*/
 
       $scope.switchTable = function (page, visible) {
         $scope.showMeasureTable = visible;
@@ -1091,13 +1097,12 @@ angular
       $scope.minimal = false;
       $scope.none = false;
 
-      $scope.reloadMethod = function () {
+      $scope.reloadMethod = function () {           
         $timeout(function () {
-          var refreshChart = $("#chartsMeterCompare").highcharts();
-
+          var refreshChart =  $('#chartsMeterCompare').highcharts();     
           refreshChart.reflow();
         }, 10);
-      };
+    };
 
       $scope.checkstorage = function () {
         var isChecked = localStorage.getItem("isChecked")
