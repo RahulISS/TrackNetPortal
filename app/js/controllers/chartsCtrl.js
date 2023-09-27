@@ -921,16 +921,16 @@ angular
         contents = contents + "\n";
 
         for (var i = 0; i < series.length; i++)
-          if (series[i].data.length > 0) tempDataList.push(series[i].data);
+          if (series[i].data.length >= 0) tempDataList.push(series[i].data);
 
-        if (tempDataList.length == 0) return;
+        // if (tempDataList.length == 0) return;
 
         function findLargestArray(arrays) {
           return arrays.reduce((largestArray, currentArray) => {
             return currentArray.length > largestArray.length ? currentArray : largestArray;
           }, []);
         }
-        
+        console.log(tempDataList);
         const largestArray = findLargestArray(tempDataList);
         //var tempArray = tempDataList[0];
         var tempArray = largestArray;
@@ -938,11 +938,7 @@ angular
         for (var i = 0; i < tempArray.length; i++) {
           for (var j = 0; j < tempDataList.length; j++) {
             if (typeof tempDataList[j][i] != "undefined"){
-
-              var date = new Date(tempDataList[j][i][0]);
-              var formattedDate = $filter('date')(date, 'dd MMM yyyy hh:mm:ss a');
-              contents = contents + " " +formattedDate + " " + ",";
-              //contents = contents + " " + moment.utc(tempDataList[j][i][0]).format("DD/MM/YYYY  HH:mm:ss")+ " " + ",";
+              contents = contents + " " + moment.utc(tempDataList[j][i][0]).format("Do MMM YYYY hh:mm:ssa")+ " " + ",";
               contents = contents + tempDataList[j][i][1] + ",";
             }else{
               if(typeof tempArray[i][0] != "undefined"){
