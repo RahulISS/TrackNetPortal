@@ -914,7 +914,7 @@ angular
         var contents = "";
         for (var i = 0; i < $scope.tableStats.length; i++) {
           if (!($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null")){
-            contents = contents + "Timestamp," + $scope.tableStats[i].title.replace(/,/g, '') + " - " + $scope.tableStats[i].currentMeasurement.id_name + ",";
+            contents = contents + "Timestamp," + $scope.tableStats[i].title + " - " + $scope.tableStats[i].currentMeasurement.id_name + ",";
           }
         }
         contents = contents.slice(0, contents.length - 1);
