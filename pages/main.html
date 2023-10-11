@@ -1,62 +1,489 @@
+<style>
+	.error-msg{
+		color: #f9cb00;
+    	font-size: 12px;
+	}
+	/* .logo-222{
+    display: flex;
+    justify-content: space-between;
+  } */
+
+  .installed {
+	background-color: green;
+  }
+
+  .notInstalled {
+	background-color: green;
+  }
+
+  .logo-tracNet {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+	}
+	.styled {
+    border: 0;
+    line-height: 2.5;
+    padding: 0 20px;
+    font-size: 1rem;
+    text-align: center;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    border-radius: 10px;
+    background-color: rgba(220, 0, 0, 1);
+    background-image: linear-gradient(to top left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0));
+    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, 0.6), inset -2px -2px 3px rgba(0, 0, 0, 0.6);
+}
+
+.styled:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+
+.styled:active {
+    box-shadow: inset -2px -2px 3px rgba(239, 5, 5, 0.6), inset 2px 2px 3px rgba(0, 0, 0, 0.6);
+}
+</style>
+
+<!-- Right Side Bar Content (Overlay over normal content z-index) -->
+<div ng-class="{ 'sideBarActive': storage.settingsBarActive }" class="rightSideBar">
+  <div class="settingsContainerTop">
+    <div ng-class="{ 'navBtnActive' : $index == indexOfSelectedTemplate }" class="navBtn marginTop flexBoxCenter" ng-click="changeTemplate($index)"  ng-repeat="template in availableTemplates">
+      {{template.name}}
+    </div>
+    <div class="navBtn marginTop flexBoxCenter" ng-click="signOut();">
+      Logout
+    </div>
+  </div>
+  <div class="settingsContainerBottom">
+  </div>
+</div>
 <!-- Main Content Header , Content and Footer Area -->
-<header>
-	<div class="loginHeader flexBoxCenter">
-		<div class="loginSides alignLeft"><img class="sydneyWt_logo" src="/_common/img/tracwater.png"
-				alt="cityofgoldcoast logo"></div>
-		<img class="meterTracLogo" src="/_common/img/Final-Logo.png" alt="tracwater logo">
-
-		<div class="navButtons">
-			<div class="img_tg_tp" ng-click="toggleMenu()">
-				<img id="tgl-sh-hd" src="img/tg_menu.png">
-			</div>
-			<div class="topnavbuttons">
-				<button id="{{navItem.link}}" ng-class="{ 'navMenuButton-checked' : $index == selectedNavIndex }"
-					class="navMenuButton" ng-click='changeTemplate($index)' ng-repeat="navItem in navigationArray">
-					<span> {{navItem.name}} </span>
-					<button class="navMenuButton font-btn" ng-click='signOut()'>
-						<span><i class="fa fa-sign-out-alt" aria-hidden="true"></i></span>
-					</button>
-			</div>
+<header class="stick_header">
+	<div class="container">
+	<div class="mainHeader  flexBoxCenter ">
+		<div class="headerLogo logo-tracNet">
+			<img class="meterTracLogo" src="img/tracwater.png" alt="TracWater logo">
+			<img class="meterTracLogo" src="/_common/img/Final-Logo.png" alt="tracwater logo">
 		</div>
-		<img class="meterTracLogo" src="/_common/img/Final-Logo.png" alt="tracwater logo">
+		
+		<div ng-click="signOut()" class="headerSideBar flexBoxCenter logout__ic">
+			<i class="fa fa-sign-out fa-2x" aria-hidden="true"></i>
+		</div>
 	</div>
+</div>
 </header>
-
-<main>
-	<div class="mainMain flexBoxCenter" style="background-color: white;">
-		<div class="mainTemplate" ui-view>
+<div class="mainChartsContainer">
+	<section class="form__block">
+		<div class="form__grid">
+			<form class="main__form" enctype="multipart/form-data"  method="post" name="myForm" id="myForm" ng-submit="nearme();formData()" >
+			<div class="wrap__block_sticky">
+		   	<div class="hide__block__input" ng-hide="slectedPortal">
+				<div class="portal__section">
+					<label>Select Portal</label>
+					<select class="ddl-select" id="portal" required name="portalList" ng-model="selectedPortal" ng-options="( item.id_name) for item in portal" value="" required ng-change="portalData()"></select>
+					<span class="error-msg" id="invalid_message" ng-model="invalid_message">{{invalid_message}}</span>
+					<span class="error-msg" ng-show="myForm.portalList.$dirty && myForm.portalList.$invalid"> * Required Field! </span>
+				</div>
+				<div class="group_sections">
+					<label>Select Group Section</label>
+					<select class="ddl-select" id="groupName"  name="groupName" ng-model="selectedGroup" ng-options="( item.textLabel) for item in groupNode" value="" required></select>
+					<span class="error-msg" ng-show="myForm.groupName.$error.required"> * Required Field! </span>
+					<span class="error-msg" id="invalid_message" ng-model="invalid_message">{{invalid_message}}</span>
+				</div>
+			</div>
+			
+			<div class="flx__bx">
+				<div class="label__block">
+					<label class="visible-label">TracNet Sensor IMEI Id:</label>
+					<select class="ddl-select existing-imei select2" id="imei" name="list" required ng-model="selectedProductImei" ng-options="( item.prod_data) for item in productImei" value="" required ng-change="imei()"></select>
+					
+					<span class="error-msg" id="invalid_message" ng-model="invalid_message">{{invalid_message}}</span>
+				</div>
+				<div class="label__block">
+					<label class="visible-label">Portal Data Tree Label:</label>
+					<input type="text" name="siteName" placeholder="Portal Data Tree Label" id="siteName" ng-model="siteName" ng-minlength="1" ng-disabled="disable">
+					<!-- <span class="error-msg" ng-if="!myForm.siteName.$valid">The value is too short</span> -->
+					<span class="error-msg" id="invalid_message" ng-model="invalid_message">{{invalid_message}}</span>
+				</div>
+			</div>
 		</div>
+			  <div class="label__block">
+				<div class="btn-group">
+					<input class="favorite styled installed {{myClass2}}" type="button" ng-click="getButtonValue('1')" ng-model="status" required value="Installed">
+					<input class="favorite styled notInstalled {{myClass1}}" type="button" ng-click="getButtonValue('0')" ng-model="status" value="Not Installed">
+				  </div>
+			 </div>
+			  <div class="label__block" ng-hide="hideLocation">
+				 <label>Current Location</label>
+				 <a class="location__btn" ng-click="nearme()">Use Current Location &nbsp;<i class="fa fa-location-arrow" aria-hidden="true"></i></a>
+			  </div>
+			  <div class="label__block" ng-hide="hideLocation">
+				 <label>Latitude</label>
+				 <input type="text"  ng-model="elat" name="lattitude" id="lattitude" placeholder="Latitude" ng-change="textChanged()"/>
+				 <span class="error-msg" ng-show="myForm.lattitude.$error.required"> * Required Field! </span>
+			  </div>
+			  <div class="label__block" ng-hide="hideLocation">
+				 <label>Longitude</label>
+				 <input type="text" ng-model="elan" name="longitude" id="longitude" placeholder="Longitude" ng-change="textChanged()"/>
+				 <span class="error-msg" ng-show="myForm.longitude.$error.required"> * Required Field! </span>
+			  </div>
+			  <div class="group_sections" ng-hide="hideLocation">
+				<label>Select Time Zone</label>
+				<select class="ddl-select" name="timeZoneValue" id="timeZoneValue" required>
+					<option selected = "selected" value="0">Select Time Zone</option>
+					<option ng-selected="item.tz === selectedValue" ng-repeat="item in timeZone" value="{{item.timezone}}" ng-model="timeZoneValue">{{item.timezone}}</option>
+				</select>
+				<p class="error-msg" id="invalid_message" ng-model="invalid_message">{{invalid_message}}</p>
+			</div>
+			  <div class="label__block">
+				 <label>Sewer or stormwater</label>
+				 <select class="ddl-select" id="sewer" name="sewer">
+					<option selected = "selected" value="0">Select Type</option>
+				 	<option ng-selected="item.value === optionsSewerSel" ng-repeat="item in optionsTypes" value="{{item.value}}" ng-model="optionsTypesSel">{{item.label}}</option>
+				</select>
+			  </div>
+			  <div class="label__block">
+				 <label>Site Notes</label>
+				 <input type="text" id="siteNotes" ng-model="siteNotes" placeholder="Enter The Site Notes" />
+			  </div>
+			  <div class="label__block label__upload">
+				 <label>Site Photo button and viewer</label>
+				 <div class="file-input">
+					<input type="file" class="file-input__input" name="files" ng-file="uploadfiles" multiple id="upload-img"/>
+					<label class="file-input__label" for="upload-img">
+					<span>Choose File</span><img src="img/upload.svg"></label>
+				 </div>
+				 <p id="invalid"></p>
+				<div class="warp__slider">
+					<!-- <div class="owl-carousel owl-theme" id="previewImg" ></div> -->
+					<div class="owl-carousel owl-theme owl-loaded owl-drag" id="previewImg">
+						<div class="owl-stage-outer" ng-if="imagesData.length > 0">
+						  <div class="owl-stage" style="width: 538px; transform: translate3d(0px, 0px, 0px); transition: all 0.25s ease 0s;">
+							<div class="owl-item " ng-repeat="row in imagesData" style="width: 124.5px; margin-right: 10px;">
+							  <div class="item">
+								<img class="close__x" src="img/x-circle.svg">
+								<img src="{{ row.domain + row.image }}" class="user__upload">
+							  </div>
+							</div>
+						  </div>
+						</div>
+					</div>
+
+
+
+
+					<div class="btn-wrap" id="sliderBtn">
+					   <button type="button" class="next-btn " ><img src="img/arrow-right-circle.svg" /></button>
+					</div>
+				 </div>
+			  </div>
+			  <input type="submit" class="sbmit_btn" id="submitForm" value="Submit">
+		   </form>
+		   <div class="data__table">
+			<p  ng-show="manholeTabelData">Manhole Specifications 
+				<!-- <i  ng-click="showModall()" class="fa fa-pencil" aria-hidden="true"></i>  -->
+				<img ng-click="showModall()" src="./img/icon1-01.svg" style="gap: 10px; margin: 0px 0px 0px 0px;height: 40px;width: 40px;">
+			</p>
+			<div ng-if="pointSettingData" class="alertValue" ng-show="manholeTabelData">
+				<label for="">Distance at Full (100%)</label><div>{{pointSettingData.full}} mm </div>
+				<label for="">Distance at Empty (0%)</label><div>{{pointSettingData.empty}} mm</div>
+				<label for="">Distance Alert 1</label><div>{{pointSettingData.alert1}} mm</div>
+				<label for="">Distance Alert 2</label><div>{{pointSettingData.alert2}} mm</div>
+				<label for="">Distance Alert 3</label><div>{{pointSettingData.alert3}} mm</div>
+			</div>
+			<lable id="lableText"></lable>
+			<div id="refreshLog"  style="display: none;">Last Updated
+				<span id="last-updated" ng-show="manholeTabelData">0</span>'s ago <button class="btn btn-success" ng-show="manholeTabelData" type="button" ng-click="showRefreshLog()" onclick="onloadTable()">REFRESH</button>
+			</div>
+			  <table ng-show="manholeTabelData">
+				 <tr>
+					<th>Timestamp</th>
+					<th>Distance</th>
+					<th>Angle</th>
+					<th>Temperature</th>
+					<th>Signal</th>
+				 </tr>
+				 <tr ng-repeat="row in tableData" id="tableContent">
+					<td id="tdVal">{{ row.date }}</td>
+					<td ng-if="row.height || row.angle == 0">Dist. {{ row.height | number : fractionSize}} mm</td>
+					<td ng-if="row.angle || row.angle == 0">Ang. {{ row.angle + " deg" }}</td>
+					<td ng-if="row.temperature || row.angle == 0">Temp. {{ row.temperature + " °C" }}</td>
+					<td ng-if="row.signalStrengthValue || row.angle == 0">Sig. {{ row.signalStrengthValue.toFixed(2).split(".")[0] | number : fractionSize }} dBm</td>
+				 </tr>
+			  </table>
+		   </div>
+		</div>
+		</div>
+	 </section>
+	 <div class="loader" ng-show="isLoading">
+		<div class="loader-spinner"></div>
 	</div>
-</main>
-
-<footer>
-	<div class="loginFooter">
-		<div class="footerCol0">
-			&copy; {{thisyear}} TracWater Pty Ltd. Patented and Patents Pending. Terms of Use and Privacy Policy are
-			applicable to you. All rights reserved.
-		</div>
-		<div class="footerCol3 flexBoxCenter">
-			<img src='img/mail.png' style="width: 26px;" /> &nbsp; support@tracwater.com.au
-		</div>
-		<div class="footerCol2 flexBoxCenter">
-			<img src='img/phone25.png' style="width: 24px;" /> &nbsp; 1300 563 219
-		</div>
-		<div class="footerCol1 flexBoxCenter">
-			<img src='img/world.png' style="width: 20px;" /> &nbsp; <a style="color: black;"
-				href="http://www.tracwater.com.au">www.tracwater.com.au</a>
-		</div>
-	</div>
-</footer>
 
 
-<script>
-	$(document).ready(function () {
-		$("#tgl-sh-hd").click(function (e) {
-			$(".meterTree2").toggle(500);
-			$(".withtree1").toggleClass('wd_fll');
 
+	  <div ng-if="showModal" class="modal-container" id="popupModalCenter">
+		  <div class="modal">
+			  <div class="modal-content">
+				  <!-- Alert and alarm Form  -->
+				  <form action="" id="myForm" autocomplete="off">
+					  <section class="mhole">
+						  <div class="mhole-mobile">
+							  <h4>Manhole Specifications</h4>
+							  <!-- <p>Reset Button All Reset Distance Alert</p> -->
+							  <div class="mhole-image">
+								  <img src="img/inner-image.png" alt="">
+							  </div>
+							  <div class="mhole-content">
+								  <div class="mhole-text">
+									  <p>TracNet Sensor</p>
+								  </div>
+								  <div class="mhole-alert boundaryOne">
+									  <label for="">Full (100%)</label>
+									  <input type="text" onkeypress="return isNumber(event)" name="fullValue" id="fullValue" value="{{pointSettingData.full}}" ng-change="onInputChange(fullVal,'fullVal')" ng-model="fullVal"> 
+									  <span class="classmm">mm</span>
+									  <span ng-show="bOneErr" class="alert-show" style="top: 33px !important;">{{ errorfull }}</span>
+								  </div> 
+								  <div class="mhole-alert traingles">
+									  <samp class="alt-status" id="alt-status3">{{altStatus3}}</samp>
+									  <label class="{{addAlt3Class}}" id="alert-label3" for="">Distance Alert 3</label>
+									  <input type="text" class="{{addAlt3Class}}" onkeypress="return isNumber(event)" name="alert3" id="alert3" ng-model="alert3"  ng-change="onInputChange(alert3,'alert3')" value="{{pointSettingData.alarmThird}}"><span class="classmm">mm</span> 
+									  <span class="disTrigger"  id="disAlt3">{{disAlt3}}</span>
+									  <span ng-show="alrErr" class="alert-show">{{ errorAlt3 }}</span>
+								  </div>
+								  <div class="mhole-alert squares">
+									  <samp class="alt-status" id="alt-status2">{{altStatus2}}</samp>
+									  <label class="{{addAlt2Class}}" id="alert-label2" for="">Distance Alert 2</label>
+									  <input type="text" class="{{addAlt2Class}}" onkeypress="return isNumber(event)"  name="alert2" id="alert2" ng-model="alert2" ng-change="onInputChange(alert2,'alert2')" value="{{pointSettingData.alarmSecond}}"><span class="classmm">mm</span> 
+									  <span class="disTrigger"  id="disAlt2">{{disAlt2}}</span>
+									  <span ng-show="alrErr" class="alert-show">{{ errorAlt2 }}</span>
+								  </div>
+								  <div class="mhole-alert circles">
+									  <samp  class="alt-status" id="alt-status1">{{altStatus1}}</samp>
+									  <label class="{{addAlt1Class}}" id="alert-label1" for="">Distance Alert 1</label>
+									  <input type="text" class="{{addAlt1Class}}" onkeypress="return isNumber(event)" name="alert1" id="alert1" ng-model="alert1" ng-change="onInputChange(alert1,'alert1')" value="{{pointSettingData.alarmFirst}}"><span class="classmm">mm</span> 
+									  <span class="disTrigger" id="disAlt1">{{disAlt1}}</span>
+									  <span ng-show="alrErr" class="alert-show">{{ errorAlt1 }}</span>
+								  </div>
+								  <div class="mhole-alert boundaryTwo">
+									  <label for="">Empty (0%)</label>
+									  <input type="text" onkeypress="return isNumber(event)" name="emptyValue" id="emptyValue" ng-change="onInputChange(emptyVal,'emptyVal')" value="{{pointSettingData.empty}}" ng-model="emptyVal"><span class="classmm">mm</span>
+									  <span ng-show="bTwoErr" class="alert-show" style="top: 33px !important;">{{ errorempty }}</span>
+								  </div>
+							  </div>
+							  <div class="alert-checkbox buttons">
+								  <input type="button" value="Save Changes" ng-disabled="btnDisabled" ng-click="saveAlertData()" class="save-btn submit__btn {{disableBtn}}" >
+								  <input type="button" class="cancel-btn" value="Cancel, Go Back" ng-click="closeModal()"/>
+							  </div>
+							  <!-- <input type="button" class="edit-btn {{disableClass}}" ng-disabled="disableReset" ng-model="reset" value="Reset" ng-click="resetAlert()" /> -->
+							  <a href="" class="edit-btn" ng-click="resetAlert()">Reset All Alerts</a>
+						  </div>
+					  </section>
+				  </form>
+					<!-- End -->
+			  </div>
+		  </div>
+	  
+	  </div>
+
+
+		  <script type="text/javascript" id="rendered-js">
+			 $(document).ready(function ($) {
+				var radioButtons = document.querySelectorAll('input[type="radio"]');
+
+				radioButtons.forEach(function(radioButton) {
+				radioButton.addEventListener('change', function() {
+					var selectElements = document.querySelectorAll('select');
+
+					selectElements.forEach(function(selectElement) {
+						var options = selectElement.querySelectorAll('option');
+							options.forEach(function(option) {
+								if (option.value === '?') {
+								option.remove();
+								}
+							});
+						});
+					});
+				});
+			 $(".owl-carousel").owlCarousel({
+			  loop: true,
+			  margin: 10,
+			  dots: false,
+			  nav: false,
+			  items: 3,
+			   responsiveClass:true,
+			  responsive:{
+				  0:{
+					  items:2,
+					  nav:false,
+						loop:false
+				  },
+				  600:{
+					  items:3,
+					  nav:false,
+						loop:false
+				  },
+				  1000:{
+					  items:3,
+					  nav:false,
+					  loop:false
+				  }
+			  }
+			 });
+			 var owl = $(".owl-carousel");
+			 owl.owlCarousel();
+			 $(".next-btn").click(function () {
+			  owl.trigger("next.owl.carousel");
+			 });
+			 $(".prev-btn").click(function () {
+			  owl.trigger("prev.owl.carousel");
+			 });
+			 });
+	    /*Group node js*/ 
+		$("ul").on("click", ".init", function() {
+		 $(this).closest("ul").children('li:not(.init)').toggle();
 		});
 
+		var allOptions = $("ul").children('li:not(.init)');
+		$("ul").on("click", "li:not(.init)", function() {
+			allOptions.removeClass('selected');
+			$(this).addClass('selected');
+			$("ul").children('.init').html($(this).html());
+			allOptions.toggle();
+		});
+		$("#imei").change(function(){
+			var e = document.getElementById("imei");
+			var text = e.options[e.selectedIndex].text
+			if( text === "Select Product IMEI"){
+				document.getElementById('lableText').innerHTML = '';
+				document.getElementById('refreshLog').style.display = 'none';
+			} else {
+				document.getElementById('lableText').innerHTML = 'Recent Uploads';
+				document.getElementById('refreshLog').style.display = 'block';
+				onloadTable()
+			}
+		});
+	</script>
+	<script>
+		$(window).scroll(function(){
+  var sticky = $('.stick_header'),
+      scroll = $(window).scrollTop();
 
-	});
-</script>
+  if (scroll >= 50) sticky.addClass('fixed');
+  else sticky.removeClass('fixed');
+});
+	</script>
+	<script>
+		$(window).scroll(function(){
+  var sticky = $('.wrap__block_sticky'),
+      scroll = $(window).scrollTop();
+
+  if (scroll >= 50) sticky.addClass('mt_tp');
+  else sticky.removeClass('mt_tp');
+});
+	</script>
+	<script>
+		var lastUpdatedElement = document.getElementById('last-updated');
+        var startTime;
+		let hours;
+		let timerInterval;
+		let seconds;
+		let minutes;
+
+        // Update timer function
+        function updateTimer() {
+            if( hours == 1 ) {
+                onloadTable()
+            }
+			const now = new Date().getTime();
+
+			// Calculate the time difference between now and the start time (in milliseconds)
+			const timeDiff = now - startTime;
+
+			if( timeDiff < 59000) {
+				lastUpdatedElement.textContent = Math.floor((timeDiff % (1000 * 60)) / 1000);+ ' s';
+			} else if( timeDiff > 59000 ) {
+				lastUpdatedElement.textContent = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)) + 'm ' + Math.floor((timeDiff % (1000 * 60)) / 1000); + ' s';
+			} else if( timeDiff >= 60000 ) {
+				hours = Math.floor(timeDiff / (1000 * 60 * 60));
+				lastUpdatedElement.textContent = Math.floor(timeDiff / (1000 * 60 * 60)) + 'h ' + Math.floor((timeDiff % (1000 * 60)) / 1000); + ' s';
+			}
+        }
+		
+		function onloadTable(){
+            startTime = new Date().getTime();
+			clearInterval(timerInterval);
+  			timerInterval = setInterval(updateTimer, 1000);
+        }
+
+	</script>
+	<script>
+	$(document).on("click", ".hideBoundaries", function() {
+			if($(this).is(":checked")) {
+				$(".boundaryTwo").hide();
+				$(".boundaryOne").hide();
+			} else {
+				$(".boundaryTwo").show();
+				$(".boundaryOne").show();
+			}
+		});
+		$(document).on("click", ".hideAlerts", function() {
+			if($(this).is(":checked")) {
+				$('.circle').hide();
+				$('.traingle').hide();
+				$('.square').hide();
+			} else {
+				$('.circle').show();
+				$('.traingle').show();
+				$('.square').show();
+			}
+		});
+
+		$(document).on("input", "#fullValue", function() {
+			var fValue = $(this).val();
+			if(parseInt(fValue) >= 400 && parseInt(fValue) <= 3998){
+				$('#errorname').hide();
+			}else{
+				$('#errorname').show();
+			}
+		});
+		$(document).on("input", "#emptyValue", function() {
+			var fullValue = $('#fullValue').val();
+			var eValue = $(this).val();
+			if((parseInt(eValue) > parseInt(fullValue) && parseInt(eValue) <= 3998 )){
+				$('#errorn').hide();
+			}else{
+				$('#errorn').show();
+			}
+		});
+
+		// popup start
+		$(document).ready(function () {
+		$(".close-button").click(function () {
+			$("#popupModalCenter").removeClass("show-modal");
+		});	
+		});
+
+		$(document).ready(function () {
+			$(".cancel-btn").click(function () {
+				$("#popupModalCenter").removeClass("show-modal");
+			});	
+		});
+
+		function isNumber(evt) {
+			  evt = (evt) ? evt : window.event;
+			  var charCode = (evt.which) ? evt.which : evt.keyCode;
+			  if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+				  return false;
+			  }
+			  return true;
+		  }
+
+
+	</script>
+
+<footer>
+  <div class="mainFooter flexBoxCenter">
+    <span style="text-align: center;"> &copy;{{thisyear}} TracNet Pty Ltd. </span>
+    <span style="text-align: center;">Terms of Use and Privacy Policy are applicable to you.  All rights reserved. </span>
+  </div>
+</footer>

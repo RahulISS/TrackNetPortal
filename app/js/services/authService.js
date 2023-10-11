@@ -32,11 +32,5 @@ angular.module('dataService', [])
 		}
 	}
 
-	dataFactory.getRequest = function(query){
-		var canceler = $q.defer();
-		httpRequestCanceller[httpRequestCanceller.length] = canceler;
-		return $http.get('php/weatherEndpoint.php',{ 'query' : query },{timeout: canceler.promise})
-	}
-
 	return dataFactory;
 });

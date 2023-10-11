@@ -5,10 +5,6 @@ angular.module('frameCtrl', [])
 		$rootScope.storage = $sessionStorage.$default({
 			treeData: [],
 			sensorData: [],
-			instalationTracNet: [],
-			locationTracNet: [],
-			instalationTracNetCalender: [],
-			locationTracNetCalenderNew: [],
 			summary_checkedMeasurement: ["freechlorine"],
 			summary_selectedMeters: [],
 			summary_startDate: moment().subtract(7, "day"),
@@ -25,7 +21,7 @@ angular.module('frameCtrl', [])
 			report_rollup_index: 0,
 			report_interval_index: 2,
 			report_weekdaylist: [0, 1, 2, 3, 4, 5, 6],
-			chartsRangeStartDate: moment().subtract(6, "day"),
+			chartsRangeStartDate: moment(),
 			chartsRangeEndDate: moment(),
 			chartsRange1StartDate: moment(),
 			chartsRange1EndDate: moment(),
@@ -156,5 +152,9 @@ angular.module('frameCtrl', [])
 			}
 		];
 
+		if (localStorage.getItem("authToken") == '' || localStorage.getItem("authToken") == undefined) {
+			$state.go('login');
+            return;
+		}
 
 	});
