@@ -1031,7 +1031,7 @@ angular
                 // window.location.reload(); // Windo Refresh If the refresh value is True
                 localStorage.removeItem("refreshTable")
               }
-              reCenterMap(null);
+              // reCenterMap(null);
             });
           });
         }).catch(function (error) {
@@ -1771,7 +1771,7 @@ angular
             getInfoWinData($scope.nodes, $scope.markers)
 
             $window.Swal.fire({
-              title: "Alert Saved!",
+              title: "Configuration Saved!",
               text: " ",
               icon: "success"
             });
@@ -1951,26 +1951,16 @@ angular
             id: dict.installationId.split(" ")[0],
           }
         );
-        beachMarker[dict.installationId.split(" ")[0]].addListener(
-          "click",
-          function () {
-            infowindow.open(
-              map,
-              beachMarker[dict.installationId.split(" ")[0]]
-            );
-          }
-        );
+        beachMarker[dict.installationId.split(" ")[0]].addListener("click", function () {
+          infowindow.open(map, beachMarker[dict.installationId.split(" ")[0]]);
+        });
         infowindow.open(map, beachMarker[dict.installationId.split(" ")[0]]);
-        beachMarker[dict.installationId.split(" ")[0]].addListener(
-          "click",
-          function () {
-            infowindow.close();
-            const node = dict;
-
-            if (node === null) return;
-            getInfoWinData(node, this);
-          }
-        );
+        beachMarker[dict.installationId.split(" ")[0]].addListener("click", function () {
+          infowindow.close();
+          const node = dict;
+          if (node === null) return;
+          getInfoWinData(node, this);
+        });
 
         reCenterMap(point);
         return {
