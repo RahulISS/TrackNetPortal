@@ -864,6 +864,7 @@ angular
       }
 
       function clearInfoBox(id) {
+        $(".infoBox").hide();
         const index = getIndex($scope.displayData, "id");
         if ($scope.displayData[index] === undefined) return;
         if ($scope.displayData[index].infoBox === null) return;
@@ -881,7 +882,7 @@ angular
       function getInfoWinData(node, marker) {
         $scope.markers = marker;
         $scope.nodes = node;
-        $(".gm-style-iw-a").html('');
+        $(".infoBox").hide();
 
         let homeiw;
         let boxText = document.createElement("div");
