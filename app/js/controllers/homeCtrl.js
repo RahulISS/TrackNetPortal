@@ -926,7 +926,7 @@ angular
             // window.location.reload();
             localStorage.removeItem("refreshinfo")
           }
-          reCenterMap(null);
+          // reCenterMap(null);
         });
 
         $scope.displayData[index]["infoBox"] = homeiw;
