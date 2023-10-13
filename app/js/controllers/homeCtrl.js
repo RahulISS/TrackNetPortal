@@ -1025,14 +1025,14 @@ angular
             $scope.displayData[index]["infoBox"].setOptions({
               content: compiled[0],
             });
-            const infoRefresh = localStorage.getItem("refreshTable");
-            homeiw.addListener('closeclick', function () {
-              if (JSON.parse(infoRefresh) === true) {
-                // window.location.reload(); // Windo Refresh If the refresh value is True
-                localStorage.removeItem("refreshTable")
-              }
-              // reCenterMap(null);
-            });
+            // const infoRefresh = localStorage.getItem("refreshTable");
+            // homeiw.addListener('closeclick', function () {
+            //   if (JSON.parse(infoRefresh) === true) {
+            //     // window.location.reload(); // Windo Refresh If the refresh value is True
+            //     localStorage.removeItem("refreshTable")
+            //   }
+            //   // reCenterMap(null);
+            // });
           });
         }).catch(function (error) {
           if (error.status == 401) {
