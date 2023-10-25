@@ -15,8 +15,8 @@ angular
       $filter,
       apiBaseUrl
     ) {
-      
-		  localStorage.setItem( "trackNet" , '');
+
+      localStorage.setItem("trackNet", '');
       const isButtonVisible = true;
       const dataPickerFormat = "D/MM/YYYY";
       const skySparkFormat = "YYYY-MM-DD";
@@ -713,7 +713,8 @@ angular
         $scope.selectLegend(0);
         $scope.flowReportBtn = false;
         deselectAllTreeNodep("#chartTree");
-        $scope.selectedValue = "";
+        $scope.selectedValue = "Relative Distance";
+        $scope.change = "Relative Distance";
         $scope.changedSensorIds = null;
         $scope.previousSensorNames = {};
         document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
@@ -777,17 +778,17 @@ angular
         $scope.chartStatusSet[page].gridlines = !$scope.chartStatusSet[page].gridlines;
         if ($scope.chartStatusSet[page].gridlines) {
           document.getElementById(page + "_gridLinesButton").setAttribute("class", "btnTopBar");
-          for (var i = 0;i < $scope.chartStatusSet[page].charts.options.yAxis.length;i++)
+          for (var i = 0; i < $scope.chartStatusSet[page].charts.options.yAxis.length; i++)
             $scope.chartStatusSet[page].charts.options.yAxis[i].gridLineWidth = 2;
           if (page == "meter")
             $scope.chartStatusSet[page].charts.options.xAxis.gridLineWidth = 2;
           else {
-            for (var i = 0;i < $scope.chartStatusSet[page].charts.options.xAxis.length;i++)
+            for (var i = 0; i < $scope.chartStatusSet[page].charts.options.xAxis.length; i++)
               $scope.chartStatusSet[page].charts.options.xAxis[i].gridLineWidth = 2;
           }
         } else {
           document.getElementById(page + "_gridLinesButton").setAttribute("class", "btnTopBarOff");
-          for (var i = 0;i < $scope.chartStatusSet[page].charts.options.yAxis.length;i++)
+          for (var i = 0; i < $scope.chartStatusSet[page].charts.options.yAxis.length; i++)
             $scope.chartStatusSet[page].charts.options.yAxis[i].gridLineWidth = 0;
           if (page == "meter")
             $scope.chartStatusSet[page].charts.options.xAxis.gridLineWidth = 0;
@@ -913,7 +914,7 @@ angular
         var tempDataList = [];
         var contents = "";
         for (var i = 0; i < $scope.tableStats.length; i++) {
-          if (!($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null")){
+          if (!($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null")) {
             contents = contents + "Timestamp," + $scope.tableStats[i].title + " - " + $scope.tableStats[i].currentMeasurement.id_name + ",";
           }
         }
@@ -937,35 +938,35 @@ angular
 
         for (var i = 0; i < tempArray.length; i++) {
           for (var j = 0; j < tempDataList.length; j++) {
-            if (typeof tempDataList[j][i] != "undefined"){
-              contents = contents + " " + moment.utc(tempDataList[j][i][0]).format("Do MMM YYYY hh:mm:ssa")+ " " + ",";
+            if (typeof tempDataList[j][i] != "undefined") {
+              contents = contents + " " + moment.utc(tempDataList[j][i][0]).format("Do MMM YYYY hh:mm:ssa") + " " + ",";
               contents = contents + tempDataList[j][i][1] + ",";
-            }else{
-              if(typeof tempArray[i][0] != "undefined"){
+            } else {
+              if (typeof tempArray[i][0] != "undefined") {
                 contents = contents + ' ' + ",";
               }
               contents = contents + ' ' + ",";
             }
-            
+
           }
           contents = contents.slice(0, contents.length - 1);
           contents = contents + "\n";
         }
-        
-        
-            $http.post("php/charts/downloadcsv.php", {filename: filename, contents: contents,}).then(
-            function (data) {
-              var hiddenElement = document.createElement("a");
-              hiddenElement.href = "data:attachment/csv," + encodeURI(data.data);
-              hiddenElement.target = "_blank";
-              hiddenElement.download = filename;
-              document.body.appendChild(hiddenElement);
-              hiddenElement.click();
-            },
-            function (err) {
-              console.log(err);
-            }
-          );
+
+
+        $http.post("php/charts/downloadcsv.php", { filename: filename, contents: contents, }).then(
+          function (data) {
+            var hiddenElement = document.createElement("a");
+            hiddenElement.href = "data:attachment/csv," + encodeURI(data.data);
+            hiddenElement.target = "_blank";
+            hiddenElement.download = filename;
+            document.body.appendChild(hiddenElement);
+            hiddenElement.click();
+          },
+          function (err) {
+            console.log(err);
+          }
+        );
       }
 
       /*function downloadCsvFile(series, filename) {
@@ -1093,12 +1094,12 @@ angular
       $scope.minimal = false;
       $scope.none = false;
 
-      $scope.reloadMethod = function () {           
+      $scope.reloadMethod = function () {
         $timeout(function () {
-          var refreshChart =  $('#chartsMeterCompare').highcharts();     
+          var refreshChart = $('#chartsMeterCompare').highcharts();
           refreshChart.reflow();
         }, 10);
-    };
+      };
 
       $scope.checkstorage = function () {
         var isChecked = localStorage.getItem("isChecked")
@@ -1173,7 +1174,7 @@ angular
           $scope.tableStats[currentLegend].pointId = node._id;
           $scope.tableStats[currentLegend].title = node.text;
           $scope.tableStats[currentLegend].measurements = $rootScope.storage.sensorData; //JSON.parse(JSON.stringify($rootScope.storage.sensorData));
-          $scope.tableStats[currentLegend].currentMeasurement = $scope.tableStats[currentLegend].measurements[0];
+          $scope.tableStats[currentLegend].currentMeasurement = $scope.tableStats[currentLegend].measurements.find(sensor => sensor.id_name === $scope.change);
           $scope.tableStats[currentLegend].fold = $rootScope.foldmethodFilter[0].value;
           document.getElementById($scope.tableStats[currentLegend].hideDivId).style.visibility = "visible";
           document.getElementById($scope.tableStats[currentLegend].hideCloseDivId).style.visibility = "visible";
@@ -1296,34 +1297,19 @@ angular
         var minUnit = {},
           maxUnit = {};
         for (let i = 0; i < $scope.tableStats.length; i++) {
-          if (
-            $scope.tableStats[i].pointId !== "null" &&
-            $scope.tableStats[i].pointId !== null
-          ) {
-            if (
-              minUnit[$scope.tableStats[i].currentMeasurement.unit] == undefined
-            ) {
-              minUnit[$scope.tableStats[i].currentMeasurement.unit] =
-                $scope.tableStats[i].min;
+          if ($scope.tableStats[i].pointId !== "null" && $scope.tableStats[i].pointId !== null) {
+            if (minUnit[$scope.tableStats[i].currentMeasurement.unit] == undefined) {
+              minUnit[$scope.tableStats[i].currentMeasurement.unit] = $scope.tableStats[i].min;
             } else {
-              minUnit[$scope.tableStats[i].currentMeasurement.unit] =
-                $scope.tableStats[i].min <
-                  minUnit[$scope.tableStats[i].currentMeasurement.unit]
-                  ? $scope.tableStats[i].min
-                  : minUnit[$scope.tableStats[i].currentMeasurement.unit];
+              minUnit[$scope.tableStats[i].currentMeasurement.unit] = $scope.tableStats[i].min < minUnit[$scope.tableStats[i].currentMeasurement.unit] ? $scope.tableStats[i].min : minUnit[$scope.tableStats[i].currentMeasurement.unit];
             }
 
             if (
               maxUnit[$scope.tableStats[i].currentMeasurement.unit] == undefined
             ) {
-              maxUnit[$scope.tableStats[i].currentMeasurement.unit] =
-                $scope.tableStats[i].max;
+              maxUnit[$scope.tableStats[i].currentMeasurement.unit] = $scope.tableStats[i].max;
             } else {
-              maxUnit[$scope.tableStats[i].currentMeasurement.unit] =
-                $scope.tableStats[i].max >
-                  maxUnit[$scope.tableStats[i].currentMeasurement.unit]
-                  ? $scope.tableStats[i].max
-                  : maxUnit[$scope.tableStats[i].currentMeasurement.unit];
+              maxUnit[$scope.tableStats[i].currentMeasurement.unit] = $scope.tableStats[i].max > maxUnit[$scope.tableStats[i].currentMeasurement.unit] ? $scope.tableStats[i].max : maxUnit[$scope.tableStats[i].currentMeasurement.unit];
             }
           }
         }
@@ -1454,7 +1440,7 @@ angular
               // $scope.meterChartConfig.options.yAxis[0] = generateYAxisConfigDisance();
 
             }
-            
+
           }
 
         }
@@ -1515,7 +1501,7 @@ angular
                 if (data[j].hasOwnProperty("v0")) {
                   hasValue = true;
                   // if points data record not find then
-                  if(data[j].hasOwnProperty("empty")){
+                  if (data[j].hasOwnProperty("empty")) {
                     $scope.emptyAlarm = data[j].empty;
                     $scope.fullAlarm = data[j].full;
                   }
@@ -2211,9 +2197,9 @@ angular
               } else {
                 for (let index = 0; index < data.selected.length; index++) {
                   if (data.node.id === data.selected[index]) {
-                    scope.selectedValue = "Relative Distance";
+                    // scope.selectedValue = "Relative Distance";
                     $(this).jstree("disable_node", data.node);
-                    scope.selectedValue = "Relative Distance";
+                    // scope.selectedValue = "Relative Distance";
                   }
                 }
                 scope.$emit("checkedRef", data.node.text);

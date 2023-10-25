@@ -1,234 +1,288 @@
 <style type="text/css">
-.chartTopButtons {
-	margin-bottom: 4px;
-}
-.modal.show {
-	display: block;
-}
-#flowReport .form-group{
-	margin-bottom: 1rem;
-}
-#flowReport .flex-column{
-	margin-top: 1rem;
-    padding-left: 0;
-}
-#flowReportComments {
-    width: 100%;
-    min-height: 5rem;
-    height: 10rem;
-    max-height: 15rem;
-}
-.placehere {
-	margin-bottom: 1rem;
-}
-#flowReport {
-	overflow-y: hidden;
-}
-#flowReport.modal.show .modal-dialog {
-	min-height: calc(100% - 20px);
-    height: 100%;
-    max-height: calc(100% - 20px);
-    margin-top: 10px;
-}
-#flowReport.modal.show .modal-dialog .modal-content {
-	height: 100%;
-}
-#flowReport .modal-body {
-	height: calc(100% - 95px);
-}
-#flowReport .modal-body > .left-bar {
-	position: relative;
-	max-height: 100%;
-    overflow-y: auto;
-}
-#flowReport .modal-body > .left-bar + div {
-	max-height: 100%;
-}
-#flowReport .modal-body > .left-bar:after {
-    background: #dee2e6;
-    width: 1px;
-    height: calc( 100% + 20px );
-    position: absolute;
-    content: " ";
-    display: block;
-    top: -10px;
-    right: 0;
-}
-#reportDataHtml {
-	height: 100%;
-	position: relative;
-}
-#reportDataHtml .loader {
-	position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    text-align: center;
-    top: 0;
-    background: rgba(255,255,255,0.8)
-}
-#reportDataHtml .loader .spinner-border{
-	position: absolute;
-    top: 50%;
-}
-#reportDataHtml .data {
-	overflow-y: auto;
-	max-height: 80vh;
-    height: 100%;
-}
-.body-div .page-break {
-	height: 5rem;
-}
+	.chartTopButtons {
+		margin-bottom: 4px;
+	}
+
+	.modal.show {
+		display: block;
+	}
+
+	#flowReport .form-group {
+		margin-bottom: 1rem;
+	}
+
+	#flowReport .flex-column {
+		margin-top: 1rem;
+		padding-left: 0;
+	}
+
+	#flowReportComments {
+		width: 100%;
+		min-height: 5rem;
+		height: 10rem;
+		max-height: 15rem;
+	}
+
+	.placehere {
+		margin-bottom: 1rem;
+	}
+
+	#flowReport {
+		overflow-y: hidden;
+	}
+
+	#flowReport.modal.show .modal-dialog {
+		min-height: calc(100% - 20px);
+		height: 100%;
+		max-height: calc(100% - 20px);
+		margin-top: 10px;
+	}
+
+	#flowReport.modal.show .modal-dialog .modal-content {
+		height: 100%;
+	}
+
+	#flowReport .modal-body {
+		height: calc(100% - 95px);
+	}
+
+	#flowReport .modal-body>.left-bar {
+		position: relative;
+		max-height: 100%;
+		overflow-y: auto;
+	}
+
+	#flowReport .modal-body>.left-bar+div {
+		max-height: 100%;
+	}
+
+	#flowReport .modal-body>.left-bar:after {
+		background: #dee2e6;
+		width: 1px;
+		height: calc(100% + 20px);
+		position: absolute;
+		content: " ";
+		display: block;
+		top: -10px;
+		right: 0;
+	}
+
+	#reportDataHtml {
+		height: 100%;
+		position: relative;
+	}
+
+	#reportDataHtml .loader {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 10;
+		text-align: center;
+		top: 0;
+		background: rgba(255, 255, 255, 0.8)
+	}
+
+	#reportDataHtml .loader .spinner-border {
+		position: absolute;
+		top: 50%;
+	}
+
+	#reportDataHtml .data {
+		overflow-y: auto;
+		max-height: 80vh;
+		height: 100%;
+	}
+
+	.body-div .page-break {
+		height: 5rem;
+	}
 </style>
-<div class="historypage"><div class="historypageInner">
-	<!-- Tree -->
-	<div class="meterTree2 noprint">
-		<div class="treeInnerchart">
-			<div id="chartTree" class="chartsTree font_size_tree" jstreechart></div>
+<div class="historypage">
+	<div class="historypageInner">
+		<!-- Tree -->
+		<div class="meterTree2 noprint">
+			<div class="treeInnerchart">
+				<div id="chartTree" class="chartsTree font_size_tree" jstreechart></div>
+			</div>
 		</div>
-	</div>
-	<!-- Chart -->
-	<div class="withtree1" id="chartWidthNone">
-		<div class="viewtemplateInner">
-			<!-- Content -->
-			<div id="scatterPlotCaontainer" class="chartsTabContent" ng-class="(flowReportEnable ? 'modal-open' : '')">
-				<!-- Measurement -->
-				<div class="measurementTab">
-					<!-- Control panel -->
-					<div class="chartsMainControlsC">
-						<!-- Date Picker -->
-						<div class="datepickerbutton">
-							<div class="datepickerbuttonInnerC">
-								<div class="datepickerbuttonleftC pointerIcon" ng-click='changeDateRange("left")'><i class="fas fa-caret-left"></i></div>
-								<div id="chartsRange" class="datepickerbuttonmiddleC pointerIcon">
-									<span></span>&nbsp;&nbsp;
+		<!-- Chart -->
+		<div class="withtree1" id="chartWidthNone">
+			<div class="viewtemplateInner">
+				<!-- Content -->
+				<div id="scatterPlotCaontainer" class="chartsTabContent"
+					ng-class="(flowReportEnable ? 'modal-open' : '')">
+					<!-- Measurement -->
+					<div class="measurementTab">
+						<!-- Control panel -->
+						<div class="chartsMainControlsC">
+							<!-- Date Picker -->
+							<div class="datepickerbutton">
+								<div class="datepickerbuttonInnerC">
+									<div class="datepickerbuttonleftC pointerIcon" ng-click='changeDateRange("left")'><i
+											class="fas fa-caret-left"></i></div>
+									<div id="chartsRange" class="datepickerbuttonmiddleC pointerIcon">
+										<span></span>&nbsp;&nbsp;
+									</div>
+									<div class="datepickerbuttonrightC pointerIcon" ng-click='changeDateRange("right")'>
+										<i class="fas fa-caret-right"></i>
+									</div>
 								</div>
-								<div class="datepickerbuttonrightC pointerIcon" ng-click='changeDateRange("right")'><i class="fas fa-caret-right"></i></div>
+							</div>
+							<div class="charttitlebuttondivLeft elspace" style="height:35px;">
+								<button class="btnReset" ng-click='clearData()'>
+									Reset
+								</button>
+							</div>
+							<div class="chartTopButtons elspace">
+								<button id="meter_gridLinesButton" style="margin-bottom: 3px;"
+									ng-click='switchGridLine("meter")' class="btnTopBar">Gridlines</button>
+								<button id="meter_yminButton" style="margin-bottom: 3px;" ng-click='switchYmin("meter")'
+									class="btnTopBarOff">Y-axis min 0</button>
+								<button id="meter_markersButton" style="margin-bottom: 3px;"
+									ng-click='switchMarkers("meter")' class="btnTopBarOff">Markers</button>
+								<button style="margin-bottom: 3px;" ng-click='download("meter")' class="btnTopBarOff"
+									download>
+									Download
+								</button>
+								<button id="tableButton" style="margin-bottom: 3px;"
+									ng-click='switchTable("meter",true)' class="btnTopBarOff">
+									Table
+								</button>
+							</div>
+							<div class="chartTopButtons week_days elspace">
+								<button ng-click="toogleWeekDays(wd)"
+									ng-class="availableWeekdays[wd] ? 'btn-flat btn-success' : 'btn-flat btn-danger'"
+									ng-repeat="wd in weekdays">
+									{{ wd }}
+								</button>
+								<div class=" updated-btn-wrp">
+									<input type="radio" class="my-radio" id="Relative Distance" name="radioBtn"
+										value="Relative Distance" ng-model="selectedValue" ng-change="getVal()"
+										ng-checked="true"> Relative Distance
+									<input type="radio" class="my-radio" id="Distance" name="radioBtn" value="Distance"
+										ng-model="selectedValue" ng-change="getVal()"> Distance
+									<input type="radio" class="my-radio" id="Angle" name="radioBtn" value="Angle"
+										ng-model="selectedValue" ng-change="getVal()"> Angle
+								</div>
 							</div>
 						</div>
-						<div class="charttitlebuttondivLeft elspace" style="height:35px;">
-							<button class="btnReset" ng-click='clearData()'>
-								Reset
-							</button> 
-						</div>
-						<div class="chartTopButtons elspace">
-							<button id="meter_gridLinesButton" style="margin-bottom: 3px;" ng-click='switchGridLine("meter")' class="btnTopBar" >Gridlines</button>
-							<button id="meter_yminButton" style="margin-bottom: 3px;" ng-click='switchYmin("meter")' class="btnTopBarOff" >Y-axis min 0</button>
-			                <button id="meter_markersButton" style="margin-bottom: 3px;" ng-click='switchMarkers("meter")' class="btnTopBarOff" >Markers</button>
-			                <button  style="margin-bottom: 3px;" ng-click='download("meter")' class="btnTopBarOff" download>
-							Download
-							</button>
-			                <button id="tableButton" style="margin-bottom: 3px;" ng-click='switchTable("meter",true)' class="btnTopBarOff">
-								Table
-							</button>
-						</div>
-						<div class="chartTopButtons week_days elspace">
-							<button ng-click="toogleWeekDays(wd)" ng-class="availableWeekdays[wd] ? 'btn-flat btn-success' : 'btn-flat btn-danger'" ng-repeat="wd in weekdays">
-								{{ wd }}
-							</button>
-							<div class=" updated-btn-wrp">
-								<input type="radio" class="my-radio" id="Relative Distance" name="radioBtn" value="Relative Distance"  ng-model="selectedValue"  ng-change="getVal()" ng-checked="true"> Relative Distance 
-								<input type="radio" class="my-radio" id="Distance" name="radioBtn" value="Distance"  ng-model="selectedValue"  ng-change="getVal()"> Distance 
-								<input type="radio" class="my-radio"  id="Angle" name="radioBtn" value="Angle"  ng-model="selectedValue" ng-change="getVal()" > Angle
-							</div>
-						</div>
-					</div>
-					
-				    <!-- Chart area -->
-					<highchart class="chartsArea" id="chartsMeterCompare" config="meterChartConfig"></highchart>
-                    <!-- Chart stats area -->
-                    <div class="charts_m_stats_area" ng-show="dataLegendFull" ng-show="dataLegendReduced" ng-show="dataLegendMinimal" ng-hide="dataLegendNone">
-                        <!-- 1 row of 4 stats boxes repeated 2 times vertically -->
-						<div class="elegent-menu">
-												
-							<label class="filter-label" > 
-								<input type="checkbox" data-ng-init='checkstorage();' style="background: #fff;
+
+						<!-- Chart area -->
+						<highchart class="chartsArea" id="chartsMeterCompare" config="meterChartConfig"></highchart>
+						<!-- Chart stats area -->
+						<div class="charts_m_stats_area" ng-show="dataLegendFull" ng-show="dataLegendReduced"
+							ng-show="dataLegendMinimal" ng-hide="dataLegendNone">
+							<!-- 1 row of 4 stats boxes repeated 2 times vertically -->
+							<div class="elegent-menu">
+
+								<label class="filter-label">
+									<input type="checkbox" data-ng-init='checkstorage();' style="background: #fff;
 								padding: 8px;
 								border: 5px solid #3255A2;
 								margin-bottom: 2px;
 								border-radius: 2px;
 								background-color: #3255A2;
-								border-radius: 2px;" ng-click='SizeScreen("full")' ng-attr-class="{{full ? 'btnTopBar' : 'btnTopBarOff' }}" >                                    <span class="checkmark"></span>
-							</label>
-							<label class="filter-label"> 
-								<input type="checkbox" data-ng-init='checkstorage();' style="background: #fff;
+								border-radius: 2px;" ng-click='SizeScreen("full")' ng-attr-class="{{full ? 'btnTopBar' : 'btnTopBarOff' }}">
+									<span class="checkmark"></span>
+								</label>
+								<label class="filter-label">
+									<input type="checkbox" data-ng-init='checkstorage();' style="background: #fff;
 								background: #ffffff;
 								padding: 5px;
 								border: 8px solid #3255A2;
 								border-radius: 2px;
 								height: 11px;
 								width: 11px;
-								margin-bottom: 2px;" ng-click='SizeScreen("reduced")' ng-attr-class="{{reduced ? 'btnTopBar' : 'btnTopBarOff' }}" >                                    <span class="checkmark"></span>
-							</label>
-							<label class="filter-label"> 
-								<input type="checkbox" data-ng-init='checkstorage();' style="    background: #fff;
+								margin-bottom: 2px;" ng-click='SizeScreen("reduced")'
+										ng-attr-class="{{reduced ? 'btnTopBar' : 'btnTopBarOff' }}"> <span
+										class="checkmark"></span>
+								</label>
+								<label class="filter-label">
+									<input type="checkbox" data-ng-init='checkstorage();' style="    background: #fff;
 								padding: 9px;
 								border: 4px solid #3255A2;
 								border-radius: 2px;
-								width: 13px;" ng-click='SizeScreen("minimal")' ng-attr-class="{{minimal ? 'btnTopBar' : 'btnTopBarOff' }}" >                                    <span class="checkmark"></span>
-							</label>
-							<label class="filter-label"> 
-								<input type="checkbox" data-ng-init='checkstorage();' style="    background: #fff;
+								width: 13px;" ng-click='SizeScreen("minimal")' ng-attr-class="{{minimal ? 'btnTopBar' : 'btnTopBarOff' }}">
+									<span class="checkmark"></span>
+								</label>
+								<label class="filter-label">
+									<input type="checkbox" data-ng-init='checkstorage();' style="    background: #fff;
 								padding: 10px;
 								border: 3px solid #3255A2;
 								border-radius: 2px;
-								margin-top: 2px;" ng-click='SizeScreen("none")' ng-attr-class="{{none ? 'btnTopBar' : 'btnTopBarOff' }}" >                                    <span class="checkmark"></span>
-							</label>
-						</div>
-                        <div ng-repeat="oneline in tableStatArr" class="charts_m_stats_row">
+								margin-top: 2px;" ng-click='SizeScreen("none")' ng-attr-class="{{none ? 'btnTopBar' : 'btnTopBarOff' }}"> <span
+										class="checkmark"></span>
+								</label>
+							</div>
+							<div ng-repeat="oneline in tableStatArr" class="charts_m_stats_row">
 
-                        <!-- A box of data series stats repeated 4 times horizontally -->
-                        <div ng-repeat="oneitem in oneline" id={{tableStats[oneitem].divId}} class="charts_m_stats_row_cell w3-container w3-border w3-round-xlarge" style="color:{{tableStats[oneitem].colour}};">
+								<!-- A box of data series stats repeated 4 times horizontally -->
+								<div ng-repeat="oneitem in oneline" id={{tableStats[oneitem].divId}}
+									class="charts_m_stats_row_cell w3-container w3-border w3-round-xlarge"
+									style="color:{{tableStats[oneitem].colour}};">
 
-                                <!-- Row 1 Stats Box Title -->
-                                <div class="charts_m_stats_row_cell_title" ng-show="dataLegendFull" ng-show="dataLegendReduced"  ng-hide="dataLegendMinimal" >
-					<span class="title-span" ng-click="selectLegend(oneitem)">
-						<div class="numberdiv pointerIcon">{{ oneitem + 1 }}</div>
-							<div class="statTitleSpan">{{tableStats[oneitem].title}}</div>
+									<!-- Row 1 Stats Box Title -->
+									<div class="charts_m_stats_row_cell_title" ng-show="dataLegendFull"
+										ng-show="dataLegendReduced" ng-hide="dataLegendMinimal">
+										<span class="title-span" ng-click="selectLegend(oneitem)">
+											<div class="numberdiv pointerIcon">{{ oneitem + 1 }}</div>
+											<div class="statTitleSpan">{{tableStats[oneitem].title}}</div>
 										</span>
-                                        <div ng-click="clearNodeData(oneitem,tableStats[oneitem])" class="closediv1 itemhidden" id={{tableStats[oneitem].hideCloseDivId}}>
+										<div ng-click="clearNodeData(oneitem,tableStats[oneitem])"
+											class="closediv1 itemhidden" id={{tableStats[oneitem].hideCloseDivId}}>
 											<i style="color:{{ tableStats[oneitem].colour }};" class="fas fa-times"></i>
 										</div>
-                                </div>
-                                <!-- Stats Data outer box takes mouse clicks-->
-                                <div>
-                                        <!-- Stats Data inner box shows and hides the stats-->
-                                        <div id={{tableStats[oneitem].hideDivId}} class="itemhidden">
-                                                <!-- Row 2 = Measurement dropdown list-->
-                                                <div class="charts_m_stats_row_cell_measurement">                        
-							<select style="color:{{tableStats[oneitem].colour}}" class="dropdownbuttonRegion" ng-change="changeMeasurement(oneitem)" ng-model="tableStats[oneitem].currentMeasurement" ng-options="sensorItem.id_name for sensorItem in tableStats[oneitem].measurements"></select>         
-                                                </div>
-                                                <!-- Row 3 Units -->
-                                                <div class="charts_m_stats_row_cell_unit">
-                                                    <div class="charts_m_stats_row_cell_unit_column">{{tableStats[oneitem].currentMeasurement.unit}}</div> 
-                                                    <div class="charts_m_stats_row_cell_unit_column">
-								                		<div class="charts_m_stats_row_cell_unit_column">{{ tableStats[oneitem].fold }}</div>      
-                                                    </div>
-                                                </div>
-                                                <!-- Row 4 Min Max Data -->
-												
-                                                <div class="charts_m_stats_row_cell_unit" ng-hide="dataLegendReduced" ng-show="dataLegendFull"> 
-                                                        <div class="charts_m_stats_row_cell_unit_column">Max: {{tableStats[oneitem].max | number : fractionSize}} </div>
-                                                        <div class="charts_m_stats_row_cell_unit_column">Min: {{tableStats[oneitem].min | number : fractionSize}} </div>
-                                                </div>
-                                                <!-- Row 6 Avg Sum Data -->
-                                                <div class="charts_m_stats_row_cell_unit" ng-hide="dataLegendReduced" ng-show="dataLegendFull">
-                                                        <div class="charts_m_stats_row_cell_unit_column">Avg: {{tableStats[oneitem].avg | number : fractionSize }} </div>
-                                                        <div class="charts_m_stats_row_cell_unit_column"></div>
-                                                </div>
+									</div>
+									<!-- Stats Data outer box takes mouse clicks-->
+									<div>
+										<!-- Stats Data inner box shows and hides the stats-->
+										<div id={{tableStats[oneitem].hideDivId}} class="itemhidden">
+											<!-- Row 2 = Measurement dropdown list-->
+											<div class="charts_m_stats_row_cell_measurement">
+												<select style="color:{{tableStats[oneitem].colour}}"
+													class="dropdownbuttonRegion" ng-change="changeMeasurement(oneitem)"
+													ng-model="tableStats[oneitem].currentMeasurement"
+													ng-options="sensorItem.id_name for sensorItem in tableStats[oneitem].measurements"
+													ng-init="tableStats[oneitem].currentMeasurement = selectedValue"></select>
+											</div>
+											<!-- Row 3 Units -->
+											<div class="charts_m_stats_row_cell_unit">
+												<div class="charts_m_stats_row_cell_unit_column">
+													{{tableStats[oneitem].currentMeasurement.unit}}</div>
+												<div class="charts_m_stats_row_cell_unit_column">
+													<div class="charts_m_stats_row_cell_unit_column">{{
+														tableStats[oneitem].fold }}</div>
+												</div>
+											</div>
+											<!-- Row 4 Min Max Data -->
 
-                                        </div><!-- END: Stats Data inner box shows and hides the stats-->
-                                </div><!-- Stats Data outer box takes mouse clicks-->
+											<div class="charts_m_stats_row_cell_unit" ng-hide="dataLegendReduced"
+												ng-show="dataLegendFull">
+												<div class="charts_m_stats_row_cell_unit_column">Max:
+													{{tableStats[oneitem].max | number : fractionSize}} </div>
+												<div class="charts_m_stats_row_cell_unit_column">Min:
+													{{tableStats[oneitem].min | number : fractionSize}} </div>
+											</div>
+											<!-- Row 6 Avg Sum Data -->
+											<div class="charts_m_stats_row_cell_unit" ng-hide="dataLegendReduced"
+												ng-show="dataLegendFull">
+												<div class="charts_m_stats_row_cell_unit_column">Avg:
+													{{tableStats[oneitem].avg | number : fractionSize }} </div>
+												<div class="charts_m_stats_row_cell_unit_column"></div>
+											</div>
+
+										</div><!-- END: Stats Data inner box shows and hides the stats-->
+									</div><!-- Stats Data outer box takes mouse clicks-->
 
 
-                        </div>
-                		</div>
+								</div>
+							</div>
 
-                    </div>
-					<div ng-show="dataLegendNone">
-												
-						<label class="filter-label" > 
-							<input type="checkbox" data-ng-init='checkstorage();' style="background: #fff;
+						</div>
+						<div ng-show="dataLegendNone">
+
+							<label class="filter-label">
+								<input type="checkbox" data-ng-init='checkstorage();' style="background: #fff;
 							padding: 5px;
 							border: 8px solid #3255A2;
 							margin-bottom: 2px;
@@ -237,10 +291,11 @@
 							height: 11px;
 							width: 11px;
 							margin-top: 2px;
-							border-radius: 2px;" ng-click='SizeScreen("full")' ng-attr-class="{{full ? 'btnTopBar' : 'btnTopBarOff' }}" >                                    <span class="checkmark"></span>
-						</label>
-						<label class="filter-label"> 
-							<input type="checkbox" data-ng-init='checkstorage();' style="background: #fff;
+							border-radius: 2px;" ng-click='SizeScreen("full")' ng-attr-class="{{full ? 'btnTopBar' : 'btnTopBarOff' }}">
+								<span class="checkmark"></span>
+							</label>
+							<label class="filter-label">
+								<input type="checkbox" data-ng-init='checkstorage();' style="background: #fff;
 							background: #ffffff;
 							padding: 5px;
 							border: 8px solid #3255A2;
@@ -248,141 +303,177 @@
 							height: 11px;
 							width: 11px;
 							margin-top: 2px;
-							margin-bottom: 2px;" ng-click='SizeScreen("reduced")' ng-attr-class="{{reduced ? 'btnTopBar' : 'btnTopBarOff' }}" >                                    <span class="checkmark"></span>
-						</label>
-						<label class="filter-label"> 
-							<input type="checkbox" data-ng-init='checkstorage();' style="    background: #fff;
+							margin-bottom: 2px;" ng-click='SizeScreen("reduced")'
+									ng-attr-class="{{reduced ? 'btnTopBar' : 'btnTopBarOff' }}"> <span
+									class="checkmark"></span>
+							</label>
+							<label class="filter-label">
+								<input type="checkbox" data-ng-init='checkstorage();' style="    background: #fff;
 							padding: 9px;
 							border: 4px solid #3255A2;
 							border-radius: 2px;
 							margin-top: 2px;
-							width: 13px;" ng-click='SizeScreen("minimal")' ng-attr-class="{{minimal ? 'btnTopBar' : 'btnTopBarOff' }}" >                                    <span class="checkmark"></span>
-						</label>
-						<label class="filter-label"> 
-							<input type="checkbox" data-ng-init='checkstorage();' style="    background: #fff;
+							width: 13px;" ng-click='SizeScreen("minimal")' ng-attr-class="{{minimal ? 'btnTopBar' : 'btnTopBarOff' }}">
+								<span class="checkmark"></span>
+							</label>
+							<label class="filter-label">
+								<input type="checkbox" data-ng-init='checkstorage();' style="    background: #fff;
 							padding: 10px;
 							border: 3px solid #3255A2;
 							border-radius: 2px;
 							margin-bottom: 2px;
 							margin-top: 2px;
-							margin-top: 2px;" ng-click='SizeScreen("none")' ng-attr-class="{{none ? 'btnTopBar' : 'btnTopBarOff' }}" >                                    <span class="checkmark"></span>
-						</label>
-					</div>
-					<div class="measureTable" ng-show="showMeasureTable">
-						<div class="measureTableLeft">
-							<div class="oneTableDiv">
-								<table class="table table-bordered table-hover my-table">
-                                    <thead>
-                                        <tr>
-											<th class="my-th">
-												Timestamp
-											</th>
-											<th ng-hide=" stat.pointId === null || stat.pointId === 'null' " class="my-th" ng-repeat="stat in tableStats">
-												{{stat.title}} - {{stat.currentMeasurement.id_name}}({{stat.currentMeasurement.unit}})
-											</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr ng-repeat="row in tableViewData  | orderBy:'ts'">
-											<td class="my-td">
-												{{ readable(row.ts) }}
-											</td>
-                                            <td class="my-td" ng-repeat="item in activeItems">
-                                               {{ readable( row["x" + item ] ) }}
-                                            </td>
-                                        </tr>
-										
-                                    </tbody>
-                                </table>
-							</div>
+							margin-top: 2px;" ng-click='SizeScreen("none")' ng-attr-class="{{none ? 'btnTopBar' : 'btnTopBarOff' }}"> <span
+									class="checkmark"></span>
+							</label>
 						</div>
-						<div class="measureTableRight">
-							<button ng-click='switchTable("meter",false)' class="btnSideBar">
-								Chart
-							</button>
-						</div>
-					</div>
-					<div class="measureTable scatterPlot" ng-show="showScatterPlot">
-						<div class="tptitlebar">
-							<div>
-								Layout: &nbsp;<select id="showGridToOneChart" ng-model="showGridToOne" ng-options="item as item.label for item in optionGridToOne track by item.value"></select>
-							</div>
-							<div ng-if="showGridToOne.value==1">
-								<button ng-click="setAsActiveScatter(sChartId)" ng-repeat="(idx, sChartId) in scatterChartConfigCount" ng-class="activeScatterChart==sChartId ? 'btn-flat btn-success' : 'btn-flat btn-danger'">{{ (idx*1) + 1 }}</button>
-							</div>
-							<button class="btnTopBarOff" ng-click="toggleScatterPlot()">Return to Charts</button>
-						</div>
-						<div ng-if="showScatterPlot" class="chartContainerOne" ng-class="(showGridToOne.value==1 || scatterChartConfigCount>9) ? 'addScrollY' : ''">
-							<div ng-if="showGridToOne.value==2 || (showGridToOne.value==1 && activeScatterChart==idx)" class="scatterWrap" ng-repeat="(idx, sChartConf) in scatterChartConfig">
-								<highchart config="sChartConf"></highchart>
-							</div>
-						</div>
-					</div>
-					<div id="flowReport" class="modal fade" ng-class="(flowReportEnable ? 'show' : '')" role="dialog">
-					    <div class="modal-dialog modal-xl" role="document">
-					        <div class="modal-content rounded-0">
-					        	<div class="modal-header">
-									<h3 class="modal-title">Generate Flow Reports</h3>
+						<div class="measureTable" ng-show="showMeasureTable">
+							<div class="measureTableLeft">
+								<div class="oneTableDiv">
+									<table class="table table-bordered table-hover my-table">
+										<thead>
+											<tr>
+												<th class="my-th">
+													Timestamp
+												</th>
+												<th ng-hide=" stat.pointId === null || stat.pointId === 'null' "
+													class="my-th" ng-repeat="stat in tableStats">
+													{{stat.title}} -
+													{{stat.currentMeasurement.id_name}}({{stat.currentMeasurement.unit}})
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="row in tableViewData  | orderBy:'ts'">
+												<td class="my-td">
+													{{ readable(row.ts) }}
+												</td>
+												<td class="my-td" ng-repeat="item in activeItems">
+													{{ readable( row["x" + item ] ) }}
+												</td>
+											</tr>
+
+										</tbody>
+									</table>
 								</div>
-					            <div class="modal-body row">
-					            	<div class="col-sm-3 left-bar">
-					            		<div class="form-group col-xs-12">
-										    <label class="col-form-label">Type of report</label>
-										    <div>
-										      	<select class="rounded-0" ng-change="exportFlowReport()" ng-model="flowReportTypeSel" ng-options="item as item.label for item in flowReportTypes track by item.value"></select>
-										    </div>
-										</div>
-						                <div class="form-group col-xs-12">
-										    <label class="col-form-label">Date Range</label>
-										    <div>
-										      	<div class="datepickerbutton">
-													<div class="datepickerbuttonInnerC">
-														<div class="datepickerbuttonleftC pointerIcon" ng-click='changeFlowDateRange("left")'><i class="fas fa-caret-left"></i></div>
-														<div id="flowReportRange" class="datepickerbuttonmiddleC pointerIcon">
-															<span></span>&nbsp;&nbsp;
+							</div>
+							<div class="measureTableRight">
+								<button ng-click='switchTable("meter",false)' class="btnSideBar">
+									Chart
+								</button>
+							</div>
+						</div>
+						<div class="measureTable scatterPlot" ng-show="showScatterPlot">
+							<div class="tptitlebar">
+								<div>
+									Layout: &nbsp;<select id="showGridToOneChart" ng-model="showGridToOne"
+										ng-options="item as item.label for item in optionGridToOne track by item.value"></select>
+								</div>
+								<div ng-if="showGridToOne.value==1">
+									<button ng-click="setAsActiveScatter(sChartId)"
+										ng-repeat="(idx, sChartId) in scatterChartConfigCount"
+										ng-class="activeScatterChart==sChartId ? 'btn-flat btn-success' : 'btn-flat btn-danger'">{{
+										(idx*1) + 1 }}</button>
+								</div>
+								<button class="btnTopBarOff" ng-click="toggleScatterPlot()">Return to Charts</button>
+							</div>
+							<div ng-if="showScatterPlot" class="chartContainerOne"
+								ng-class="(showGridToOne.value==1 || scatterChartConfigCount>9) ? 'addScrollY' : ''">
+								<div ng-if="showGridToOne.value==2 || (showGridToOne.value==1 && activeScatterChart==idx)"
+									class="scatterWrap" ng-repeat="(idx, sChartConf) in scatterChartConfig">
+									<highchart config="sChartConf"></highchart>
+								</div>
+							</div>
+						</div>
+						<div id="flowReport" class="modal fade" ng-class="(flowReportEnable ? 'show' : '')"
+							role="dialog">
+							<div class="modal-dialog modal-xl" role="document">
+								<div class="modal-content rounded-0">
+									<div class="modal-header">
+										<h3 class="modal-title">Generate Flow Reports</h3>
+									</div>
+									<div class="modal-body row">
+										<div class="col-sm-3 left-bar">
+											<div class="form-group col-xs-12">
+												<label class="col-form-label">Type of report</label>
+												<div>
+													<select class="rounded-0" ng-change="exportFlowReport()"
+														ng-model="flowReportTypeSel"
+														ng-options="item as item.label for item in flowReportTypes track by item.value"></select>
+												</div>
+											</div>
+											<div class="form-group col-xs-12">
+												<label class="col-form-label">Date Range</label>
+												<div>
+													<div class="datepickerbutton">
+														<div class="datepickerbuttonInnerC">
+															<div class="datepickerbuttonleftC pointerIcon"
+																ng-click='changeFlowDateRange("left")'><i
+																	class="fas fa-caret-left"></i></div>
+															<div id="flowReportRange"
+																class="datepickerbuttonmiddleC pointerIcon">
+																<span></span>&nbsp;&nbsp;
+															</div>
+															<div class="datepickerbuttonrightC pointerIcon"
+																ng-click='changeFlowDateRange("right")'><i
+																	class="fas fa-caret-right"></i></div>
 														</div>
-														<div class="datepickerbuttonrightC pointerIcon" ng-click='changeFlowDateRange("right")'><i class="fas fa-caret-right"></i></div>
+													</div>
+													<div class="clearfix"></div>
+												</div>
+											</div>
+											<div class="form-group col-xs-12">
+												<label class="col-form-label">Sensor to Report</label>
+												<div>
+													<div class="mt-small flex-column flex-start"
+														ng-repeat="sensor in flowSensorData">
+														<div class="flexBoxCenter">
+															<input class="mr-small" type="checkbox" id={{sensor.type}}
+																ng-click="selectFlowRepSensor($index)"
+																ng-model="sensor.checked">
+															<span class="flexBoxCenter">{{sensor.id_name}}
+																({{sensor.unit}})</span>
+														</div>
 													</div>
 												</div>
-												<div class="clearfix"></div>
-										    </div>
-										</div>
-						                <div class="form-group col-xs-12">
-										    <label class="col-form-label">Sensor to Report</label>
-										    <div>
-										      	<div class="mt-small flex-column flex-start" ng-repeat="sensor in flowSensorData">
-													<div class="flexBoxCenter">
-														<input class="mr-small" type="checkbox" id={{sensor.type}} ng-click="selectFlowRepSensor($index)" ng-model="sensor.checked">
-														<span class="flexBoxCenter">{{sensor.id_name}} ({{sensor.unit}})</span>
-													</div>
+											</div>
+											<div class="form-group col-xs-12">
+												<label class="col-form-label">Comment / Annotation</label>
+												<div>
+													<textarea id="flowReportComments" class="rounded-0"
+														ng-model="flowReportComments"></textarea>
 												</div>
-										    </div>
+											</div>
 										</div>
-						                <div class="form-group col-xs-12">
-										    <label class="col-form-label">Comment / Annotation</label>
-										    <div>
-										    	<textarea id="flowReportComments" class="rounded-0" ng-model="flowReportComments"></textarea>
-										    </div>
+										<div class="col-sm-9">
+											<div id="reportDataHtml">
+												<div class="data">
+													<div class="placehere"></div>
+													<div ng-if="flowReportComments"><strong>Comment / Annotation
+															::</strong>&nbsp;{{flowReportComments}}</div>
+												</div>
+												<div class="loader" ng-show="flowReportLoader">
+													<div class="spinner-border" role="status"><span
+															class="sr-only">Loading...</span></div>
+												</div>
+											</div>
 										</div>
-					            	</div>
-					            	<div class="col-sm-9">
-					            		<div id="reportDataHtml">
-					            			<div class="data"><div class="placehere"></div><div ng-if="flowReportComments"><strong>Comment / Annotation ::</strong>&nbsp;{{flowReportComments}}</div></div>
-					            			<div class="loader" ng-show="flowReportLoader"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>
-					            		</div>
-					            	</div>
-					            </div>
-					            <div class="modal-footer">
-					                <button type="button" class="btn-flat btn-primary" ng-click="exportFlowReport(1)">Export PDF</button>
-					                <button type="button" class="btn-flat btn-success" ng-click="exportFlowReport(2)">Email PDF</button>
-					                <button type="button" class="btn-flat btn-danger" ng-click="toggleFlowRepModel(0)">Close</button>
-					            </div>
-					        </div>
-					    </div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn-flat btn-primary"
+											ng-click="exportFlowReport(1)">Export PDF</button>
+										<button type="button" class="btn-flat btn-success"
+											ng-click="exportFlowReport(2)">Email PDF</button>
+										<button type="button" class="btn-flat btn-danger"
+											ng-click="toggleFlowRepModel(0)">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div></div>
+</div>
 <div ng-if="flowReportEnable" class="modal-backdrop fade show"></div>
