@@ -931,7 +931,7 @@ angular
             return currentArray.length > largestArray.length ? currentArray : largestArray;
           }, []);
         }
-        console.log(tempDataList);
+        // console.log(tempDataList);
         const largestArray = findLargestArray(tempDataList);
         //var tempArray = tempDataList[0];
         var tempArray = largestArray;
@@ -1442,11 +1442,13 @@ angular
             }
 
           }
-
         }
-        if ($scope.changedSensorIds == null || $scope.changedSensorIds == $scope.tableStats[i].pointId && $scope.changeSensor == null || $scope.changeSensor == $scope.outPreviousSensorNames && $scope.checkRelativeDistanceSensor == "Relative Distance") {
+        // console.log($scope.queriesRelativeDistalceArray, $scope.queriesArray);
+        // console.log($scope.changedSensorIds, $scope.tableStats[i].pointId, $scope.changeSensor, $scope.outPreviousSensorNames, $scope.checkRelativeDistanceSensor);
+        // if ($scope.changedSensorIds == null || $scope.changedSensorIds == $scope.tableStats[i].pointId && $scope.changeSensor == null || $scope.changeSensor == $scope.outPreviousSensorNames && $scope.checkRelativeDistanceSensor == "Relative Distance") {
 
-          if ($scope.queriesRelativeDistalceArray.length === 0) return;
+        $scope.tableViewData = [];
+        if ($scope.queriesRelativeDistalceArray.length != 0) {
 
           const promises_data = $scope.queriesRelativeDistalceArray.map(function (item) {
 
@@ -1466,21 +1468,20 @@ angular
           data_completion.then(function (responses) {
 
             if (responses.length === 0) return;
-            $scope.tableViewData = [];
             for (let p = 0; p < responses[0].data.data.data.length; p++) {
               $scope.tableViewData.push([responses[0].data.data.data[p].ts])
             }
             for (let i = 0; i < responses.length; i++) {
               const data = responses[i].data.data.data;
-              if (sensor_name == "Distance") {
-                for (let k = data.length - 1; k >= 0; k--) {
-                  if (data[k].v0 <= 400) {
-                    data[k].v0 = 400;
-                  } else if (data[k].v0 >= 3998) {
-                    data.splice(k, 1); // Remove the element at index k
-                  }
-                }
-              }
+              // if (sensor_name == "Distance") {
+              //   for (let k = data.length - 1; k >= 0; k--) {
+              //     if (data[k].v0 <= 400) {
+              //       data[k].v0 = 400;
+              //     } else if (data[k].v0 >= 3998) {
+              //       data.splice(k, 1); // Remove the element at index k
+              //     }
+              //   }
+              // }
               const index = responses[i].index;
               $scope.tableStats[index].max = 0;
               $scope.tableStats[index].min = 0;
@@ -1507,7 +1508,7 @@ angular
                   }
                   var relativeDistance = Math.round(((($scope.emptyAlarm - $scope.fullAlarm) - (parseFloat(data[j].v0) - $scope.fullAlarm)) / ($scope.emptyAlarm - $scope.fullAlarm)) * 100);
 
-                  if ($scope.checkRelativeDistanceSensor == "Relative Distance") {
+                  if ($scope.changeSensor == "Relative Distance") {
                     if (relativeDistance < 0 || relativeDistance == -0) {
                       relativeDistance = 0;
                     }
@@ -1580,10 +1581,11 @@ angular
           });
           $scope.changedSensorIds = null;
         }
-        else {
+        if ($scope.queriesArray.length != 0) {
           if ($scope.queriesArray.length === 0) return;
           //if($scope.queriesArray.length === 0) return;
           const promises_data1 = $scope.queriesArray.map(function (item) {
+            // console.log(item);
             return $http.get(item.query, { headers: customeHeader }).then(function (reqResult) {
               return {
                 'index': item.index,
@@ -1591,17 +1593,16 @@ angular
               };
             });
           })
-
           const data_completion = $q.all(promises_data1)
           data_completion.then(function (responses) {
             if (responses.length === 0) return;
-            $scope.tableViewData = [];
+            // $scope.tableViewData = [];
             for (let p = 0; p < responses[0].data.data.data.length; p++) {
               $scope.tableViewData.push([responses[0].data.data.data[p].ts])
             }
             for (let i = 0; i < responses.length; i++) {
               const data = responses[i].data.data.data;
-              if (sensor_name == "Distance") {
+              if ($scope.changeSensor == "Distance") {
                 for (let k = data.length - 1; k >= 0; k--) {
                   if (data[k].v0 <= 400) {
                     data[k].v0 = 400;
