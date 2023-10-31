@@ -1496,15 +1496,7 @@ angular
         }
         for (let i = 0; i < responses.length; i++) {
           const data = responses[i].data.data.data;
-          if ($scope.changeSensor == "Distance") {
-            for (let k = data.length - 1; k >= 0; k--) {
-              if (data[k].v0 <= 400) {
-                data[k].v0 = 400;
-              } else if (data[k].v0 >= 3998) {
-                data.splice(k, 1); // Remove the element at index k
-              }
-            }
-          }
+
           const index = responses[i].index;
           $scope.tableStats[index].max = 0;
           $scope.tableStats[index].min = 0;
@@ -1517,6 +1509,16 @@ angular
           $scope.tableViewData.push([]);
           const valueName = 'x' + i;
           let hasValue = false;
+
+          if ($scope.tableStats[index].currentMeasurement.id_name == "Distance") {
+            for (let k = data.length - 1; k >= 0; k--) {
+              if (data[k].v0 <= 400) {
+                data[k].v0 = 400;
+              } else if (data[k].v0 >= 3998) {
+                data.splice(k, 1); // Remove the element at index k
+              }
+            }
+          }
 
           for (var j = 0; j < data.length; j++) {
             var ttemp = data[j].ts.slice(0, data[j].ts.indexOf("+"));
