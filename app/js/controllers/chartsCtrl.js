@@ -1426,13 +1426,10 @@ angular
     $scope.sensor2 = null;
     $scope.checkRelativeDistanceSensor = null;
     $scope.aTreeNodeId = null;
-    // $scope.fullAlarm = null;
-    // $scope.emptyAlarm = null;
     $scope.changedSensorIds = null;
     $scope.previousSensorNames = {};
     $scope.outPreviousSensorNames = null;
     $scope.distanceAlert = null;
-    //$scope.getAllSensor = [];
 
     var distanceAlert = "";
     function loadData() {
@@ -1467,168 +1464,20 @@ angular
           $scope.sensorType = $scope.tableStats[i].currentMeasurement.id.split(" ")[0];
           localStorage.setItem("aTreeNodeId", id);
           localStorage.setItem("sensorId", $scope.sensorType);
-          //$scope.getAllSensor = $scope.tableStats[i].currentMeasurement.id_name;
           sensor_name = $scope.tableStats[i].currentMeasurement.id_name;
           $scope.checkRelativeDistanceSensor = sensor_name;
-          // if ($scope.checkRelativeDistanceSensor == "Relative Distance") {
-          //   const query = apiBaseUrl + `html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual}`;
-          //   let queryInfo = { query: query, index: i };
-          //   $scope.queriesRelativeDistalceArray.push(queryInfo);
-          //   document.getElementById("meter_yminButton").setAttribute("class", "btnTopBar");
-
-          // } else {
 
           const query = apiBaseUrl + `html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual}`;
 
           let queryInfo = { query: query, index: i };
           $scope.queriesArray.push(queryInfo);
           document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
-          // $scope.meterChartConfig.options.yAxis[0] = generateYAxisConfigDisance();
-
-          // }
 
         }
 
       }
-      // if ($scope.changedSensorIds == null || $scope.changedSensorIds == $scope.tableStats[i].pointId && $scope.changeSensor == null || $scope.changeSensor == $scope.outPreviousSensorNames && $scope.checkRelativeDistanceSensor == "Relative Distance") {
 
-      //   if ($scope.queriesRelativeDistalceArray.length === 0) return;
-
-      //   const promises_data = $scope.queriesRelativeDistalceArray.map(function (item) {
-
-      //     return $http.get(item.query, { headers: customeHeader }).then(function (reqResult) {
-
-      //       return {
-      //         'index': item.index,
-      //         'data': reqResult
-      //       };
-      //     });
-
-      //   })
-
-
-
-      //   const data_completion = $q.all(promises_data)
-      //   data_completion.then(function (responses) {
-
-      //     if (responses.length === 0) return;
-      //     $scope.tableViewData = [];
-      //     for (let p = 0; p < responses[0].data.data.data.length; p++) {
-      //       $scope.tableViewData.push([responses[0].data.data.data[p].ts])
-      //     }
-      //     for (let i = 0; i < responses.length; i++) {
-      //       const data = responses[i].data.data.data;
-      //       if (sensor_name == "Distance") {
-      //         for (let k = data.length - 1; k >= 0; k--) {
-      //           if (data[k].v0 <= 400) {
-      //             data[k].v0 = 400;
-      //           } else if (data[k].v0 >= 3998) {
-      //             data.splice(k, 1); // Remove the element at index k
-      //           }
-      //         }
-      //       }
-      //       const index = responses[i].index;
-      //       $scope.tableStats[index].max = 0;
-      //       $scope.tableStats[index].min = 0;
-      //       $scope.tableStats[index].avg = "";
-      //       $scope.tableStats[index].sum = 0;
-      //       $scope.tableStats[index].data = [];
-      //       let values = [];
-      //       let measurements = [];
-      //       $scope.meterChartConfig.series[index].data = [];
-      //       $scope.tableViewData.push([]);
-      //       const valueName = 'x' + i;
-      //       let hasValue = false;
-
-      //       for (var j = 0; j < data.length; j++) {
-      //         var ttemp = data[j].ts.slice(0, data[j].ts.indexOf("+"));
-      //         var mmx = moment.utc(ttemp);
-      //         const xval = mmx.valueOf();
-      //         if (data[j].hasOwnProperty("v0")) {
-      //           hasValue = true;
-      //           // if points data record not find then
-      //           if (data[j].hasOwnProperty("empty")) {
-      //             $scope.emptyAlarm = data[j].empty;
-      //             $scope.fullAlarm = data[j].full;
-      //           }
-      //           var relativeDistance = Math.round(((($scope.emptyAlarm - $scope.fullAlarm) - (parseFloat(data[j].v0) - $scope.fullAlarm)) / ($scope.emptyAlarm - $scope.fullAlarm)) * 100);
-
-      //           if ($scope.checkRelativeDistanceSensor == "Relative Distance") {
-      //             if (relativeDistance < 0 || relativeDistance == -0) {
-      //               relativeDistance = 0;
-      //             }
-      //             if (relativeDistance > 100) {
-      //               relativeDistance = 100;
-      //             }
-      //           }
-      //           const yval = relativeDistance;
-      //           measurements.push(yval);
-      //           values.push([xval, yval]);
-      //           let dict = {};
-      //           dict["ts"] = data[j].ts;
-      //           dict[valueName] = yval
-      //           $scope.tableViewData[i].push(dict);
-      //         } else {
-      //           let dict = {};
-      //           dict["ts"] = data[j].ts;
-      //           dict[valueName] = null
-      //           $scope.tableViewData[i].push(dict);
-      //           values.push([xval, null]);
-      //         }
-      //       }
-      //       if (hasValue === false) {
-      //         $scope.tableStats[index].noData = true;
-      //         continue;
-      //       } else {
-      //         $scope.tableStats[index].noData = false;
-      //       }
-      //       $scope.tableStats[index].data = values;
-      //       $scope.tableStats[index].min = Math.min(...measurements);
-      //       $scope.tableStats[index].max = Math.max(...measurements);
-      //       const sum = measurements.reduce(function (pre, curr) { return pre + curr; }, 0);
-      //       $scope.tableStats[index].sum = sum.toFixed(2);
-      //       $scope.tableStats[index].avg = (sum / measurements.length).toFixed(0);
-      //       updateSeriesData();
-      //       $scope.meterChartConfig.series[index].name = $scope.tableStats[index].title + " - " + $scope.tableStats[index].currentMeasurement.id_name;
-      //       $scope.meterChartConfig.series[index].marker.enabled = $scope.chartStatusSet.meter.markers;
-      //       $scope.meterChartConfig.series[index]['tooltip']['pointFormatter'] = function () {
-      //         return dataPointFormaterFunction(this, $scope.tableStats[index].currentMeasurement);
-      //       }
-      //       let sensorName;
-      //       sensorName = $scope.tableStats[index].currentMeasurement.id_name;
-      //       $scope.meterChartConfig.options.yAxis[index].labels['formatter'] = function () {
-      //         return yAxisLabelFormaterFunction(this, $scope.tableStats[index].currentMeasurement.kind, $scope.tableStats[index].currentMeasurement.id_name, $scope.tableStats[index].currentMeasurement.unit);
-      //       }
-      //       if (sensorName === 'Flow Switch' || sensorName === 'Door Switch' || sensorName === 'Flow Valve') {
-      //         $scope.meterChartConfig.options.yAxis[index].tickWidth = 0;
-      //       } else {
-      //         $scope.meterChartConfig.options.yAxis[index].tickWidth = 2;
-      //       }
-      //     }
-      //     const filteredNoData = $scope.tableStats.filter((element) => {
-      //       if (element.noData === false) {
-      //         return element
-      //       }
-      //     });
-      //     if (filteredNoData.length === 0) {
-      //       resetYaxes();
-      //       return;
-      //     }
-      //     cloneGetYminMax();
-      //     const map = new Map();
-      //     $scope.tableViewData[0].forEach(item => map.set(item.ts, item));
-      //     for (let i = 1; i < $scope.tableViewData.length; i++) {
-      //       $scope.tableViewData[i].forEach(item => map.set(item.ts, { ...map.get(item.ts), ...item }));
-      //     }
-      //     let mergedArr = Array.from(map.values());
-      //     $scope.tableViewData = [];
-      //     $scope.tableViewData = mergedArr.sort((a, b) => a.ts < b.ts);
-      //   });
-      //   $scope.changedSensorIds = null;
-      // }
-      // else {
       if ($scope.queriesArray.length === 0) return;
-      //if($scope.queriesArray.length === 0) return;
       const promises_data1 = $scope.queriesArray.map(function (item) {
         return $http.get(item.query, { headers: customeHeader }).then(function (reqResult) {
           return {
@@ -1757,7 +1606,6 @@ angular
         $scope.tableViewData = [];
         $scope.tableViewData = mergedArr.sort((a, b) => a.ts < b.ts);
       });
-      // }
     }
     $scope.meterChartConfig = {
       options: {
