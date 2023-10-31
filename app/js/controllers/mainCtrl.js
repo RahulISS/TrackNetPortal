@@ -39,9 +39,9 @@ angular.module('mainCtrl', [])
             link: 'settings',
         }
         ];
-        if(localStorage.getItem("trackNet") == 'trackNet'){
+        if (localStorage.getItem("trackNet") == 'trackNet') {
             $scope.selectedNavIndex = 2;
-        }else{
+        } else {
             $scope.selectedNavIndex = 0;
         }
         $state.go('main.' + $scope.navigationArray[$scope.selectedNavIndex].link);
