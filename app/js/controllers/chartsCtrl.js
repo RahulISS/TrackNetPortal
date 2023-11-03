@@ -991,67 +991,6 @@ angular
       );
     }
 
-    // function downloadCsvFile(series, filename) {
-    //   var tempDataList = [];
-    //   var contents = "ts,";
-    //   for (var i = 0; i < $scope.tableStats.length; i++) {
-    //     if (
-    //       !(
-    //         $scope.tableStats[i].pointId == null ||
-    //         $scope.tableStats[i].pointId == "null"
-    //       )
-    //     )
-    //       contents =
-    //         contents +
-    //         $scope.tableStats[i].title +
-    //         " - " +
-    //         $scope.tableStats[i].currentMeasurement.id_name +
-    //         ",";
-    //   }
-    //   contents = contents.slice(0, contents.length - 1);
-    //   contents = contents + "\n";
-
-    //   for (var i = 0; i < series.length; i++)
-    //     if (series[i].data.length > 0) tempDataList.push(series[i].data);
-
-    //   if (tempDataList.length == 0) return;
-
-    //   var tempArray = tempDataList[0];
-
-    //   for (var i = 0; i < tempArray.length; i++) {
-    //     contents =
-    //       contents +
-    //       moment.utc(tempArray[i][0]).format("YYYY-MM-DD  HH:mm") +
-    //       ",";
-    //     for (var j = 0; j < tempDataList.length; j++) {
-    //       if (typeof tempDataList[j][i] != "undefined")
-    //         contents = contents + tempDataList[j][i][1] + ",";
-    //     }
-    //     contents = contents.slice(0, contents.length - 1);
-    //     contents = contents + "\n";
-    //   }
-
-    //   $http
-    //     .post("php/charts/downloadcsv.php", {
-    //       filename: filename,
-    //       contents: contents,
-    //     })
-    //     .then(
-    //       function (data) {
-    //         var hiddenElement = document.createElement("a");
-    //         hiddenElement.href =
-    //           "data:attachment/csv," + encodeURI(data.data);
-    //         hiddenElement.target = "_blank";
-    //         hiddenElement.download = filename;
-    //         document.body.appendChild(hiddenElement);
-    //         hiddenElement.click();
-    //       },
-    //       function (err) {
-    //         //console.log(err);
-    //       }
-    //     );
-    // }
-
     $scope.switchTable = function (page, visible) {
       $scope.showMeasureTable = visible;
     };
@@ -1366,14 +1305,23 @@ angular
           $scope.tableStats[k].pointId === null
         )
           continue;
-        if ($scope.chartStatusSet["meter"].ymin) {
+
+        if (
+          $scope.tableStats[k].currentMeasurement.id_name ==
+          "Relative Distance"
+        ) {
           $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = 0;
+          $scope.chartStatusSet["meter"].charts.options.yAxis[k].max = 105;
         } else {
-          $scope.chartStatusSet["meter"].charts.options.yAxis[k].min =
-            minUnit[$scope.tableStats[k].currentMeasurement.unit];
+          if ($scope.chartStatusSet["meter"].ymin) {
+            $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = 0;
+          } else {
+            $scope.chartStatusSet["meter"].charts.options.yAxis[k].min =
+              minUnit[$scope.tableStats[k].currentMeasurement.unit];
+          }
+          $scope.chartStatusSet["meter"].charts.options.yAxis[k].max =
+            maxUnit[$scope.tableStats[k].currentMeasurement.unit];
         }
-        $scope.chartStatusSet["meter"].charts.options.yAxis[k].max =
-          maxUnit[$scope.tableStats[k].currentMeasurement.unit];
       }
     }
 
@@ -1467,11 +1415,10 @@ angular
           sensor_name = $scope.tableStats[i].currentMeasurement.id_name;
           $scope.checkRelativeDistanceSensor = sensor_name;
 
-          const query = apiBaseUrl + `html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual}`;
+          const query = apiBaseUrl + `html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
 
           let queryInfo = { query: query, index: i };
           $scope.queriesArray.push(queryInfo);
-          document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
 
         }
 
@@ -1511,6 +1458,8 @@ angular
           let hasValue = false;
 
           if ($scope.tableStats[index].currentMeasurement.id_name == "Distance") {
+            document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
+
             for (let k = data.length - 1; k >= 0; k--) {
               if (data[k].v0 <= 400) {
                 data[k].v0 = 400;
@@ -1541,6 +1490,8 @@ angular
                   relativeDistance = 100;
                 }
                 var yval = relativeDistance;
+
+                document.getElementById("meter_yminButton").setAttribute("class", "btnTopBar");
               } else {
                 var yval = parseFloat(data[j].v0);
               }
