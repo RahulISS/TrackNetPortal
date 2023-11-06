@@ -291,7 +291,7 @@ angular
                 var distance_alarm_tr = "Distance alarm Triggered";
                 var dis_color_rank = 1;
                 var dis_color = "Red";
-              } else if (distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1 || distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1 || distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
+              } else if (distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1 || distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1 || distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1 && distanceValue > 400 && distanceValue < 3998) {
                 var distance_alarm_tr = "Distance alert Triggered";
                 var dis_color_rank = 2;
                 var dis_color = "orange";
