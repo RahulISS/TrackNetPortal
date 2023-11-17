@@ -6,7 +6,8 @@ angular.module('mainCtrl', [])
         const token = localStorage.getItem("authToken");
         const customeHeader = {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
         };
 
         if (localStorage.getItem("authToken") == '' || localStorage.getItem("authToken") == undefined) {

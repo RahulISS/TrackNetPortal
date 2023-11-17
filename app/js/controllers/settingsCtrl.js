@@ -3,8 +3,8 @@ angular.module('settingsCtrl', [])
   .controller('settingsController', function ($scope, $rootScope, Data, $http, $timeout, $window, $state, $location, apiBaseUrl) {
 
     const portalRef = 'read( aPortal and aCustomerRef->id_name == "Gold Coast Water" and id_name == "TracNet Master Network" )->id';
-    
-		localStorage.setItem( "trackNet" , '');
+
+    localStorage.setItem("trackNet", '');
     let selectedNodeLabel;
     let selectedProduct;
     $scope.userRecord = [];
@@ -17,7 +17,8 @@ angular.module('settingsCtrl', [])
     const token = localStorage.getItem("authToken");
     const customeHeader = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      'Authorization': `Bearer ${token}`,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
     };
 
 

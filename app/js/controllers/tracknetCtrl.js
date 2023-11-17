@@ -3,7 +3,7 @@ angular
     this.locationData = {};
   }).controller(
     "tracknetController",
-    function (      
+    function (
       $window,
       $scope,
       $rootScope,
@@ -40,7 +40,8 @@ angular
       const token = localStorage.getItem("authToken");
       const customeHeader = {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${token}`,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
       };
 
 
@@ -320,12 +321,12 @@ angular
                   var dis_color_rank = 3;
                   var dis_color = "Green";
                 }
-                if ( parseInt(data.point.height) <= 400) {
+                if (parseInt(data.point.height) <= 400) {
                   var distanceValue = 400;
                   var distance_alarm_tr = "Distance alarm Triggered";
                   var dis_color_rank = 1;
                   var dis_color = "Red";
-                } else if ( data.point.height < data.point.distance_alert ) {
+                } else if (data.point.height < data.point.distance_alert) {
                   var distance_alarm_tr = "Distance alert Triggered";
                   var dis_color_rank = 2;
                   var dis_color = "orange";
@@ -344,19 +345,19 @@ angular
                   var markerShape = "Red";
                 }
                 else {
-                  var closestValue = closest({'al1':parseInt(data.point.alert1),'al2':parseInt(data.point.alert2),'al3': parseInt(data.point.alert3)}, data.point.height);
-                  
-                if (data.point.alert1 != null && data.point.height < data.point.alert1 && data.point.alarmFirstCheck != null && data.point.alarmFirstCheck == 1 && parseInt(data.point.alert1) == closestValue) {
-                  var markerShape = "circle";
-                }
-                if (data.point.alert2 != null && data.point.height < data.point.alert2 && data.point.alarmSecondCheck != null && data.point.alarmSecondCheck == 1 && parseInt(data.point.alert2) == closestValue) {
-                  var markerShape = "square";
-                }
+                  var closestValue = closest({ 'al1': parseInt(data.point.alert1), 'al2': parseInt(data.point.alert2), 'al3': parseInt(data.point.alert3) }, data.point.height);
 
-                if (data.point.alert3 != null && data.point.height < data.point.alert3 && data.point.alarmThirdCheck != null && data.point.alarmThirdCheck == 1 && parseInt(data.point.alert3) == closestValue) {
-                  var markerShape = "triangle";
+                  if (data.point.alert1 != null && data.point.height < data.point.alert1 && data.point.alarmFirstCheck != null && data.point.alarmFirstCheck == 1 && parseInt(data.point.alert1) == closestValue) {
+                    var markerShape = "circle";
+                  }
+                  if (data.point.alert2 != null && data.point.height < data.point.alert2 && data.point.alarmSecondCheck != null && data.point.alarmSecondCheck == 1 && parseInt(data.point.alert2) == closestValue) {
+                    var markerShape = "square";
+                  }
+
+                  if (data.point.alert3 != null && data.point.height < data.point.alert3 && data.point.alarmThirdCheck != null && data.point.alarmThirdCheck == 1 && parseInt(data.point.alert3) == closestValue) {
+                    var markerShape = "triangle";
+                  }
                 }
-              }
                 /** ends */
 
                 if (data.point.manhole_level_alarm == "Not full alarm") {
@@ -1093,7 +1094,7 @@ angular
 
         return hoursA - hoursB;
       }
-      
+
 
       function alarmApi() {
         $scope.realtimesummery.series[0].data[0].y = 0;
@@ -1331,7 +1332,7 @@ angular
                 $scope.realtimesummery.series[0].data[2].y++;
               }
 
-              if ( distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al1) && uniqueDataCount[i].alarmFirstCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al2) && uniqueDataCount[i].alarmSecondCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al3) && uniqueDataCount[i].alarmThirdCheck == 1 && uniqueDataCount[i].angle < 5 ) {
+              if (distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al1) && uniqueDataCount[i].alarmFirstCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al2) && uniqueDataCount[i].alarmSecondCheck == 1 || distanceDataCValue < parseInt(uniqueDataCount[i].totalAlerts.al3) && uniqueDataCount[i].alarmThirdCheck == 1 && uniqueDataCount[i].angle < 5) {
                 $scope.realtimesummery.series[0].data[1].y++;
               }
 
@@ -1344,7 +1345,7 @@ angular
 
             }
 
-            $scope.alertLists = uniqueDataCount;           
+            $scope.alertLists = uniqueDataCount;
 
             var uniqueAlertData = [];
             for (var i = 0; i < $scope.alertLists.length; i++) {
@@ -1370,7 +1371,7 @@ angular
 
               //   $scope.alertLists[i].class = "distance danger";
               // }
-              else if ( distanceValue < parseInt($scope.alertLists[i].totalAlerts.al1) && $scope.alertLists[i].alarmFirstCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al2) && $scope.alertLists[i].alarmSecondCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al3) && $scope.alertLists[i].alarmThirdCheck == 1  && $scope.alertLists[i].angle < 5) {
+              else if (distanceValue < parseInt($scope.alertLists[i].totalAlerts.al1) && $scope.alertLists[i].alarmFirstCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al2) && $scope.alertLists[i].alarmSecondCheck == 1 || distanceValue < parseInt($scope.alertLists[i].totalAlerts.al3) && $scope.alertLists[i].alarmThirdCheck == 1 && $scope.alertLists[i].angle < 5) {
                 uniqueAlertData.push($scope.alertLists[i]);
                 $scope.alertLists[i].class = "distance warn";
               }
@@ -1395,7 +1396,7 @@ angular
               //   $scope.alertLists[i].oldest_comm_date =  last_comm_split[0] + "y";
               // }
             }
-            
+
             $scope.alertCount = uniqueAlertData.length;
             $scope.alertLists = uniqueAlertData.sort(customComparator);
           }).catch(function (error) {

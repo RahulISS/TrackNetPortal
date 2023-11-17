@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="bootstrap5/css/bootstrap.css">
   <link rel="stylesheet" href="jstree/dist/themes/default/style.min.css" />
   <link rel="stylesheet" href="vendor/daterangepicker.css">
-  <link rel="stylesheet" href="app/css/styles.css" />
+  <link rel="stylesheet" href="app/css/styles.css?v=1" />
   <link rel="stylesheet" href="app/css/owl.carousel.min.css" />
   <link rel="stylesheet" href="app/css/owl.theme.default.css" />
 
@@ -75,7 +75,7 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
   <script src="vendor/d3.js"></script>
   <script src="app/js/app.routes.js"></script>
-  <script src="app/js/app.js"></script>
+  <script src="app/js/app.js?v=1"></script>
   <script type="text/javascript" src="jstree/dist/jstree.min.js"></script>
   <script type="text/javascript" src="vendor/convex_hull.js"></script>
   <!-- Google map -->
@@ -106,5 +106,29 @@
   <script>
   </script>
 </body>
+<script>
+  // Disable cut copy paste
+  $('body').bind('cut copy paste', function (e) {
+    e.preventDefault(); return false;
+  });
+  // Disable right-click
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  function ctrlShiftKey(e, keyCode) {
+    return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
+  }
+
+  document.onkeydown = (e) => {
+    // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+    if (
+      event.keyCode === 123 ||
+      ctrlShiftKey(e, 'I') ||
+      ctrlShiftKey(e, 'J') ||
+      ctrlShiftKey(e, 'C') ||
+      (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))
+    )
+      return false;
+  };
+</script>
 
 </html>
