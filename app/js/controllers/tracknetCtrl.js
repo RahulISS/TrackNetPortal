@@ -1078,12 +1078,14 @@ angular
       /*alertlist sorting*/
       function customComparator(a, b) {
         function extractHours(timeString) {
-          if (timeString.endsWith('d')) {
-            return parseInt(timeString) * 24; // Convert days to hours
+          if (timeString.endsWith('wk')) {
+            return parseInt(timeString) * 7 * 24 * 60; // Convert weeks to minutes
+          } else if (timeString.endsWith('d')) {
+            return parseInt(timeString) * 24 * 60; // Convert days to minutes
           } else if (timeString.endsWith('h')) {
-            return parseInt(timeString);
+            return parseInt(timeString) * 60; // Convert hours to minutes
           } else if (timeString.endsWith('min')) {
-            return parseInt(timeString) / 60;
+            return parseInt(timeString);
           } else {
             return 0;
           }
