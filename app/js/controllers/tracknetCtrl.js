@@ -1078,16 +1078,30 @@ angular
       /*alertlist sorting*/
       function customComparator(a, b) {
         function extractHours(timeString) {
-          if (timeString.endsWith('wk')) {
-            return parseInt(timeString) * 7 * 24 * 60; // Convert weeks to minutes
-          } else if (timeString.endsWith('d')) {
-            return parseInt(timeString) * 24 * 60; // Convert days to minutes
-          } else if (timeString.endsWith('h')) {
-            return parseInt(timeString) * 60; // Convert hours to minutes
-          } else if (timeString.endsWith('min')) {
-            return parseInt(timeString);
-          } else {
-            return 0;
+          const regex = /^(\d+)\s*(d|h|min|sec|wk)?$/; // Regular expression to match time units
+
+          const match = timeString.match(regex);
+
+          if (!match) {
+            throw new Error('Invalid time format: ' + timeString);
+          }
+
+          const value = parseInt(match[1]);
+          const unit = match[2] || 'h'; // Default to hours if no unit specified
+
+          switch (unit) {
+            case 'd':
+              return value * 24; // Convert days to hours
+            case 'h':
+              return value;
+            case 'min':
+              return value / 60;
+            case 'sec':
+              return value / 3600;
+            case 'wk':
+              return value * 24 * 7; // Convert weeks to hours
+            default:
+              throw new Error('Unsupported time unit: ' + unit);
           }
         }
 
