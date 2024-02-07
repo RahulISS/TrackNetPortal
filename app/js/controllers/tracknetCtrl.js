@@ -1441,7 +1441,7 @@ angular
             const ttemp = convertDateStringToISOString(eachEntry.ts);
             var mmx = moment.utc(ttemp);
 
-            const xval = mmx.valueOf();
+            const xval = mmx.valueOf() + 8 * 60 * 60 * 1000;
             if (!eachEntry.empty) {
               eachEntry.empty = 3998;
             }

@@ -938,7 +938,7 @@ angular
       var contents = "";
       for (var i = 0; i < $scope.tableStats.length; i++) {
         if (!($scope.tableStats[i].pointId == null || $scope.tableStats[i].pointId == "null")) {
-          contents = contents + "Timestamp," + $scope.tableStats[i].title.replace(/,/g, '') + " - " + $scope.tableStats[i].currentMeasurement.id_name + ",";
+          contents = contents + "Timestamp," + $scope.tableStats[i].title.replace(/,/g, '') + " - " + $scope.tableStats[i].currentMeasurement.id_name + "(" + $scope.tableStats[i].currentMeasurement.unit + ") ,";
         }
       }
       contents = contents.slice(0, contents.length - 1);
@@ -1469,6 +1469,9 @@ angular
               }
             }
           }
+
+          if ($scope.tableStats[index].currentMeasurement.id_name != "Relative Distance")
+            document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
 
           for (var j = 0; j < data.length; j++) {
             var ttemp = data[j].ts.slice(0, data[j].ts.indexOf("+"));
