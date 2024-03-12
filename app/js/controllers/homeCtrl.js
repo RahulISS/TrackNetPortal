@@ -3,14 +3,11 @@ angular
 
   .controller(
     "homeController",
-    function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval, apiBaseUrl, $window) {
+    function ($scope, $http, $rootScope, Data, $timeout, $compile, $interval, apiBaseUrl, portalId, $window) {
       // refresh code
       localStorage.setItem("refreshinfo", false);
       localStorage.setItem("trackNet", '');
       localStorage.setItem("refreshTable", false);
-
-
-
 
       $scope.pointSettingData = '';
       $scope.emptyVal = 3998;
@@ -56,7 +53,7 @@ angular
       const customeHeader = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        //'Cache-Control': 'no-cache, no-store, must-revalidate',
       };
 
 
@@ -209,32 +206,40 @@ angular
       const initZoomLevel = 11;
       const myLatLng = new google.maps.LatLng(-28.033546, 153.381246);
       const mapOptions = {
-        // center: myLatLng,
-        // mapTypeId: google.maps.MapTypeId.SATELLITE,
-        // fullscreenControl: false,
-        // disableDefaultUI: true,
+
         center: new google.maps.LatLng(-28.033546, 153.381246), //IS-384
         mapTypeId: google.maps.MapTypeId.SATELLITE,
         fullscreenControl: false,
         styles: styles,
       };
-
+      
       const map = new google.maps.Map(
         document.getElementById("homeMap"),
         mapOptions
       );
+      homeMap = document.getElementById("homeMap");
+      homeMap.gMap = map;
+      if (homeMap.gMap.getStreetView()) {
+        homeMap.gMap.getStreetView().addListener("visible_changed", () => {
+          if (homeMap.gMap.getStreetView().getVisible()) {
+            $("#myId").hide();
+          } else {
+            $("#myId").show();
+          }
+        });
+      }
+
 
       $scope.displayData = [];
       $scope.sortedArray = [];
       $scope.isLoading = false;
 
-      //addMarker();
       var arr = [];
       var last_comm_split = null;
 
       function closest(array, num) {
         var i = 0;
-        var minDiff = 1000;
+        var minDiff = 4000;
         var ans;
         for (i in array) {
           var m = Math.abs(num - array[i]);
@@ -255,203 +260,214 @@ angular
       function addMarker(type) {
         $scope.isLoading = true;
         $scope.getParam = type;
-        $http.get(apiBaseUrl + "newtraknetApiList", { headers: customeHeader }).then(function (res) {
+
+        $http.get(apiBaseUrl + "newtraknetApiList?portalId=" + portalId, { headers: customeHeader }).then(function (res) {
 
           const response = res.data.data;
-          const response_pointDis = res.data.pointDis;
+
           var convertedData = [];
-          for (var i = response.length - 1; i > 0; i--) {
+          for (var i = response.length - 1; i >= 0; i--) {
             var data = response[i];
-            var objectId = data._id.$oid;
+            if (data.point != null && data.product != null) {
+              var objectId = data._id;
+              var existingObject = convertedData.find(
+                (obj) => obj.locationID === objectId
+              );
 
-            var existingObject = convertedData.find(
-              (obj) => obj.locationID === objectId
-            );
+              if (!existingObject) {
 
-            if (!existingObject) {
-              let distanceValue = parseInt(data.point.height);
-              let angleValue = parseInt(data.point.angle);
+                if (data.point.status == "Not full alarm") {
+                  var manhole_level_alarm = 0;
+                } else {
+                  var manhole_level_alarm = 1;
+                }
 
-              if (angleValue >= 5) {
-                var angleColorRank = 1;
-                var angleColor = "Red";
-                var angle_alarm_tr = "Angle alarm Triggered";
-              } else {
-                var angleColorRank = 3;
-                var angleColor = "Green";
-                var angle_alarm_tr = "";
-              }
+                if (data.manhole_level_alarm == "Not moved") {
+                  var manhole_moved_alarm = 0;
+                } else {
+                  var manhole_moved_alarm = 1;
+                }
 
-              if (data.point.height > 3998) {
-                var dis_color_rank = 3;
-                var dis_color = "";
-                distanceValue = "";
-              }
-              if (data.point.height <= 400) {
-                distanceValue = 400;
-                var distance_alarm_tr = "Distance alarm Triggered";
-                var dis_color_rank = 1;
-                var dis_color = "Red";
-              } else if (distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1 || distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1 || distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1 && distanceValue > 400 && distanceValue < 3998) {
-                var distance_alarm_tr = "Distance alert Triggered";
-                var dis_color_rank = 2;
-                var dis_color = "orange";
-              } else {
-                var distance_alarm_tr = "";
-                var dis_color_rank = 3;
-                var dis_color = "green";
-              }
+                let distanceValue = parseInt(data.point.height);
+                let angleValue = parseInt(data.point.angle);
 
-              /** alerts value starts*/
-              if ('alert1' in data.point && distanceValue < parseInt(data.point.alert1) && data.point.alarmFirstCheck == 1) {
-                var alertF = data.point.alert1;
+                if (angleValue >= 5) {
+                  var angleColorRank = 1;
+                  var angle_alarm_tr = "Angle alarm Triggered";
+                } else {
+                  var angleColorRank = 3;
+                  var angleColor = "Green";
+                  var angle_alarm_tr = "";
+                }
 
-                var al1Check = data.point.alarmFirstCheck;
-              } else {
-                var alertF = undefined;
-              }
-              if ('alert2' in data.point && distanceValue < parseInt(data.point.alert2) && data.point.alarmSecondCheck == 1) {
-                var alertS = data.point.alert2;
+                if (distanceValue > 3998) {
+                  var dis_color_rank = 3;
+                  var dis_color = "";
+                  distanceValue = '';
+                }
+                if (distanceValue <= 400 && distanceValue != '') {
+                  distanceValue = 400;
+                  var distance_alarm_tr = "Distance alarm Triggered";
+                  var dis_color_rank = 1;
+                  var dis_color = "Red";
+                } else if (distanceValue < parseInt(data.distanceAlert.alert1) && data.distanceAlert.alarmFirstCheck == 1 || distanceValue < parseInt(data.distanceAlert.alert2) && data.distanceAlert.alarmSecondCheck == 1 || distanceValue < parseInt(data.distanceAlert.alert3) && data.distanceAlert.alarmThirdCheck == 1 && distanceValue > 400 && distanceValue < 3998) {
+                  var distance_alarm_tr = "Distance alert Triggered";
+                  var dis_color_rank = 2;
+                  var dis_color = "orange";
+                } else {
+                  var distance_alarm_tr = "";
+                  var dis_color_rank = 3;
+                  var dis_color = "green";
+                }
 
-                var al2Check = data.point.alarmSecondCheck;
-              } else {
-                var alertS = undefined;
-              }
-              if ('alert3' in data.point && distanceValue < parseInt(data.point.alert3) && data.point.alarmThirdCheck == 1) {
-                var alertT = data.point.alert3;
+                /** alerts value starts*/
+                if ('alert1' in data.distanceAlert && distanceValue < parseInt(data.distanceAlert.alert1) && data.distanceAlert.alarmFirstCheck == 1) {
+                  var alertF = data.distanceAlert.alert1;
 
-                var al3Check = data.point.alarmThirdCheck;
-              } else {
-                var alertT = undefined;
-              }
-              /** ends */
+                  var al1Check = data.distanceAlert.alarmFirstCheck;
+                } else {
+                  var alertF = undefined;
+                }
+                if ('alert2' in data.distanceAlert && distanceValue < parseInt(data.distanceAlert.alert2) && data.distanceAlert.alarmSecondCheck == 1) {
+                  var alertS = data.distanceAlert.alert2;
 
-              if (data.point.manhole_level_alarm == "Not full alarm") {
-                var manhole_level_alarm = 0;
-              } else {
-                var manhole_level_alarm = 1;
-              }
+                  var al2Check = data.distanceAlert.alarmSecondCheck;
+                } else {
+                  var alertS = undefined;
+                }
+                if ('alert3' in data.distanceAlert && distanceValue < parseInt(data.distanceAlert.alert3) && data.distanceAlert.alarmThirdCheck == 1) {
+                  var alertT = data.distanceAlert.alert3;
 
-              if (data.manhole_level_alarm == "Not moved") {
-                var manhole_moved_alarm = 0;
-              } else {
-                var manhole_moved_alarm = 1;
-              }
+                  var al3Check = data.distanceAlert.alarmThirdCheck;
+                } else {
+                  var alertT = undefined;
+                }
+                /** ends */
 
-              if (parseInt(data.point.created_at.$date.$numberLong)) {
-                const convertDateStringToISOString = function (dateString) {
-                  const dateArray = dateString.split("_");
-                  const datePart = dateArray[0].split("-").map(Number);
-                  const timePart = dateArray[1].split("-").map(Number);
 
-                  // Note: Months in JavaScript Date are zero-based (0-11)
-                  const date = new Date(Date.UTC(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]));
-                  return date;
+                if (parseInt(data.point.created_at.$date.$numberLong)) {
+                  const convertDateStringToISOString = function (dateString) {
+                    const dateArray = dateString.split("_");
+                    const datePart = dateArray[0].split("-").map(Number);
+                    const timePart = dateArray[1].split("-").map(Number);
+
+                    // Note: Months in JavaScript Date are zero-based (0-11)
+                    const date = new Date(Date.UTC(datePart[0], datePart[1] - 1, datePart[2], timePart[0], timePart[1], timePart[2]));
+                    return date;
+                  };
+
+                  const inputDateString = data.point.date;
+                  const ttemp = convertDateStringToISOString(inputDateString);
+                  const specificDate = moment(ttemp).tz(localStorage.getItem("setTimeZone"));
+
+                  const currentDate = moment().tz(localStorage.getItem("setTimeZone"));
+                  var timeDiff = Math.abs(currentDate - specificDate);
+                  var lastCommColor = "";
+                  //90000000 ms is equal to 25hrs
+
+
+                  if (timeDiff >= 90000000) {
+                    var lastComm = "Communications alarm Triggered";
+                    lastCommColor = "red";
+                  } else {
+                    var lastComm = "";
+                    lastCommColor = "green";
+                  }
+                  var cd = 24 * 60 * 60 * 1000;
+                  if (timeDiff < 1000) {
+                    //miliseconds
+                    var hours = timeDiff + " ms";
+                  } else if (timeDiff >= 1000 && timeDiff < 60000) {
+                    //seconds
+                    var hours = ((timeDiff % 60000) / 1000).toFixed(0) + "s";
+                  } else if (timeDiff >= 60000 && timeDiff < 3600000) {
+                    //mins
+                    var hours =
+                      Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)) +
+                      "min";
+                  } else if (timeDiff >= 3600000 && timeDiff < 86400000) {
+                    //hours
+                    var hours = Math.floor(timeDiff / 3600000) + "h";
+                  } else if (timeDiff >= 86400000 && timeDiff < 604800000) {
+                    //day
+                    var hours = Math.floor(timeDiff / cd) + "d";
+                  } else if (timeDiff >= 604800000 && timeDiff < 31536000000) {
+                    //week
+                    var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 7)) + "wk";
+                  } else {
+                    //year
+                    var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 60 * 24 * 365)) + "y";
+                  }
+
+                  var timeDate = hours;
+                  data.ts = hours + " ago";
+                  var totalSeconds = timeDiff;
+                  data.totalSeconds = totalSeconds;
+                }
+
+                if (data.distanceAlert.distance_alert) {
+                  var distanceAlerts = JSON.parse(data.distanceAlert.distance_alert);
+                  var relativeDistanceCal = Math.round((((parseInt(distanceAlerts.empty) - (distanceAlerts.full)) - (data.point.height - parseInt(distanceAlerts.full))) / (parseInt(distanceAlerts.empty) - parseInt(distanceAlerts.full))) * 100)
+                  if (relativeDistanceCal < 0) {
+                    relativeDistanceCal = 0;
+                  }
+                  if (relativeDistanceCal > 100) {
+                    relativeDistanceCal = 100;
+                  }
+                } else {
+                  var relativeDistanceCal = Math.round((((3998 - 400) - (data.point.height - 400)) / (3998 - 400)) * 100)
+                  if (relativeDistanceCal < 0) {
+                    relativeDistanceCal = 0;
+                  }
+                  if (relativeDistanceCal > 100) {
+                    relativeDistanceCal = 100;
+                  }
+
+                }
+
+                var msg = "Relative Distance: " + relativeDistanceCal + " %, Angle: " + data.point.angle + " deg";
+
+                var convertedPoint = {
+                  locationID: data._id,
+                  address: data.location.street + " " + data.location.city + " " + data.location.tz,
+                  angle: angleValue,
+                  city: data.location.city,
+                  street: data.location.street,
+                  distance: distanceValue,
+                  installationName: data.treenode.textLabel,
+                  latitude: parseFloat(data.location.latitude),
+                  longitude: parseFloat(data.location.longitude),
+                  serialNumber: data.product.id_serial,
+                  manhole_level_alarm: manhole_level_alarm,
+                  manhole_moved_alarm: manhole_moved_alarm,
+                  disColorRank: parseInt(dis_color_rank),
+                  disColor: dis_color,
+                  angleColorRank: parseInt(angleColorRank),
+                  angle_alarm_tr: angle_alarm_tr,
+                  distance_alarm_tr: distance_alarm_tr,
+                  id: data.point._id.$oid,
+                  installationId: data.point._id.$oid,
+                  lastComm_alarm_tr: lastComm,
+                  last_communication: timeDiff,
+                  message: msg,
+                  relative_distance: relativeDistanceCal,
+                  oldest_comm_date: timeDate,
+                  last_comm_color: lastCommColor,
+                  status: "all clear",
+                  height: data.point.height,
+                  emptyVal: (data.distanceAlert.empty) ? parseInt(data.distanceAlert.empty) : 3998,
+                  fullVal: (data.distanceAlert.full) ? parseInt(data.distanceAlert.full) : 400,
+                  alertOne: alertF,
+                  alertTwo: alertS,
+                  alertThree: alertT,
+                  aCheck1: al1Check,
+                  aCheck2: al2Check,
+                  aCheck3: al3Check
+
                 };
 
-                const inputDateString = data.point.date;
-                const ttemp = convertDateStringToISOString(inputDateString);
-                const specificDate = moment(ttemp).tz("Asia/Singapore");
-
-                const currentDate = moment().tz("Asia/Singapore");
-                var timeDiff = Math.abs(currentDate - specificDate);
-                var lastCommColor = "";
-                //90000000 ms is equal to 25hrs
-
-
-                if (timeDiff >= 90000000) {
-                  var lastComm = "Communications alarm Triggered";
-                  lastCommColor = "red";
-                } else {
-                  var lastComm = "";
-                  lastCommColor = "green";
-                }
-                var cd = 24 * 60 * 60 * 1000;
-                if (timeDiff < 1000) {
-                  //miliseconds
-                  var hours = timeDiff + " ms";
-                } else if (timeDiff >= 1000 && timeDiff < 60000) {
-                  //seconds
-                  var hours = ((timeDiff % 60000) / 1000).toFixed(0) + "s";
-                } else if (timeDiff >= 60000 && timeDiff < 3600000) {
-                  //mins
-                  var hours =
-                    Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60)) +
-                    "min";
-                } else if (timeDiff >= 3600000 && timeDiff < 86400000) {
-                  //hours
-                  var hours = Math.floor(timeDiff / 3600000) + "h";
-                } else if (timeDiff >= 86400000 && timeDiff < 604800000) {
-                  //day
-                  var hours = Math.floor(timeDiff / cd) + "d";
-                } else if (timeDiff >= 604800000 && timeDiff < 31536000000) {
-                  //week
-                  var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 7)) + "wk";
-                } else {
-                  //year
-                  var hours = Math.floor(timeDiff / (1000 * 60 * 60 * 60 * 24 * 365)) + "y";
-                }
-
-                var timeDate = hours;
-                data.ts = hours + " ago";
-                var totalSeconds = timeDiff;
-                data.totalSeconds = totalSeconds;
+                convertedData.push(convertedPoint);
               }
-
-              var convertedPoint = {
-                locationID: data._id.$oid,
-                address:
-                  data.location.street +
-                  " " +
-                  data.location.city +
-                  " " +
-                  data.location.tz,
-                location: data.point._id.$oid,
-                latitude: parseFloat(data.location.latitude),
-                longitude: parseFloat(data.location.longitude),
-                city: data.location.city,
-                street: data.location.street,
-                serialNumber: data.product.id_serial,
-                installationId: data.point._id.$oid,
-                installationName: data.treenode.textLabel,
-                angle: parseInt(data.point.angle),
-                angleColorRank: parseInt(angleColorRank),
-                angleColor: angleColor,
-                angle_alarm_tr: angle_alarm_tr,
-                lastComm_alarm_tr: lastComm,
-                last_comm_color: lastCommColor,
-                last_communication: timeDiff,
-                manhole_level_alarm: manhole_level_alarm,
-                manhole_moved_alarm: manhole_moved_alarm,
-                status: "all clear",
-                color: "green",
-                oldest_comm_date: timeDate,
-                customDistance: 500,
-                area: data.location.street,
-                batteryStatus: data.point.manholeBatteryStatusValue,
-                batteryVolt: data.point.battery_voltage,
-                distance: distanceValue,
-                disColorRank: parseInt(dis_color_rank),
-                disColor: dis_color,
-                distance_alarm_tr: distance_alarm_tr,
-                distanceValue: distanceValue,
-                levelAlarm: data.point.manholeLevelAlarmValue,
-                movedAlarm: data.point.moved_alarm,
-                signalStrength: data.point.signal_strength,
-                temperature: data.point.temperature,
-                ts: data.ts,
-                height: data.point.height,
-                emptyVal: (data.distanceAlert.empty) ? data.distanceAlert.empty : 3998,
-                fullVal: (data.distanceAlert.full) ? data.distanceAlert.full : 400,
-                alertOne: alertF,
-                alertTwo: alertS,
-                alertThree: alertT,
-                aCheck1: al1Check,
-                aCheck2: al2Check,
-                aCheck3: al3Check
-              };
-
-              convertedData.push(convertedPoint);
             }
           }
 
@@ -580,6 +596,7 @@ angular
           }
 
           $scope.sortedArray_1 = $scope.sortedArray;
+          console.log($scope.sortedArray_1, '$scope.sortedArray_1$scope.sortedArray_1');
           // sorted end
           for (var i = 0; i < $scope.sortedArray_1.length; i++) {
 
@@ -590,27 +607,27 @@ angular
               var markerShape = "red";
               aLocation[i].markerOnMap = markerShape;
 
-            } else if (aLocation[i].distanceValue <= 400 && aLocation[i].distanceValue != "") {
+            } else if (aLocation[i].height <= 400 && aLocation[i].height != "") {
               var markerShape = "red";
 
               aLocation[i].markerOnMap = markerShape;
 
             } else {
-              var closestValue = closest({ 'al1': parseInt(aLocation[i].alertOne), 'al2': parseInt(aLocation[i].alertTwo), 'al3': parseInt(aLocation[i].alertThree) }, aLocation[i].distanceValue);
+              var closestValue = closest({ 'al1': parseInt(aLocation[i].alertOne), 'al2': parseInt(aLocation[i].alertTwo), 'al3': parseInt(aLocation[i].alertThree) }, aLocation[i].distance);
 
-              if ($scope.getParam == 'circle' && aLocation[i].alertOne != undefined && parseInt(aLocation[i].alertOne) == closestValue && aLocation[i].distanceValue != "" && aLocation[i].distanceValue < parseInt(aLocation[i].alertOne)) {
+              if ($scope.getParam == 'circle' && aLocation[i].alertOne != undefined && parseInt(aLocation[i].alertOne) == closestValue && aLocation[i].distance != "" && aLocation[i].distance < parseInt(aLocation[i].alertOne)) {
                 var markerShape = "circle";
 
                 aLocation[i].markerOnMap = markerShape;
 
               }
-              else if ($scope.getParam == 'square' && aLocation[i].alertTwo != undefined && parseInt(aLocation[i].alertTwo) == closestValue && aLocation[i].distanceValue < parseInt(aLocation[i].alertTwo)) {
+              else if ($scope.getParam == 'square' && aLocation[i].alertTwo != undefined && parseInt(aLocation[i].alertTwo) == closestValue && aLocation[i].distance < parseInt(aLocation[i].alertTwo)) {
                 var markerShape = "square";
 
                 aLocation[i].markerOnMap = markerShape;
 
               }
-              else if ($scope.getParam == 'triangle' && aLocation[i].alertThree != undefined && aLocation[i].distanceValue != "" && parseInt(aLocation[i].alertThree) == closestValue && aLocation[i].distanceValue < parseInt(aLocation[i].alertThree)) {
+              else if ($scope.getParam == 'triangle' && aLocation[i].alertThree != undefined && aLocation[i].distance != "" && parseInt(aLocation[i].alertThree) == closestValue && aLocation[i].distance < parseInt(aLocation[i].alertThree)) {
                 var markerShape = "triangle";
 
                 aLocation[i].markerOnMap = markerShape;
@@ -618,7 +635,7 @@ angular
               }
               else {
 
-                if (aLocation[i].alertOne == undefined && aLocation[i].distanceValue != "" && aLocation[i].alertTwo == undefined && aLocation[i].alertThree == undefined) {
+                if (aLocation[i].alertOne == undefined && aLocation[i].distance != "" && aLocation[i].alertTwo == undefined && aLocation[i].alertThree == undefined) {
                   var markerShape = "green";
                   aLocation[i].markerOnMap = markerShape;
 
@@ -639,8 +656,6 @@ angular
 
                 }
               }
-
-
             }
 
             dict["id"] = aLocation[i].installationId.split(" ")[0];
@@ -655,6 +670,7 @@ angular
             dict["address"] = aLocation[i].address;
             dict["installationName"] = aLocation[i].installationName;
             dict["city"] = aLocation[i].city;
+            dict["street"] = aLocation[i].street;
             dict["infoBox"] = null;
             dict["serial_no"] = aLocation[i].serialNumber;
             dict["colorRank"] = aLocation[i].disColorRank;
@@ -865,7 +881,6 @@ angular
       }
 
       function clearInfoBox(id) {
-        $(".infoBox").hide();
         const index = getIndex($scope.displayData, "id");
         if ($scope.displayData[index] === undefined) return;
         if ($scope.displayData[index].infoBox === null) return;
@@ -883,11 +898,12 @@ angular
       function getInfoWinData(node, marker) {
         $scope.markers = marker;
         $scope.nodes = node;
-        $(".infoBox").hide();
+        $(".infoBox").css('display', 'none');
 
         let homeiw;
         let boxText = document.createElement("div");
-        boxText.style.cssText = "text-align: center; background: black; color: white; padding: 2px;";
+        boxText.style.cssText =
+          "text-align: center; background: black; color: white; padding: 2px;";
         let nodeID = node.id ?? node.installationId.split(" ")[0];
         boxText.setAttribute("id", "infoBox_" + nodeID.split(" ")[0]);
         let tempInnerHTML = "<b>Loading...</b>";
@@ -925,7 +941,7 @@ angular
         map.setCenter(marker.position);
         homeiw.addListener('closeclick', function () {
           if (JSON.parse(infoRefresh) === true) {
-            // window.location.reload();
+            window.location.reload();
             localStorage.removeItem("refreshinfo")
           }
           // reCenterMap(null);
@@ -934,16 +950,17 @@ angular
         $scope.displayData[index]["infoBox"] = homeiw;
         $scope.getStoreAlert = '';
         localStorage.setItem("node_id", nodeID.split(" ")[0]);
-        const query = $http.get(apiBaseUrl + "html_aTreeNode_hisEndVal?aTreeNodeId=" + nodeID, { headers: customeHeader }).then(function (response) {
+        const query = $http.get(apiBaseUrl + "html_aTreeNode_hisEndVal?aTreeNodeId=" + nodeID + "&portalId=" + portalId, { headers: customeHeader }).then(function (response) {
           const readings = response.data.data;
 
-          $http.get(apiBaseUrl + `getDeviceIdByPointID/${nodeID}`, { headers: customeHeader }).then(function (res) {
+          localStorage.setItem("device_id", readings[0].device_id);
+          $http.get(apiBaseUrl + `getDistanceAlert/${readings[0].device_id}?portalId=${portalId} `, { headers: customeHeader }).then(function (res) {
             var getTableAlert = res.data.data.distance_alert;
             $scope.getStoreAlert = res.data.data.distance_alert;
 
             let content = document.createElement("div");
             content.style.cssText =
-              "text-align: center; background: black; color: white; padding: 5px; font-size: 1.8rem";
+              "text-align: center; background: black; color: white; padding: 5px;";
             content.setAttribute("id", "infoBox_" + nodeID.split(" ")[0]);
 
             let tempInnerHTML = "<b>" + node.installationName + "</b><table class='homemaptable'>";
@@ -974,7 +991,7 @@ angular
                   "<tr><td class='infowindow_td'>" +
                   readings[i].id_name +
                   "</td><td class='infowindow_td'>" +
-                  readings[i].hisEndVal +
+                  parseFloat(readings[i].hisEndVal).toFixed(2) +
                   " " +
                   (readings[i].unit ? readings[i].unit : "");
               } else if (readings[i].id_name == "Distance") {
@@ -1002,7 +1019,7 @@ angular
 
             tempInnerHTML =
               tempInnerHTML +
-              "<tr><td>TracNet IMEI</td><td>" + res.data.data.device_id + "</td></tr> <tr ><td colspan='2'><i>Last Updated " + res.data.data.date + " ago</i></td></tr> <tr style='background: #ececec;'><td colspan='2'><div ><p  style='height:50px;width:100%;padding: 24px; color: black;margin: 0; cursor: pointer;text-align: left;'> Manhole Specifications </p></div><div style='gap: 10px; margin: -40px 0px 0px 160px;height: 40px;width: 40px;'><img ng-click='poppupForm()' src='./img/icon1-01.svg'/ style='cursor: pointer;'></div>";
+              "<tr><td>TracNet IMEI</td><td>" + res.data.data.device_id + "</td></tr> <tr ><td colspan='2'><i>Last Updated " + res.data.data.date + " ago</i></td></tr> <tr style='background: #ececec;'><td colspan='2'><div class='unicClass'><p  style='height:50px;width:100%;padding: 24px; color: black;margin: 0; cursor: pointer;text-align: left;'> Manhole Specifications </p><div style='gap: 10px; width: 40px;'><img ng-click='poppupForm()' src='./img/icon1-01.svg'/ style='cursor: pointer;'></div></div>";
 
 
             if (res.data.status == true)
@@ -1027,14 +1044,14 @@ angular
             $scope.displayData[index]["infoBox"].setOptions({
               content: compiled[0],
             });
-            // const infoRefresh = localStorage.getItem("refreshTable");
-            // homeiw.addListener('closeclick', function () {
-            //   if (JSON.parse(infoRefresh) === true) {
-            //     // window.location.reload(); // Windo Refresh If the refresh value is True
-            //     localStorage.removeItem("refreshTable")
-            //   }
-            //   // reCenterMap(null);
-            // });
+            const infoRefresh = localStorage.getItem("refreshTable");
+            homeiw.addListener('closeclick', function () {
+              if (JSON.parse(infoRefresh) === true) {
+                window.location.reload(); // Windo Refresh If the refresh value is True
+                localStorage.removeItem("refreshTable")
+              }
+              // reCenterMap(null);
+            });
           });
         }).catch(function (error) {
           if (error.status == 401) {
@@ -1051,75 +1068,63 @@ angular
       /*open the poppup form click on setting icon in info window*/
       $scope.poppupForm = function () {
         $scope.alarmCount = 0;
-        var node_id = localStorage.getItem("node_id");
+        var device_id = localStorage.getItem("device_id");
         $("#popupModalCenter").addClass("show-modal");
-        $http.get(apiBaseUrl + "user-definded-distancealert?aTreeNodeRef=" + node_id, { headers: customeHeader }).then(function (response) {
-          if (response.data.data.distance_alert === undefined || response.data.data.distance_alert == '') {
-            $scope.alarmCount = "";
-            $scope.alert1 = "";
-            $scope.alert2 = "";
-            $scope.alert3 = "";
+        //console.log($scope.getStoreAlert);
+        if ($scope.getStoreAlert == null) {
+          $scope.alarmCount = "";
+          $scope.alert1 = "";
+          $scope.alert2 = "";
+          $scope.alert3 = "";
+        } else {
+          localStorage.setItem("instName", $scope.getStoreAlert.installationName);
+          $scope.pointSettingData = JSON.parse($scope.getStoreAlert.distance_alert);
+
+          $scope.alarmCount = parseInt(($scope.pointSettingData.alert1) ? 1 : 0) + parseInt(($scope.pointSettingData.alert2) ? 1 : 0) + parseInt(($scope.pointSettingData.alert3) ? 1 : 0)
+          $scope.emptyVal = parseInt($scope.pointSettingData.empty);
+          $scope.fullVal = parseInt($scope.pointSettingData.full);
+          $scope.alert1 = parseInt($scope.pointSettingData.alert1);
+          $scope.alert2 = parseInt($scope.pointSettingData.alert2);
+          $scope.alert3 = parseInt($scope.pointSettingData.alert3);
+          $scope.alert1Check = $scope.pointSettingData.alarmFirstCheck;
+          $scope.alert2Check = $scope.pointSettingData.alarmSecondCheck;
+          $scope.alert3Check = $scope.pointSettingData.alarmThirdCheck;
+          $scope.showAlert1 = true;
+          $scope.showAlert2 = true;
+          $scope.showAlert3 = true;
+
+          /** Setting alert blur as per thier check value starts*/
+          if (!$scope.pointSettingData.hasOwnProperty('alarmFirstCheck') || $scope.pointSettingData.alarmFirstCheck === null || $scope.pointSettingData.alarmFirstCheck === '') {
+            $scope.addAlt1Class = 'alertLight';
+            $scope.disAlt1 = '';
+            $scope.altStatus1 = 'Disabled';
           } else {
-            localStorage.setItem("instName", response.data.data.installationName);
-            $scope.pointSettingData = JSON.parse(response.data.data.distance_alert);
-
-            $scope.alarmCount = parseInt(($scope.pointSettingData.alert1) ? 1 : 0) + parseInt(($scope.pointSettingData.alert2) ? 1 : 0) + parseInt(($scope.pointSettingData.alert3) ? 1 : 0)
-            $scope.emptyVal = parseInt($scope.pointSettingData.empty);
-            $scope.fullVal = parseInt($scope.pointSettingData.full);
-            $scope.alert1 = parseInt($scope.pointSettingData.alert1);
-            $scope.alert2 = parseInt($scope.pointSettingData.alert2);
-            $scope.alert3 = parseInt($scope.pointSettingData.alert3);
-            $scope.alert1Check = $scope.pointSettingData.alarmFirstCheck;
-            $scope.alert2Check = $scope.pointSettingData.alarmSecondCheck;
-            $scope.alert3Check = $scope.pointSettingData.alarmThirdCheck;
-            $scope.showAlert1 = true;
-            $scope.showAlert2 = true;
-            $scope.showAlert3 = true;
-
-            /** Setting alert blur as per thier check value starts*/
-            if ($scope.pointSettingData.alarmFirstCheck === null) {
-              $scope.addAlt1Class = 'alertLight';
-              $scope.disAlt1 = '';
-              $scope.altStatus1 = 'Disabled';
-            } else {
-              $scope.addAlt1Class = '';
-              $scope.disAlt1 = Math.round(((($scope.emptyVal - $scope.fullVal) - ($scope.alert1 - $scope.fullVal)) / ($scope.emptyVal - $scope.fullVal)) * 100);
-              $scope.altStatus1 = '';
-            }
-
-            if ($scope.pointSettingData.alarmSecondCheck === null) {
-              $scope.addAlt2Class = 'alertLight';
-              $scope.disAlt2 = '';
-              $scope.altStatus2 = 'Disabled';
-            } else {
-              $scope.addAlt2Class = '';
-              $scope.disAlt2 = Math.round(((($scope.emptyVal - $scope.fullVal) - ($scope.alert2 - $scope.fullVal)) / ($scope.emptyVal - $scope.fullVal)) * 100);
-              $scope.altStatus2 = '';
-            }
-
-            if ($scope.pointSettingData.alarmThirdCheck === null) {
-              $scope.addAlt3Class = 'alertLight';
-              $scope.disAlt3 = '';
-              $scope.altStatus3 = 'Disabled';
-            } else {
-              $scope.addAlt3Class = '';
-              $scope.disAlt3 = Math.round(((($scope.emptyVal - $scope.fullVal) - ($scope.alert3 - $scope.fullVal)) / ($scope.emptyVal - $scope.fullVal)) * 100);
-              $scope.altStatus3 = '';
-            }
-
+            $scope.addAlt1Class = '';
+            $scope.disAlt1 = Math.round(((($scope.emptyVal - $scope.fullVal) - ($scope.alert1 - $scope.fullVal)) / ($scope.emptyVal - $scope.fullVal)) * 100);
+            $scope.altStatus1 = '';
           }
-        }).catch(function (error) {
-          $scope.alarmCount = 0;
-          $scope.emptyVal = 3998;
-          $scope.fullVal = 400;
-          $scope.showAlert1 = false;
-          $scope.showAlert2 = false;
-          $scope.showAlert3 = false;
-          $scope.alert1 = '';
-          $scope.alert2 = '';
-          $scope.alert3 = '';
-          // Error callback, handle the error here
-        });
+
+          if (!$scope.pointSettingData.hasOwnProperty('alarmSecondCheck') || $scope.pointSettingData.alarmSecondCheck === null || $scope.pointSettingData.alarmSecondCheck === '') {
+            $scope.addAlt2Class = 'alertLight';
+            $scope.disAlt2 = '';
+            $scope.altStatus2 = 'Disabled';
+          } else {
+            $scope.addAlt2Class = '';
+            $scope.disAlt2 = Math.round(((($scope.emptyVal - $scope.fullVal) - ($scope.alert2 - $scope.fullVal)) / ($scope.emptyVal - $scope.fullVal)) * 100);
+            $scope.altStatus2 = '';
+          }
+
+          if (!$scope.pointSettingData.hasOwnProperty('alarmThirdCheck') || $scope.pointSettingData.alarmThirdCheck === null || $scope.pointSettingData.alarmThirdCheck === '') {
+            $scope.addAlt3Class = 'alertLight';
+            $scope.disAlt3 = '';
+            $scope.altStatus3 = 'Disabled';
+          } else {
+            $scope.addAlt3Class = '';
+            $scope.disAlt3 = Math.round(((($scope.emptyVal - $scope.fullVal) - ($scope.alert3 - $scope.fullVal)) / ($scope.emptyVal - $scope.fullVal)) * 100);
+            $scope.altStatus3 = '';
+          }
+
+        }
       };
 
       /** Home Page markers sorting starts*/
@@ -1645,7 +1650,7 @@ angular
       /*saving relative distance alerts*/
       $scope.saveAlertData = function () {
         const enabled = 1;
-        var node_id = localStorage.getItem("node_id");
+        var device_id = localStorage.getItem("device_id");
         var val = angular.element($(".alertNumber")).val();
         var alertF = angular.element($('#alert1')).val();
         var alertS = angular.element($('#alert2')).val();
@@ -1750,7 +1755,7 @@ angular
 
 
         let formData = {
-          "pointId": node_id,
+          "deviceId": device_id,
           "distance_alert": {
             "full": $scope.fullValue,
             "empty": $scope.emptyValue,
@@ -1792,11 +1797,13 @@ angular
 
       /*Zoom out marker location by the click on installation*/
       $scope.GetTableItemsByClick = function (item) {
+        $("#myId").hide();
         $scope.mapLocation(item);
       };
 
       /*Zoom out marker location by the selcted dropdown installation*/
       $scope.GetTableItemsBySlected = function (inst_item) {
+        $("#myId").hide();
         $scope.mapLocation(inst_item);
       };
       /*get the single lat and lng zoom the location marker*/
@@ -1835,7 +1842,6 @@ angular
         if (dict.relative_distance > 100) {
           dict.relative_distance = 100;
         }
-
         var infowindow = new google.maps.InfoWindow({
           content: dict.relative_distance.toLocaleString() + "%" + ",  " + dict.angle + "\xBA",
         });
@@ -1953,16 +1959,26 @@ angular
             id: dict.installationId.split(" ")[0],
           }
         );
-        beachMarker[dict.installationId.split(" ")[0]].addListener("click", function () {
-          infowindow.open(map, beachMarker[dict.installationId.split(" ")[0]]);
-        });
+        beachMarker[dict.installationId.split(" ")[0]].addListener(
+          "click",
+          function () {
+            infowindow.open(
+              map,
+              beachMarker[dict.installationId.split(" ")[0]]
+            );
+          }
+        );
         infowindow.open(map, beachMarker[dict.installationId.split(" ")[0]]);
-        beachMarker[dict.installationId.split(" ")[0]].addListener("click", function () {
-          infowindow.close();
-          const node = dict;
-          if (node === null) return;
-          getInfoWinData(node, this);
-        });
+        beachMarker[dict.installationId.split(" ")[0]].addListener(
+          "click",
+          function () {
+            infowindow.close();
+            const node = dict;
+
+            if (node === null) return;
+            getInfoWinData(node, this);
+          }
+        );
 
         reCenterMap(point);
         return {
@@ -1977,5 +1993,6 @@ angular
       };
 
       $scope.distanceAlert;
+      $scope.isActive = null;
     });
 

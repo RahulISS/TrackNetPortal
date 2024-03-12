@@ -1,7 +1,7 @@
 angular
   .module("chartsCtrl", [])
 
-  .controller("chartsController", function ($scope, $rootScope, Data, $q, $http, $timeout, $interval, $window, apiBaseUrl) {
+  .controller("chartsController", function ($scope, $rootScope, Data, $q, $http, $timeout, $interval, $window, apiBaseUrl, portalId) {
 
     localStorage.setItem("trackNet", '');
     const isButtonVisible = true;
@@ -17,7 +17,7 @@ angular
     const customeHeader = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      //'Cache-Control': 'no-cache, no-store, must-revalidate',
     };
 
     $scope.data_table_meter_page = [];
@@ -737,19 +737,11 @@ angular
           $scope.tableStats[i].pointId == null ||
           $scope.tableStats[i].pointId == "null"
         ) {
-          document.getElementById(
-            $scope.tableStats[i].hideDivId
-          ).style.visibility = "hidden";
-          document.getElementById(
-            $scope.tableStats[i].hideCloseDivId
-          ).style.visibility = "hidden";
+          document.getElementById($scope.tableStats[i].hideDivId).style.visibility = "hidden";
+          document.getElementById($scope.tableStats[i].hideCloseDivId).style.visibility = "hidden";
         } else {
-          document.getElementById(
-            $scope.tableStats[i].hideDivId
-          ).style.visibility = "visible";
-          document.getElementById(
-            $scope.tableStats[i].hideCloseDivId
-          ).style.visibility = "visible";
+          document.getElementById($scope.tableStats[i].hideDivId).style.visibility = "visible";
+          document.getElementById($scope.tableStats[i].hideCloseDivId).style.visibility = "visible";
         }
       }
     }
@@ -770,60 +762,29 @@ angular
     };
 
     // set marker default active
-    document
-      .getElementById("meter" + "_markersButton")
-      .setAttribute("class", "btnTopBar");
+    document.getElementById("meter" + "_markersButton").setAttribute("class", "btnTopBar");
 
     $scope.switchGridLine = function (page) {
-      $scope.chartStatusSet[page].gridlines =
-        !$scope.chartStatusSet[page].gridlines;
+      $scope.chartStatusSet[page].gridlines = !$scope.chartStatusSet[page].gridlines;
       if ($scope.chartStatusSet[page].gridlines) {
-        document
-          .getElementById(page + "_gridLinesButton")
-          .setAttribute("class", "btnTopBar");
-        for (
-          var i = 0;
-          i < $scope.chartStatusSet[page].charts.options.yAxis.length;
-          i++
-        )
-          $scope.chartStatusSet[page].charts.options.yAxis[
-            i
-          ].gridLineWidth = 2;
+        document.getElementById(page + "_gridLinesButton").setAttribute("class", "btnTopBar");
+        for (var i = 0; i < $scope.chartStatusSet[page].charts.options.yAxis.length; i++)
+          $scope.chartStatusSet[page].charts.options.yAxis[i].gridLineWidth = 2;
         if (page == "meter")
           $scope.chartStatusSet[page].charts.options.xAxis.gridLineWidth = 2;
         else {
-          for (
-            var i = 0;
-            i < $scope.chartStatusSet[page].charts.options.xAxis.length;
-            i++
-          )
-            $scope.chartStatusSet[page].charts.options.xAxis[
-              i
-            ].gridLineWidth = 2;
+          for (var i = 0; i < $scope.chartStatusSet[page].charts.options.xAxis.length; i++)
+            $scope.chartStatusSet[page].charts.options.xAxis[i].gridLineWidth = 2;
         }
       } else {
-        document
-          .getElementById(page + "_gridLinesButton")
-          .setAttribute("class", "btnTopBarOff");
-        for (
-          var i = 0;
-          i < $scope.chartStatusSet[page].charts.options.yAxis.length;
-          i++
-        )
-          $scope.chartStatusSet[page].charts.options.yAxis[
-            i
-          ].gridLineWidth = 0;
+        document.getElementById(page + "_gridLinesButton").setAttribute("class", "btnTopBarOff");
+        for (var i = 0; i < $scope.chartStatusSet[page].charts.options.yAxis.length; i++)
+          $scope.chartStatusSet[page].charts.options.yAxis[i].gridLineWidth = 0;
         if (page == "meter")
           $scope.chartStatusSet[page].charts.options.xAxis.gridLineWidth = 0;
         else {
-          for (
-            var i = 0;
-            i < $scope.chartStatusSet[page].charts.options.xAxis.length;
-            i++
-          )
-            $scope.chartStatusSet[page].charts.options.xAxis[
-              i
-            ].gridLineWidth = 0;
+          for (var i = 0; i < $scope.chartStatusSet[page].charts.options.xAxis.length; i++)
+            $scope.chartStatusSet[page].charts.options.xAxis[i].gridLineWidth = 0;
         }
       }
 
@@ -836,13 +797,9 @@ angular
 
       $scope.chartStatusSet[page].ymin = !$scope.chartStatusSet[page].ymin;
       if ($scope.chartStatusSet[page].ymin === true) {
-        document
-          .getElementById(page + "_yminButton")
-          .setAttribute("class", "btnTopBar");
+        document.getElementById(page + "_yminButton").setAttribute("class", "btnTopBar");
       } else {
-        document
-          .getElementById(page + "_yminButton")
-          .setAttribute("class", "btnTopBarOff");
+        document.getElementById(page + "_yminButton").setAttribute("class", "btnTopBarOff");
       }
 
       getYminMax();
@@ -853,16 +810,11 @@ angular
 
 
     $scope.switchMarkers = function (page) {
-      $scope.chartStatusSet[page].markers =
-        !$scope.chartStatusSet[page].markers;
+      $scope.chartStatusSet[page].markers = !$scope.chartStatusSet[page].markers;
       if ($scope.chartStatusSet[page].markers) {
-        document
-          .getElementById(page + "_markersButton")
-          .setAttribute("class", "btnTopBar");
+        document.getElementById(page + "_markersButton").setAttribute("class", "btnTopBar");
       } else {
-        document
-          .getElementById(page + "_markersButton")
-          .setAttribute("class", "btnTopBarOff");
+        document.getElementById(page + "_markersButton").setAttribute("class", "btnTopBarOff");
       }
       showMarkers(page);
     };
@@ -965,17 +917,19 @@ angular
             contents = contents + " " + moment.utc(tempDataList[j][i][0]).format("Do MMM YYYY hh:mm:ssa") + " " + ",";
             contents = contents + tempDataList[j][i][1] + ",";
           } else {
+            if(tempDataList[j][i] != null){
             if (typeof tempArray[i][0] != "undefined") {
               contents = contents + ' ' + ",";
             }
             contents = contents + ' ' + ",";
+          }
           }
 
         }
         contents = contents.slice(0, contents.length - 1);
         contents = contents + "\n";
       }
-
+console.log(contents);
 
       $http.post("php/charts/downloadcsv.php", { filename: filename, contents: contents, }).then(
         function (data) {
@@ -1067,7 +1021,7 @@ angular
     $scope.reloadMethod = function () {
       $timeout(function () {
         var refreshChart = $("#chartsMeterCompare").highcharts();
-
+        if(refreshChart)
         refreshChart.reflow();
       }, 10);
     };
@@ -1253,7 +1207,7 @@ angular
       if (typeof datatype == "string") {
         if (datatype != "") {
           readable = moment(datatype.slice(0, datatype.indexOf("+"))).format(
-            "Do MMM YYYY HH:mm:ssa"
+            "Do MMM YYYY hh:mm:ssa"
           );
         }
       } else if (datatype === null) {
@@ -1300,6 +1254,21 @@ angular
         }
       }
 
+      // for (let k = 0; k < $scope.tableStats.length; k++) {
+      //   if (
+      //     $scope.tableStats[k].pointId === "null" ||
+      //     $scope.tableStats[k].pointId === null
+      //   )
+      //     continue;
+      //   if ($scope.chartStatusSet["meter"].ymin) {
+      //     $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = 0;
+      //   } else {
+      //     $scope.chartStatusSet["meter"].charts.options.yAxis[k].min =
+      //       minUnit[$scope.tableStats[k].currentMeasurement.unit];
+      //   }
+      //   $scope.chartStatusSet["meter"].charts.options.yAxis[k].max =
+      //     maxUnit[$scope.tableStats[k].currentMeasurement.unit];
+      // }
       for (let k = 0; k < $scope.tableStats.length; k++) {
         if (
           $scope.tableStats[k].pointId === "null" ||
@@ -1382,6 +1351,15 @@ angular
 
     var distanceAlert = "";
     function loadData() {
+      
+    document.getElementById("downloadId").className = "btnTopBar";
+    document.getElementById("downloadId").setAttribute("disabled", true);
+
+    document.getElementById("tableButton").className = "btnTopBar";
+    document.getElementById("tableButton").setAttribute("disabled", true);
+
+    
+
       var datespan = moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat) + ".." + moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
       var startDate = moment($rootScope.storage.chartsRangeStartDate).format(skySparkFormat);
       var endDate = moment($rootScope.storage.chartsRangeEndDate).format(skySparkFormat);
@@ -1393,7 +1371,14 @@ angular
       $scope.tableHeader = [];
       $scope.activeItems = [];
       for (let i = 0; i < $scope.tableStats.length; i++) {
-        if ($scope.tableStats[i].pointId !== "null" && $scope.tableStats[i].pointId !== null) {
+        if ($scope.tableStats[i].pointId !== "null" && $scope.tableStats[i].pointId !== null) {          
+          document.getElementById("downloadId").className = "btnTopBarOff";
+          document.getElementById("downloadId").removeAttribute("disabled");
+
+          document.getElementById("tableButton").className = "btnTopBarOff";
+          document.getElementById("tableButton").removeAttribute("disabled");
+          
+
           $scope.activeItems.push(i);
           sensorName = $scope.tableStats[i].currentMeasurement.id_name;
           const previousSensorName = $scope.previousSensorNames[$scope.tableStats[i].pointId] || null;
@@ -1416,7 +1401,7 @@ angular
           sensor_name = $scope.tableStats[i].currentMeasurement.id_name;
           $scope.checkRelativeDistanceSensor = sensor_name;
 
-          const query = apiBaseUrl + `html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual`;
+          const query = apiBaseUrl + `html_plot_chart_06_b?aTreeNodeId=${id}&sensorId=${$scope.sensorType}&startDate=${startDate}&endDate=${endDate}&fold=actual&portalId=${portalId}`;
 
           let queryInfo = { query: query, index: i };
           $scope.queriesArray.push(queryInfo);
@@ -1425,6 +1410,19 @@ angular
 
       }
 
+      /**this function will change the value if index if value and index not equal to same fro Chart >> Table View only starts */
+      function updateArrayIndexValue(arr) {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] !== i) {
+                arr[i] = i;
+            }
+        }
+        return arr;
+      }
+
+      updateArrayIndexValue($scope.activeItems);
+      /** ends */
+      
       if ($scope.queriesArray.length === 0) return;
       const promises_data1 = $scope.queriesArray.map(function (item) {
         return $http.get(item.query, { headers: customeHeader }).then(function (reqResult) {

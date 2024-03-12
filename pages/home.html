@@ -61,33 +61,38 @@
 				</div>
 			</div>
 		</div>
-		<div class="legend-button">
+		<div class="legend-button" id="myId">
 			<div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-				<button type="button" class="btn btn-primary" ng-click='addMarker1("all clear")'>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("all clear"); isActive="all clear"'
+					ng-class="{ 'active': isActive === 'all clear' }">
 					<div class="icoBg"><img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" /></div>
 					<div class="icoBg">
 						<span>All Clear</span>
 					</div>
 				</button>
-				<button type="button" class="btn btn-primary" ng-click='addMarker1("all alarms")'>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("all alarms"); isActive="all alarms"'
+					ng-class="{ 'active': isActive === 'all alarms' }">
 					<div class="icoBg"><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" /></div>
 					<div class="icoBg">
 						<span>Alarm</span>
 					</div>
 				</button>
-				<button type="button" class="btn btn-primary" ng-click='addMarker1("triangle")'>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("triangle"); isActive="triangle"'
+					ng-class="{ 'active': isActive === 'triangle' }">
 					<div class="icoBg"><img src="img/triangle.svg" /></div>
 					<div class="icoBg">
 						<span>Distance Alert 3</span>
 					</div>
 				</button>
-				<button type="button" class="btn btn-primary" ng-click='addMarker1("square")'>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("square"); isActive="square"'
+					ng-class="{ 'active': isActive === 'square' }">
 					<div class="icoBg"><img src="img/square.svg" /></div>
 					<div class="icoBg">
 						<span>Distance Alert 2</span>
 					</div>
 				</button>
-				<button type="button" class="btn btn-primary" ng-click='addMarker1("circle")'>
+				<button type="button" class="btn btn-primary" ng-click='addMarker1("circle"); isActive="circle"'
+					ng-class="{ 'active': isActive === 'circle' }">
 					<div class="icoBg"><img src="img/circle.svg" /></div>
 					<div class="icoBg">
 						<span>Distance Alert 1</span>
@@ -95,7 +100,6 @@
 				</button>
 			</div>
 		</div>
-
 		<div class="view-style">
 			<button class="reset_btn" ng-click="resetMapClick()">Reset</button>
 			<div class="cale-ico">

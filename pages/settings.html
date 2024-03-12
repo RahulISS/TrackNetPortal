@@ -1,10 +1,7 @@
 <div class="tablewrapper">
     <h2>Notifications</h2>
-    <!-- calling the rest value function on click og the add button -->
-    <button type="button" onclick="openForm()" ng-click="reSet3 ()" class="openbtn">Create </button>
-
-
-
+    <button type="button" onclick="openForm()" ng-show="disableCreateButton" ng-click="reSetValue()"
+        class="openbtn">Create </button>
     <!-- POP UP FORM -->
     <div class="form-popup" id="form">
         <form class="form-container" action="/" method="post" id="settingForm">
@@ -20,15 +17,13 @@
                 <span ng-show="alrErrEmail" class="text-danger">{{ errorMsgEmail }}</span>
             </div>
             <div class="elemDiv">
-                <label for="number">SMS Number (Please enter with country code) </label>
-                <div class="test-div">
-                    <input type="text" ng-model="smsNumber" id="mobile_code" name="smsNumber" value="{{smsNumber}}">
-                    <button type="button" class="test" ng-click="sendTestMessage()">Test</button>
-                </div>
-
-                <span ng-show="alrErrNumber" style="display: block;" class="text-danger">{{ errorMsgNumber }}</span>
-
+                <label for="number">SMS Number</label>
+                <input type="text" ng-model="smsNumber" id="mobile_code" name="smsNumber" value="{{smsNumber}}">
+                <!-- <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span> -->
+                <button type="button" class="test" ng-click="sendTestMessage()">Test</button>
+                <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span>
             </div>
+            <!-- <button type="button"  class="test" ng-click="sendTestMessage()">Test</button> -->
             <div class="form-row">
                 <div class="elemDiv">
                     <label for="gender">Distance Alert1</label>
@@ -116,9 +111,8 @@
                 ng-click="saveUserConfiguationSetting('Add')">Add</button>
             <button type="button" class="update" value="update" ng-show="updateShow"
                 ng-click="updateUserConfiguationSetting('Edit')">Update</button>
-            <button type="button" class="reset" ng-click="reSet3()">Reset</button>
-            <!-- <button type="button" class="test" ng-click="sendTestMessage()">Test</button> -->
-            <!-- <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span> -->
+            <button type="button" class="reset update" ng-show="addShow" ng-click="reSet3('add')">Reset</button>
+            <button type="button" class="reset update" ng-show="updateShow" ng-click="reSet3('update')">Reset</button>
         </form>
 
     </div>
@@ -164,26 +158,20 @@
         document.getElementById("form").style.display = "block";
         document.getElementById("settingForm").reset();
     }
-
     function resetForm() {
-        // document.getElementById("settingForm").reset();
-        // $('#settingForm').trigger("reset");
         document.getElementById("settingForm").reset()
     }
-
-
     function closeForm() {
         document.getElementById("form").style.display = "none";
     }
-
     $('#reset').click(function () {
         $('#settingForm')[0].reset();
     });
 
     // -----Country Code Selection
     $("#mobile_code").intlTelInput({
-        initialCountry: "sg",
+        initialCountry: "au",
         separateDialCode: true,
-        // utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/11.0.4/js/utils.js"
+        allowDropdown: false,
     });
 </script>
