@@ -5,20 +5,23 @@
     <!-- POP UP FORM -->
     <div class="form-popup" id="form">
         <form class="form-container" action="/" method="post" id="settingForm">
-            <span class="close" onclick="closeForm()"> &times; </span>
+            <span class="close" onclick="closeForm()" ng-click="reSetValue()"> &times; </span>
             <div class="elemDiv">
                 <label for="username">Group Name</label>
-                <input type="text" ng-model="contactName" id="groupname" name="contactName" value="{{contactName}}">
+                <input type="text" ng-model="contactName" id="groupname" name="contactName" value="{{contactName}}"
+                    ng-change="checkValid('alrErrName')">
                 <span ng-show="alrErrName" class="text-danger">{{ errorMsgName }}</span>
             </div>
             <div class="elemDiv">
                 <label for="email">Email Address</label>
-                <input type="email" ng-model="emailAddress" id="email" name="emailAddress" value="{{emailAddress}}">
+                <input type="email" ng-model="emailAddress" id="email" name="emailAddress" value="{{emailAddress}}"
+                    ng-change="checkValid('alrErrEmail')">
                 <span ng-show="alrErrEmail" class="text-danger">{{ errorMsgEmail }}</span>
             </div>
             <div class="elemDiv">
                 <label for="number">SMS Number</label>
-                <input type="text" ng-model="smsNumber" id="mobile_code" name="smsNumber" value="{{smsNumber}}">
+                <input type="text" ng-model="smsNumber" id="mobile_code" name="smsNumber" value="{{smsNumber}}"
+                    ng-change="checkValid('alrErrNumber')">
                 <!-- <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span> -->
                 <button type="button" class="test" ng-click="sendTestMessage()">Test</button>
                 <span ng-show="alrErrNumber" class="text-danger">{{ errorMsgNumber }}</span>
@@ -39,7 +42,6 @@
                                 ng-checked="{{distanceAlert_1 == 0 || distanceAlert_1 == null}}">
                         </div>
                     </div>
-
                 </div>
                 <div class="elemDiv">
                     <label for="gender">Angle Alarm</label>

@@ -424,6 +424,7 @@ display: none;
 .containerMain {
     height: 100vh;
     width: 100vw;
+    overflow-y: auto !important;
 }
 
 /*header .img_tg_tp{
@@ -13108,7 +13109,7 @@ div.alarmpage,
     }
 
     .legend-button .btn,
-    .tracnt-tab-legend-button .btn{
+    .tracnt-tab-legend-button .btn {
         font-size: unset !important;
     }
 
@@ -13230,8 +13231,7 @@ table.homemaptable tr.bottom-cl td {
         font-size: 0.8em;
     }
 
-    #homeMap .infoBox b
-    {
+    #homeMap .infoBox b {
         font-size: 1em !important;
     }
 
@@ -13345,12 +13345,12 @@ table.homemaptable tr.bottom-cl td {
         width: 320px !important;
     }
 
-    .icoBg-tracnet{
+    .icoBg-tracnet {
         min-height: 24px;
     }
 
-    .gm-style-iw-d .homemaptable{
-        font-size:unset;
+    .gm-style-iw-d .homemaptable {
+        font-size: unset;
     }
 }
 
@@ -13421,7 +13421,7 @@ button.reset_btn {
 
 div:where(.swal2-container) h2:where(.swal2-title),
 div:where(.swal2-container) .swal2-html-container,
-div:where(.swal2-container) div:where(.swal2-popup){
+div:where(.swal2-container) div:where(.swal2-popup) {
     font-size: 1em !important;
 }
 
@@ -13430,6 +13430,15 @@ div:where(.swal2-container) div:where(.swal2-popup){
     padding-top: 10px;
 }
 
-.tracnet-modal#myModal .modal-body h3{
-    font-size:1em !important;
+.tracnet-modal#myModal .modal-body h3 {
+    font-size: 1em !important;
+}
+
+#settingForm .elemDiv span.text-danger {
+    display: block;
+}
+
+.block-1.block-xpnd .ts-c,
+.block-3.block-xpnd-2 .ts-c {
+    overflow-y: unset;
 }

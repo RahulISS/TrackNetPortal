@@ -12,6 +12,7 @@ angular
     var fullAlarm = [];
     var emptyAlarm = [];
     var currentLegend = 0;
+    $scope.yMinButtonChecked = false;
 
     const token = localStorage.getItem("authToken");
     const customeHeader = {
@@ -752,6 +753,12 @@ angular
     ];
 
     $scope.changeMeasurement = function () {
+      
+      if( $scope.yMinButtonChecked  == true ) {
+        document.getElementById("meter_yminButton").setAttribute("class", "btnTopBar");
+      } else {
+        document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
+      }
       $scope.cancelInterval();
       $scope.startInterval();
     };
@@ -798,8 +805,10 @@ angular
       $scope.chartStatusSet[page].ymin = !$scope.chartStatusSet[page].ymin;
       if ($scope.chartStatusSet[page].ymin === true) {
         document.getElementById(page + "_yminButton").setAttribute("class", "btnTopBar");
+        $scope.yMinButtonChecked = true;
       } else {
         document.getElementById(page + "_yminButton").setAttribute("class", "btnTopBarOff");
+        $scope.yMinButtonChecked = false;
       }
 
       getYminMax();
@@ -1254,21 +1263,6 @@ console.log(contents);
         }
       }
 
-      // for (let k = 0; k < $scope.tableStats.length; k++) {
-      //   if (
-      //     $scope.tableStats[k].pointId === "null" ||
-      //     $scope.tableStats[k].pointId === null
-      //   )
-      //     continue;
-      //   if ($scope.chartStatusSet["meter"].ymin) {
-      //     $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = 0;
-      //   } else {
-      //     $scope.chartStatusSet["meter"].charts.options.yAxis[k].min =
-      //       minUnit[$scope.tableStats[k].currentMeasurement.unit];
-      //   }
-      //   $scope.chartStatusSet["meter"].charts.options.yAxis[k].max =
-      //     maxUnit[$scope.tableStats[k].currentMeasurement.unit];
-      // }
       for (let k = 0; k < $scope.tableStats.length; k++) {
         if (
           $scope.tableStats[k].pointId === "null" ||
@@ -1294,36 +1288,7 @@ console.log(contents);
         }
       }
     }
-
-    function cloneGetYminMax() {
-      var minUnit = {}, maxUnit = {};
-      for (let i = 0; i < $scope.tableStats.length; i++) {
-        if ($scope.tableStats[i].pointId !== 'null' && $scope.tableStats[i].pointId !== null) {
-          if (minUnit[$scope.tableStats[i].currentMeasurement.unit] == undefined) {
-            minUnit[$scope.tableStats[i].currentMeasurement.unit] = $scope.tableStats[i].min;
-          } else {
-            minUnit[$scope.tableStats[i].currentMeasurement.unit] = ($scope.tableStats[i].min < minUnit[$scope.tableStats[i].currentMeasurement.unit]) ? $scope.tableStats[i].min : minUnit[$scope.tableStats[i].currentMeasurement.unit];
-          }
-
-          if (maxUnit[$scope.tableStats[i].currentMeasurement.unit] == undefined) {
-            maxUnit[$scope.tableStats[i].currentMeasurement.unit] = $scope.tableStats[i].max;
-          } else {
-            maxUnit[$scope.tableStats[i].currentMeasurement.unit] = ($scope.tableStats[i].max > maxUnit[$scope.tableStats[i].currentMeasurement.unit]) ? $scope.tableStats[i].max : maxUnit[$scope.tableStats[i].currentMeasurement.unit];
-          }
-        }
-      }
-
-      for (let k = 0; k < $scope.tableStats.length; k++) {
-        if ($scope.tableStats[k].pointId === 'null' || $scope.tableStats[k].pointId === null) continue;
-        if ($scope.chartStatusSet["meter"].ymin) {
-          $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = 0;
-        } else {
-          $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = 0;
-        }
-        $scope.chartStatusSet["meter"].charts.options.yAxis[k].max = 105;
-      }
-    }
-
+    
     function resetYaxes() {
       for (let k = 0; k < $scope.tableStats.length; k++) {
         $scope.chartStatusSet["meter"].charts.options.yAxis[k].min = null;
@@ -1468,9 +1433,14 @@ console.log(contents);
             }
           }
 
-          if ($scope.tableStats[index].currentMeasurement.id_name != "Relative Distance")
+          if ($scope.tableStats[index].currentMeasurement.id_name != "Relative Distance") {
             document.getElementById("meter_yminButton").setAttribute("class", "btnTopBarOff");
-
+            if( $scope.yMinButtonChecked == true) {
+              document.getElementById("meter_yminButton").setAttribute("class", "btnTopBar");
+            }
+          }
+          
+        
           for (var j = 0; j < data.length; j++) {
             var ttemp = data[j].ts.slice(0, data[j].ts.indexOf("+"));
             var mmx = moment.utc(ttemp);

@@ -596,7 +596,6 @@ angular
           }
 
           $scope.sortedArray_1 = $scope.sortedArray;
-          console.log($scope.sortedArray_1, '$scope.sortedArray_1$scope.sortedArray_1');
           // sorted end
           for (var i = 0; i < $scope.sortedArray_1.length; i++) {
 
@@ -1070,7 +1069,7 @@ angular
         $scope.alarmCount = 0;
         var device_id = localStorage.getItem("device_id");
         $("#popupModalCenter").addClass("show-modal");
-        //console.log($scope.getStoreAlert);
+        console.log($scope.getStoreAlert, "getStoreAlert");
         if ($scope.getStoreAlert == null) {
           $scope.alarmCount = "";
           $scope.alert1 = "";

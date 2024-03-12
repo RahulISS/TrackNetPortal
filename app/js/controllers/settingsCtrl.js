@@ -18,12 +18,8 @@ angular.module('settingsCtrl', [])
     $scope.loading = false;
     $scope.operationResult = false;
 
-
-
-
     // Function to reset the form
     $scope.reSet3 = function (type) {
-
       if (type == 'add') {
         $scope.contactName = null;
         $scope.emailAddress = null;
@@ -36,7 +32,20 @@ angular.module('settingsCtrl', [])
       }
 
     };
-
+    $scope.checkValid = function (type) {
+      if (type == 'alrErrName' || $scope.contactName) {
+        $scope.errorMsgName = "";
+        $scope.alrErrName = false;
+      }
+      if (type == 'alrErrEmail' || $scope.emailAddress) {
+        $scope.errorMsgEmail = "";
+        $scope.alrErrEmail = false;
+      }
+      if (type == 'alrErrNumber' || $scope.smsNumber) {
+        $scope.errorMsgNumber = "";
+        $scope.alrErrNumber = false;
+      }
+    }
 
     getSaveedUserConfiguration();
     // ADD the record using the form
@@ -54,18 +63,28 @@ angular.module('settingsCtrl', [])
         $scope.errorMsgName = "Field is required";
         $scope.alrErrName = true;
         return;
+      } else {
+        $scope.errorMsgName = "";
+        $scope.alrErrName = false;
       }
 
       if (emailAddress == null || emailAddress == "") {
         $scope.errorMsgEmail = "Field is required";
         $scope.alrErrEmail = true;
         return;
+      } else {
+        $scope.errorMsgEmail = "";
+        $scope.alrErrEmail = false;
       }
 
       if (smsNumber == null || smsNumber == "") {
         $scope.errorMsgNumber = "Field is required";
         $scope.alrErrNumber = true;
         return;
+      } else {
+        $scope.errorMsgNumber = "";
+        $scope.alrErrNumber = false;
+
       }
 
       if (distanceAlert_1 == null)
@@ -291,18 +310,28 @@ angular.module('settingsCtrl', [])
         $scope.errorMsgName = "Field is required";
         $scope.alrErrName = true;
         return;
+      } else {
+        $scope.errorMsgName = "";
+        $scope.alrErrName = false;
       }
 
       if (emailAddress == null || emailAddress == "") {
         $scope.errorMsgEmail = "Field is required";
         $scope.alrErrEmail = true;
         return;
+      } else {
+        $scope.errorMsgEmail = "";
+        $scope.alrErrEmail = false;
       }
 
       if (smsNumber == null || smsNumber == "") {
         $scope.errorMsgNumber = "Field is required";
         $scope.alrErrNumber = true;
         return;
+      } else {
+        $scope.errorMsgNumber = "";
+        $scope.alrErrNumber = false;
+
       }
 
       if (distanceAlert_1 == null)
@@ -356,9 +385,11 @@ angular.module('settingsCtrl', [])
     }
 
     $scope.reSetValue = function () {
-      $scope.contactName = null;
+
+      $scope.smsNumber = null;
       $scope.emailAddress = null;
       $scope.mobileNumber = null;
+      $scope.contactName = null;
       $scope.distanceAlert_1 = null;
       $scope.distanceAlert_2 = null;
       $scope.distanceAlert_3 = null;
@@ -370,12 +401,14 @@ angular.module('settingsCtrl', [])
       $scope.alrErrEmail = false;
       $scope.alrErrNumber = false;
 
+
     }
 
     $scope.clearForm = function () {
-      $scope.contactName = null;
+      $scope.smsNumber = null;
       $scope.emailAddress = null;
       $scope.mobileNumber = null;
+      $scope.contactName = null;
     }
 
     function numcheck(number) {

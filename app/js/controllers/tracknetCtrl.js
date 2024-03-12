@@ -443,7 +443,6 @@ angular
           }
         }
 
-        console.log(convertedData);
         for (i = 0; i < convertedData.length; i++) {
           if ($scope.device[convertedData[i].serialNumber] == undefined)
             $scope.device[convertedData[i].serialNumber] = [];
@@ -1343,6 +1342,8 @@ angular
           var mmx = moment.utc(ttemp);
 
           const xval = mmx.valueOf();
+          
+          $scope.timeVal = moment.utc(xval).tz(localStorage.getItem("setTimeZone")).format("HH:mm:ss:000");
           if (!eachEntry.empty) {
             eachEntry.empty = 3998;
           }
@@ -1455,12 +1456,18 @@ angular
             },
           ],
           xAxis: {
+            labels: {
+              enabled: true,
+              formatter: function () {
+                return $scope.timeVal;
+              },
+            },
             minPadding: 0,
             maxPadding: 0,
-            type: "datetime",
             tickPixelInterval: 100,
             gridLineWidth: 2,
           },
+          
           legend: {
             enabled: false,
           },
@@ -1500,6 +1507,8 @@ angular
           text: "",
         },
       };
+
+      // Function to overwrite x-axis categories
       $scope.meterChartConfig.options.lang.noData = "No Data Recorded.";
       for (let i = 0; i < $scope.chartLabel.length; i++) {
         $scope.meterChartConfig.series[i].data = data[i];
@@ -1510,7 +1519,8 @@ angular
       options: {
         chart: {
           type: 'column',
-          height: 230
+          height: 270,
+          marginTop: 20 // Adjust the marginTop to add top margin
         },
         yAxis: {
           min: 0,
@@ -1522,7 +1532,8 @@ angular
           },
           title: {
             text: ''
-          }
+          },
+          maxPadding: 0.1 // Adjust the maxPadding to add margin
         },
         xAxis: {
           labels: {
@@ -1596,16 +1607,27 @@ angular
       $scope.isLoading = true;
       $http.get(apiBaseUrl + "tracnet-chart?portalId=" + portalId + "&page=" + currentPage + "&limit=" + limit, { headers: customeHeader }).then(function (res) {
         var rowsData = Object.values(res.data.data);
+
         if( rowsData.length < 10 ) {
-          const button = document.getElementById("myButton");
+          const button = document.getElementById("nextBtn");
           button.disabled = true;
           $scope.isDisabledNex = true;
         } else {
-          const button = document.getElementById("myButton");
+          const button = document.getElementById("nextBtn");
           button.disabled = false;
           $scope.isDisabledNex = false;
         }
-        
+        if (currentPage > 1) {
+          const button = document.getElementById("preBtn");
+          button.disabled = false;
+          $scope.isDisabledPre = false;
+        }else{
+          const button = document.getElementById("preBtn");
+          button.disabled = true;
+          $scope.isDisabledPre = true;
+        }
+
+
         if (limit <= rowsData.length) {
           totalPage++;
         }
@@ -1615,7 +1637,9 @@ angular
           $scope.emptyAlarm = rowsData[i].empty;
           $scope.fullAlarm = rowsData[i].full;
           $scope.height = rowsData[i].height;
-
+          ///$val_full = rowsData[i].val_full;
+          //console.log(rowsData[i], "rowsData[i]");
+          //return false;
           $val_full = Math.round(((($scope.emptyAlarm - $scope.fullAlarm) - ($scope.height - $scope.fullAlarm)) / ($scope.emptyAlarm - $scope.fullAlarm)) * 100);
 
           if ($val_full < 0) {
@@ -1625,17 +1649,17 @@ angular
           } else {
             $val = $val_full;
           }
-
+          
           if (1 * $val >= 0) allSeriesData.push({ y: $val, myData: rowsData[i], color: "#3255A2" });
         }
-
+        
         allSeriesData.sort((a, b) => b.y - a.y);
-
+        
         $scope.relativedistance.series[0].data = allSeriesData;
         if ($scope.$parent && $scope.$parent.relativedistance) {
           $scope.$parent.relativedistance.series[0].data = allSeriesData;
         }
-
+        
         const relativedistancechart = $('#relativedistance').highcharts();
         relativedistancechart.series[0].update({ data: allSeriesData });
         $scope.isLoading = false;
