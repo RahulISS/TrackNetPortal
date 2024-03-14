@@ -154,6 +154,11 @@
         font-size: 15px;
         line-height: 20px;
     }
+
+    .pageDisable {
+        background: black !important;
+        cursor: auto !important;
+    }
 </style>
 <section>
     <div class="container-fluid">
@@ -224,7 +229,8 @@
                                     <strong>Alerts and Alarms ({{alertCount}})</strong>
                                     <i ng-if="alertCount==0">ALL ALERTS ARE CLEAR</i>
                                     <ul ng-if="alertCount>0">
-                                        <li ng-repeat="alert in alertLists track by $index" ng-click="alertClick(alert)">
+                                        <li ng-repeat="alert in alertLists track by $index"
+                                            ng-click="alertClick(alert)">
                                             <p class="{{alert.class}}">
                                                 {{ alert.aTreeNode_textLabel }}<br />
                                                 {{ alert.message }}<br />
@@ -262,33 +268,43 @@
                     <!-- legend code added here  -->
                     <div class="tracnt-tab-legend-button">
                         <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                            <button type="button" class="btn btn-primary" ng-click='loadData(true, "all clear")'>
+                            <button type="button" class="btn btn-primary"
+                                ng-click='loadData(true, "all clear"); isActive="all clear"'
+                                ng-class="{ 'active': isActive === 'all clear' }">
                                 <div class="icoBg-tracnet">
                                     <span>All Clear</span>
                                 </div>
                                 <div class="icoBg-tracnet"><img
                                         src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" /></div>
                             </button>
-                            <button type="button" class="btn btn-primary" ng-click='loadData(true, "all alarms")'>
+                            <button type="button" class="btn btn-primary"
+                                ng-click='loadData(true, "all alarms"); isActive="all alarms"'
+                                ng-class="{ 'active': isActive === 'all alarms' }">
                                 <div class="icoBg-tracnet">
                                     <span>Alarm</span>
                                 </div>
                                 <div class="icoBg-tracnet"><img
                                         src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" /></div>
                             </button>
-                            <button type="button" class="btn btn-primary" ng-click='loadData(true, "triangle")'>
+                            <button type="button" class="btn btn-primary"
+                                ng-click='loadData(true, "triangle"); isActive="triangle"'
+                                ng-class="{ 'active': isActive === 'triangle' }">
                                 <div class="icoBg-tracnet">
                                     <span>Distance Alert 3</span>
                                 </div>
                                 <div class="icoBg-tracnet"><img src="img/triangle.svg" /></div>
                             </button>
-                            <button type="button" class="btn btn-primary" ng-click='loadData(true, "square")'>
+                            <button type="button" class="btn btn-primary"
+                                ng-click='loadData(true, "square"); isActive="square"'
+                                ng-class="{ 'active': isActive === 'square' }">
                                 <div class="icoBg-tracnet">
                                     <span>Distance Alert 2</span>
                                 </div>
                                 <div class="icoBg-tracnet"><img src="img/square.svg" /></div>
                             </button>
-                            <button type="button" class="btn btn-primary" ng-click='loadData(true, "circle")'>
+                            <button type="button" class="btn btn-primary"
+                                ng-click='loadData(true, "circle"); isActive="circle"'
+                                ng-class="{ 'active': isActive === 'circle' }">
                                 <div class="icoBg-tracnet">
                                     <span>Distance Alert 1</span>
                                 </div>
@@ -331,8 +347,9 @@
                                 <highchart id="relativedistance" config="relativedistance"></highchart>
                             </div>
                             <div class="chart-btn-wrp">
-                                <button ng-click="previousPage()">Previous</button>
-                                <button ng-click="nextPage()">Next</button>
+                                <button id = "preBtn" ng-class="{ 'pageDisable': isDisabledPre }"
+                                    ng-click="previousPage()">Previous</button>
+                                <button id = "nextBtn" ng-class="{ 'pageDisable': isDisabledNex }" ng-click="nextPage()">Next</button>
                             </div>
                         </div>
                     </div>
@@ -346,7 +363,8 @@
     <div class="loader-spinner"></div>
 </div>
 <!-- Modal -->
-<div class="modal fade chartmdl" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade chartmdl tracnet-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -355,16 +373,13 @@
             <div class="modal-body overflow-hidden min-440">
                 <highchart class="chartsArea" id="meterChartConfig" config="meterChartConfig"></highchart>
             </div>
-            <div class="modal-footer">
-                <button style="background-color: #3255a2; font-size: 14px;" type="button" class="btn btn-primary"
-                    data-bs-dismiss="modal">Close</button>
-            </div>
         </div>
     </div>
 </div>
 
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade tracnet-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -375,10 +390,6 @@
                 <h3>Current Weather Humidity :<span> {{ humidity }}%</span></h3>
                 <h3>Current Wind Speed :<span> {{ windSpeed }}km/h</span></h3>
                 <h3>Current Wind Direction : <span>{{ windDirectionText }}</span></h3>
-            </div>
-            <div class="modal-footer">
-                <button style="background-color: #3255a2; font-size: 14px;" type="button" class="btn btn-primary"
-                    data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

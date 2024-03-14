@@ -1,13 +1,12 @@
 angular.module('mainCtrl', [])
 
-    .controller('mainController', function ($scope, $rootScope, $http, $state, $q, Data, $location, apiBaseUrl, $window) {
+    .controller('mainController', function ($scope, $rootScope, $http, $state, $q, portalId, $location, apiBaseUrl, $window) {
         $rootScope.storage.toggle = false;
-        $scope.serverRequest = apiBaseUrl;
         const token = localStorage.getItem("authToken");
         const customeHeader = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            //'Cache-Control': 'no-cache, no-store, must-revalidate',
         };
 
         if (localStorage.getItem("authToken") == '' || localStorage.getItem("authToken") == undefined) {
@@ -43,7 +42,7 @@ angular.module('mainCtrl', [])
         if (localStorage.getItem("trackNet") == 'trackNet') {
             $scope.selectedNavIndex = 2;
         } else {
-            $scope.selectedNavIndex = 2;
+            $scope.selectedNavIndex = 0;
         }
         $state.go('main.' + $scope.navigationArray[$scope.selectedNavIndex].link);
 
@@ -80,23 +79,29 @@ angular.module('mainCtrl', [])
 
         }
 
+        $http.get(apiBaseUrl + 'getAllPortal?portalId=' + portalId, { headers: customeHeader }).then(function (result) {
+            $scope.portal = result.data.data;
+            $scope.selectedPortal = $scope.portal[0];
+            localStorage.setItem("setTimeZone", $scope.selectedPortal.timeZone);
+        })
         // let sensors = [];
 
         $rootScope.loadTree = function () {
-            const query = $http.get(apiBaseUrl + 'chart', { headers: customeHeader })
+            let flatArray = []
+            const query = $http.get(apiBaseUrl + 'chart?portalId=' + portalId, { headers: customeHeader })
                 .then(function (response) {
                     const data = response.data.data;
-                    let flatArray = [{
+                    flatArray = [{
                         'aTreeNodeRef': null,
-                        'aTreeRef': '64ad1d5d664396439a286281',
-                        'text': 'Trial Network',
-                        'a_attr': { 'title': 'Trial Network' },
-                        '_id': '64ae5888efa8baae8f106baf',
+                        'aTreeRef': data[0].aTreeRef,
+                        'text': data[0].textLabel,
+                        'a_attr': { 'title': data[0].textLabel },
+                        '_id': data[1].aTreeNodeRef,
                     }];
-                    for (let i = 0; i < data.length; i++) {
+                    for (let i = 1; i < data.length; i++) {
                         let dict = {
                             'aTreeNodeRef': data[i].aTreeNodeRef,
-                            'aTreeRef': data[i].aTreeRef,
+                            'aTreeRef': data[i].aTreeNodeRef,
                             'text': data[i].textLabel,
                             'a_attr': { 'title': data[i].textMouseRollover },
                             '_id': data[i]._id,
@@ -111,12 +116,6 @@ angular.module('mainCtrl', [])
                         }
                         return acc;
                     }, {});
-                    // const idMapping = flatArray.reduce((acc, el, i) => {
-                    //     //console.log(_id,'el._id')
-                    //     acc[el._id] = i;
-                    //     //console.log(acc,'acc')
-                    //     return acc;
-                    // }, {});
 
                     flatArray.forEach(el => {
                         let temp_tree;
@@ -148,7 +147,6 @@ angular.module('mainCtrl', [])
                     const promises_data = queriesArray.map(function (item) {
                         return $http.get(query, { headers: customeHeader })
                             .then(function (reqResult) {
-                                //console.log(reqResult.data,'reqResult.data sorb')
                                 return {
                                     'idx': item.index,
                                     'data': reqResult.data.data
@@ -178,6 +176,7 @@ angular.module('mainCtrl', [])
         });
 
         if ($rootScope.storage.treeData.length === 0) {
+            // $rootScope.storage.treeData = []
             $rootScope.loadTree();
         }
         $rootScope.loadTree();
@@ -187,7 +186,6 @@ angular.module('mainCtrl', [])
         }
 
         function checkedRefData(e, edata) {
-            let sensors = [];
             const query2 = $http.get(apiBaseUrl + 'sensortList', { headers: customeHeader })
                 .then(function (response) {
                     const data = response.data.data
@@ -266,6 +264,31 @@ function tooltipFormaterFunction(obj, sensType, measurement) {
         <span style="color:${seriesColor}">${seriesName}</span><b>: ${state}</b><br/>`;
     } else {
         let tooltip = `<span style="font-size:10px;">${moment.utc(obj.x).format("D/M/YYYY h:mma")}</span><br/>`
+        if (obj.points.length > 1) {
+            for (let i = 0; i < obj.points.length; i++) {
+                tooltip += `<span style="color:${obj.points[i].color}">${obj.points[i].series.name}</span><b>: ${obj.points[i].y}</b><br/>`;
+            }
+        } else {
+            tooltip += `<span style="color:${seriesColor}">${seriesName}</span><b>: ${obj.y}</b>`;
+        }
+        return tooltip;
+    }
+}
+
+function toolDateFormaterFunction(obj, sensType, measurement) {
+    const seriesName = obj.points[0].series.name;
+    const seriesColor = obj.points[0].color;
+    if (sensType === 'Bool') {
+        let state;
+        if (obj.y == 1) {
+            state = boolValueDict[measurement][1];
+        } else {
+            state = boolValueDict[measurement][0];
+        }
+        return `<span style="font-size: 10px">${moment.utc(obj.x).tz(localStorage.getItem("setTimeZone")).format("D/M/YYYY h:mma")}</span><br/>
+        <span style="color:${seriesColor}">${seriesName}</span><b>: ${state}</b><br/>`;
+    } else {
+        let tooltip = `<span style="font-size:10px;">${moment.utc(obj.x).tz(localStorage.getItem("setTimeZone")).format("D/M/YYYY h:mma")}</span><br/>`
         if (obj.points.length > 1) {
             for (let i = 0; i < obj.points.length; i++) {
                 tooltip += `<span style="color:${obj.points[i].color}">${obj.points[i].series.name}</span><b>: ${obj.points[i].y}</b><br/>`;

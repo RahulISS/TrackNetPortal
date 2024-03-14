@@ -1,7 +1,6 @@
 html {
     top: 0;
     left: 0;
-    font-size: 62.5%;
     box-sizing: border-box;
     background-color: #303030 !important;
 }
@@ -16,7 +15,7 @@ body {
     height: 100%;
     scrollbar-width: auto;
     scrollbar-color: #111111 rgba(184, 182, 182, 1);
-    font-size: 1.6rem !important;
+    font-size: 1em !important;
     background-color: #303030 !important;
 }
 
@@ -154,7 +153,7 @@ body {
 }
 
 .data_tp_thumb p {
-    font-size: 12px;
+    font-size: 1em;
     margin: 0px;
     text-align: center;
     width: 50%;
@@ -225,7 +224,7 @@ body {
     padding: 0px;
     margin: 0px;
     text-align: left;
-    font-size: 16px;
+    font-size: 1em;
     font-weight: bold;
     position: absolute;
     right: 0px;
@@ -339,7 +338,7 @@ body {
     text-align: center;
     font-weight: bold;
     color: #3255a2;
-    font-size: 14px;
+    font-size: 1em;
 }
 
 .grid_btn button {
@@ -347,7 +346,7 @@ body {
     background-color: #3255a2;
     color: #fff;
     color: #e6e6e6;
-    font-size: 16px;
+    font-size: 1em;
     padding: 11px 10px;
     margin: 0px;
     line-height: 7px;
@@ -425,6 +424,7 @@ display: none;
 .containerMain {
     height: 100vh;
     width: 100vw;
+    overflow-y: auto !important;
 }
 
 /*header .img_tg_tp{
@@ -443,7 +443,7 @@ display: none;
     top: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    font-size: 17px;
+    font-size: 1em;
     font-weight: bold;
 }
 
@@ -656,7 +656,9 @@ img#footerBrandingOz {
     padding-right: 0.5em;
     transition: all 0.3s ease 0s;
     margin-right: 0.2em;
-    font-size: 16px;
+    font-size: 1em;
+    padding-top: 0.4em;
+    padding-bottom: 0.3em;
 }
 
 .navMenuButton-checked {
@@ -1803,7 +1805,7 @@ div.atfContents {
 .datepickerbuttonleft {
     width: 14%;
     height: 100%;
-    font-size: 1.6vmin;
+    font-size: 1em;
     padding-top: 1%;
 }
 
@@ -1815,7 +1817,7 @@ div.atfContents {
 .datepickerbuttonright {
     width: 14%;
     height: 100%;
-    font-size: 1.6vmin;
+    font-size: 1em;
     padding-top: 1%;
 }
 
@@ -2131,7 +2133,7 @@ div.chartsMainControls {
     vertical-align: middle;
     text-align: center;
     /* font-weight: bold; */
-    font-size: 0.9em;
+    font-size: 1em;
 }
 
 .datepickerbuttonleft {
@@ -3848,15 +3850,15 @@ div.settings3hysteresisconright {
 .settings3notificationaddress {
     width: 100%;
     height: 100%;
-    //font-size: 1.8vmin;
+    /* //font-size: 1.8vmin; */
 }
 
 .settings3notificationaddress th {
     height: 30%;
     background-color: #eee;
     text-align: center;
-    //font-weight: bold;
-    //font-size: 1.8vmin;
+    /* //font-weight: bold;
+    //font-size: 1.8vmin; */
     padding-top: 1%;
 }
 
@@ -4501,7 +4503,7 @@ th {
 .date_time_stamp p {
     margin: 0px;
     color: #fff;
-    font-size: 14px;
+    /* font-size: 14px; */
 }
 
 .date_time_stamp span {
@@ -7253,7 +7255,7 @@ div.batterylifediv {
     width: 80%;
     height: 100%;
     border-radius: 10px;
-    //border: 1px solid #292929;
+    /* //border: 1px solid #292929; */
     border: 5px double black;
     margin: auto;
     padding-bottom: 6px;
@@ -7443,7 +7445,7 @@ div.onealarmItemRight {
     text-align: center;
     width: 100%;
     height: 20px;
-    font-size: 1.6rem;
+    font-size: 1rem;
 }
 
 .homemaptdclassleft {
@@ -7648,7 +7650,7 @@ div.settings1tablerightInner {
     height: 25%;
     line-height: 5vmin;
     white-space: nowrap;
-    //display: inline-flex;
+    /* //display: inline-flex; */
     flex-direction: row;
 }
 
@@ -7657,7 +7659,7 @@ div.settings1tablerightInner1 {
     height: 100%;
     line-height: 5vmin;
     white-space: nowrap;
-    //display: inline-flex;
+    /* //display: inline-flex; */
     flex-direction: row;
 }
 
@@ -7675,17 +7677,17 @@ div.settings1table2col {
 div.settings1table2col1 {
     width: 20vmin;
     height: 100%;
-    //border-right: 2px solid black;
-    //border-bottom: 2px solid #eee;
+    /* //border-right: 2px solid black;
+    //border-bottom: 2px solid #eee; */
     display: inline-block;
     text-align: center;
-    //background-color: white;
-    //color: black;
+    /* //background-color: white;
+    //color: black; */
 }
 
 div.settings1tablerightright {
     height: 100%;
-    //white-space: nowrap;
+    /* //white-space: nowrap; */
     display: inline-flex;
     flex-direction: row;
 }
@@ -7815,7 +7817,7 @@ div.settings2list {
 }
 
 .settingsequiplist {
-    //cursor: pointer;
+    /* //cursor: pointer; */
     list-style-type: none;
 }
 
@@ -7961,15 +7963,15 @@ div.settings3hysteresisconright {
 .settings3notificationaddress {
     width: 100%;
     height: 100%;
-    //font-size: 1.8vmin;
+    /* //font-size: 1.8vmin; */
 }
 
 .settings3notificationaddress th {
     height: 30%;
     background-color: #eee;
     text-align: center;
-    //font-weight: bold;
-    //font-size: 1.8vmin;
+    /* //font-weight: bold;
+    //font-size: 1.8vmin; */
     padding-top: 1%;
 }
 
@@ -10717,7 +10719,7 @@ input {
 
 .filter-label {
     font-weight: 600;
-    font-size: 14px;
+    /* font-size: 14px; */
     line-height: 140%;
     text-transform: uppercase;
     color: #707070;
@@ -10752,6 +10754,10 @@ div.week_days {
 
     .flexBoxCenter {
         overflow-y: scroll;
+    }
+
+    .loginFooter .flexBoxCenter {
+        overflow-y: unset;
     }
 
     /* insert styles here */
@@ -10847,7 +10853,7 @@ div.week_days {
 }
 
 .withtree.map-100.map-50+.side-det {
-    width: 500px;
+    width: 700px;
     display: block;
 }
 
@@ -10890,7 +10896,7 @@ table.elem td {
     padding: 7px 13px;
     background: #3e3e3e;
     color: #fff;
-    font-size: 15px;
+    font-size: 1em;
     outline: none;
     border: none;
     border-radius: 5px;
@@ -10912,7 +10918,7 @@ table.elem td {
 
 .homepage.ng-scope .modal-content {
     position: absolute;
-    top: -109px;
+    top: -20px;
     left: 50%;
     transform: translate(-50%, 0%);
     background-color: #FFF2DD !important;
@@ -11370,7 +11376,7 @@ form#userFrm .user-frm-wrp input {
 }
 
 .mhole-mobile h4 {
-    font-size: 25px;
+    font-size: 1em;
     text-align: center;
     padding-bottom: 0px;
 }
@@ -11556,11 +11562,11 @@ form#userFrm .user-frm-wrp input {
     outline: none;
     border: 1px solid #000;
     background: rgb(91 180 91);
-    ;
     color: #fff;
-    font-size: 20px;
+    font-size: 1em;
     border-radius: 6px;
     padding: 3px 47px !important;
+    text-align: center !important;
 }
 
 .mhole-mobile .cancel-btn {
@@ -11568,9 +11574,10 @@ form#userFrm .user-frm-wrp input {
     border: none;
     background: #b40505;
     color: #fff;
-    font-size: 20px;
+    font-size: 1em;
     border-radius: 6px;
     padding: 3px 47px !important;
+    text-align: center !important;
 }
 
 .mhole-mobile .edit-btn {
@@ -11581,7 +11588,7 @@ form#userFrm .user-frm-wrp input {
     border-radius: 9px;
     background: blue;
     padding: 3px;
-    font-size: 16px;
+    font-size: 1em;
     right: 15px;
     left: unset;
     text-decoration: none;
@@ -11596,14 +11603,14 @@ form#userFrm .user-frm-wrp input {
 /* 08 update */
 #homeMap .homemaptable {
     background: #fff;
-    font-size: 12px;
+    /* font-size: 12px; */
     padding: 0 5px;
     color: #000;
 }
 
 #homeMap table.homemaptable tbody {
     background: #fff;
-    font-size: 12px;
+    /* font-size: 12px; */
     padding: 0 5px;
     color: #000;
 }
@@ -11711,7 +11718,7 @@ table.homemaptable .bottom-cl td:last-child {
     /* Stay in place */
     z-index: 1;
     /* Sit on top */
-    padding-top: 100px;
+    /* padding-top: 100px; */
     /* Location of the box */
     left: 0;
     top: 0;
@@ -11868,11 +11875,12 @@ div#myModal2 {
     color: red;
     position: absolute;
     top: 60px !important;
-    right: -7.5rem !important;
+    right: -4.5rem !important;
     letter-spacing: -1px !important;
     display: flex !important;
     flex-wrap: wrap !important;
     width: 163px !important;
+    justify-content: flex-start !important;
 }
 
 .disTrigger {
@@ -11882,14 +11890,14 @@ div#myModal2 {
 
 .mhole-alert .classmm {
     position: absolute;
-    top: 13px !important;
-    right: -3rem !important;
+    top: 5px !important;
+    right: -2rem !important;
 }
 
 .mhole-alert .alt-status {
     position: absolute;
     top: 31px !important;
-    right: 22.4rem !important;
+    right: 14rem !important;
     color: red;
 }
 
@@ -11913,7 +11921,7 @@ div#myModal2 {
     color: white;
     border: none;
     margin-left: auto;
-    font-size: 16px;
+    font-size: 1em;
     border-radius: 5px;
     padding: 8px 22px;
     background-color: #008000;
@@ -12006,7 +12014,7 @@ button.test {
 
 .tablewrapper .close {
     right: -32px;
-    top: -46px;
+    top: -42px;
     position: absolute;
     border-radius: 50%;
     color: #fff;
@@ -12093,7 +12101,7 @@ button {
     color: white;
     border: none;
     margin-left: auto;
-    font-size: 16px;
+    font-size: 1em;
     border-radius: 5px;
     padding: 8px 22px;
     margin-left: 410px;
@@ -12149,7 +12157,7 @@ button {
     min-height: 30px;
     color: #000;
     font-weight: 600;
-    font-size: 9px;
+    /* font-size: 9px; */
 }
 
 .icoBg img {
@@ -12177,7 +12185,7 @@ button {
     color: #000;
     line-height: 12px;
     font-weight: 600;
-    font-size: 9px;
+    /* font-size: 9px; */
     margin: 0 auto;
     min-height: 34px;
 }
@@ -12226,7 +12234,7 @@ button {
 
 .mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1) {
     margin-bottom: 0px;
-    margin-top: 102px;
+    margin-top: 100px !important;
 }
 
 .mhole-mobile .mhole-content .circles {
@@ -12308,12 +12316,1129 @@ button {
 .elemDiv .test-div {
     display: flex;
 }
-.chart #relativedistance div#highcharts-nc9z3os-12.highcharts-container{
-    height: 215px!important;
+
+.chart #relativedistance div#highcharts-nc9z3os-12.highcharts-container {
+    height: 215px !important;
 }
-.last_block_third .ul_li{
-    height: 44%;
-}
+
+/* .last_block_third .ul_li {
+    height: 47%;
+} */
+
 .outer-block-4 {
-    margin-top: -4px!important;
+    margin-top: -4px !important;
+}
+
+
+
+/* ------------------------------------ */
+
+
+
+
+
+.withtree .homemaparea .infoBox b {
+    font-size: 1em;
+    float: left;
+    font-weight: 400;
+    padding-left: 5px;
+    font-style: normal;
+    line-height: normal;
+    font-family: "Roboto", sans-serif;
+}
+
+.withtree .homemaparea .infoBox .homemaptable {
+    font-size: 1em;
+    font-weight: 400;
+    text-align: left;
+    font-style: normal;
+    line-height: normal;
+    font-family: "Roboto", sans-serif;
+}
+
+.withtree .homemaparea .infoBox .homemaptable tr {
+    height: 25px;
+}
+
+.withtree .homemaparea .infoBox .homemaptable tr td {
+    padding-left: 8px;
+    width: 60%;
+    padding-bottom: 8px;
+}
+
+.homemaptable2 .infotabel td {
+    padding-bottom: 8px;
+}
+
+.withtree .homemaparea .infoBox .homemaptable tr td:nth-child(2) {
+    background-color: #fff;
+}
+
+a.jstree-anchor {
+    font-size: 1em;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+    font-family: "Roboto", sans-serif;
+}
+
+.intervalContainerC.elspace {
+    height: unset;
+}
+
+/* .intervalContainerC .summaryInterval {
+          padding: 3px 0;
+        } */
+
+/* .titlebutton {
+          padding: 3px 0 3.5px;
+        } */
+
+.treeInnerLower {
+    height: 45%;
+    border-bottom: 0px solid #343536;
+}
+
+.oneChartLeftTable td {
+    text-align: left;
+    padding-left: 12px;
+}
+
+/* .intervalbuttondivC.elspace .titlebutton {
+          padding: 3px 0 3.2px;
+        } */
+
+.dropdownbuttonRegion {
+    border: 1px solid;
+    margin-bottom: 1px;
+    outline-color: inherit;
+}
+
+select.charts_m_stats_dropdownbutton {
+    border: 1px solid;
+}
+
+/* .timeComaprsionTab .dropdownbuttonRegion{
+            border: unset;
+            margin-bottom:unset;
+        } */
+
+div.charts_m_stats_row_cell_measurement {
+    width: 85%;
+}
+
+.timeComaprsionTab div.charts_m_stats_row_cell_measurement,
+.timeComaprsionTab .charts_m_stats_row_cell_unit {
+    width: 50%;
+}
+
+div.charts_m_stats_row_cell_unit_column:nth-child(2) {
+    width: 50%;
+    margin-left: 0;
+    /* margin-right: 40px; */
+}
+
+.timeComaprsionTab div.charts_m_stats_row_cell_unit_column:nth-child(2) {
+    width: 100%;
+    margin-left: unset;
+    margin-right: unset;
+}
+
+body .datapickerLabel table tr {
+    height: unset;
+}
+
+.settings3secondrow table.settings3notificationaddress tr:first-child {
+    height: 10px;
+}
+
+.settings3secondrow table.settings3notificationaddress tr:first-child>th {
+    height: unset;
+    width: 100%;
+    padding-bottom: 5px;
+}
+
+.infoBox b {
+    float: left;
+    font-size: 1em;
+    font-weight: 400;
+    padding-left: 5px;
+    font-style: normal;
+    line-height: normal;
+    font-family: "Roboto", sans-serif;
+}
+
+.infoBox .homemaptable2 {
+    font-size: 1em;
+    font-weight: 400;
+    text-align: left;
+    font-style: normal;
+    line-height: normal;
+    font-family: "Roboto", sans-serif;
+}
+
+.infoBox .homemaptable2 tr {
+    height: 25px;
+}
+
+.infoBox .homemaptable2 tr td {
+    padding-left: 8px;
+}
+
+.navMenuButton span {
+    font-family: "Roboto", sans-serif;
+    font-size: 1em;
+    font-weight: 700;
+}
+
+.withtree1 {
+    font-family: "Roboto", sans-serif;
+}
+
+main.ng-scope {
+    font-family: "Roboto", sans-serif;
+}
+
+.flexBoxCenter {
+    font-size: 1em;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+}
+
+.chartsMainControlsC .datapickerLabel tr td {
+    font-size: 1em;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+}
+
+.newUserContainer .btn-primary {
+    font-size: 1em;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+}
+
+.overviewChartContainerInner .btn,
+.setting1footdiv .btn {
+    font-size: 1em;
+    font-style: normal;
+    line-height: normal;
+}
+
+.settings1tabeldiv .ng-binding,
+.settings1tabeldiv .ng-scope {
+    font-size: 1em;
+    font-style: normal;
+}
+
+/* 15-12-23 */
+
+.modal .modal-body {
+    height: 100%;
+}
+
+.modal .modal-body .userCreateContainer {
+    row-gap: 10px;
+}
+
+.modal .modal-header .close {
+    order: 1;
+}
+
+.modal .modal-header .modal-title {
+    order: -1;
+}
+
+.download-control-container {
+    justify-content: center;
+    gap: 12px;
+}
+
+
+.summaryContainer button.formMarginBottom {
+    padding: 6px 12px;
+    outline: none;
+    border: 1px solid;
+    font-size: 1em;
+    font-weight: 400;
+    font-family: "Roboto", sans-serif;
+    margin-left: 10px;
+    margin-top: 10px;
+    box-shadow: 2px 4px 4px #ccc;
+}
+
+.overviewequiplabel.ng-binding {
+    padding-top: 0;
+}
+
+.statTitleSpan span.tooltipspan {
+    visibility: hidden;
+    width: fit-content;
+    background-color: #f3f3f3;
+    color: inherit;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 8px;
+    position: absolute;
+    z-index: 1;
+    top: -32px;
+    left: -10px;
+}
+
+.statTitleSpan:hover span.tooltipspan {
+    visibility: visible;
+}
+
+.summaryChart {
+    overflow: auto;
+}
+
+.chartContainerSevenToNine {
+    margin-bottom: 12px;
+}
+
+.homepage.ng-scope {
+    display: flex;
+}
+
+.homepage.ng-scope .meterTree.noprint {
+    width: fit-content;
+    padding-right: 24px;
+    background-color: #fff;
+}
+
+.homepage.ng-scope .withtree {
+    width: 100%;
+}
+
+/* 19-12-23 */
+
+.summaryLayerLow .summaryChartContainer {
+    width: 100%;
+}
+
+.alarmpage .meterTree.noprint {
+    width: fit-content;
+}
+
+.alarmpage .meterTree.noprint .treeInner {
+    padding-right: 24px;
+}
+
+.alarmpage .withtree {
+    width: 100%;
+}
+
+#download-Btn {
+    padding: 4px 12px;
+    outline: none;
+    border: 1px solid #000;
+    font-size: 1em;
+    font-weight: 400;
+    font-family: "Roboto", sans-serif;
+    margin-left: 10px;
+    margin-top: 10px;
+    box-shadow: 2px 4px 4px #ccc;
+    color: #000;
+    height: 28px;
+}
+
+.clear-activedata {
+    padding: 6px 12px;
+    outline: none;
+    border: 1px solid;
+    font-size: 1em;
+    font-weight: 400;
+    font-family: "Roboto", sans-serif;
+    margin-left: 10px;
+    margin-top: 10px;
+    box-shadow: 2px 4px 4px #ccc;
+}
+
+.download-disabled {
+    background-color: #000;
+    cursor: not-allowed !important;
+    height: 28px !important;
+}
+
+.download-disabled:hover {
+    background-color: #ccc;
+    color: #000;
+}
+
+.alarmpage .withtree {
+    width: 100%;
+}
+
+/* 21-12-23 */
+
+.summaryChartContainer .summaryInfo {
+    height: calc(100% - 9vh);
+}
+
+svg text {
+    font-family: "Roboto", sans-serif;
+}
+
+.titlebutton:focus,
+.titlebutton:hover {
+    background-color: unset;
+}
+
+div.charts_m_stats_row_cell_wider {
+    width: 32%;
+}
+
+div.charts_m_stats_row {
+    justify-content: center;
+}
+
+select.charts_m_stats_dropdownbutton {
+    width: 100%;
+}
+
+.summaryControl2 {
+    padding-top: 14px;
+    padding-left: 0;
+}
+
+.summaryControl2 .navButtonsSub {
+    position: unset;
+}
+
+.userCreateForm .boxlabel {
+    justify-content: start;
+}
+
+div.charts_m_stats_row_cell_unit {
+    width: 85%;
+}
+
+/* Modal styles (you may want to customize this) */
+#popupModal {
+    display: none;
+    position: fixed;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    width: 40%;
+    height: 30%;
+    text-align: center;
+    border-radius: 15px;
+}
+
+#popupModal,
+p {
+    /* margin: 80px 0 10px; */
+    /* font-size: 30px; */
+}
+
+#popupModal #countdown {
+    margin-top: 80px;
+}
+
+/* 26-12-2023  me */
+
+.modal-content {
+    font-family: "Roboto", sans-serif;
+    font-size: 1em;
+}
+
+.modal-header {
+    background-color: #f5f5f5;
+    color: #333;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.modal-body {
+    padding: 15px;
+}
+
+.modal-footer {
+    border-top: 1px solid #e5e5e5;
+    padding: 10px;
+}
+
+input.userSetInput,
+select.userSetSel {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input.userSetInput.ng-invalid,
+select.userSetSel.ng-invalid {
+    border: 1px solid red;
+}
+
+.error {
+    color: red;
+    font-size: 1em;
+    margin-top: 5px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* 28-12-23 */
+
+.treeInnerLowerStack>div:first-child,
+.treeInnerLower>div:first-child {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 119;
+}
+
+div.charts_m_stats_row_cell_title .title-span {
+    padding-left: 0;
+}
+
+div.charts_m_stats_row_cell_title .title-span div.numberdiv {
+    margin-left: 0;
+}
+
+/* div.charts_m_stats_row_cell_unit_column {
+    text-align: left;
+} */
+
+.custome-form {
+    height: 100%;
+}
+
+.custome-form .settings3firstrowcol1 {
+    width: 33%;
+}
+
+.settings3firstrow+.settings3secondrow table.settings3notificationaddress tr:first-child {
+    height: 100%;
+}
+
+.settingsTabdiv .settings3notificationaddress {
+    height: unset;
+}
+
+.settingsTabdiv .settings3notificationaddress tr:nth-child(2) {
+    padding-top: 8.25px;
+}
+
+div#checkboxContainer .settings3firstrowcol1 {
+    width: 45%;
+}
+
+.btn-primary {
+    background-color: #3255a2;
+}
+
+div.alarmpage {
+    height: 84vh;
+}
+
+.downloadpage div.datepickerbuttonInnerC {
+    height: 28px;
+}
+
+.btn {
+    font-size: 1em;
+}
+
+/* 10-1-24 */
+
+.treeInnerLower .mt-small>.flexBoxCenter {
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.treeInnerLower .mt-small>.flexBoxCenter>span {
+    font-size: 1em;
+    line-height: 28px;
+    font-weight: 600;
+}
+
+.treeInnerLower .mt-small>.flexBoxCenter .flex-wrap {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    flex-wrap: nowrap !important;
+}
+
+.summaryTreeContainer .mainTreeMeters {
+    background-color: #fff;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+}
+
+@media screen and (min-width: 1920px) {
+    .mainMain {
+        min-height: 89.2vh;
+    }
+
+    .mainTemplate {
+        min-height: 89.2vh;
+    }
+
+    .navMenuButton span,
+    .navButtonsSub button.navMenuButton {
+        font-size: 1em;
+    }
+
+    .modal.in .modal-dialog {
+        transform: translate(0, 15%);
+    }
+}
+
+div.homepage {
+    min-height: calc(95vh - 73px) !important;
+}
+
+.kioskContainer,
+.summaryContainer,
+div.overviewpage,
+div.historypage,
+div.alarmpage,
+.locations-page,
+.downloadpage {
+    height: calc(95vh - 73px) !important;
+}
+
+.kioskChartsLeftUpperChart svg .highcharts-label.highcharts-no-data text,
+.kioskChartsLeftLowerChartItem svg .highcharts-label.highcharts-no-data text,
+.chartsArea svg .highcharts-label.highcharts-no-data text,
+.highcharts-container svg .highcharts-label.highcharts-no-data text,
+.highcharts-container svg .highcharts-axis.highcharts-xaxis text {
+    font-size: 1em !important;
+    font-weight: 400 !important;
+}
+
+.kioskChartsRightTitle {
+    font-size: 1em;
+}
+
+.overviewpage.ng-scope .withtree {
+    padding-top: 0;
+}
+
+.legend-button {
+    width: 180px;
+}
+
+.tracnt-tab-legend-button {
+    width: 180px;
+}
+
+.legend-button .icoBg>span,
+.tracnt-tab-legend-button .icoBg-tracnet>span {
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.tracnt-tab-legend-button .icoBg-tracnet:nth-child(1) {
+    text-align: left;
+    padding: 7px 7px;
+}
+
+.tracnt-tab-legend-button .icoBg-tracnet:nth-child(2) {
+    max-width: 30px !important;
+    width: 30px !important;
+}
+
+.tracnt-tab-legend-button .icoBg-tracnet>img {
+    width: 20px !important;
+    height: 20px;
+}
+
+.main-block .block-1 .ng-binding,
+.main-block h5,
+.main-block h3,
+.main-block p,
+.main-block svg text,
+.main-block .gmnoprint button,
+.main-block #homeMapZoom,
+.main-block #homeMapReset,
+.main-block .block-3 .openhis,
+.main-block .block-3 .history_block span,
+.tracknet-map .gm-style-iw h2,
+.tracknet-map .infoWindowContent,
+.block-3 .chart-btn-wrp button,
+.tablewrapper h2,
+.tablewrapper button,
+.tablewrapper table tr th,
+.tablewrapper table tr td,
+#homeMap .infoBox b,
+#homeMap .infoBox table.homemaptable tr td,
+#homeMap .infoBox table.homemaptable tr td div>p,
+#homeMap .infoBox table.homemaptable tr.bottom-cl td,
+.chartsArea .highcharts-container svg text {
+    font-size: 1em !important;
+    font-family: "Roboto", sans-serif !important;
+}
+
+#homeMap .infoBox table.homemaptable tr td div>p {
+    padding: 10px !important;
+}
+
+#homeMap .infoBox table.homemaptable tr td div>img {
+    height: 30px;
+    width: 30px;
+    /* margin-left: 75px; */
+}
+
+#homeMap .infoBox table.homemaptable tr td div>p {
+    margin-left: 30px !important;
+    width: 60% !important;
+}
+
+#homeMap .infoBox {
+    width: 400px !important;
+}
+
+#homeMap .infoBox b,
+#homeMap .infoBox table.homemaptable tr td,
+#homeMap .infoBox table.homemaptable tr td div>p,
+#homeMap .infoBox table.homemaptable tr.bottom-cl td {
+    text-align: center;
+}
+
+#homeMap .infoBox table.homemaptable tr td {
+    padding-bottom: 15px;
+}
+
+#homeMap .infoBox table.homemaptable tr.bottom-cl td {
+    padding-bottom: 10px;
+}
+
+#homeMap .infoBox b {
+    float: unset;
+}
+
+#homeMap .infoBox table.homemaptable tr td,
+#homeMap .infoBox table.homemaptable tr td div>p,
+#homeMap .infoBox table.homemaptable tr.bottom-cl td {
+    background-color: #ececec;
+}
+
+.mhole-mobile .mhole-content .mhole-alert.boundaryOne {
+    margin-top: 10px !important;
+}
+
+.mhole-text p {
+    font-size: 1em !important;
+}
+
+.block-1 .ts-c,
+.block-3 .ts-c {
+    overflow-y: auto;
+}
+
+.block-2 .datepickerbuttonInnerC {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.block-2 .pointerIcon {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (min-width: 2000px) and (max-width: 2400px) {
+    .last_block_third .btn_clps+.ul_li {
+        height: 50%;
+    }
+}
+
+@media screen and (max-width: 1500px) {
+    .outer-block-4 {
+        margin-top: 20px !important;
+    }
+
+    /* .last_block_third .btn_clps+.ul_li {
+        height: 50%;
+    } */
+}
+
+@media screen and (min-width: 1600px) {
+    .outer-block-4 {
+        margin-top: 20px !important;
+    }
+}
+
+.outer-block-4 p {
+    margin-bottom: 15px !important;
+}
+
+
+@media screen and (min-width: 1920px) {
+    body {
+        font-size: 1.1em !important;
+    }
+
+    .mhole-mobile .mhole-content .mhole-alert::before {
+        left: 43%;
+    }
+
+    .mhole-mobile .mhole-content .mhole-alert.boundaryOne::before,
+    .mhole-mobile .mhole-content .mhole-alert.boundaryTwo::before {
+        left: 40%;
+    }
+
+    .legend-button .btn,
+    .tracnt-tab-legend-button .btn {
+        font-size: unset !important;
+    }
+
+    .tracnt-tab-legend-button {
+        width: 200px;
+    }
+
+    .legend-button {
+        width: 200px;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    body {
+        font-size: 1.2em !important;
+    }
+}
+
+.gm-style-iw .gm-ui-hover-effect {
+    top: -6px !important;
+    right: -6px !important;
+    outline: none !important;
+}
+
+
+.box-block-21 .morebtn_block p {
+    text-align: center;
+}
+
+.side-det table.elem tr td {
+    max-width: 100%;
+}
+
+.gm-style {
+    font: unset !important;
+}
+
+.gm-style .gm-style-iw {
+    font-size: unset !important;
+}
+
+.infoBox>img {
+    width: 20px;
+    height: 20px;
+}
+
+.gm-style-iw.gm-style-iw-c button[title="Close"]>span {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.gm-style-iw.gm-style-iw-c button[title="Close"] {
+    right: 15px !important;
+    top: 10px !important;
+}
+
+#homeMap .gm-style-iw.gm-style-iw-c button[title="Close"] {
+    right: 0px !important;
+    top: 0px !important;
+}
+
+.tablewrapper h2 {
+    font-weight: 700;
+}
+
+.unicClass {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.unicClass>p {
+    padding: 0px !important;
+    height: auto !important;
+    text-align: center !important;
+    width: unset !important;
+}
+
+#homeMap table.homemaptable tbody tr:first-child td {
+    padding-top: 15px !important;
+}
+
+.gm-style-iw.gm-style-iw-c {
+    padding: 0px !important;
+}
+
+.gm-style-iw-d>div {
+    padding: 20px;
+}
+
+table.homemaptable tr td {
+    font-weight: 400;
+}
+
+table.homemaptable tr.bottom-cl td {
+    padding-bottom: 10px !important;
+}
+
+.alert_changed,
+.highcharts-root {
+    font-size: unset !important;
+}
+
+.tracnet-modal .modal-header {
+    padding: 0 !important;
+    border-bottom: unset !important;
+    background-color: unset !important;
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1599px) {
+    body {
+        font-size: 0.8em !important;
+    }
+
+    .legend-button .icoBg>span,
+    .tracnt-tab-legend-button .icoBg-tracnet>span {
+        font-size: 0.8em;
+    }
+
+    #homeMap .infoBox b {
+        font-size: 1em !important;
+    }
+
+    .unicClass>p {
+        font-size: 1em !important;
+    }
+
+    #homeMap table.homemaptable tbody tr:first-child td {
+        padding-top: 10px !important;
+    }
+
+    #homeMap .infoBox table.homemaptable tr td {
+        padding-bottom: 10px;
+    }
+
+    #homeMap .gm-style-iw.gm-style-iw-c button[title="Close"] {
+        top: -9px !important;
+    }
+
+    .gm-style-iw.gm-style-iw-c button[title="Close"] {
+        top: 5px !important;
+    }
+
+    .gm-style-iw-d>div {
+        padding: 15px;
+    }
+
+
+    /* .gm-style-iw-d>div b{
+        font-size: 0.8em;
+    }
+     */
+
+    /* #homeMap .gm-style-iw-d>div b {
+        font-size: 0.8em;
+    } */
+
+    .kioskContainer,
+    .summaryContainer,
+    div.overviewpage,
+    div.historypage,
+    div.alarmpage,
+    .locations-page,
+    .downloadpage {
+        height: calc(95vh - 83px) !important;
+    }
+
+    div.homepage {
+        height: calc(95vh - 83px) !important;
+        min-height: 100% !important;
+    }
+
+    .loginFooter {
+        font-size: 0.9em;
+    }
+
+    .footerCol0 {
+        width: 55%;
+    }
+
+    .history_block {
+        margin-bottom: 0 !important;
+    }
+
+    #homeMap .infoBox {
+        left: -150px !important;
+    }
+
+    .mhole-mobile .mhole-content .mhole-alert::before {
+        width: 85px;
+        left: 36%;
+    }
+
+    .mhole-mobile .mhole-content .mhole-alert.boundaryOne::before,
+    .mhole-mobile .mhole-content .mhole-alert.boundaryTwo::before {
+        width: 98px;
+    }
+
+    .mhole-mobile .mhole-content .mhole-alert:nth-last-of-type(1) {
+        margin-top: 97px !important;
+    }
+
+    .mhole-mobile .mhole-content .mhole-text p::before {
+        top: 15px;
+    }
+
+    .mhole-alert .alt-status {
+        right: 13rem !important;
+    }
+
+    .block-1,
+    .block-3 {
+        max-width: 20% !important;
+        /* width: 100% !important; */
+    }
+
+    .block-1 .ul_li,
+    .block-3 .ul_li {
+        padding: 5px !important;
+    }
+
+    #homeMap .gm-style-iw.gm-style-iw-c button[title="Close"] {
+        top: -4px !important;
+    }
+
+    .block-3 {
+        margin-right: 0 !important;
+    }
+
+    #homeMap .infoBox {
+        width: 320px !important;
+    }
+
+    .icoBg-tracnet {
+        min-height: 24px;
+    }
+
+    .gm-style-iw-d .homemaptable {
+        font-size: unset;
+    }
+}
+
+.alert_changed li {
+    font-size: unset !important;
+}
+
+.gmnoprint .gm-style-mtc ul li {
+    font-size: unset !important;
+}
+
+.gm-style-iw-d .homemaptable tbody tr {
+    height: 25px !important;
+}
+
+@media screen and (min-width: 1800px) {
+    .homepage.ng-scope .modal-content {
+        top: 20px;
+    }
+}
+
+.sydneyWt_logo {
+    max-width: 170px;
+}
+
+.meterTracLogo {
+    height: 80%;
+}
+
+.gm-style-iw-d .unicClass div img {
+    max-width: 30px;
+    width: 100%;
+}
+
+.tablewrapper .elemDiv:not(:first-child) {
+    margin-top: 0;
+}
+
+.tablewrapper #settingForm .elemDiv:not(:first-child) {
+    margin-top: 15px;
+}
+
+.gm-style-iw-d td.infowindow_td {
+    padding-bottom: 15px !important;
+}
+
+.gm-style-iw-d .homemaptable tr:first-child td {
+    padding-bottom: 15px !important;
+}
+
+.gm-style-iw-d .unicClass {
+    margin-top: 10px !important;
+}
+
+
+button.reset_btn {
+    padding: 6px 11px !important;
+}
+
+#errorname,
+#errorn {
+    right: 17px !important;
+}
+
+.loginInner {
+    padding: 1.5rem !important;
+}
+
+div:where(.swal2-container) h2:where(.swal2-title),
+div:where(.swal2-container) .swal2-html-container,
+div:where(.swal2-container) div:where(.swal2-popup) {
+    font-size: 1em !important;
+}
+
+.tracnet-modal#myModal .modal-body {
+    padding: 0;
+    padding-top: 10px;
+}
+
+.tracnet-modal#myModal .modal-body h3 {
+    font-size: 1em !important;
+}
+
+#settingForm .elemDiv span.text-danger {
+    display: block;
+}
+
+.block-1.block-xpnd .ts-c,
+.block-3.block-xpnd-2 .ts-c {
+    overflow-y: unset;
 }

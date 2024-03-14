@@ -140,12 +140,12 @@
 									class="btnTopBarOff">Y-axis min 0</button>
 								<button id="meter_markersButton" style="margin-bottom: 3px;"
 									ng-click='switchMarkers("meter")' class="btnTopBarOff">Markers</button>
-								<button style="margin-bottom: 3px;" ng-click='download("meter")' class="btnTopBarOff"
+								<button style="margin-bottom: 3px;" id="downloadId" ng-click='download("meter")' class="btnTopBarOff"
 									download>
 									Download
 								</button>
 								<button id="tableButton" style="margin-bottom: 3px;"
-									ng-click='switchTable("meter",true)' class="btnTopBarOff">
+									ng-click='switchTable("meter",true)'  class="btnTopBarOff">
 									Table
 								</button>
 							</div>
@@ -334,12 +334,14 @@
 										<thead>
 											<tr>
 												<th class="my-th">
-													Timestamp
+													<p>Timestamp</p>
 												</th>
 												<th ng-hide=" stat.pointId === null || stat.pointId === 'null' "
 													class="my-th" ng-repeat="stat in tableStats">
-													{{stat.title}} -
-													{{stat.currentMeasurement.id_name}}({{stat.currentMeasurement.unit}})
+													<p>
+														{{stat.title}} -
+														{{stat.currentMeasurement.id_name}}({{stat.currentMeasurement.unit}})
+													</p>
 												</th>
 											</tr>
 										</thead>
